@@ -211,6 +211,97 @@ public class Board : MonoBehaviour {
 
 	}
 
+	//checking cover
+	public Tile.Cover getCover(Unit sourceUnit, Unit targetUnit){
+
+		//check the line from the player, but also the adjacent squares that are not cover themselves
+		List<Tile.Cover> coverVals = new List<Tile.Cover>();
+
+		coverVals.Add( getCover (sourceUnit.CurTile, targetUnit.CurTile) );
+		for (int i = 0; i < 4; i++) {
+			if (sourceUnit.CurTile.Adjacent [i] != null) {
+				if (sourceUnit.CurTile.Adjacent [i].CoverVal == Tile.Cover.None) {
+					coverVals.Add (getCover (sourceUnit.CurTile.Adjacent [i], targetUnit.CurTile));
+				}
+			}
+		}
+
+		//go through and find the best possible shot (lowest cover val)
+		Tile.Cover returnVal = Tile.Cover.Full;
+		foreach (Tile.Cover cover in coverVals) {
+			if ((int)cover < (int)returnVal) {
+				returnVal = cover;
+			}
+		}
+
+		Debug.Log ("cover: " + returnVal);
+		return returnVal;
+	}
+
+	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
+		//get the direction
+		float dist = Vector3.Distance (sourceTile.transform.position, targetTile.transform.position);
+		Vector3 dir3 = targetTile.transform.position - sourceTile.transform.position;
+		Vector2 dir = new Vector2(dir3.x, dir3.y);
+
+		//debug line
+		Debug.DrawLine(sourceTile.transform.position, sourceTile.transform.position+new Vector3(dir.x, dir.y, 0), Color.red);
+
+
+		//check for full cover
+		turnOffAllTileCollidersExcept(Tile.Cover.Full);
+
+		RaycastHit2D fullHit = Physics2D.Raycast(sourceTile.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		if (fullHit.collider != null) {
+			turnOnAllTileColliders ();
+			return Tile.Cover.Full;
+		}
+
+		//check for partial cover. Only tiles adjacent to the target count for this
+		turnOffAllTileColliders();
+		//turn on coliders for tiles adjacent to our target
+		for (int i = 0; i < 4; i++) {
+			if (targetTile.Adjacent [i] != null) {
+				if (targetTile.Adjacent [i].CoverVal == Tile.Cover.Part) {
+					targetTile.Adjacent [i].collider.enabled = true;
+				}
+			}
+		}
+
+		RaycastHit2D partHit = Physics2D.Raycast(sourceTile.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		if (partHit.collider != null) {
+			turnOnAllTileColliders ();
+			return Tile.Cover.Part;
+		}
+
+
+
+		turnOnAllTileColliders ();
+		return Tile.Cover.None;
+	}
+
+	void turnOffAllTileColliders(){
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				grid [x, y].collider.enabled = false;
+			}
+		}
+	}
+	void turnOffAllTileCollidersExcept(Tile.Cover coverLevelToKeepOn){
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				grid [x, y].collider.enabled = grid [x, y].CoverVal == coverLevelToKeepOn;
+			}
+		}
+	}
+	void turnOnAllTileColliders(){
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				grid [x, y].collider.enabled = true;
+			}
+		}
+	}
+
 
 	//setters and getters
 

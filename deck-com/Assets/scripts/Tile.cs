@@ -22,6 +22,8 @@ public class Tile : MonoBehaviour {
 
 	private bool isHighlighted;
 
+	public BoxCollider2D collider;
+
 	public void setup(Tile[] _adjacent, int xPos, int yPos, GameManager _gm){
 		gm = _gm;
 
@@ -96,6 +98,12 @@ public class Tile : MonoBehaviour {
 	public bool IsHighlighted{
 		get{
 			return this.isHighlighted;
+		}
+	}
+
+	public Tile[] Adjacent{
+		get{
+			return this.adjacent;
 		}
 	}
 

@@ -133,6 +133,9 @@ public class GameManager : MonoBehaviour {
 		}
 
 
+		//testing
+		board.getCover(units[0], units[2]);
+
 	}
 
 	//Input for cards that are about to be played
