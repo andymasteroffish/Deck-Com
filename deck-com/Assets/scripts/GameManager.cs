@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
 
 	private Unit activeUnit;
 
+	public Card activeCard;
+
 	//tracking rounds
 	private bool isPlayerTurn;
 	private int roundNum;
@@ -52,6 +54,8 @@ public class GameManager : MonoBehaviour {
 			unit.resetRound ();
 		}
 		setActiveUnit (unitsPlayer [0]);
+
+		clearActiveCard ();
 	}
 
 	void endPlayerTurn(){
@@ -92,7 +96,11 @@ public class GameManager : MonoBehaviour {
 
 		//clicks
 		if (Input.GetMouseButtonDown (0) && !areAnimaitonsHappening()) {
-			activeUnit.checkActiveClick ();
+			//see if they clicked a card to play (but only if they are not in the process of playing one)
+			if (activeCard == null) {
+				activeUnit.checkActiveClick ();
+			}
+			//check potential targets
 			board.checkClick ();
 			foreach(Unit unit in units){
 				unit.checkGeneralClick ();
@@ -101,6 +109,7 @@ public class GameManager : MonoBehaviour {
 
 		//tabbing
 		if (Input.GetKeyDown (KeyCode.Tab)) {
+			clearActiveCard ();
 			if (isPlayerTurn) {
 				tabActivePlayerUnit ();
 			} else {
@@ -110,6 +119,7 @@ public class GameManager : MonoBehaviour {
 
 		//ending the turn
 		if (Input.GetKeyDown (KeyCode.Space)) {
+			clearActiveCard ();
 			if (isPlayerTurn) {
 				endPlayerTurn ();
 			} else {
@@ -119,15 +129,34 @@ public class GameManager : MonoBehaviour {
 
 		//pressing escape to cancel a move
 		if (Input.GetKeyDown (KeyCode.Escape)) {
-			activeUnit.hand.cancel ();
+			activeUnit.deck.cancel ();
 		}
 	}
 
+	//Input for cards that are about to be played
 	public void tileClicked(Tile tile){
-		activeUnit.hand.passInTile (tile);
+		Debug.Log ("clickci");
+		if (activeCard != null) {
+			activeCard.passInTile (tile);
+		}
+		//activeUnit.deck.passInTile (tile);
 	}
 	public void unitClicked(Unit unit){
-		activeUnit.hand.passInUnit (unit);
+		if (activeCard != null) {
+			activeCard.passInUnit (unit);
+		}
+		//activeUnit.deck.passInUnit (unit);
+	}
+
+	public void setCardActive(Card newCard){
+		activeCard = newCard;
+	}
+
+	public void clearActiveCard(){
+		if (activeCard != null){
+			activeCard = null;
+			board.clearHighlights ();
+		}
 	}
 
 	//switching units
@@ -137,7 +166,7 @@ public class GameManager : MonoBehaviour {
 		foreach (Unit unit in units){
 			unit.setActive ( unit==activeUnit);
 			if (!unit.IsActive) {
-				unit.hand.cancel ();
+				unit.deck.cancel ();
 			}
 		}
 		cam.setTarget (newActive);
@@ -198,7 +227,7 @@ public class GameManager : MonoBehaviour {
 		return aiUnits;
 	}
 
-
+	//checking for things
 	public bool areAnimaitonsHappening(){
 		foreach(Unit unit in units){
 			if (unit.DoingAnimation){

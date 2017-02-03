@@ -27,9 +27,7 @@ public class Unit : MonoBehaviour {
 
 	private bool doingAnimation;
 
-	public GameObject handPrefab, deckPrefab;
-	[System.NonSerialized]
-	public Hand hand;
+	public GameObject deckPrefab;
 	[System.NonSerialized]
 	public Deck deck;
 
@@ -49,14 +47,14 @@ public class Unit : MonoBehaviour {
 		deckObj.gameObject.name = unitName + "_deck";
 		deck = deckObj.GetComponent<Deck> ();
 
-		//spawn hand
-		GameObject handObj = Instantiate (handPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-		handObj.gameObject.name = unitName + "_hand";
-		hand = handObj.GetComponent<Hand> ();
+//		//spawn hand
+//		GameObject handObj = Instantiate (handPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+//		handObj.gameObject.name = unitName + "_hand";
+//		hand = handObj.GetComponent<Hand> ();
 
 		//set them up
 		deck.setup (this);
-		hand.setup (this);
+		//hand.setup (this);
 
 		setHighlighted (false);
 
@@ -81,7 +79,7 @@ public class Unit : MonoBehaviour {
 
 	public void setActive(bool _isActive){
 		isActive = _isActive;
-		hand.setActive (isActive);
+		deck.setActive (isActive);
 	}
 
 	// Update is called once per frame
@@ -89,7 +87,7 @@ public class Unit : MonoBehaviour {
 		//bounce the sprite when it is active
 		float spriteScale = 1;
 		if (isActive) {
-			spriteScale = 1.0f + Mathf.Abs(Mathf.Sin (Time.time * 1) * 0.2f);
+			spriteScale = 1.0f + Mathf.Abs(Mathf.Sin (Time.time * 2) * 0.2f);
 		}
 		spriteRend.gameObject.transform.localScale = new Vector3 (spriteScale, spriteScale, spriteScale);
 	}
@@ -99,7 +97,7 @@ public class Unit : MonoBehaviour {
 		//clear remaining actions
 		actionsLeft = 0;
 		//discard the hand
-		hand.discardHand();
+		deck.discardHand();
 		//draw to hand size
 		for (int i = 0; i < baseHandSize; i++) {
 			deck.drawCard ();
@@ -109,7 +107,7 @@ public class Unit : MonoBehaviour {
 	//playing a cards
 	public void markCardPlayed(Card card){
 		actionsLeft--;
-		hand.markCardPlayed (card);
+		deck.markCardPlayed (card);
 	}
 
 	//input
@@ -120,7 +118,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void checkActiveClick(){
-		hand.checkClick ();
+		deck.checkClick ();
 	}
 		
 

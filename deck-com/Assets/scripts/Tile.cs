@@ -57,6 +57,7 @@ public class Tile : MonoBehaviour {
 	}
 
 	public void checkClick(){
+		Debug.Log ("shit got click");
 		if (mouseIsOver && isHighlighted) {
 			gm.tileClicked (this);
 		}

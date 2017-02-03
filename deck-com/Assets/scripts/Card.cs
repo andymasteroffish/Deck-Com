@@ -14,6 +14,7 @@ public class Card : MonoBehaviour {
 	[System.NonSerialized]
 	public SpriteRenderer spriteRend;
 
+	private bool isActive;
 	private bool waitingForTile, waitingForUnit, waitingForChoice;
 
 	private bool mouseIsOver;
@@ -76,7 +77,7 @@ public class Card : MonoBehaviour {
 			spritePos.y = 0.5f;
 		}
 
-		if (isWaitingForInput ()) {
+		if (isActive) {
 			spritePos.z += -5;
 			spritePos.y = 2;
 		}
@@ -91,6 +92,8 @@ public class Card : MonoBehaviour {
 	}
 
 	public void selectCard(){
+		isActive = true;
+		owner.GM.setCardActive (this);
 		selectCardCustom ();
 	}
 	public virtual void selectCardCustom(){}
@@ -99,10 +102,14 @@ public class Card : MonoBehaviour {
 		waitingForTile = false;
 		waitingForUnit = false;
 		waitingForChoice = false;
-		owner.GM.board.clearHighlights ();
+		if (isActive) {
+			isActive = false;
+			owner.GM.clearActiveCard ();
+		}
 	}
 
 	public void passInTile(Tile tile){
+		Debug.Log ("Love it");
 		if (waitingForTile) {
 			passInTileCustom (tile);
 		}
@@ -121,7 +128,6 @@ public class Card : MonoBehaviour {
 	}
 
 	public void finish(){
-		owner.GM.board.clearHighlights ();
 		owner.markCardPlayed (this);
 	}
 
@@ -181,6 +187,15 @@ public class Card : MonoBehaviour {
 	public Unit Owner {
 		get {
 			return this.owner;
+		}
+	}
+
+	public bool IsActive{
+		get{
+			return this.isActive;
+		}
+		set{
+			isActive = value;
 		}
 	}
 }
