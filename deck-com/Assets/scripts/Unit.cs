@@ -107,7 +107,6 @@ public class Unit : MonoBehaviour {
 	//playing a cards
 	public void markCardPlayed(Card card){
 		actionsLeft--;
-		deck.markCardPlayed (card);
 	}
 
 	//input
@@ -183,6 +182,18 @@ public class Unit : MonoBehaviour {
 		Destroy (gameObject);
 		gm.removeUnit (this);
 
+	}
+
+	public bool areAnimaitonsHappening(){
+		if (doingAnimation){
+			return true;
+		}
+
+		if (deck.areAnimaitonsHappening()){
+			return true;
+		}
+
+		return false;
 	}
 
 	//highlighting

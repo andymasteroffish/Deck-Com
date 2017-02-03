@@ -41,7 +41,7 @@ public class Deck : MonoBehaviour {
 			GameObject cardObj = Instantiate (collection [i], Vector3.zero, Quaternion.identity) as GameObject;
 			cardObj.transform.parent = transform;
 			Card thisCard = cardObj.GetComponent<Card> ();
-			thisCard.setup (owner);
+			thisCard.setup (owner, this);
 			cardObj.gameObject.SetActive (false);
 			addCardToDrawPile (thisCard);
 		}
@@ -109,6 +109,7 @@ public class Deck : MonoBehaviour {
 		discardPile.Add (card);
 		card.gameObject.transform.parent = discardPileTransform;
 		card.gameObject.SetActive (false);
+		alignCardsInHand ();
 	}
 
 	void putDiscardInDrawPile(){
@@ -146,13 +147,14 @@ public class Deck : MonoBehaviour {
 		}
 	}
 
-	public void markCardPlayed(Card card){
+	public void discardCardFromHand(Card card){
 		//get rid of this card
 		addCardToDiscard(card);
 		hand.Remove(card);
 		alignCardsInHand();
 		owner.GM.clearActiveCard ();
 	}
+
 
 	//visual things
 	void alignCardsInHand(){
@@ -196,6 +198,11 @@ public class Deck : MonoBehaviour {
 				card.setDisabled (owner.ActionsLeft <= 0);
 			}
 		}
+
+		//tetsing
+//		if (Input.GetKeyDown (KeyCode.D)) {
+//			hand [0].discard ();
+//		}
 	
 	}
 
@@ -206,6 +213,20 @@ public class Deck : MonoBehaviour {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	//checking for animations
+	public bool areAnimaitonsHappening(){
+		if (doingAnimation) {
+			return true;
+		}
+		foreach (Card card in hand) {
+			if (card.DoingAnimation) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 }

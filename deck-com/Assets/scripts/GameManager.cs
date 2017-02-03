@@ -131,6 +131,8 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			activeUnit.deck.cancel ();
 		}
+
+
 	}
 
 	//Input for cards that are about to be played
@@ -230,7 +232,7 @@ public class GameManager : MonoBehaviour {
 	//checking for things
 	public bool areAnimaitonsHappening(){
 		foreach(Unit unit in units){
-			if (unit.DoingAnimation){
+			if (unit.areAnimaitonsHappening()){
 				return true;
 			}
 		}

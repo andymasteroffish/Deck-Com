@@ -23,6 +23,7 @@ public class Card : MonoBehaviour {
 	private float order;
 
 	private Unit owner;
+	private Deck deck;
 
 	//some colors
 	[System.NonSerialized]
@@ -30,9 +31,14 @@ public class Card : MonoBehaviour {
 	[System.NonSerialized]
 	public Color attackHighlightColor  = new Color(1f, 0.5f, 0.5f);
 
+	private bool doingAnimation;
 
-	public void setup(Unit _owner){
+
+	public void setup(Unit _owner, Deck _deck){
 		owner = _owner;
+		deck = _deck;
+
+		doingAnimation = false;
 
 		//find all the parts
 		Transform[] ts = gameObject.transform.GetComponentsInChildren<Transform>();
@@ -128,13 +134,17 @@ public class Card : MonoBehaviour {
 	}
 
 	public void finish(){
-		owner.markCardPlayed (this);
+		StartCoroutine(doDeathAnimation(0.5f, true));
+	}
+	public void discard(){
+		StartCoroutine(doDeathAnimation(0.5f, false));
 	}
 
 	public bool isWaitingForInput(){
 		return waitingForTile || waitingForUnit || waitingForChoice;
 	}
 
+	//utility
 	void OnMouseEnter(){
 		mouseIsOver = true;
 	}
@@ -142,6 +152,34 @@ public class Card : MonoBehaviour {
 		mouseIsOver = false;
 	}
 
+	//animations
+	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone){
+		doingAnimation = true;
+
+		float timer = time;
+		float startScale = transform.localScale.x;
+
+		while (timer > 0) {
+			timer -= Time.deltaTime;
+			timer = Mathf.Max (0, timer);
+
+			float newScale = timer / time;
+			newScale = Mathf.Pow (newScale, 2);
+			transform.localScale = new Vector3 (newScale, newScale, newScale);
+
+			yield return null;
+		}
+
+
+		transform.localScale = new Vector3 (1, 1, 1);	
+
+		if (markAsPlayedWhenDone) {
+			owner.markCardPlayed (this);
+		}
+
+		deck.discardCardFromHand (this);
+
+	}
 
 
 	//setters getters
@@ -196,6 +234,12 @@ public class Card : MonoBehaviour {
 		}
 		set{
 			isActive = value;
+		}
+	}
+
+	public bool DoingAnimation{
+		get{
+			return this.doingAnimation;
 		}
 	}
 }
