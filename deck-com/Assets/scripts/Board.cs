@@ -87,7 +87,6 @@ public class Board : MonoBehaviour {
 			foreach (Unit unit in gm.units) {
 				if (unit.CurTile == tile) {
 					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
-						Debug.Log ("highlight " + unit.unitName);
 						unit.setHighlighted (true, col);
 					}
 				}

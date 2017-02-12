@@ -4,26 +4,26 @@ using System.Collections.Generic;
 
 public class CardAttack : Card {
 
-	public int rangeAdjust;
 	public int damageAdjust;
+	public int rangeAdjust;
+
 
 	public override void setupCustom(){
-		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
 		string damageText = "Damage: " + (damageAdjust >= 0 ? "+" : "") + damageAdjust;
-		textField.text = rangeText + "\n" + damageText;
+		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
+
+		textField.text = damageText + "\n" + rangeText;
 	}
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		int range = Owner.Weapon.baseRange + rangeAdjust;
-		Debug.Log ("range: " + range);
 		Owner.GM.board.highlightTilesInRange (Owner.CurTile, range, false, true, attackHighlightColor);
 		Owner.GM.board.highlightUnitsInRange (Owner.CurTile, range, true, true, attackHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){
 
-		Debug.Log ("got passed in " + unit.unitName);
 
 		int damageVal = Owner.Weapon.baseDamage + damageAdjust;
 

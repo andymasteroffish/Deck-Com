@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class Unit : MonoBehaviour {
@@ -31,8 +32,9 @@ public class Unit : MonoBehaviour {
 	[System.NonSerialized]
 	public Deck deck;
 
-	public GameObject weaponPrefab, charmPrefab;
-	private Item weapon, charm;
+	public GameObject[] itemPrefabs;
+	private Item weapon;
+	private List<Item> charms = new List<Item>();
 
 	private bool mouseIsOver;
 
@@ -50,19 +52,17 @@ public class Unit : MonoBehaviour {
 		deckObj.gameObject.name = unitName + "_deck";
 		deck = deckObj.GetComponent<Deck> ();
 
-		//spawn items if they have them
-		if (weaponPrefab != null) {
-			GameObject weaponObj = Instantiate (weaponPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-			weaponObj.name = unitName + "_weapon";
-			weapon = weaponObj.GetComponent<Item> ();
-			weapon.setup (this);
+		//spawn the items
+		for (int i = 0; i < itemPrefabs.Length; i++) {
+			GameObject itemObj = Instantiate (itemPrefabs[i], Vector3.zero, Quaternion.identity) as GameObject;
+			Item thisItem =  itemObj.GetComponent<Item> ();
+			thisItem.setup (this, i);
+			itemObj.name = unitName + "_" + thisItem.name;
+			charms.Add (thisItem);
 		}
-		if (charmPrefab != null) {
-			GameObject charmObj = Instantiate (charmPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-			charmObj.name = unitName + "_charm";
-			charm = charmObj.GetComponent<Item> ();
-			charm.setup (this);
-		}
+
+		//the first item is the weapon
+		weapon = charms[0];
 
 		//set them up
 		deck.setup (this);
@@ -87,15 +87,17 @@ public class Unit : MonoBehaviour {
 	public void resetRound(){
 		actionsLeft = baseActions;
 		setActive (false);
-		weapon.resetRound ();
-		charm.resetRound ();
+		foreach (Item charm in charms) {
+			charm.resetRound ();
+		}
 	}
 
 	public void setActive(bool _isActive){
 		isActive = _isActive;
 		deck.setActive (isActive);
-		if (weapon != null)		weapon.setActive (isActive);
-		if (charm != null)		charm.setActive (isActive);
+		foreach (Item charm in charms) {
+			charm.setActive (isActive);
+		}
 	}
 
 	// Update is called once per frame
@@ -129,8 +131,9 @@ public class Unit : MonoBehaviour {
 	//playing a cards
 	public void markCardPlayed(Card card){
 		//check if any item does something
-		weapon.cardPlayed(card);
-		charm.cardPlayed (card);
+		foreach (Item charm in charms) {
+			charm.cardPlayed (card);
+		}
 
 		//reduce the actions
 		actionsLeft--;
@@ -295,9 +298,9 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-	public Item Charm{
+	public List<Item> Charms{
 		get{
-			return this.charm;
+			return this.charms;
 		}
 	}
 }

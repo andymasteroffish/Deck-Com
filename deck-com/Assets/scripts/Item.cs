@@ -10,7 +10,7 @@ public class Item : MonoBehaviour {
 	public string name, description;
 	public ItemType type;
 
-	public int baseRange, baseDamage;
+	public int baseDamage, baseRange;
 
 	private Unit owner;
 
@@ -26,7 +26,7 @@ public class Item : MonoBehaviour {
 	private Vector3 startPos, endPos;
 	private bool doingAnimation;
 
-	public void setup(Unit _owner){
+	public void setup(Unit _owner, int offsetID){
 
 		owner = _owner;
 
@@ -49,15 +49,12 @@ public class Item : MonoBehaviour {
 		textField.text = description;
 
 		//setting up movement
-		Transform startTrans = GameObject.Find ("itemStartPos").transform;
-		startPos = new Vector3 (startTrans.position.x, startTrans.position.y, startTrans.position.z);
-		Transform endTrans = GameObject.Find ("itemEndPos").transform;
-		endPos = new Vector3 (endTrans.position.x, endTrans.position.y, endTrans.position.z);
 		float ySpacing = 1.4f;
-		if (type == ItemType.Weapon) {
-			startPos.y += ySpacing;
-			endPos.y += ySpacing;
-		}
+		Transform startTrans = GameObject.Find ("itemStartPos").transform;
+		startPos = new Vector3 (startTrans.position.x, startTrans.position.y + offsetID*ySpacing, startTrans.position.z);
+		Transform endTrans = GameObject.Find ("itemEndPos").transform;
+		endPos = new Vector3 (endTrans.position.x, endTrans.position.y + offsetID*ySpacing, endTrans.position.z);
+
 
 		transform.position = startPos;
 

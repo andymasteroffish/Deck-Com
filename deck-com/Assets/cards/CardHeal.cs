@@ -22,8 +22,9 @@ public class CardHeal : Card {
 
 		int healVal = healAmount;
 
-		healVal += Owner.Weapon.getHealMod (this);
-		healVal += Owner.Charm.getHealMod (this);
+		foreach (Item charm in Owner.Charms) {
+			healVal += charm.getHealMod (this);
+		}
 
 		if (healVal < 0) {
 			healVal = 0;
