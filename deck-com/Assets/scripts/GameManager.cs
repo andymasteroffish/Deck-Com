@@ -134,7 +134,7 @@ public class GameManager : MonoBehaviour {
 
 
 		//testing
-		board.getCover(units[0], units[2]);
+		//board.getCover(units[0], units[2]);
 
 	}
 

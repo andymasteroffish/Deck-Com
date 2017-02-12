@@ -5,7 +5,10 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour {
 
+	public enum CardType{Attack, Movement, Other};
+
 	public string name;
+	public CardType type;
 
 	[System.NonSerialized]
 	public Text nameField;

@@ -31,6 +31,9 @@ public class Unit : MonoBehaviour {
 	[System.NonSerialized]
 	public Deck deck;
 
+	public GameObject weaponPrefab, charmPrefab;
+	private Item weapon, charm;
+
 	private bool mouseIsOver;
 
 	private bool isHighlighted;
@@ -47,10 +50,19 @@ public class Unit : MonoBehaviour {
 		deckObj.gameObject.name = unitName + "_deck";
 		deck = deckObj.GetComponent<Deck> ();
 
-//		//spawn hand
-//		GameObject handObj = Instantiate (handPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-//		handObj.gameObject.name = unitName + "_hand";
-//		hand = handObj.GetComponent<Hand> ();
+		//spawn items if they have them
+		if (weaponPrefab != null) {
+			GameObject weaponObj = Instantiate (weaponPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+			weaponObj.name = unitName + "_weapon";
+			weapon = weaponObj.GetComponent<Item> ();
+			weapon.setup (this);
+		}
+		if (charmPrefab != null) {
+			GameObject charmObj = Instantiate (charmPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+			charmObj.name = unitName + "_charm";
+			charm = charmObj.GetComponent<Item> ();
+			charm.setup (this);
+		}
 
 		//set them up
 		deck.setup (this);
@@ -80,6 +92,8 @@ public class Unit : MonoBehaviour {
 	public void setActive(bool _isActive){
 		isActive = _isActive;
 		deck.setActive (isActive);
+		if (weapon != null)		weapon.setActive (isActive);
+		if (charm != null)		charm.setActive (isActive);
 	}
 
 	// Update is called once per frame
@@ -255,6 +269,18 @@ public class Unit : MonoBehaviour {
 	public bool IsHighlighted{
 		get{
 			return this.isHighlighted;
+		}
+	}
+
+	public Item Weapon{
+		get{
+			return this.weapon;
+		}
+	}
+
+	public Item Charm{
+		get{
+			return this.charm;
 		}
 	}
 }
