@@ -87,6 +87,8 @@ public class Unit : MonoBehaviour {
 	public void resetRound(){
 		actionsLeft = baseActions;
 		setActive (false);
+		weapon.resetRound ();
+		charm.resetRound ();
 	}
 
 	public void setActive(bool _isActive){
@@ -104,6 +106,12 @@ public class Unit : MonoBehaviour {
 			spriteScale = 1.0f + Mathf.Abs(Mathf.Sin (Time.time * 2) * 0.2f);
 		}
 		spriteRend.gameObject.transform.localScale = new Vector3 (spriteScale, spriteScale, spriteScale);
+
+		//show health
+		healthText.text = "HP: " + health+"/"+baseHealth;
+
+		//keeping them raised up for clicking
+		transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
 	}
 
 	//ending the turn
@@ -120,6 +128,11 @@ public class Unit : MonoBehaviour {
 
 	//playing a cards
 	public void markCardPlayed(Card card){
+		//check if any item does something
+		weapon.cardPlayed(card);
+		charm.cardPlayed (card);
+
+		//reduce the actions
 		actionsLeft--;
 	}
 
@@ -142,11 +155,15 @@ public class Unit : MonoBehaviour {
 	}
 
 	//damage and health
+	public void heal(int amount){
+		health += amount;
+		if (health > baseHealth) {
+			health = baseHealth;
+		}
+	}
+
 	public void takeDamage(int amount){
 		health -= amount;
-		healthText.text = "HP: " + health;
-		//Debug.Log (unitName + " has " + health + " health");
-
 		if (health <= 0) {
 			killUnit ();
 		}

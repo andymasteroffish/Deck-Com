@@ -28,6 +28,8 @@ public class Item : MonoBehaviour {
 
 	public void setup(Unit _owner){
 
+		owner = _owner;
+
 		//find all the parts
 		Transform[] ts = gameObject.transform.GetComponentsInChildren<Transform>();
 		foreach (Transform t in ts){
@@ -74,6 +76,17 @@ public class Item : MonoBehaviour {
 		}
 	}
 
+	public void resetRound(){
+		resetRoundCustom ();
+	}
+	public virtual void resetRoundCustom(){}
+
+	//general play
+	public virtual void cardPlayed(Card card){}
+
+	//modifiers
+	public virtual int getHealMod(Card card){return 0;}
+
 	//animations
 	IEnumerator doMoveAnimation(Vector3 start, Vector3 target, float time){
 		doingAnimation = true;
@@ -90,5 +103,13 @@ public class Item : MonoBehaviour {
 
 		doingAnimation = false;
 		transform.position = target;
+	}
+
+	//setters getters
+
+	public Unit Owner{
+		get{
+			return this.owner;
+		}
 	}
 }

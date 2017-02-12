@@ -23,6 +23,8 @@ public class CardAttack : Card {
 
 	public override void passInUnitCustom(Unit unit){
 
+		Debug.Log ("got passed in " + unit.unitName);
+
 		int damageVal = Owner.Weapon.baseDamage + damageAdjust;
 
 		if (damageVal < 0) {

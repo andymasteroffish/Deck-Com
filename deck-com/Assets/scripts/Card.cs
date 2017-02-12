@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour {
 
-	public enum CardType{Attack, Movement, Other};
+	public enum CardType{Attack, Movement, Aid, Other};
 
 	public string name;
 	public CardType type;
@@ -33,6 +33,8 @@ public class Card : MonoBehaviour {
 	public Color moveHighlightColor = new Color(0.5f, 0.5f, 1f);
 	[System.NonSerialized]
 	public Color attackHighlightColor  = new Color(1f, 0.5f, 0.5f);
+	[System.NonSerialized]
+	public Color aidHighlightColor  = new Color(0.5f, 1f, 0.5f);
 
 	private bool doingAnimation;
 
@@ -118,7 +120,6 @@ public class Card : MonoBehaviour {
 	}
 
 	public void passInTile(Tile tile){
-		Debug.Log ("Love it");
 		if (waitingForTile) {
 			passInTileCustom (tile);
 		}

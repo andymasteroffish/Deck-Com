@@ -140,7 +140,6 @@ public class GameManager : MonoBehaviour {
 
 	//Input for cards that are about to be played
 	public void tileClicked(Tile tile){
-		Debug.Log ("clickci");
 		if (activeCard != null) {
 			activeCard.passInTile (tile);
 		}
