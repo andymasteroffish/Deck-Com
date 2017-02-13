@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CardHeal : Card {
+public class Card_Heal : Card {
 
 	public int range;
 	public int healAmount;

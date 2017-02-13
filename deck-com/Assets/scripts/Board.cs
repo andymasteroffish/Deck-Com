@@ -97,6 +97,14 @@ public class Board : MonoBehaviour {
 		}
 	}
 
+	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
+		foreach (Unit unit in gm.units) {
+			if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
+				unit.setHighlighted (true, col);
+			}
+		}
+	}
+
 	public void highlightTilesInRange(Tile source, float range, bool includeWalls, bool includeOccupied, Color col){
 		List<Tile> selectable = getTilesInRange (source, range, includeWalls, includeOccupied);
 		foreach (Tile tile in selectable) {

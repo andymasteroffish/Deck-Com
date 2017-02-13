@@ -79,6 +79,9 @@ public class Item : MonoBehaviour {
 	public virtual void resetRoundCustom(){}
 
 	//general play
+	public virtual void turnEndPreDiscard(){}
+	public virtual void turnEndPostDiscard(){}
+
 	public virtual void cardPlayed(Card card){}
 
 	//modifiers

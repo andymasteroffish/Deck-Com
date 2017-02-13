@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CardAttack : Card {
+public class Card_Attack : Card {
 
 	public int damageAdjust;
 	public int rangeAdjust;

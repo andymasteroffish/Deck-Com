@@ -112,7 +112,7 @@ public class GameManager : MonoBehaviour {
 		//getting input
 
 		//clicks
-		if (Input.GetMouseButtonDown (0) && !areAnimaitonsHappening()) {
+		if (Input.GetMouseButtonDown (0) && !areAnimationsHappening()) {
 			//see if they clicked a card to play (but only if they are not in the process of playing one)
 			if (activeCard == null) {
 				activeUnit.checkActiveClick ();
@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour {
 		}
 
 		//tabbing
-		if (Input.GetKeyDown (KeyCode.Tab)) {
+		if (Input.GetKeyDown (KeyCode.Tab) && !areAnimationsHappening()) {
 			clearActiveCard ();
 			if (isPlayerTurn) {
 				tabActivePlayerUnit ();
@@ -270,9 +270,9 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//checking for things
-	public bool areAnimaitonsHappening(){
+	public bool areAnimationsHappening(){
 		foreach(Unit unit in units){
-			if (unit.areAnimaitonsHappening()){
+			if (unit.areAnimationsHappening()){
 				return true;
 			}
 		}

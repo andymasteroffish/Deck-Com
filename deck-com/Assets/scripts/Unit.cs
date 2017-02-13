@@ -106,10 +106,19 @@ public class Unit : MonoBehaviour {
 	void Update () {
 		//bounce the sprite when it is active
 		float spriteScale = 1;
-		if (isActive) {
+		if (isActive && !turnIsDone) {
 			spriteScale = 1.0f + Mathf.Abs(Mathf.Sin (Time.time * 2) * 0.2f);
 		}
 		spriteRend.gameObject.transform.localScale = new Vector3 (spriteScale, spriteScale, spriteScale);
+
+		//greying when turn is done
+		if (!isHighlighted) {
+			Color colThisFrame = new Color (1, 1, 1, 1);
+			if (turnIsDone) {
+				colThisFrame = new Color (0.3f, 0.3f, 0.3f, 0.5f);
+			}
+			spriteRend.color = colThisFrame;
+		}
 
 		//show health
 		healthText.text = "HP: " + health+"/"+baseHealth;
@@ -125,6 +134,11 @@ public class Unit : MonoBehaviour {
 
 	IEnumerator doEndTurn(){
 		doingAnimation = true;
+		turnIsDone = true;
+
+		foreach (Item charm in charms) {
+			charm.turnEndPreDiscard ();
+		}
 
 		//clear remaining actions
 		actionsLeft = 0;
@@ -138,13 +152,17 @@ public class Unit : MonoBehaviour {
 			deck.drawCard ();
 		}
 
-		while (deck.areAnimaitonsHappening ()) {
+		while (deck.areAnimationsHappening ()) {
 			yield return null;
 		}
 
 		yield return new WaitForSeconds (1f);	//a second to see the new cards
 
-		turnIsDone = true;
+		foreach (Item charm in charms) {
+			charm.turnEndPostDiscard ();
+		}
+
+		yield return new WaitForSeconds (0.5f);
 
 		if (isPlayerControlled) {
 			gm.tabActivePlayerUnit ();
@@ -203,6 +221,11 @@ public class Unit : MonoBehaviour {
 		StartCoroutine(doDeathAnimation(0.5f));
 	}
 
+	//other effects
+	public void gainActions(int num){
+		actionsLeft += num;
+	}
+
 
 	//animations
 	IEnumerator doMoveAnimation(Vector3 target, float time){
@@ -245,12 +268,12 @@ public class Unit : MonoBehaviour {
 
 	}
 
-	public bool areAnimaitonsHappening(){
+	public bool areAnimationsHappening(){
 		if (doingAnimation){
 			return true;
 		}
 
-		if (deck.areAnimaitonsHappening()){
+		if (deck.areAnimationsHappening()){
 			return true;
 		}
 

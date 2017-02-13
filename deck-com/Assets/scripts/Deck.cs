@@ -81,6 +81,11 @@ public class Deck : MonoBehaviour {
 
 	}
 
+	public void drawCards(int num){
+		for (int i=0; i<num; i++){
+			drawCard();
+		}
+	}
 	public void drawCard(){
 		if (drawPile.Count == 0) {
 			putDiscardInDrawPile ();
@@ -221,7 +226,7 @@ public class Deck : MonoBehaviour {
 	}
 
 	//checking for animations
-	public bool areAnimaitonsHappening(){
+	public bool areAnimationsHappening(){
 		if (doingAnimation) {
 			return true;
 		}
