@@ -74,7 +74,7 @@ public class Card : MonoBehaviour {
 
 	public void setPos(Vector3 newPos, int _order){
 		order = (float)_order;
-		transform.position = newPos;
+		transform.localPosition = newPos;
 		cancel ();
 	}
 
@@ -160,6 +160,10 @@ public class Card : MonoBehaviour {
 	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone){
 		doingAnimation = true;
 
+		yield return new WaitForSeconds (0.05f);
+
+		deck.removeCardFromHand (this);
+
 		float timer = time;
 		float startScale = transform.localScale.x;
 
@@ -181,8 +185,35 @@ public class Card : MonoBehaviour {
 			owner.markCardPlayed (this);
 		}
 
-		deck.discardCardFromHand (this);
+		deck.discardCard(this);
 
+		doingAnimation = false;
+	}
+
+	public void startDrawAnimation(){
+		StartCoroutine( doDrawAnimaiton (0.5f, transform.localPosition));
+	}
+
+	IEnumerator doDrawAnimaiton(float time, Vector3 targetPos){
+		doingAnimation = true;
+		float timer = 0;
+
+		Vector3 startPos = targetPos;
+		startPos.y -= 2;	//guessing
+
+		while (timer < time) {
+			timer += Time.deltaTime;
+			float prc = timer / time;
+
+			transform.localPosition = Vector3.Lerp (startPos, targetPos, prc);
+
+			yield return null;
+		}
+
+		transform.localPosition = targetPos;
+
+
+		doingAnimation = false;
 	}
 
 

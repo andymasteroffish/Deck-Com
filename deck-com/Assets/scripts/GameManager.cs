@@ -38,13 +38,13 @@ public class GameManager : MonoBehaviour {
 			unit.reset ();
 		}
 
-		startRound ();
+		startPlayerTurn ();
 
 	}
 
 	//starting and ending turns
 
-	void startRound(){
+	void startPlayerTurn(){
 		roundNum++;
 
 		isPlayerTurn = true;
@@ -58,14 +58,8 @@ public class GameManager : MonoBehaviour {
 		clearActiveCard ();
 	}
 
-	void endPlayerTurn(){
+	void startAITurn(){
 		isPlayerTurn = false;
-
-		//end the players
-		List<Unit> unitsPlayer = getPlayerUnits ();
-		foreach(Unit unit in unitsPlayer){
-			unit.endTurn ();
-		}
 
 		List<Unit> unitsAI = getAIUnits ();
 		if (unitsAI.Count == 0) {
@@ -77,17 +71,40 @@ public class GameManager : MonoBehaviour {
 			}
 			setActiveUnit (unitsAI [0]);
 		}
+
+		clearActiveCard ();
 	}
 
-	void endAITurn(){
-		//end AI
-		List<Unit> unitsAI = getAIUnits ();
-		foreach(Unit unit in unitsAI){
-			unit.endTurn ();
-		}
-
-		startRound ();
-	}
+//	void endPlayerTurn(){
+//		isPlayerTurn = false;
+//
+//		//end the players
+//		List<Unit> unitsPlayer = getPlayerUnits ();
+//		foreach(Unit unit in unitsPlayer){
+//			unit.endTurn ();
+//		}
+//
+//		List<Unit> unitsAI = getAIUnits ();
+//		if (unitsAI.Count == 0) {
+//			Debug.Log ("YOU WIN");
+//		} else {
+//			//start the AI
+//			foreach (Unit unit in unitsAI) {
+//				unit.resetRound ();
+//			}
+//			setActiveUnit (unitsAI [0]);
+//		}
+//	}
+//
+//	void endAITurn(){
+//		//end AI
+//		List<Unit> unitsAI = getAIUnits ();
+//		foreach(Unit unit in unitsAI){
+//			unit.endTurn ();
+//		}
+//
+//		startRound ();
+//	}
 
 	//Update
 	void Update () {
@@ -117,14 +134,15 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 
-		//ending the turn
+		//ending the turn for a unit
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			clearActiveCard ();
-			if (isPlayerTurn) {
-				endPlayerTurn ();
-			} else {
-				endAITurn ();
-			}
+			activeUnit.endTurn ();
+//			if (isPlayerTurn) {
+//				endPlayerTurn ();
+//			} else {
+//				endAITurn ();
+//			}
 		}
 
 		//pressing escape to cancel a move
@@ -176,7 +194,7 @@ public class GameManager : MonoBehaviour {
 		cam.setTarget (newActive);
 	}
 
-	void tabActivePlayerUnit(){
+	public void tabActivePlayerUnit(){
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		int idNum = -1;
 		for (int i = 0; i < unitsPlayer.Count; i++) {
@@ -184,14 +202,24 @@ public class GameManager : MonoBehaviour {
 				idNum = i;
 			}
 		}
-		int newID = idNum + 1;
-		if (newID >= unitsPlayer.Count) {
-			newID = 0;
+
+		//find the next unit who's turn is not over
+		int count = 0;
+		idNum = (idNum + 1) % unitsPlayer.Count;
+		while (unitsPlayer [idNum].TurnIsDone && count < unitsPlayer.Count + 1) {
+			idNum = (idNum + 1) % unitsPlayer.Count;
+			count++;
 		}
-		setActiveUnit (unitsPlayer [newID]);
+
+		//if we found one, great, otherwise, go to the next turn
+		if (count <= unitsPlayer.Count) {
+			setActiveUnit (unitsPlayer [idNum]);
+		} else {
+			startAITurn ();
+		}
 	}
 
-	void tabActiveAIUnit(){
+	public void tabActiveAIUnit(){
 		List<Unit> unitsAI = getAIUnits ();
 		int idNum = -1;
 		for (int i = 0; i < unitsAI.Count; i++) {
@@ -199,11 +227,21 @@ public class GameManager : MonoBehaviour {
 				idNum = i;
 			}
 		}
-		int newID = idNum + 1;
-		if (newID >= unitsAI.Count) {
-			newID = 0;
+
+		//find the next unit who's turn is not over
+		int count = 0;
+		idNum = (idNum + 1) % unitsAI.Count;
+		while (unitsAI [idNum].TurnIsDone && count < unitsAI.Count + 1) {
+			idNum = (idNum + 1) % unitsAI.Count;
+			count++;
 		}
-		setActiveUnit (unitsAI [newID]);
+
+		//if we found one, great, otherwise, go to the next turn
+		if (count <= unitsAI.Count) {
+			setActiveUnit (unitsAI [idNum]);
+		} else {
+			startPlayerTurn ();
+		}
 	}
 
 	//killing units

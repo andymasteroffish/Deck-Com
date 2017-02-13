@@ -98,6 +98,8 @@ public class Deck : MonoBehaviour {
 
 		hand.Add (card);
 		alignCardsInHand ();
+
+		card.startDrawAnimation ();
 	}
 
 	public void addCardToDrawPile(Card card){
@@ -120,9 +122,8 @@ public class Deck : MonoBehaviour {
 	}
 
 	public void discardHand(){
-		while (hand.Count > 0) {
-			addCardToDiscard (hand[0]);
-			hand.RemoveAt (0);
+		for (int i = 0; i < hand.Count; i++) {
+			hand [i].discard ();
 		}
 	}
 
@@ -147,11 +148,14 @@ public class Deck : MonoBehaviour {
 		}
 	}
 
-	public void discardCardFromHand(Card card){
-		//get rid of this card
-		addCardToDiscard(card);
+	//call this before you discard a card form hand
+	public void removeCardFromHand(Card card){
 		hand.Remove(card);
 		alignCardsInHand();
+	}
+	//this moves a card to the discard. It must have alreayd been rmeoved from the source
+	public void discardCard(Card card){
+		addCardToDiscard(card);
 		owner.GM.clearActiveCard ();
 	}
 
@@ -159,7 +163,7 @@ public class Deck : MonoBehaviour {
 	//visual things
 	void alignCardsInHand(){
 		for (int i=0; i<hand.Count; i++){
-			hand[i].setPos (cardStartPos.position + cardSpacing * (float)i, i);
+			hand[i].setPos (cardStartPos.localPosition + cardSpacing * (float)i, i);
 		}
 	}
 

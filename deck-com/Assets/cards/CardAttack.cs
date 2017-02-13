@@ -27,6 +27,10 @@ public class CardAttack : Card {
 
 		int damageVal = Owner.Weapon.baseDamage + damageAdjust;
 
+		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
+		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
+		Debug.Log ("cover: " + coverVal);
+
 		if (damageVal < 0) {
 			damageVal = 0;
 		}

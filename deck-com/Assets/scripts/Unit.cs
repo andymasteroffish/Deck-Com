@@ -19,6 +19,7 @@ public class Unit : MonoBehaviour {
 	public int baseHandSize;
 
 	private bool isActive;
+	private bool turnIsDone;
 
 	public int baseActions;
 	private int actionsLeft;
@@ -87,6 +88,7 @@ public class Unit : MonoBehaviour {
 	public void resetRound(){
 		actionsLeft = baseActions;
 		setActive (false);
+		turnIsDone = false;
 		foreach (Item charm in charms) {
 			charm.resetRound ();
 		}
@@ -118,14 +120,39 @@ public class Unit : MonoBehaviour {
 
 	//ending the turn
 	public void endTurn(){
+		StartCoroutine (doEndTurn ());
+	}
+
+	IEnumerator doEndTurn(){
+		doingAnimation = true;
+
 		//clear remaining actions
 		actionsLeft = 0;
 		//discard the hand
 		deck.discardHand();
+
+		yield return new WaitForSeconds (0.52f);
+
 		//draw to hand size
 		for (int i = 0; i < baseHandSize; i++) {
 			deck.drawCard ();
 		}
+
+		while (deck.areAnimaitonsHappening ()) {
+			yield return null;
+		}
+
+		yield return new WaitForSeconds (1f);	//a second to see the new cards
+
+		turnIsDone = true;
+
+		if (isPlayerControlled) {
+			gm.tabActivePlayerUnit ();
+		} else {
+			gm.tabActiveAIUnit ();
+		}
+
+		doingAnimation = false;
 	}
 
 	//playing a cards
@@ -283,6 +310,12 @@ public class Unit : MonoBehaviour {
 	public bool IsActive{
 		get{
 			return this.isActive;
+		}
+	}
+
+	public bool TurnIsDone{
+		get{
+			return this.turnIsDone;
 		}
 	}
 

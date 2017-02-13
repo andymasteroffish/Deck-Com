@@ -14,6 +14,9 @@ public class Board : MonoBehaviour {
 
 	public GameObject tilePrefab;
 
+	public int partialCoverDamageReduction;
+	public float fullCoverDamagePrc;
+
 	// Use this for initialization
 	void Start () {
 		reset ();
@@ -234,7 +237,6 @@ public class Board : MonoBehaviour {
 			}
 		}
 
-		Debug.Log ("cover: " + returnVal);
 		return returnVal;
 	}
 
@@ -300,6 +302,21 @@ public class Board : MonoBehaviour {
 				grid [x, y].collider.enabled = true;
 			}
 		}
+	}
+
+	public int getNewDamageValFromCover(int origDamage, Tile.Cover cover){
+		int newDamage = origDamage;
+		if (cover == Tile.Cover.Part) {
+			newDamage -= partialCoverDamageReduction;
+		}
+		if (cover == Tile.Cover.Full) {
+			newDamage = (int) Mathf.Floor( (float)origDamage * fullCoverDamagePrc );
+			//make sure it is at least as good as partial cover
+			if (newDamage > origDamage - partialCoverDamageReduction) {
+				newDamage = origDamage - partialCoverDamageReduction;
+			}
+		}
+		return newDamage;
 	}
 
 
