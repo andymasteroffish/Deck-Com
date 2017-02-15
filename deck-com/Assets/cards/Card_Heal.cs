@@ -8,6 +8,8 @@ public class Card_Heal : Card {
 	public int healAmount;
 
 	public override void setupCustom(){
+		type = CardType.Aid;
+
 		textField.text = "heals "+healAmount+" at range "+range;
 	}
 

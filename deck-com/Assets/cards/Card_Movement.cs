@@ -10,6 +10,8 @@ public class Card_Movement : Card {
 	public int bonusCards;
 
 	public override void setupCustom(){
+		type = Card.CardType.Movement;
+
 		textField.text = "move up to " + range + " spaces";
 		if (bonusActions > 0) {
 			textField.text += "\n+" + bonusActions + " action(s)";

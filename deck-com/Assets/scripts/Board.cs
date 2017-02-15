@@ -222,6 +222,79 @@ public class Board : MonoBehaviour {
 
 	}
 
+	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal){
+		List<Tile> tiles = new List<Tile> ();
+
+		for (int xOffset = - 1; xOffset <= 1; xOffset++) {
+			for (int yOffset = - 1; yOffset <= 1; yOffset++) {
+				int x = start.Pos.x + xOffset;
+				int y = start.Pos.y + yOffset;
+				if (x >= 0 && x < cols && y >= 0 && y < rows && (xOffset != 0 || yOffset !=0)) {
+					if (includeDiagonal || (xOffset != yOffset)) {
+						tiles.Add (grid [x, y]);
+					}
+				}
+			}
+		}
+
+		return tiles;
+	}
+
+	public List<Unit> getAdjacentUnits(Tile start, bool includeDiagonal){
+		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal);
+		List<Unit> units = new List<Unit> ();
+
+		for (int i = 0; i < tiles.Count; i++) {
+			Unit unit = getUnitOnTile (tiles [i]);
+			if (unit != null) {
+				units.Add (unit);
+			}
+		}
+		return units;
+	}
+
+	public Unit getUnitOnTile(Tile tile){
+		for (int i=0; i<gm.units.Count; i++){
+			if (gm.units[i].CurTile == tile) {
+				return gm.units[i];
+			}
+		}
+		return null;
+	}
+
+	//this can be optimized a lot
+	public List<Tile> getTilesInDist(Tile start, float dist){
+		List<Tile> tiles = new List<Tile> ();
+
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				if (start.Pos.getDist (grid [x, y].Pos) <= dist) {
+					tiles.Add (grid [x, y]);
+				}
+			}
+		}
+
+		return tiles;
+	}
+
+	public Tile getFirstTileWithCover(Tile start, Tile end){
+		Tile returnVal = null;
+		//get the direction
+		float dist = Vector3.Distance (start.transform.position, end.transform.position);
+		Vector3 dir3 = end.transform.position - start.transform.position;
+		Vector2 dir = new Vector2(dir3.x, dir3.y);
+		//turn off tiles with no cover
+		turnOffAllTileCollidersBelow(Tile.Cover.Part);
+		//shoot the ray!
+		RaycastHit2D hit = Physics2D.Raycast(start.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		if (hit.collider != null) {
+			returnVal = hit.collider.gameObject.GetComponent<Tile> ();
+		}
+
+		turnOnAllTileColliders ();
+		return returnVal;
+	}
+
 	//checking cover
 	public Tile.Cover getCover(Unit sourceUnit, Unit targetUnit){
 
@@ -255,8 +328,7 @@ public class Board : MonoBehaviour {
 		Vector2 dir = new Vector2(dir3.x, dir3.y);
 
 		//debug line
-		Debug.DrawLine(sourceTile.transform.position, sourceTile.transform.position+new Vector3(dir.x, dir.y, 0), Color.red);
-
+		//Debug.DrawLine(sourceTile.transform.position, sourceTile.transform.position+new Vector3(dir.x, dir.y, 0), Color.red);
 
 		//check for full cover
 		turnOffAllTileCollidersExcept(Tile.Cover.Full);
@@ -301,6 +373,13 @@ public class Board : MonoBehaviour {
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
 				grid [x, y].collider.enabled = grid [x, y].CoverVal == coverLevelToKeepOn;
+			}
+		}
+	}
+	void turnOffAllTileCollidersBelow(Tile.Cover coverLevelToKeepOn){
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				grid [x, y].collider.enabled = (int)grid [x, y].CoverVal >= (int)coverLevelToKeepOn;
 			}
 		}
 	}

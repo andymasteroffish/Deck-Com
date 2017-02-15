@@ -181,7 +181,7 @@ public class Unit : MonoBehaviour {
 		}
 
 		//reduce the actions
-		actionsLeft--;
+		actionsLeft -= card.getNumActionsNeededToPlay();
 	}
 
 	//input

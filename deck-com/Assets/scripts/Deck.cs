@@ -61,9 +61,6 @@ public class Deck : MonoBehaviour {
 		float moveTime = 0.2f;
 		if (isActive) {
 			StartCoroutine (doMoveAnimation (startPos.position, Vector3.zero, moveTime));
-			foreach (Card card in hand) {
-				card.setDisabled (owner.ActionsLeft <= 0);
-			}
 		} else {
 			StartCoroutine (doMoveAnimation (Vector3.zero, endPos.position, moveTime));
 		}
@@ -203,15 +200,8 @@ public class Deck : MonoBehaviour {
 			Destroy (actionOrbSprites [actionOrbSprites.Count - 1].gameObject);
 			actionOrbSprites.RemoveAt (actionOrbSprites.Count - 1);
 
-			foreach (Card card in hand) {
-				card.setDisabled (owner.ActionsLeft <= 0);
-			}
 		}
 
-		//tetsing
-//		if (Input.GetKeyDown (KeyCode.D)) {
-//			hand [0].discard ();
-//		}
 	
 	}
 

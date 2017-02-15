@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour {
 
-	public enum CardType{Attack, Movement, Aid, Other};
+	public enum CardType{Attack, AttackSpecial, Movement, Aid, Other};
 
 	public string name;
+
+	[System.NonSerialized]
 	public CardType type;
+	[System.NonSerialized]
+	public int baseActionCost;
 
 	[System.NonSerialized]
 	public Text nameField;
@@ -62,7 +66,11 @@ public class Card : MonoBehaviour {
 		nameField.text = name;
 		//textField.text = "Hey, I'm testin over here! "+Random.Range(0,999).ToString();
 
+		//default values
+		baseActionCost = 1;
+		type = CardType.Other;
 
+		//custom stiff
 		setupCustom ();
 	}
 	public virtual void setupCustom(){}
@@ -81,6 +89,12 @@ public class Card : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+
+
+		//check if this can be played
+		setDisabled (checkIfCanBePlayed() == false);
+
 		Vector3 spritePos = new Vector3 (0, 0, order * -0.1f);
 		Color col = new Color (1, 1, 1, 1);
 		if (mouseIsOver) {
@@ -102,6 +116,20 @@ public class Card : MonoBehaviour {
 			
 	}
 
+	//by default, cards just need an aciton to be played
+	public virtual bool checkIfCanBePlayed(){
+		return Owner.ActionsLeft >= getNumActionsNeededToPlay();
+	}
+
+	public int getNumActionsNeededToPlay(){
+		int actionCost = baseActionCost;
+		foreach (Item charm in Owner.Charms) {
+			actionCost += charm.getCardActionCostMod (this);
+		}
+		return actionCost;
+	}
+		
+
 	public void selectCard(){
 		isActive = true;
 		owner.GM.setCardActive (this);
@@ -117,7 +145,10 @@ public class Card : MonoBehaviour {
 			isActive = false;
 			owner.GM.clearActiveCard ();
 		}
+		cancelCustom ();
+
 	}
+	public virtual void cancelCustom(){}
 
 	public void passInTile(Tile tile){
 		if (waitingForTile) {
@@ -216,6 +247,22 @@ public class Card : MonoBehaviour {
 		doingAnimation = false;
 	}
 
+	//some actions that are common enough to standardize
+
+	public void doWeaponDamageToUnit(Unit unit, int damageMod){
+		int damageVal = Owner.Weapon.baseDamage + damageMod;
+
+		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
+		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
+
+		if (damageVal < 0) {
+			damageVal = 0;
+		}
+
+		Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
+
+		unit.takeDamage (damageVal);
+	}
 
 	//setters getters
 

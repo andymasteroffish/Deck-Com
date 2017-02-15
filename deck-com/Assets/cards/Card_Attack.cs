@@ -9,6 +9,8 @@ public class Card_Attack : Card {
 
 
 	public override void setupCustom(){
+		type = Card.CardType.Attack;
+
 		string damageText = "Damage: " + (damageAdjust >= 0 ? "+" : "") + damageAdjust;
 		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
 
@@ -23,19 +25,7 @@ public class Card_Attack : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-
-
-		int damageVal = Owner.Weapon.baseDamage + damageAdjust;
-
-		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
-		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
-		Debug.Log ("cover: " + coverVal);
-
-		if (damageVal < 0) {
-			damageVal = 0;
-		}
-
-		unit.takeDamage (damageVal);
+		doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}
 }

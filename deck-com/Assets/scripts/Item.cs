@@ -85,6 +85,7 @@ public class Item : MonoBehaviour {
 	public virtual void cardPlayed(Card card){}
 
 	//modifiers
+	public virtual int getCardActionCostMod(Card card){return 0;}
 	public virtual int getHealMod(Card card){return 0;}
 
 	//animations

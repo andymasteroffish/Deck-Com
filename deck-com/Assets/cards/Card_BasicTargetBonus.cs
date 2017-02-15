@@ -9,13 +9,15 @@ public class Card_BasicTargetBonus : Card {
 	public int numActionsToGain;
 
 	// Use this for initialization
-	void Start () {
+	public override void setupCustom(){
+		type = CardType.Aid;
+
 		textField.text = "Gain";
 		if (numCardsToDraw > 0) {
-			textField.text = "\n+" + numCardsToDraw + " card(s)";
+			textField.text += "\n+" + numCardsToDraw + " card(s)";
 		}
 		if (numActionsToGain > 0) {
-			textField.text = "\n+" + numActionsToGain + " actions(s)";
+			textField.text += "\n+" + numActionsToGain + " actions(s)";
 		}
 		if (anyUnit) {
 			textField.text += "\n(any unit)";
@@ -24,7 +26,11 @@ public class Card_BasicTargetBonus : Card {
 	
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
-		Owner.GM.board.highlightAllUnits (true, true, aidHighlightColor);
+		if (anyUnit) {
+			Owner.GM.board.highlightAllUnits (true, true, aidHighlightColor);
+		} else {
+			Owner.setHighlighted (true, aidHighlightColor);
+		}
 	}
 
 	public override void passInUnitCustom(Unit unit){
