@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [ExecuteInEditMode]
-public class SpriteOutline : MonoBehaviour {
+public class SpriteOutline_old : MonoBehaviour {
     public Color color = Color.white;
 
     [Range(0, 16)]
