@@ -123,8 +123,8 @@ public class Card : MonoBehaviour {
 
 	public int getNumActionsNeededToPlay(){
 		int actionCost = baseActionCost;
-		foreach (Item charm in Owner.Charms) {
-			actionCost += charm.getCardActionCostMod (this);
+		for (int i=Owner.Charms.Count-1; i>=0; i--){
+			actionCost += Owner.Charms[i].getCardActionCostMod (this);
 		}
 		return actionCost;
 	}
@@ -254,6 +254,10 @@ public class Card : MonoBehaviour {
 
 		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
 		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
+
+		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
+			damageVal += owner.Charms [i].getWeaponDamageMod (this);
+		}
 
 		if (damageVal < 0) {
 			damageVal = 0;

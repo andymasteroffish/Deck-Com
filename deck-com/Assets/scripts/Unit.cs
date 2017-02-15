@@ -55,11 +55,7 @@ public class Unit : MonoBehaviour {
 
 		//spawn the items
 		for (int i = 0; i < itemPrefabs.Length; i++) {
-			GameObject itemObj = Instantiate (itemPrefabs[i], Vector3.zero, Quaternion.identity) as GameObject;
-			Item thisItem =  itemObj.GetComponent<Item> ();
-			thisItem.setup (this, i);
-			itemObj.name = unitName + "_" + thisItem.name;
-			charms.Add (thisItem);
+			addCharm (itemPrefabs [i]);
 		}
 
 		//the first item is the weapon
@@ -75,6 +71,26 @@ public class Unit : MonoBehaviour {
 	}
 	public virtual void setupCustom(){}
 
+	public void addCharm(GameObject charmPrefab){
+		GameObject itemObj = Instantiate (charmPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+		Item thisItem =  itemObj.GetComponent<Item> ();
+		thisItem.setup (this, charms.Count);
+		itemObj.name = unitName + "_" + thisItem.name;
+		thisItem.setActive (isActive);
+		charms.Add (thisItem);
+	}
+
+	public void removeCharm(Item charmToRemove){
+		//kill this one
+		Destroy (charmToRemove.gameObject);
+		charms.Remove (charmToRemove);
+
+		//space out the others
+		for (int i = 0; i < charms.Count; i++) {
+			charms[i].setPos (i);
+		}
+	}
+
 	public void reset(){
 		//draw first hand
 		for (int i = 0; i < baseHandSize; i++) {
@@ -89,16 +105,16 @@ public class Unit : MonoBehaviour {
 		actionsLeft = baseActions;
 		setActive (false);
 		turnIsDone = false;
-		foreach (Item charm in charms) {
-			charm.resetRound ();
+		for (int i=charms.Count-1; i>=0; i--){
+			charms[i].resetRound ();
 		}
 	}
 
 	public void setActive(bool _isActive){
 		isActive = _isActive;
 		deck.setActive (isActive);
-		foreach (Item charm in charms) {
-			charm.setActive (isActive);
+		for (int i=charms.Count-1; i>=0; i--){
+			charms[i].setActive (isActive);
 		}
 	}
 
@@ -136,8 +152,8 @@ public class Unit : MonoBehaviour {
 		doingAnimation = true;
 		turnIsDone = true;
 
-		foreach (Item charm in charms) {
-			charm.turnEndPreDiscard ();
+		for (int i=charms.Count-1; i>=0; i--){
+			charms[i].turnEndPreDiscard ();
 		}
 
 		//clear remaining actions
@@ -158,8 +174,8 @@ public class Unit : MonoBehaviour {
 
 		yield return new WaitForSeconds (1f);	//a second to see the new cards
 
-		foreach (Item charm in charms) {
-			charm.turnEndPostDiscard ();
+		for (int i=charms.Count-1; i>=0; i--){
+			charms[i].turnEndPostDiscard ();
 		}
 
 		yield return new WaitForSeconds (0.5f);
@@ -176,8 +192,8 @@ public class Unit : MonoBehaviour {
 	//playing a cards
 	public void markCardPlayed(Card card){
 		//check if any item does something
-		foreach (Item charm in charms) {
-			charm.cardPlayed (card);
+		for (int i=charms.Count-1; i>=0; i--){
+			charms[i].cardPlayed (card);
 		}
 
 		//reduce the actions

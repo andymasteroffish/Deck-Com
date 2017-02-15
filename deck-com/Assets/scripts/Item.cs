@@ -49,12 +49,7 @@ public class Item : MonoBehaviour {
 		textField.text = description;
 
 		//setting up movement
-		float ySpacing = 1.4f;
-		Transform startTrans = GameObject.Find ("itemStartPos").transform;
-		startPos = new Vector3 (startTrans.position.x, startTrans.position.y + offsetID*ySpacing, startTrans.position.z);
-		Transform endTrans = GameObject.Find ("itemEndPos").transform;
-		endPos = new Vector3 (endTrans.position.x, endTrans.position.y + offsetID*ySpacing, endTrans.position.z);
-
+		setPos(offsetID);
 
 		transform.position = startPos;
 
@@ -63,6 +58,14 @@ public class Item : MonoBehaviour {
 		setupCustom ();
 	}
 	public virtual void setupCustom(){}
+
+	public void setPos(int offsetID){
+		float ySpacing = 1.4f;
+		Transform startTrans = GameObject.Find ("itemStartPos").transform;
+		startPos = new Vector3 (startTrans.position.x, startTrans.position.y + offsetID * ySpacing, startTrans.position.z);
+		Transform endTrans = GameObject.Find ("itemEndPos").transform;
+		endPos = new Vector3 (endTrans.position.x, endTrans.position.y + offsetID * ySpacing, endTrans.position.z);
+	}
 	
 	public void setActive(bool isActive){
 		float moveTime = 0.2f;
@@ -86,6 +89,7 @@ public class Item : MonoBehaviour {
 
 	//modifiers
 	public virtual int getCardActionCostMod(Card card){return 0;}
+	public virtual int getWeaponDamageMod(Card card){return 0;}
 	public virtual int getHealMod(Card card){return 0;}
 
 	//animations
