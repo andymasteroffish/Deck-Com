@@ -89,9 +89,6 @@ public class Card : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-
-
 		//check if this can be played
 		setDisabled (checkIfCanBePlayed() == false);
 
@@ -129,7 +126,6 @@ public class Card : MonoBehaviour {
 		return actionCost;
 	}
 		
-
 	public void selectCard(){
 		isActive = true;
 		owner.GM.setCardActive (this);
@@ -182,10 +178,22 @@ public class Card : MonoBehaviour {
 	//utility
 	void OnMouseEnter(){
 		mouseIsOver = true;
+		if (Owner.GM.activeCard == null) {
+			mouseEnterEffects ();
+		}
 	}
+	public virtual void mouseEnterEffects(){}
+
 	void OnMouseExit(){
 		mouseIsOver = false;
+		if (!isActive && Owner.GM.activeCard == null) {
+			owner.GM.board.clearHighlights ();
+		}
+		mosueExitEffects ();
 	}
+	public virtual void mosueExitEffects(){}
+
+
 
 	//animations
 	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone){
@@ -250,6 +258,21 @@ public class Card : MonoBehaviour {
 	}
 
 	//some actions that are common enough to standardize
+
+	public void mouseEnterForWeapon(int rangeMod){
+		owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, Owner.Weapon.baseRange + rangeMod, attackHighlightColor);
+	}
+//	public void mouseExitForWeapon(){
+//		
+//	}
+
+	public void selectCardForWeapon(int rangeAdjust){
+		WaitingForUnit = true;
+		int range = Owner.Weapon.baseRange + rangeAdjust;
+
+		owner.GM.board.clearHighlights ();
+		Owner.GM.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
+	}
 
 	public void doWeaponDamageToUnit(Unit unit, int damageMod){
 		int damageVal = Owner.Weapon.baseDamage + damageMod;

@@ -97,6 +97,19 @@ public class Board : MonoBehaviour {
 		}
 	}
 
+	public void highlightUnitsInVisibleRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
+		List<Tile> selectable = getTilesInVisibleRange (source, range);
+		foreach (Tile tile in selectable) {
+			foreach (Unit unit in gm.units) {
+				if (unit.CurTile == tile) {
+					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
+						unit.setHighlighted (true, col);
+					}
+				}
+			}
+		}
+	}
+
 	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
 		foreach (Unit unit in gm.units) {
 			if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
@@ -105,6 +118,72 @@ public class Board : MonoBehaviour {
 		}
 	}
 
+	//VISIBLE RANGE IS AS THE CROW FLIES, BUT NOT OBSCURED
+	public void highlightTilesInVisibleRange(Tile source, float range, Color col){
+		List<Tile> selectable = getTilesInVisibleRange (source, range);
+		foreach (Tile tile in selectable) {
+			tile.setHighlighted (true, col);
+		}
+	}
+
+	public List<Tile> getTilesInVisibleRange(Tile source, float range){
+		List<Tile> returnTiles = new List<Tile> ();
+
+		//figure out what range could work in a square
+		int startX = (int)Mathf.Max(source.Pos.x - range, 0);
+		int startY = (int)Mathf.Max(source.Pos.y - range, 0);
+		int endX = (int)Mathf.Min(source.Pos.x + range, cols-1);
+		int endY = (int)Mathf.Min(source.Pos.y + range, rows-1);
+
+		//go through each one
+		for (int x = startX; x <= endX; x++) {
+			for (int y = startY; y <= endY; y++) {
+				//check if it is in range
+				if (source.Pos.getDist (grid [x, y].Pos) <= range) {
+
+					//if it is, check if a line can be drawn between it and any adjacent, unnocupied tiles
+					List<Tile> tiles = getAdjacentTiles (source, false, Tile.Cover.Part);
+					tiles.Add (source);	//get adjacent does not include the source by default
+					bool doneChecking = false;
+
+					foreach (Tile tile in tiles) {
+						if (!doneChecking) {
+							if (checkIfTilesAreVisibleToEachother (tile, grid [x, y])) {
+								returnTiles.Add (grid [x, y]);
+								doneChecking = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return returnTiles;
+	}
+
+	//draws a ray between two tiles and returns true if no full cover blocked it
+	public bool checkIfTilesAreVisibleToEachother(Tile a, Tile b){
+		bool returnVal = true;
+		//get the direction
+		float dist = Vector3.Distance (a.transform.position, b.transform.position);
+		Vector3 dir3 = b.transform.position - a.transform.position;
+		Vector2 dir = new Vector2(dir3.x, dir3.y);
+		//turn off tiles with no cover
+		turnOffAllTileCollidersExcept(Tile.Cover.Full);
+		//turn off the colliders on these tiles too
+		a.collider.enabled = false;
+		b.collider.enabled = false;
+		//shoot the ray!
+		RaycastHit2D hit = Physics2D.Raycast(a.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		if (hit.collider != null) {
+			returnVal = false;
+		}
+
+		turnOnAllTileColliders ();
+		return returnVal;
+	}
+
+	//IN RANGE MEANS YOU CAN WALK THERE
 	public void highlightTilesInRange(Tile source, float range, bool includeWalls, bool includeOccupied, Color col){
 		List<Tile> selectable = getTilesInRange (source, range, includeWalls, includeOccupied);
 		foreach (Tile tile in selectable) {
@@ -219,10 +298,9 @@ public class Board : MonoBehaviour {
 		}
 
 		return returnTiles;
-
 	}
 
-	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal){
+	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
 		List<Tile> tiles = new List<Tile> ();
 
 		for (int xOffset = - 1; xOffset <= 1; xOffset++) {
@@ -231,7 +309,9 @@ public class Board : MonoBehaviour {
 				int y = start.Pos.y + yOffset;
 				if (x >= 0 && x < cols && y >= 0 && y < rows && (xOffset != 0 || yOffset !=0)) {
 					if (includeDiagonal || (xOffset != yOffset)) {
-						tiles.Add (grid [x, y]);
+						if ((int)grid [x, y].CoverVal <= (int)maxCover) {
+							tiles.Add (grid [x, y]);
+						}
 					}
 				}
 			}
@@ -241,7 +321,7 @@ public class Board : MonoBehaviour {
 	}
 
 	public List<Unit> getAdjacentUnits(Tile start, bool includeDiagonal){
-		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal);
+		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, Tile.Cover.Full);
 		List<Unit> units = new List<Unit> ();
 
 		for (int i = 0; i < tiles.Count; i++) {

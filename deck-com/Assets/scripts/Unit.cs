@@ -135,7 +135,7 @@ public class Unit : MonoBehaviour {
 		//bounce the sprite when it is active
 		float spriteScale = 1;
 		if (isActive && !turnIsDone) {
-			spriteScale = 1.0f + Mathf.Abs(Mathf.Sin (Time.time * 2) * 0.2f);
+			spriteScale = 1.0f + Mathf.Abs(Mathf.Sin (Time.time * 2) * 0.1f);
 		}
 		spriteRend.gameObject.transform.localScale = new Vector3 (spriteScale, spriteScale, spriteScale);
 
