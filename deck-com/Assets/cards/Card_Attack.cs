@@ -20,7 +20,7 @@ public class Card_Attack : Card {
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		int range = Owner.Weapon.baseRange + rangeAdjust;
-		Owner.GM.board.highlightTilesInRange (Owner.CurTile, range, false, true, attackHighlightColor);
+		//Owner.GM.board.highlightTilesInRange (Owner.CurTile, range, false, true, attackHighlightColor);
 		Owner.GM.board.highlightUnitsInRange (Owner.CurTile, range, true, true, attackHighlightColor);
 	}
 

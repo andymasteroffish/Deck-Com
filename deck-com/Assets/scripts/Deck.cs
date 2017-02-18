@@ -174,6 +174,7 @@ public class Deck : MonoBehaviour {
 		doingAnimation = true;
 
 		float timer = 0;
+		time *= owner.GM.debugAnimationTimeMod;
 
 		while (timer < time) {
 			timer += Time.deltaTime;

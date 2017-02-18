@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Unit : MonoBehaviour {
 
+	//some basic info
 	public string unitName;
 
 	private GameManager gm;
@@ -12,34 +13,42 @@ public class Unit : MonoBehaviour {
 	public bool isPlayerControlled;
 
 	private Tile curTile;
+	private bool isActive;
+	private bool turnIsDone;
 
+	//stats
 	public int baseHealth;
 	private int health;
 
 	public int baseHandSize;
 
-	private bool isActive;
-	private bool turnIsDone;
-
 	public int baseActions;
 	private int actionsLeft;
 
+	//display
 	public SpriteRenderer spriteRend;
 	public Text healthText;
 
+	public GameObject spriteOutlinePrefab;
+	private SpriteOutline outline = null;
+
+	private bool isHighlighted;
+
 	private bool doingAnimation;
 
+	//decks and cards
 	public GameObject deckPrefab;
 	[System.NonSerialized]
 	public Deck deck;
 
+	//weapons and charms
 	public GameObject[] itemPrefabs;
 	private Item weapon;
 	private List<Item> charms = new List<Item>();
 
+	//utility
 	private bool mouseIsOver;
 
-	private bool isHighlighted;
 
 	public void setup(GameManager _gm, int startX, int startY){
 		gm = _gm;
@@ -47,6 +56,9 @@ public class Unit : MonoBehaviour {
 		transform.position = curTile.transform.position;
 
 		health = baseHealth;
+
+		//set the outline
+		//createOutlineObj();
 
 		//spawn deck
 		GameObject deckObj = Instantiate (deckPrefab, Vector3.zero, Quaternion.identity) as GameObject;
@@ -130,7 +142,7 @@ public class Unit : MonoBehaviour {
 		//greying when turn is done
 		if (!isHighlighted) {
 			Color colThisFrame = new Color (1, 1, 1, 1);
-			if (turnIsDone) {
+			if (turnIsDone && gm.IsPlayerTurn == isPlayerControlled) {
 				colThisFrame = new Color (0.3f, 0.3f, 0.3f, 0.5f);
 			}
 			spriteRend.color = colThisFrame;
@@ -161,7 +173,7 @@ public class Unit : MonoBehaviour {
 		//discard the hand
 		deck.discardHand();
 
-		yield return new WaitForSeconds (0.52f);
+		yield return new WaitForSeconds (0.5f * gm.debugAnimationTimeMod);
 
 		//draw to hand size
 		for (int i = 0; i < baseHandSize; i++) {
@@ -172,13 +184,13 @@ public class Unit : MonoBehaviour {
 			yield return null;
 		}
 
-		yield return new WaitForSeconds (1f);	//a second to see the new cards
+		yield return new WaitForSeconds (1f * gm.debugAnimationTimeMod);	//a second to see the new cards
 
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].turnEndPostDiscard ();
 		}
 
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.5f * gm.debugAnimationTimeMod);
 
 		if (isPlayerControlled) {
 			gm.tabActivePlayerUnit ();
@@ -265,7 +277,7 @@ public class Unit : MonoBehaviour {
 	IEnumerator doDeathAnimation(float time){
 		doingAnimation = true;
 
-		float timer = time;
+		float timer = time * gm.debugAnimationTimeMod;
 		float startScale = transform.localScale.x;
 
 		while (timer > 0) {
@@ -298,15 +310,28 @@ public class Unit : MonoBehaviour {
 
 	//highlighting
 	public void setHighlighted(bool val, Color col){
+		if (outline == null) {
+			createOutlineObj ();
+		}
+
 		isHighlighted = val;
 		if (isHighlighted) {
-			spriteRend.color = col;
+			outline.turnOn (col);
+			//spriteRend.color = col;
 		} else {
-			spriteRend.color = new Color (1, 1, 1);
+			outline.turnOff ();
+			//spriteRend.color = new Color (1, 1, 1);
 		}
 	}
 	public void setHighlighted(bool val){
 		setHighlighted (val, Color.white);
+	}
+
+	private void createOutlineObj(){
+		GameObject outlineObj = Instantiate(spriteOutlinePrefab, spriteRend.gameObject.transform.position, Quaternion.identity) as GameObject;
+		outlineObj.transform.parent = spriteRend.gameObject.transform;
+		outline = outlineObj.GetComponent<SpriteOutline> ();
+		outline.setup ();
 	}
 
 	//utility

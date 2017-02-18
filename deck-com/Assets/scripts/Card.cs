@@ -195,7 +195,7 @@ public class Card : MonoBehaviour {
 
 		deck.removeCardFromHand (this);
 
-		float timer = time;
+		float timer = time  * Owner.GM.debugAnimationTimeMod;
 		float startScale = transform.localScale.x;
 
 		while (timer > 0) {
@@ -228,6 +228,8 @@ public class Card : MonoBehaviour {
 	IEnumerator doDrawAnimaiton(float time, Vector3 targetPos){
 		doingAnimation = true;
 		float timer = 0;
+
+		time *= Owner.GM.debugAnimationTimeMod;
 
 		Vector3 startPos = targetPos;
 		startPos.y -= 2;	//guessing

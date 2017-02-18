@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
 
+	public float debugAnimationTimeMod;
+
 	public CameraControl cam;
 	public Board board;
 
@@ -282,9 +284,9 @@ public class GameManager : MonoBehaviour {
 
 	//setters and getters
 
-//	public List<Unit> Units{
-//		get{
-//			return this.allUnits;
-//		}
-//	}
+	public bool IsPlayerTurn {
+		get {
+			return this.isPlayerTurn;
+		}
+	}
 }
