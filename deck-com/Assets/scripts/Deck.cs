@@ -124,7 +124,7 @@ public class Deck : MonoBehaviour {
 	}
 
 	public void discardHand(){
-		for (int i = 0; i < hand.Count; i++) {
+		for (int i = hand.Count-1; i >= 0; i--) {
 			hand [i].discard ();
 		}
 	}
