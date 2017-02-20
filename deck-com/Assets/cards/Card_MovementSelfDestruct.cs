@@ -2,15 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Card_MoveAttackAOE : Card {
+public class Card_MovementSelfDestruct : Card {
 
 	public int range;
-	public int damage;
+
 
 	public override void setupCustom(){
-		type = CardType.Movement;
+		type = Card.CardType.Movement;
 
-		textField.text = "move up to " + range + " spaces and deal "+damage+" to ALL adjacent units";
+		baseActionCost = 0;
+
+		textField.text = "move up to " + range + " spaces. Costs 0 acitons. One Time Use.";
+	}
+
+	public override void mouseEnterEffects(){
+		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
 	}
 
 	public override void selectCardCustom(){
@@ -21,12 +27,7 @@ public class Card_MoveAttackAOE : Card {
 	public override void passInTileCustom(Tile tile){
 		Owner.moveTo (tile);
 
-		List<Unit> units = Owner.GM.board.getAdjacentUnits (tile, true);
-		for (int i = 0; i < units.Count; i++) {
-			units [i].takeDamage (damage);
-		}
 
-
-		finish ();
+		finish (true);
 	}
 }

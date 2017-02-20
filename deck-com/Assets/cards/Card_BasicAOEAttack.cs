@@ -27,7 +27,7 @@ public class Card_BasicAOEAttack : Card {
 
 	public override void selectCardCustom(){
 		WaitingForTile = true;
-		Owner.GM.board.highlightTilesInRange (Owner.CurTile, throwRange, false, true, attackHighlightColor);
+		Owner.GM.board.highlightTilesInVisibleRange(Owner.CurTile, throwRange, attackHighlightColor);
 	}
 
 	public override void passInTileCustom(Tile tile){

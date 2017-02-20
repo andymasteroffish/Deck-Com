@@ -7,7 +7,7 @@ public class Card_MoveAndAttack : Card {
 	public int moveRange;
 	public int damageMod;
 
-	private bool onAttackStep;
+	private bool onAttackStep = false;
 
 	public override void setupCustom(){
 		type = CardType.Attack;
@@ -18,7 +18,7 @@ public class Card_MoveAndAttack : Card {
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		onAttackStep = false;
-		Owner.GM.board.highlightTilesInRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
+		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
 	}
 
 	//moving
@@ -31,14 +31,16 @@ public class Card_MoveAndAttack : Card {
 			WaitingForUnit = true;
 
 			//highlight for the attack
-			int attackRange = Owner.Weapon.baseRange;
-			Owner.GM.board.highlightTilesInRange (Owner.CurTile, attackRange, false, true, attackHighlightColor);
-			Owner.GM.board.highlightUnitsInRange (Owner.CurTile, attackRange, true, true, attackHighlightColor);
+			selectCardForWeapon(0);
+//			int attackRange = Owner.Weapon.baseRange;
+//			Owner.GM.board.highlightTilesInRange (Owner.CurTile, attackRange, false, true, attackHighlightColor);
+//			Owner.GM.board.highlightUnitsInRange (Owner.CurTile, attackRange, true, true, attackHighlightColor);
 		}
 	}
 
 	public override void passInUnitCustom(Unit unit){
 		if (onAttackStep) {
+			onAttackStep = false;
 			doWeaponDamageToUnit (unit, damageMod);
 			finish ();
 		}
@@ -47,6 +49,7 @@ public class Card_MoveAndAttack : Card {
 	//if the user cancels after moving, just discard the card
 	public override void cancelCustom(){
 		if (onAttackStep) {
+			onAttackStep = false;
 			finish ();
 		}
 	}

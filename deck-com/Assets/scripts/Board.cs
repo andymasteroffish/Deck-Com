@@ -85,7 +85,7 @@ public class Board : MonoBehaviour {
 	}
 
 	public void highlightUnitsInRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
-		List<Tile> selectable = getTilesInRange (source, range, true, true);
+		List<Tile> selectable = getTilesInMoveRange (source, range, true, true);
 		foreach (Tile tile in selectable) {
 			foreach (Unit unit in gm.units) {
 				if (unit.CurTile == tile) {
@@ -183,19 +183,19 @@ public class Board : MonoBehaviour {
 		return returnVal;
 	}
 
-	//IN RANGE MEANS YOU CAN WALK THERE
-	public void highlightTilesInRange(Tile source, float range, bool includeWalls, bool includeOccupied, Color col){
-		List<Tile> selectable = getTilesInRange (source, range, includeWalls, includeOccupied);
+	//IN MOVE RANGE MEANS YOU CAN WALK THERE
+	public void highlightTilesInMoveRange(Tile source, float range, bool includeWalls, bool includeOccupied, Color col){
+		List<Tile> selectable = getTilesInMoveRange (source, range, includeWalls, includeOccupied);
 		foreach (Tile tile in selectable) {
 			tile.setHighlighted (true, col);
 		}
 	}
 
-	public List<Tile> getTilesInRange(Tile source, float range, bool includeWalls, bool includeOccupied){
-		return getTilesInRange (source.Pos.x, source.Pos.y, range, includeWalls, includeOccupied);
+	public List<Tile> getTilesInMoveRange(Tile source, float range, bool includeWalls, bool includeOccupied){
+		return getTilesInMoveRange (source.Pos.x, source.Pos.y, range, includeWalls, includeOccupied);
 	}
 
-	public List<Tile> getTilesInRange(int sourceX, int sourceY, float range, bool includeWalls, bool includeOccupied){
+	public List<Tile> getTilesInMoveRange(int sourceX, int sourceY, float range, bool includeWalls, bool includeOccupied){
 		List<TileSearchInfo> active = new List<TileSearchInfo>();
 		List<TileSearchInfo> searched = new List<TileSearchInfo>();
 
@@ -300,6 +300,7 @@ public class Board : MonoBehaviour {
 		return returnTiles;
 	}
 
+	//getting tiles and units from a tile
 	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
 		List<Tile> tiles = new List<Tile> ();
 

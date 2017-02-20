@@ -164,8 +164,8 @@ public class Card : MonoBehaviour {
 		isDisabled = val;
 	}
 
-	public void finish(){
-		StartCoroutine(doDeathAnimation(0.5f, true));
+	public void finish(bool destroyCard = false){
+		StartCoroutine(doDeathAnimation(0.5f, true, destroyCard));
 	}
 	public void discard(){
 		StartCoroutine(doDeathAnimation(0.5f, false));
@@ -196,7 +196,7 @@ public class Card : MonoBehaviour {
 
 
 	//animations
-	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone){
+	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone, bool permanentlyDestroyCard = false){
 		doingAnimation = true;
 
 		yield return new WaitForSeconds (0.05f);
@@ -224,7 +224,11 @@ public class Card : MonoBehaviour {
 			owner.markCardPlayed (this);
 		}
 
-		deck.discardCard(this);
+		if (!permanentlyDestroyCard) {
+			deck.discardCard (this);
+		} else {
+			deck.destroyCard (this);
+		}
 
 		doingAnimation = false;
 	}

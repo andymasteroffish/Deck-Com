@@ -16,8 +16,8 @@ public class Card_Heal : Card {
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		Debug.Log ("range: " + range);
-		Owner.GM.board.highlightTilesInRange (Owner.CurTile, range, false, true, aidHighlightColor);
-		Owner.GM.board.highlightUnitsInRange (Owner.CurTile, range, true, true, aidHighlightColor);
+
+		Owner.GM.board.highlightUnitsInVisibleRange(Owner.CurTile, range, true, true, aidHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){

@@ -21,10 +21,6 @@ public class Card_Attack : Card {
 		mouseEnterForWeapon (rangeAdjust);
 	}
 
-//	public override void mosueExitEffects(){
-//		mouseExitForWeapon ();
-//	}
-
 	public override void selectCardCustom(){
 
 		selectCardForWeapon (rangeAdjust);

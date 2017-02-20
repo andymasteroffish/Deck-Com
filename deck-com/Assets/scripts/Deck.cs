@@ -38,12 +38,12 @@ public class Deck : MonoBehaviour {
 
 		//create a card for each one in the collection and add it to the deck
 		for (int i = 0; i < collection.Length; i++) {
-			GameObject cardObj = Instantiate (collection [i], Vector3.zero, Quaternion.identity) as GameObject;
-			cardObj.transform.parent = transform;
-			Card thisCard = cardObj.GetComponent<Card> ();
-			thisCard.setup (owner, this);
-			cardObj.gameObject.SetActive (false);
-			addCardToDrawPile (thisCard);
+//			GameObject cardObj = Instantiate (collection [i], Vector3.zero, Quaternion.identity) as GameObject;
+//			cardObj.transform.parent = transform;
+//			Card thisCard = cardObj.GetComponent<Card> ();
+//			thisCard.setup (owner, this);
+//			cardObj.gameObject.SetActive (false);
+			addCardToDrawPile ( spawnCard(collection[i]) );
 		}
 
 		shuffle ();
@@ -53,6 +53,15 @@ public class Deck : MonoBehaviour {
 
 		doingAnimation = false;
 		setActive (false);
+	}
+
+	public Card spawnCard(GameObject prefab){
+		GameObject cardObj = Instantiate (prefab, Vector3.zero, Quaternion.identity) as GameObject;
+		cardObj.transform.parent = transform;
+		Card thisCard = cardObj.GetComponent<Card> ();
+		thisCard.setup (owner, this);
+		cardObj.gameObject.SetActive (false);
+		return thisCard;
 	}
 
 	//starting the turn
@@ -113,6 +122,12 @@ public class Deck : MonoBehaviour {
 		discardPile.Add (card);
 		card.gameObject.transform.parent = discardPileTransform;
 		card.gameObject.SetActive (false);
+		alignCardsInHand ();
+	}
+
+	public void destroyCard(Card card){
+		Destroy (card.gameObject);
+		owner.GM.clearActiveCard ();
 		alignCardsInHand ();
 	}
 
@@ -197,7 +212,7 @@ public class Deck : MonoBehaviour {
 			orbObj.transform.parent = transform;
 			actionOrbSprites.Add(orbObj.GetComponent<SpriteRenderer>());
 		}
-		if (owner.ActionsLeft < actionOrbSprites.Count) {
+		if (owner.ActionsLeft < actionOrbSprites.Count && actionOrbSprites.Count > 0) {
 			Destroy (actionOrbSprites [actionOrbSprites.Count - 1].gameObject);
 			actionOrbSprites.RemoveAt (actionOrbSprites.Count - 1);
 

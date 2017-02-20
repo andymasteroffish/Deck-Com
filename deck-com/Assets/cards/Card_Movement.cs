@@ -22,12 +22,12 @@ public class Card_Movement : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.GM.board.highlightTilesInRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForTile = true;
-		Owner.GM.board.highlightTilesInRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
 //		List<Tile> selectable = Owner.GM.board.getTilesInRange (Owner.CurTile, range);
 //		foreach (Tile tile in selectable) {
 //			tile.setHighlighted (true);
