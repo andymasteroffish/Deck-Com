@@ -23,7 +23,8 @@ public class Card_MoveAttackAOE : Card {
 
 		List<Unit> units = Owner.GM.board.getAdjacentUnits (tile, true);
 		for (int i = 0; i < units.Count; i++) {
-			units [i].takeDamage (damage);
+			doDamageToUnit (units [i], damage);
+			//units [i].takeDamage (damage);
 		}
 
 

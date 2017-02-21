@@ -39,6 +39,8 @@ public class Card : MonoBehaviour {
 	public Color attackHighlightColor  = new Color(1f, 0.5f, 0.5f);
 	[System.NonSerialized]
 	public Color aidHighlightColor  = new Color(0.5f, 1f, 0.5f);
+	[System.NonSerialized]
+	public Color otherHighlightColor  = new Color(1f, 0.5f, 1f);
 
 	private bool doingAnimation;
 
@@ -291,7 +293,7 @@ public class Card : MonoBehaviour {
 	//Dealing damage
 	//**********************************
 	public void doDamageToUnit(Unit unit, int damage){
-		unit.takeDamage (damage);
+		unit.takeDamage (damage, this, Owner);
 	}
 
 	//**********************************
@@ -299,14 +301,23 @@ public class Card : MonoBehaviour {
 	//**********************************
 
 	public void mouseEnterForWeapon(int rangeMod){
-		owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, Owner.Weapon.baseRange + rangeMod, attackHighlightColor);
+		int range = Owner.Weapon.baseRange + rangeMod;
+
+		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
+			range += owner.Charms [i].getWeaponRangeMod (this);
+		}
+
+		owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
 	}
 
-	public void selectCardForWeapon(int rangeAdjust){
+	public void selectCardForWeapon(int rangeMod){
 		WaitingForUnit = true;
-		int range = Owner.Weapon.baseRange + rangeAdjust;
+		int range = Owner.Weapon.baseRange + rangeMod;
 
-		owner.GM.board.clearHighlights ();
+		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
+			range += owner.Charms [i].getWeaponRangeMod (this);
+		}
+
 		Owner.GM.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
 	}
 
@@ -320,17 +331,22 @@ public class Card : MonoBehaviour {
 
 		//check my charms
 		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
-			text += owner.Charms [i].getDamageModifierText (this);
+			text += owner.Charms [i].getDamageModifierText (this, unit);
 		}
 
 		//check if the unit has any charms that would alter damage values
+		int totalPrevention = 0;
+		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
+			text += unit.Charms [i].getDamagePreventionText (this, Owner);
+			totalPrevention += unit.Charms [i].getDamageTakenMod (this, owner);
+		}
 
 		//calculate cover
 		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
 		text += "\n"+getInfoStringForCover (coverVal)+"\n";
 
 		//print the total
-		text += "\nDAMAGE "+getWeaponDamageToUnit(unit, damageMod);
+		text += "\nDAMAGE: "+(getWeaponDamageToUnit(unit, damageMod)+totalPrevention);
 
 		//set the target info text
 		owner.GM.targetInfoText.turnOn(text, unit);
@@ -341,7 +357,7 @@ public class Card : MonoBehaviour {
 		int damageVal = Owner.Weapon.baseDamage + damageMod;
 
 		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
-			damageVal += owner.Charms [i].getWeaponDamageMod (this);
+			damageVal += owner.Charms [i].getWeaponDamageMod (this, unit);
 		}
 
 		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);

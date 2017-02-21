@@ -38,7 +38,8 @@ public class Card_BasicAOEAttack : Card {
 			Unit thisUnit = Owner.GM.board.getUnitOnTile (tiles [i]);
 			if (thisUnit != null) {
 				if (harmsFriendly || (thisUnit.isPlayerControlled != Owner.isPlayerControlled)) {
-					thisUnit.takeDamage (damage);
+					doDamageToUnit (thisUnit, damage);
+					//thisUnit.takeDamage (damage);
 				}
 			}
 		}

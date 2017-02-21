@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public class Card_Attack : Card {
 
-	public int damageAdjust;
+	public int damageMod;
 	public int rangeAdjust;
 
 
 	public override void setupCustom(){
 		type = Card.CardType.Attack;
 
-		string damageText = "Damage: " + (damageAdjust >= 0 ? "+" : "") + damageAdjust;
+		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
 		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
 
 		textField.text = damageText + "\n" + rangeText;
@@ -22,7 +22,7 @@ public class Card_Attack : Card {
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
-		setPotentialTargetInfoTextForWeapon (unit, damageAdjust);
+		setPotentialTargetInfoTextForWeapon (unit, damageMod);
 	}
 
 	public override void selectCardCustom(){
@@ -31,7 +31,7 @@ public class Card_Attack : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageAdjust) );
+		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageMod) );
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}

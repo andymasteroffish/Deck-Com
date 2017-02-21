@@ -98,6 +98,7 @@ public class Board : MonoBehaviour {
 	}
 
 	public void highlightUnitsInVisibleRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
+		clearHighlights ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
 		foreach (Tile tile in selectable) {
 			foreach (Unit unit in gm.units) {
@@ -118,8 +119,11 @@ public class Board : MonoBehaviour {
 		}
 	}
 
+	//**********************
 	//VISIBLE RANGE IS AS THE CROW FLIES, BUT NOT OBSCURED
+	//**********************
 	public void highlightTilesInVisibleRange(Tile source, float range, Color col){
+		clearHighlights ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
 		foreach (Tile tile in selectable) {
 			tile.setHighlighted (true, col);
@@ -183,8 +187,11 @@ public class Board : MonoBehaviour {
 		return returnVal;
 	}
 
+	//**********************
 	//IN MOVE RANGE MEANS YOU CAN WALK THERE
+	//**********************
 	public void highlightTilesInMoveRange(Tile source, float range, bool includeWalls, bool includeOccupied, Color col){
+		clearHighlights ();
 		List<Tile> selectable = getTilesInMoveRange (source, range, includeWalls, includeOccupied);
 		foreach (Tile tile in selectable) {
 			tile.setHighlighted (true, col);
@@ -300,7 +307,58 @@ public class Board : MonoBehaviour {
 		return returnTiles;
 	}
 
+	//**********************
+	//IN RANGE IGNORES COVER AND JUST CHECKS DISTANCE
+	//**********************
+	public void highlightTilesInRange(Tile source, float range, Tile.Cover maxCoverVal, bool includeOccupied, Color col){
+		clearHighlights ();
+		List<Tile> selectable = getTilesInRange (source, range, maxCoverVal, includeOccupied);
+		foreach (Tile tile in selectable) {
+			tile.setHighlighted (true, col);
+		}
+	}
+
+	public List<Tile> getTilesInRange(Tile source, float range, Tile.Cover maxCoverVal, bool includeOccupied){
+		List<Tile> returnTiles = new List<Tile> ();
+
+		//figure out what range could work in a square
+		int startX = (int)Mathf.Max(source.Pos.x - range, 0);
+		int startY = (int)Mathf.Max(source.Pos.y - range, 0);
+		int endX = (int)Mathf.Min(source.Pos.x + range, cols-1);
+		int endY = (int)Mathf.Min(source.Pos.y + range, rows-1);
+
+		//go through each one
+		for (int x = startX; x <= endX; x++) {
+			for (int y = startY; y <= endY; y++) {
+				//check if the cover is OK
+				if ((int)grid [x, y].CoverVal <= (int)maxCoverVal) {
+					//check if it is in range
+					if (source.Pos.getDist (grid [x, y].Pos) <= range) {
+
+						//is it unoccupied (or are we allowing occupied tiles)?
+						bool unfilled = true;
+						if (!includeOccupied) {
+							foreach (Unit unit in gm.units) {
+								if (unit.CurTile == grid [x, y]) {
+									unfilled = false;
+								}
+							}
+						}
+
+						if (unfilled) {
+							returnTiles.Add (grid [x, y]);
+						}
+					}
+				}
+			}
+		}
+
+		return returnTiles;
+	}
+
+	//********************
 	//getting tiles and units from a tile
+	//********************
 	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
 		List<Tile> tiles = new List<Tile> ();
 

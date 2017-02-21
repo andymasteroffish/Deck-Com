@@ -18,7 +18,7 @@ public class ItemHealRing : Item {
 		}
 	}
 
-	public override int getHealMod(Card card){
+	public override int getHealMod(Card card, Unit target){
 		return healIncrease;
 	}
 }

@@ -238,11 +238,34 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-	public void takeDamage(int amount){
-		health -= amount;
+	public void takeDamage(int amount, Card card, Unit source){
+		int totalDamage = amount;
+
+		//check if any charms will do anything
+		for (int i = charms.Count - 1; i >= 0; i--) {
+			totalDamage += charms [i].getDamageTakenMod (card, source);
+		} 
+
+
+		//if modifiers would cause the unit to gain life, they instead just take 0 damage
+		if (totalDamage < 0) {
+			totalDamage = 0;
+		}
+
+		//do the damage
+		health -= totalDamage;
+
+		//check if any charms trigger on taking damage
+		for (int i = charms.Count - 1; i >= 0; i--) {
+			charms [i].takeDamage (card, source);
+		} 
+
+
+		//is the unit dead?
 		if (health <= 0) {
 			killUnit ();
 		}
+
 	}
 
 	public void killUnit(){

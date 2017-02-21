@@ -4,14 +4,14 @@ using System.Collections.Generic;
 
 public class Card_CoverAttack : Card {
 
-	public int damageAdjust;
+	public int damageMod;
 	public int rangeAdjust;
 
 
 	public override void setupCustom(){
 		type = CardType.Attack;
 
-		string damageText = "Damage: " + (damageAdjust >= 0 ? "+" : "") + damageAdjust;
+		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
 		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
 
 		textField.text = damageText + "\n" + rangeText+"\nCan go through cover, destroying it";
@@ -35,7 +35,7 @@ public class Card_CoverAttack : Card {
 		}
 
 		//do the damage
-		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageAdjust) );
+		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageMod) );
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}

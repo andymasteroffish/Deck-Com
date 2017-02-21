@@ -32,10 +32,11 @@ public class Card_MoveAndAttack : Card {
 
 			//highlight for the attack
 			selectCardForWeapon(0);
-//			int attackRange = Owner.Weapon.baseRange;
-//			Owner.GM.board.highlightTilesInRange (Owner.CurTile, attackRange, false, true, attackHighlightColor);
-//			Owner.GM.board.highlightUnitsInRange (Owner.CurTile, attackRange, true, true, attackHighlightColor);
 		}
+	}
+
+	public override void setPotentialTargetInfo(Unit unit){
+		setPotentialTargetInfoTextForWeapon (unit, damageMod);
 	}
 
 	public override void passInUnitCustom(Unit unit){

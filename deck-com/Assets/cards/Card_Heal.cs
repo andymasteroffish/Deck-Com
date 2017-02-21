@@ -25,7 +25,7 @@ public class Card_Heal : Card {
 		int healVal = healAmount;
 
 		for (int i=Owner.Charms.Count-1; i>=0; i--){
-			healVal += Owner.Charms[i].getHealMod (this);
+			healVal += Owner.Charms[i].getHealMod (this, unit);
 		}
 
 		if (healVal < 0) {
