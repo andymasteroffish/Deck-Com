@@ -35,7 +35,8 @@ public class Card_CoverAttack : Card {
 		}
 
 		//do the damage
-		doWeaponDamageToUnit (unit, damageAdjust);
+		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageAdjust) );
+		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}
 }

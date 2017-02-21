@@ -21,22 +21,18 @@ public class Card_Attack : Card {
 		mouseEnterForWeapon (rangeAdjust);
 	}
 
+	public override void setPotentialTargetInfo(Unit unit){
+		setPotentialTargetInfoTextForWeapon (unit, damageAdjust);
+	}
+
 	public override void selectCardCustom(){
 
 		selectCardForWeapon (rangeAdjust);
-
-		//WaitingForUnit = true;
-		//int range = Owner.Weapon.baseRange + rangeAdjust;
-
-		//Owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
-		//Owner.GM.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
-
-		//Owner.GM.board.highlightTilesInRange (Owner.CurTile, range, false, true, attackHighlightColor);
-		//Owner.GM.board.highlightUnitsInRange (Owner.CurTile, range, true, true, attackHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){
-		doWeaponDamageToUnit (unit, damageAdjust);
+		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageAdjust) );
+		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}
 }

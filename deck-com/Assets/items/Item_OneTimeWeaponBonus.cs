@@ -8,7 +8,14 @@ public class Item_OneTimeWeaponBonus : Item {
 
 	public override int getWeaponDamageMod(Card card){
 		Debug.Log ("do ya thing for " + damageMod);
-		Owner.removeCharm (this);
+
 		return damageMod;
+	}
+
+	public override void cardPlayed(Card card){
+		if (card.type == Card.CardType.Attack) {
+			Debug.Log ("buh bye "+name);
+			Owner.removeCharm (this);
+		}
 	}
 }

@@ -92,6 +92,18 @@ public class Item : MonoBehaviour {
 	public virtual int getWeaponDamageMod(Card card){return 0;}
 	public virtual int getHealMod(Card card){return 0;}
 
+	//writing modifiers in the info box
+	public string getDamageModifierText(Card card){
+		string returnVal = "";
+		int damageMod = getWeaponDamageMod (card);
+		if (damageMod != 0) {
+			string symbol = damageMod >= 0 ? " +" : " -";
+			returnVal += name +symbol + damageMod + "\n";
+		}
+
+		return returnVal;
+	}
+
 	//animations
 	IEnumerator doMoveAnimation(Vector3 start, Vector3 target, float time){
 		doingAnimation = true;

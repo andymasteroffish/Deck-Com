@@ -338,9 +338,13 @@ public class Unit : MonoBehaviour {
 
 	void OnMouseEnter(){
 		mouseIsOver = true;
+		if (isHighlighted) {
+			GM.ActiveCard.potentialTargetMouseOver (this);
+		}
 	}
 	void OnMouseExit(){
 		mouseIsOver = false;
+		GM.targetInfoText.unitRollOff(this);
 	}
 
 

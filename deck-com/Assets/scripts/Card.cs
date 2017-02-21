@@ -140,6 +140,7 @@ public class Card : MonoBehaviour {
 		if (isActive) {
 			isActive = false;
 			owner.GM.clearActiveCard ();
+			owner.GM.targetInfoText.turnOff ();
 		}
 		cancelCustom ();
 
@@ -165,6 +166,7 @@ public class Card : MonoBehaviour {
 	}
 
 	public void finish(bool destroyCard = false){
+		owner.GM.targetInfoText.turnOff ();
 		StartCoroutine(doDeathAnimation(0.5f, true, destroyCard));
 	}
 	public void discard(){
@@ -175,10 +177,13 @@ public class Card : MonoBehaviour {
 		return waitingForTile || waitingForUnit || waitingForChoice;
 	}
 
+	//**********************************
 	//utility
+	//**********************************
+
 	void OnMouseEnter(){
 		mouseIsOver = true;
-		if (Owner.GM.activeCard == null) {
+		if (Owner.GM.ActiveCard == null) {
 			mouseEnterEffects ();
 		}
 	}
@@ -186,16 +191,29 @@ public class Card : MonoBehaviour {
 
 	void OnMouseExit(){
 		mouseIsOver = false;
-		if (!isActive && Owner.GM.activeCard == null) {
+		if (!isActive && Owner.GM.ActiveCard == null) {
 			owner.GM.board.clearHighlights ();
 		}
 		mosueExitEffects ();
 	}
 	public virtual void mosueExitEffects(){}
 
+	public string getInfoStringForCover(Tile.Cover coverVal){
+		if (coverVal == Tile.Cover.Full) {
+			return "Full Cover: *0.5";
+		}
+		if (coverVal == Tile.Cover.Part) {
+			return "Part Cover: -1";
+		}
+
+		return "No Cover";
+	}
 
 
+	//**********************************
 	//animations
+	//**********************************
+
 	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone, bool permanentlyDestroyCard = false){
 		doingAnimation = true;
 
@@ -261,14 +279,28 @@ public class Card : MonoBehaviour {
 		doingAnimation = false;
 	}
 
+	//**********************************
+	//showing information when a potential target is moused over
+	//**********************************
+	public void potentialTargetMouseOver(Unit unit){
+		setPotentialTargetInfo (unit);
+	}
+	public virtual void setPotentialTargetInfo(Unit unit){}
+
+	//**********************************
+	//Dealing damage
+	//**********************************
+	public void doDamageToUnit(Unit unit, int damage){
+		unit.takeDamage (damage);
+	}
+
+	//**********************************
 	//some actions that are common enough to standardize
+	//**********************************
 
 	public void mouseEnterForWeapon(int rangeMod){
 		owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, Owner.Weapon.baseRange + rangeMod, attackHighlightColor);
 	}
-//	public void mouseExitForWeapon(){
-//		
-//	}
 
 	public void selectCardForWeapon(int rangeAdjust){
 		WaitingForUnit = true;
@@ -278,23 +310,50 @@ public class Card : MonoBehaviour {
 		Owner.GM.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
 	}
 
-	public void doWeaponDamageToUnit(Unit unit, int damageMod){
-		int damageVal = Owner.Weapon.baseDamage + damageMod;
+	public void setPotentialTargetInfoTextForWeapon(Unit unit, int damageMod){
+		//start with the weapon
+		string text = "Weapon +"+Owner.Weapon.baseDamage+"\n";
 
+		//then the damage mod for this card
+		string cardSymbol = damageMod >= 0 ? "+" : "-";
+		text += "Card "+cardSymbol+damageMod+"\n";
+
+		//check my charms
+		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
+			text += owner.Charms [i].getDamageModifierText (this);
+		}
+
+		//check if the unit has any charms that would alter damage values
+
+		//calculate cover
 		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
-		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
+		text += "\n"+getInfoStringForCover (coverVal)+"\n";
+
+		//print the total
+		text += "\nDAMAGE "+getWeaponDamageToUnit(unit, damageMod);
+
+		//set the target info text
+		owner.GM.targetInfoText.turnOn(text, unit);
+
+	}
+
+	public int getWeaponDamageToUnit(Unit unit, int damageMod){
+		int damageVal = Owner.Weapon.baseDamage + damageMod;
 
 		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
 			damageVal += owner.Charms [i].getWeaponDamageMod (this);
 		}
 
+		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
+		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
+
 		if (damageVal < 0) {
 			damageVal = 0;
 		}
 
-		Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
+		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
 
-		unit.takeDamage (damageVal);
+		return damageVal;
 	}
 
 	//setters getters

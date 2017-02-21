@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour {
 
 	private Unit activeUnit;
 
-	public Card activeCard;
+	private Card activeCard;
+
+	public TargetInfoText targetInfoText;
 
 	//tracking rounds
 	private bool isPlayerTurn;
@@ -287,6 +289,12 @@ public class GameManager : MonoBehaviour {
 	public bool IsPlayerTurn {
 		get {
 			return this.isPlayerTurn;
+		}
+	}
+
+	public Card ActiveCard{
+		get{
+			return this.activeCard;
 		}
 	}
 }

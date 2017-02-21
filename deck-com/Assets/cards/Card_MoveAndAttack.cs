@@ -41,7 +41,8 @@ public class Card_MoveAndAttack : Card {
 	public override void passInUnitCustom(Unit unit){
 		if (onAttackStep) {
 			onAttackStep = false;
-			doWeaponDamageToUnit (unit, damageMod);
+			doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageMod) );
+			//doWeaponDamageToUnit (unit, damageMod);
 			finish ();
 		}
 	}
