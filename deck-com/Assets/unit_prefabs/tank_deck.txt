@@ -1,0 +1,13 @@
+grenade
+coverAttack
+move4
+move3
+move3
+move3
+move2
+move2
+attackBasic
+attackBasic
+attackR1
+attackR1
+attackD1

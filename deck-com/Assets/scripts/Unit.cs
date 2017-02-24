@@ -43,6 +43,8 @@ public class Unit : MonoBehaviour {
 	[System.NonSerialized]
 	public Deck deck;
 
+	public TextAsset deckList;
+
 	//weapons and charms
 	public GameObject[] itemPrefabs;
 	private Item weapon;
@@ -78,8 +80,7 @@ public class Unit : MonoBehaviour {
 		weapon = charms[0];
 
 		//set them up
-		deck.setup (this);
-		//hand.setup (this);
+		deck.setup (this, deckList);
 
 		setHighlighted (false);
 

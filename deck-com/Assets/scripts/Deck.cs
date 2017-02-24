@@ -10,7 +10,7 @@ public class Deck : MonoBehaviour {
 	//private Hand hand;
 
 	//the card objects before they come into the game
-	public GameObject[] collection;
+	//private List<GameObject[] collection;
 
 	//the piles
 	private List<Card> drawPile = new List<Card> ();
@@ -33,17 +33,13 @@ public class Deck : MonoBehaviour {
 	private bool doingAnimation;
 
 	//setup
-	public void setup(Unit _owner){
+	public void setup(Unit _owner, TextAsset deckList){
 		owner = _owner;
 
-		//create a card for each one in the collection and add it to the deck
-		for (int i = 0; i < collection.Length; i++) {
-//			GameObject cardObj = Instantiate (collection [i], Vector3.zero, Quaternion.identity) as GameObject;
-//			cardObj.transform.parent = transform;
-//			Card thisCard = cardObj.GetComponent<Card> ();
-//			thisCard.setup (owner, this);
-//			cardObj.gameObject.SetActive (false);
-			addCardToDrawPile ( spawnCard(collection[i]) );
+		//create a card for each one in the list and add it to the deck
+		List<GameObject> cardPrefabs = owner.GM.cm.getCardPrefabsFromTextFile (deckList);
+		for (int i = 0; i < cardPrefabs.Count; i++) {
+			addCardToDrawPile ( spawnCard(cardPrefabs[i]) );
 		}
 
 		shuffle ();

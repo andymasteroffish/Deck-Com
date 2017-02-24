@@ -1,0 +1,11 @@
+move4
+move3
+move3
+move3
+attackBasic
+attackBasic
+heal
+heal
+gainAnAction
+drawCard
+moveCantrip

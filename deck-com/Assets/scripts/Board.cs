@@ -412,7 +412,6 @@ public class Board : MonoBehaviour {
 			}
 		}
 
-		Debug.Log (matches.Count + " matches for "+property);
 		return matches [(int)Random.Range (0, matches.Count)];
 	}
 

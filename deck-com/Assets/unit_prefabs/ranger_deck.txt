@@ -1,0 +1,11 @@
+move3
+move3
+attackBasic
+attackBasic
+attackBasic
+moveAndAttack
+moveAndAttack
+bladeDash
+village
+village
+heal

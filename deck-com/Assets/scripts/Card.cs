@@ -350,7 +350,6 @@ public class Card : MonoBehaviour {
 
 		//set the target info text
 		owner.GM.targetInfoText.turnOn(text, unit);
-
 	}
 
 	public int getWeaponDamageToUnit(Unit unit, int damageMod){
