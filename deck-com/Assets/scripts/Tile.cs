@@ -7,11 +7,15 @@ public class Tile : MonoBehaviour {
 
 	public enum Direction{Up, Right, Down, Left, None};
 	public enum Cover{None, Part, Full};
+	public enum SpawnProperty{None, Player, Foe, Exit};
 
 	public Sprite[] coverSprites;
 	public SpriteRenderer spriteRend;
 
+	public Sprite goalSprite;
+
 	private Cover cover;
+	public SpawnProperty spawnProperty;
 	private Tile[] adjacent = new Tile[4];
 
 	private bool mouseIsOver;
@@ -24,26 +28,29 @@ public class Tile : MonoBehaviour {
 
 	public BoxCollider2D collider;
 
-	public void setup(Tile[] _adjacent, int xPos, int yPos, GameManager _gm){
-		gm = _gm;
-
-		pos = new TilePos(xPos, yPos);
-		
-		for (int i = 0; i < 4; i++) {
-			adjacent [i] = _adjacent [i];
-		}
-
-		cover = (Cover)(int)Random.Range (0, 3);
-		if (Random.value < 0.5f) {
-			cover = Cover.None;
-		}
-
+	public void setup(Cover _cover, SpawnProperty _spawnProperty){
+		cover = _cover;
+		spawnProperty = _spawnProperty;
+//		cover = (Cover)(int)Random.Range (0, 3);
+//		if (Random.value < 0.5f) {
+//			cover = Cover.None;
+//		}
 
 		setCover (cover);
 
 		mouseIsOver = false;
 
 		setHighlighted (false);
+	}
+
+	public void setInfo(int xPos, int yPos, Tile[] _adjacent,  GameManager _gm){
+		pos = new TilePos(xPos, yPos);
+
+		gm = _gm;
+
+		for (int i = 0; i < 4; i++) {
+			adjacent [i] = _adjacent [i];
+		}
 
 	}
 
@@ -67,6 +74,10 @@ public class Tile : MonoBehaviour {
 	public void setCover(Cover newCover){
 		cover = newCover;
 		spriteRend.sprite = coverSprites [(int)cover];
+
+		if (spawnProperty == SpawnProperty.Exit) {
+			spriteRend.sprite = goalSprite;
+		}
 	}
 
 	public void setHighlighted(bool val, Color col){

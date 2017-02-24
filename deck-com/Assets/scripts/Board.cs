@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class Board : MonoBehaviour {
 
 	public GameManager gm;
+	public LevelGen levelGen;
 
 	public int cols, rows;
 
@@ -12,7 +13,7 @@ public class Board : MonoBehaviour {
 
 	private Tile[,] grid = null;
 
-	public GameObject tilePrefab;
+	//public GameObject tilePrefab;
 
 	public int partialCoverDamageReduction;
 	public float fullCoverDamagePrc;
@@ -24,16 +25,16 @@ public class Board : MonoBehaviour {
 
 	public void reset(){
 		clear ();
-		grid = new Tile[cols, rows];
+		grid = levelGen.getTestLevel ();// new Tile[cols, rows];
 
 		//spawn tiles
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				GameObject tileObj = Instantiate (tilePrefab, new Vector3 (x, y, 0), Quaternion.identity) as GameObject;
-				tileObj.transform.parent = transform;
-				grid [x, y] = tileObj.GetComponent<Tile> ();
-			}
-		}
+//		for (int x = 0; x < cols; x++) {
+//			for (int y = 0; y < rows; y++) {
+//				GameObject tileObj = Instantiate (tilePrefab, new Vector3 (x, y, 0), Quaternion.identity) as GameObject;
+//				tileObj.transform.parent = transform;
+//				grid [x, y] = tileObj.GetComponent<Tile> ();
+//			}
+//		}
 
 		//give them some relevant info
 		for (int x = 0; x < cols; x++) {
@@ -43,7 +44,8 @@ public class Board : MonoBehaviour {
 				if (x > 0)		adjacent [(int)Tile.Direction.Left] = grid [x-1, y];
 				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
 				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
-				grid [x, y].setup (adjacent, x, y, gm);
+				grid [x, y].setInfo (x,y, adjacent, gm);
+				grid[x,y].transform.parent = transform;
 			}
 		}
 
