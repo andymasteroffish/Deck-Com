@@ -9,7 +9,9 @@ public class GameManager : MonoBehaviour {
 	public CameraControl cam;
 	public Board board;
 
-	public List<Unit> units;
+	public GameObject[] spawnList;
+
+	private List<Unit> units = new List<Unit>();
 
 	private Unit activeUnit;
 
@@ -28,14 +30,25 @@ public class GameManager : MonoBehaviour {
 
 		roundNum = 0;
 
-		units [0].setup (this, 2, 2);
-		board.Grid [2, 2].setCover (Tile.Cover.None);
+		//place the players
+		for (int i = 0; i < spawnList.Length; i++) {
+			GameObject unitObj = Instantiate (spawnList [i]) as GameObject;
+			Unit thisUnit = unitObj.GetComponent<Unit> ();
 
-		units [1].setup (this, 4, 2);
-		board.Grid [4, 2].setCover (Tile.Cover.None);
+			Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( thisUnit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
+			thisUnit.setup (this, spawnTile);
 
-		units [2].setup (this, 3, 3);
-		board.Grid [3, 3].setCover (Tile.Cover.None);
+			units.Add (thisUnit);
+		}
+//
+//		units [0].setup (this, 2, 2);
+//		board.Grid [2, 2].setCover (Tile.Cover.None);
+//
+//		units [1].setup (this, 4, 2);
+//		board.Grid [4, 2].setCover (Tile.Cover.None);
+//
+//		units [2].setup (this, 3, 3);
+//		board.Grid [3, 3].setCover (Tile.Cover.None);
 
 
 		foreach(Unit unit in units){
@@ -295,6 +308,12 @@ public class GameManager : MonoBehaviour {
 	public Card ActiveCard{
 		get{
 			return this.activeCard;
+		}
+	}
+
+	public List<Unit> Units{
+		get{
+			return this.units;
 		}
 	}
 }

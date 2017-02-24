@@ -27,7 +27,9 @@ public class Unit : MonoBehaviour {
 
 	//display
 	public SpriteRenderer spriteRend;
-	public Text healthText;
+
+	public GameObject canvasPrefab;
+	private Text healthText;
 
 	public GameObject spriteOutlinePrefab;
 	private SpriteOutline outline = null;
@@ -50,15 +52,17 @@ public class Unit : MonoBehaviour {
 	private bool mouseIsOver;
 
 
-	public void setup(GameManager _gm, int startX, int startY){
+	public void setup(GameManager _gm,Tile startTile){
 		gm = _gm;
-		curTile = gm.board.Grid [startX, startY];
+		curTile = startTile;
 		transform.position = curTile.transform.position;
 
 		health = baseHealth;
 
-		//set the outline
-		//createOutlineObj();
+		//spawn the canvas for displaying info
+		GameObject canvasObj = Instantiate(canvasPrefab, transform.position, Quaternion.identity) as GameObject;
+		canvasObj.transform.parent = transform;
+		healthText = canvasObj.GetComponentInChildren<Text> ();
 
 		//spawn deck
 		GameObject deckObj = Instantiate (deckPrefab, Vector3.zero, Quaternion.identity) as GameObject;

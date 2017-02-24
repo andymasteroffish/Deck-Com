@@ -7,7 +7,7 @@ public class Board : MonoBehaviour {
 	public GameManager gm;
 	public LevelGen levelGen;
 
-	public int cols, rows;
+	private int cols, rows;
 
 	public float diagonalVal;	//1.41 is geometry 
 
@@ -27,14 +27,8 @@ public class Board : MonoBehaviour {
 		clear ();
 		grid = levelGen.getTestLevel ();// new Tile[cols, rows];
 
-		//spawn tiles
-//		for (int x = 0; x < cols; x++) {
-//			for (int y = 0; y < rows; y++) {
-//				GameObject tileObj = Instantiate (tilePrefab, new Vector3 (x, y, 0), Quaternion.identity) as GameObject;
-//				tileObj.transform.parent = transform;
-//				grid [x, y] = tileObj.GetComponent<Tile> ();
-//			}
-//		}
+		cols = grid.GetLength (0);
+		rows = grid.GetLength (1);
 
 		//give them some relevant info
 		for (int x = 0; x < cols; x++) {
@@ -68,7 +62,7 @@ public class Board : MonoBehaviour {
 				grid [x, y].setHighlighted (false);
 			}
 		}
-		foreach (Unit unit in gm.units) {
+		foreach (Unit unit in gm.Units) {
 			unit.setHighlighted (false);
 		}
 	}
@@ -86,10 +80,13 @@ public class Board : MonoBehaviour {
 
 	}
 
+	//**********************
+	//Hihglighting tiles and units
+	//**********************
 	public void highlightUnitsInRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
 		List<Tile> selectable = getTilesInMoveRange (source, range, true, true);
 		foreach (Tile tile in selectable) {
-			foreach (Unit unit in gm.units) {
+			foreach (Unit unit in gm.Units) {
 				if (unit.CurTile == tile) {
 					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 						unit.setHighlighted (true, col);
@@ -103,7 +100,7 @@ public class Board : MonoBehaviour {
 		clearHighlights ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
 		foreach (Tile tile in selectable) {
-			foreach (Unit unit in gm.units) {
+			foreach (Unit unit in gm.Units) {
 				if (unit.CurTile == tile) {
 					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 						unit.setHighlighted (true, col);
@@ -114,7 +111,7 @@ public class Board : MonoBehaviour {
 	}
 
 	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
-		foreach (Unit unit in gm.units) {
+		foreach (Unit unit in gm.Units) {
 			if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 				unit.setHighlighted (true, col);
 			}
@@ -251,7 +248,7 @@ public class Board : MonoBehaviour {
 						//is it unoccupied (or are we allowing occupied tiles?
 						bool unfilled = true;
 						if (!includeOccupied) {
-							foreach (Unit unit in gm.units) {
+							foreach (Unit unit in gm.Units) {
 								if (unit.CurTile == grid [x, y]) {
 									unfilled = false;
 								}
@@ -340,7 +337,7 @@ public class Board : MonoBehaviour {
 						//is it unoccupied (or are we allowing occupied tiles)?
 						bool unfilled = true;
 						if (!includeOccupied) {
-							foreach (Unit unit in gm.units) {
+							foreach (Unit unit in gm.Units) {
 								if (unit.CurTile == grid [x, y]) {
 									unfilled = false;
 								}
@@ -395,12 +392,28 @@ public class Board : MonoBehaviour {
 	}
 
 	public Unit getUnitOnTile(Tile tile){
-		for (int i=0; i<gm.units.Count; i++){
-			if (gm.units[i].CurTile == tile) {
-				return gm.units[i];
+		for (int i=0; i<gm.Units.Count; i++){
+			if (gm.Units[i].CurTile == tile) {
+				return gm.Units[i];
 			}
 		}
 		return null;
+	}
+
+	public Tile GetUnoccupiedTileWithSpawnProperty(Tile.SpawnProperty property){
+		List<Tile> matches = new List<Tile> ();
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				if (grid [x, y].spawnProperty == property) {
+					if (getUnitOnTile (grid [x, y]) == null) {
+						matches.Add (grid [x, y]);
+					}
+				}
+			}
+		}
+
+		Debug.Log (matches.Count + " matches for "+property);
+		return matches [(int)Random.Range (0, matches.Count)];
 	}
 
 	//this can be optimized a lot

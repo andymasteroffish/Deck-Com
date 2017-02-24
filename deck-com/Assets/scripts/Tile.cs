@@ -31,6 +31,10 @@ public class Tile : MonoBehaviour {
 	public void setup(Cover _cover, SpawnProperty _spawnProperty){
 		cover = _cover;
 		spawnProperty = _spawnProperty;
+
+//		if (spawnProperty == SpawnProperty.Foe) {
+//			Debug.Log ("foe go here");
+//		}
 //		cover = (Cover)(int)Random.Range (0, 3);
 //		if (Random.value < 0.5f) {
 //			cover = Cover.None;
