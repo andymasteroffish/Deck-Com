@@ -90,6 +90,7 @@ public class Deck : MonoBehaviour {
 	}
 	public void drawCard(){
 		if (drawPile.Count == 0) {
+			Debug.Log ("need to shuff");
 			putDiscardInDrawPile ();
 			shuffle ();
 		}
@@ -128,6 +129,7 @@ public class Deck : MonoBehaviour {
 	}
 
 	void putDiscardInDrawPile(){
+		Debug.Log ("cards in discard: " + discardPile.Count);
 		while (discardPile.Count > 0) {
 			addCardToDrawPile (discardPile [0]);
 			discardPile.RemoveAt (0);

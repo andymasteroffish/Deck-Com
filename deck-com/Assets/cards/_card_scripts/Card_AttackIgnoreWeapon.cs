@@ -5,14 +5,14 @@ using System.Collections.Generic;
 public class Card_AttackIgnoreWeapon : Card {
 
 	public int damage;
-	public int range;
+	public float range;
 
 
 	public override void setupCustom(){
 		type = Card.CardType.Attack;
 
 		string damageText = "Damage: " + damage;
-		string rangeText = "Range: " + range;
+		string rangeText = "Range: " + Mathf.Floor(range);
 
 		textField.text = damageText + "\n" + rangeText + "\nDoes not use weapon.";
 	}

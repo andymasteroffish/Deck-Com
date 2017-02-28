@@ -19,13 +19,18 @@ public class CardManager : MonoBehaviour {
 	}
 
 	public List<GameObject> getCardPrefabsFromTextFile(TextAsset file){
+		//Debug.Log ("getting deck for " + file.name);
 		List<GameObject> deck = new List<GameObject> ();
 
 		string[] lines = file.text.Split ('\n');
 		for (int i = 0; i < lines.Length; i++) {
-			GameObject thisCard = getCardPrefabFromName (lines [i]);
-			if (thisCard != null) {
-				deck.Add (thisCard);
+			if (lines [i].Length > 1) {
+				GameObject thisCard = getCardPrefabFromName (lines [i]);
+				if (thisCard != null) {
+					deck.Add (thisCard);
+				} else {
+					Debug.Log ("BAD CARD NAME: "+lines [i]+" in deck "+file.name);
+				}
 			}
 		}
 
@@ -34,7 +39,6 @@ public class CardManager : MonoBehaviour {
 
 	public GameObject getCardPrefabFromName(string name){
 		if (!cards.ContainsKey (name)) {
-			Debug.Log ("BAD CARD NAME: "+name);
 			return null;
 		}
 		return cards [name];

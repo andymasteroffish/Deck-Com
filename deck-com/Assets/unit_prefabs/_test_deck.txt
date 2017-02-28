@@ -1,0 +1,4 @@
+move4
+move4
+teleport
+teamDash

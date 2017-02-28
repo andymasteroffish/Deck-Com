@@ -221,8 +221,6 @@ public class Card : MonoBehaviour {
 
 		yield return new WaitForSeconds (0.05f);
 
-		deck.removeCardFromHand (this);
-
 		float timer = time  * Owner.GM.debugAnimationTimeMod;
 		float startScale = transform.localScale.x;
 
@@ -236,6 +234,8 @@ public class Card : MonoBehaviour {
 
 			yield return null;
 		}
+
+		deck.removeCardFromHand (this);
 
 
 		transform.localScale = new Vector3 (1, 1, 1);	
@@ -265,6 +265,7 @@ public class Card : MonoBehaviour {
 
 		Vector3 startPos = targetPos;
 		startPos.y -= 2;	//guessing
+
 
 		while (timer < time) {
 			timer += Time.deltaTime;

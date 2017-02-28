@@ -13,6 +13,10 @@ public class Card_MoveAttackAOE : Card {
 		textField.text = "move up to " + range + " spaces and deal "+damage+" to ALL adjacent units";
 	}
 
+	public override void mouseEnterEffects(){
+		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
+	}
+
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);

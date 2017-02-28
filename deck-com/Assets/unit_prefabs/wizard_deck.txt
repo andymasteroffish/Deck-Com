@@ -1,11 +1,11 @@
+move3
 move4
-move3
-move3
-move3
+move4
+move5
 attackBasic
 attackBasic
 heal
 heal
 gainAnAction
-drawCard
+drawACard
 moveCantrip

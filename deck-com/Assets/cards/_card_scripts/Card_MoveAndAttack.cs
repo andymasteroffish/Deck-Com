@@ -15,6 +15,10 @@ public class Card_MoveAndAttack : Card {
 		textField.text = "move up to " + moveRange + " spaces and attack at "+damageMod+" damage";
 	}
 
+	public override void mouseEnterEffects(){
+		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
+	}
+
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		onAttackStep = false;

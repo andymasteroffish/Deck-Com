@@ -63,7 +63,7 @@ public class Unit : MonoBehaviour {
 
 		//spawn the canvas for displaying info
 		GameObject canvasObj = Instantiate(canvasPrefab, transform.position, Quaternion.identity) as GameObject;
-		canvasObj.transform.parent = transform;
+		canvasObj.transform.SetParent(transform);
 		healthText = canvasObj.GetComponentInChildren<Text> ();
 
 		//spawn deck
@@ -178,7 +178,11 @@ public class Unit : MonoBehaviour {
 		//discard the hand
 		deck.discardHand();
 
-		yield return new WaitForSeconds (0.5f * gm.debugAnimationTimeMod);
+		while (deck.areAnimationsHappening()){
+			yield return null;
+		}
+
+		yield return new WaitForSeconds (0.2f * gm.debugAnimationTimeMod);
 
 		//draw to hand size
 		for (int i = 0; i < baseHandSize; i++) {

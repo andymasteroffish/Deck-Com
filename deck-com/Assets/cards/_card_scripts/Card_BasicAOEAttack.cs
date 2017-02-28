@@ -25,6 +25,10 @@ public class Card_BasicAOEAttack : Card {
 		}
 	}
 
+	public override void mouseEnterEffects(){
+		Owner.GM.board.highlightTilesInVisibleRange(Owner.CurTile, throwRange, attackHighlightColor);
+	}
+
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		Owner.GM.board.highlightTilesInVisibleRange(Owner.CurTile, throwRange, attackHighlightColor);

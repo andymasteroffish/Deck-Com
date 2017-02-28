@@ -13,6 +13,10 @@ public class Card_Heal : Card {
 		textField.text = "heals "+healAmount+" at range "+range;
 	}
 
+	public override void mouseEnterEffects(){
+		Owner.GM.board.highlightTilesInVisibleRange(Owner.CurTile, range, aidHighlightColor);
+	}
+
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		Debug.Log ("range: " + range);

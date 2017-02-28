@@ -95,37 +95,6 @@ public class GameManager : MonoBehaviour {
 		clearActiveCard ();
 	}
 
-//	void endPlayerTurn(){
-//		isPlayerTurn = false;
-//
-//		//end the players
-//		List<Unit> unitsPlayer = getPlayerUnits ();
-//		foreach(Unit unit in unitsPlayer){
-//			unit.endTurn ();
-//		}
-//
-//		List<Unit> unitsAI = getAIUnits ();
-//		if (unitsAI.Count == 0) {
-//			Debug.Log ("YOU WIN");
-//		} else {
-//			//start the AI
-//			foreach (Unit unit in unitsAI) {
-//				unit.resetRound ();
-//			}
-//			setActiveUnit (unitsAI [0]);
-//		}
-//	}
-//
-//	void endAITurn(){
-//		//end AI
-//		List<Unit> unitsAI = getAIUnits ();
-//		foreach(Unit unit in unitsAI){
-//			unit.endTurn ();
-//		}
-//
-//		startRound ();
-//	}
-
 	//Update
 	void Update () {
 
@@ -158,11 +127,6 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Space)) {
 			clearActiveCard ();
 			activeUnit.endTurn ();
-//			if (isPlayerTurn) {
-//				endPlayerTurn ();
-//			} else {
-//				endAITurn ();
-//			}
 		}
 
 		//pressing escape to cancel a move

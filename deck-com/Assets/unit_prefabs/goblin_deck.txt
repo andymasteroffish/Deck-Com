@@ -9,4 +9,3 @@ attackBasic
 attackBasic
 attackR1D-1
 attackR1D-1
-grenade

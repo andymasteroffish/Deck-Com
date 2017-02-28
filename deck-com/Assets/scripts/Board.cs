@@ -84,6 +84,7 @@ public class Board : MonoBehaviour {
 	//Hihglighting tiles and units
 	//**********************
 	public void highlightUnitsInRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
+		clearHighlights ();
 		List<Tile> selectable = getTilesInMoveRange (source, range, true, true);
 		foreach (Tile tile in selectable) {
 			foreach (Unit unit in gm.Units) {
@@ -358,6 +359,15 @@ public class Board : MonoBehaviour {
 	//********************
 	//getting tiles and units from a tile
 	//********************
+
+	public void highlightAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover, Color col){
+		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, maxCover);
+		Debug.Log("tile coutn "+tiles.Count);
+		for (int i = 0; i < tiles.Count; i++) {
+			tiles [i].setHighlighted (true, col);
+		}
+	}
+
 	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
 		List<Tile> tiles = new List<Tile> ();
 
