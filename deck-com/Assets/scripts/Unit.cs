@@ -202,9 +202,9 @@ public class Unit : MonoBehaviour {
 		yield return new WaitForSeconds (0.5f * gm.debugAnimationTimeMod);
 
 		if (isPlayerControlled) {
-			gm.tabActivePlayerUnit ();
+			gm.tabActivePlayerUnit (1);
 		} else {
-			gm.tabActiveAIUnit ();
+			gm.tabActiveAIUnit (1);
 		}
 
 		doingAnimation = false;

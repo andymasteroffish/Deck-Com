@@ -117,9 +117,17 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Tab) && !areAnimationsHappening()) {
 			clearActiveCard ();
 			if (isPlayerTurn) {
-				tabActivePlayerUnit ();
+				tabActivePlayerUnit (1);
 			} else {
-				tabActiveAIUnit ();
+				tabActiveAIUnit (1);
+			}
+		}
+		if (Input.GetKeyDown (KeyCode.LeftShift) && !areAnimationsHappening()) {
+			clearActiveCard ();
+			if (isPlayerTurn) {
+				tabActivePlayerUnit (-1);
+			} else {
+				tabActiveAIUnit (-1);
 			}
 		}
 
@@ -178,7 +186,7 @@ public class GameManager : MonoBehaviour {
 		cam.setTarget (newActive);
 	}
 
-	public void tabActivePlayerUnit(){
+	public void tabActivePlayerUnit(int dir){
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		int idNum = -1;
 		for (int i = 0; i < unitsPlayer.Count; i++) {
@@ -189,7 +197,7 @@ public class GameManager : MonoBehaviour {
 
 		//find the next unit who's turn is not over
 		int count = 0;
-		idNum = (idNum + 1) % unitsPlayer.Count;
+		idNum = (idNum + dir + unitsPlayer.Count) % unitsPlayer.Count;
 		while (unitsPlayer [idNum].TurnIsDone && count < unitsPlayer.Count + 1) {
 			idNum = (idNum + 1) % unitsPlayer.Count;
 			count++;
@@ -203,7 +211,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void tabActiveAIUnit(){
+	public void tabActiveAIUnit(int dir){
 		List<Unit> unitsAI = getAIUnits ();
 		int idNum = -1;
 		for (int i = 0; i < unitsAI.Count; i++) {
@@ -214,7 +222,7 @@ public class GameManager : MonoBehaviour {
 
 		//find the next unit who's turn is not over
 		int count = 0;
-		idNum = (idNum + 1) % unitsAI.Count;
+		idNum = (idNum  + dir + unitsAI.Count) % unitsAI.Count;
 		while (unitsAI [idNum].TurnIsDone && count < unitsAI.Count + 1) {
 			idNum = (idNum + 1) % unitsAI.Count;
 			count++;
