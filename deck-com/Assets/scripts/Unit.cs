@@ -57,7 +57,7 @@ public class Unit : MonoBehaviour {
 	public void setup(GameManager _gm,Tile startTile){
 		gm = _gm;
 		curTile = startTile;
-		transform.position = curTile.transform.position;
+		transform.position = curTile.Pos.getV3 ();// curTile.transform.position;
 
 		health = baseHealth;
 
@@ -236,7 +236,8 @@ public class Unit : MonoBehaviour {
 	//movement
 	public void moveTo(Tile target){
 		curTile = target;
-		StartCoroutine(doMoveAnimation(target.transform.position, 0.5f));
+		StartCoroutine(doMoveAnimation(target.Pos.getV3(), 0.5f));
+		//StartCoroutine(doMoveAnimation(target.transform.position, 0.5f));
 	}
 
 	//damage and health

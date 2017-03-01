@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class LevelGen : MonoBehaviour {
 
-	public GameObject tilePrefab;
+	//public GameObject tilePrefab;
 
 	public TextAsset testLevelFile;
+	public GameManager gm;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +24,7 @@ public class LevelGen : MonoBehaviour {
 	}
 
 	public Tile[,] loadLevelFromText(TextAsset file){
+		Debug.Log ("get it now pls");
 		string[] lines = file.text.Split ('\n');
 		int gridW = lines [0].Length;
 		int gridH = lines.Length;
@@ -46,10 +48,12 @@ public class LevelGen : MonoBehaviour {
 				if (thisChar == 'G')	spawnProperty = Tile.SpawnProperty.Exit;
 
 				//make the tile
-				GameObject tileObj = Instantiate (tilePrefab, new Vector3 (x, y, 0), Quaternion.identity) as GameObject;
-				tileObj.transform.parent = transform;
-				grid [x, y] = tileObj.GetComponent<Tile> ();
-				grid [x, y].setup (cover, spawnProperty);
+				grid [x, y] = new Tile(x, y, cover, spawnProperty, true, gm);
+
+//				GameObject tileObj = Instantiate (tilePrefab, new Vector3 (x, y, 0), Quaternion.identity) as GameObject;
+//				tileObj.transform.parent = transform;
+//				grid [x, y] = tileObj.GetComponent<Tile> ();
+//				grid [x, y].setup (cover, spawnProperty);
 			}
 		}
 

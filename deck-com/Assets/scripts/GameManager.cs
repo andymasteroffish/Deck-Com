@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 	public float debugAnimationTimeMod;
 
 	public CardManager cm;
+	public GameObjectManager gameObjectManager;
 
 	public CameraControl cam;
 	public Board board;

@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tile : MonoBehaviour {
+
+public class Tile {
 
 	private GameManager gm;
+
+	//if this tile does not need any visual representaiton, the GameObject will be null
+	public TileGO GO;
 
 	public enum Direction{Up, Right, Down, Left, None};
 	public enum Cover{None, Part, Full};
 	public enum SpawnProperty{None, Player, Foe, Exit};
-
-	public Sprite[] coverSprites;
-	public SpriteRenderer spriteRend;
-
-	public Sprite goalSprite;
 
 	private Cover cover;
 	public SpawnProperty spawnProperty;
@@ -25,49 +24,46 @@ public class Tile : MonoBehaviour {
 	public TextMesh debugText;
 
 	private bool isHighlighted;
+	public Color highlightCol;
 
-	public BoxCollider2D collider;
+	//public BoxCollider2D collider;
 
-	public void setup(Cover _cover, SpawnProperty _spawnProperty){
-		cover = _cover;
+	public Tile(int x, int y, Cover _cover, SpawnProperty _spawnProperty, bool usesGameObject, GameManager _gm){
+		gm = _gm;
 		spawnProperty = _spawnProperty;
 
-//		if (spawnProperty == SpawnProperty.Foe) {
-//			Debug.Log ("foe go here");
-//		}
-//		cover = (Cover)(int)Random.Range (0, 3);
-//		if (Random.value < 0.5f) {
-//			cover = Cover.None;
-//		}
+		pos = new TilePos (x,y);
 
-		setCover (cover);
+		setCover (_cover);
+
+		if (usesGameObject) {
+			GO = gm.gameObjectManager.getTileGO ();
+			GO.activate (this);
+		} else {
+			GO = null;
+		}
 
 		mouseIsOver = false;
+
+		highlightCol = Color.white;
 
 		setHighlighted (false);
 	}
 
-	public void setInfo(int xPos, int yPos, Tile[] _adjacent,  GameManager _gm){
-		pos = new TilePos(xPos, yPos);
-
-		gm = _gm;
-
+	public void setInfo(Tile[] _adjacent){
 		for (int i = 0; i < 4; i++) {
 			adjacent [i] = _adjacent [i];
 		}
 
+		if (GO != null) {
+			GO.refresh ();
+		}
 	}
 
 	// Update is called once per frame
 	void Update () {
 	}
 
-	void OnMouseEnter(){
-		mouseIsOver = true;
-	}
-	void OnMouseExit(){
-		mouseIsOver = false;
-	}
 
 	public void checkClick(){
 		if (mouseIsOver && isHighlighted) {
@@ -77,19 +73,16 @@ public class Tile : MonoBehaviour {
 
 	public void setCover(Cover newCover){
 		cover = newCover;
-		spriteRend.sprite = coverSprites [(int)cover];
-
-		if (spawnProperty == SpawnProperty.Exit) {
-			spriteRend.sprite = goalSprite;
+		if (GO != null) {
+			GO.refresh ();
 		}
 	}
 
 	public void setHighlighted(bool val, Color col){
 		isHighlighted = val;
-		if (isHighlighted) {
-			spriteRend.color = col;
-		} else {
-			spriteRend.color = new Color (1, 1, 1);
+		highlightCol = col;
+		if (GO != null) {
+			GO.refresh ();
 		}
 	}
 	public void setHighlighted(bool val){
@@ -121,5 +114,15 @@ public class Tile : MonoBehaviour {
 			return this.adjacent;
 		}
 	}
+
+	public bool MouseIsOver{
+		get{
+			return this.mouseIsOver;
+		}
+		set{
+			mouseIsOver = value;
+		}
+	}
+
 
 }

@@ -18,13 +18,9 @@ public class Board : MonoBehaviour {
 	public int partialCoverDamageReduction;
 	public float fullCoverDamagePrc;
 
-	// Use this for initialization
-	void Start () {
-		reset ();
-	}
 
 	public void reset(){
-		clear ();
+		//clear ();
 		grid = levelGen.getTestLevel ();// new Tile[cols, rows];
 
 		cols = grid.GetLength (0);
@@ -38,23 +34,23 @@ public class Board : MonoBehaviour {
 				if (x > 0)		adjacent [(int)Tile.Direction.Left] = grid [x-1, y];
 				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
 				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
-				grid [x, y].setInfo (x,y, adjacent, gm);
-				grid[x,y].transform.parent = transform;
+				grid [x, y].setInfo (adjacent);
+				//grid[x,y].transform.parent = transform;
 			}
 		}
 
 		clearHighlights ();
 	}
 
-	private void clear(){
-		if (grid != null){
-			for (int x = 0; x < cols; x++) {
-				for (int y = 0; y < rows; y++) {
-					Destroy (grid [x, y].gameObject);
-				}
-			}
-		}
-	}
+//	private void clear(){
+//		if (grid != null){
+//			for (int x = 0; x < cols; x++) {
+//				for (int y = 0; y < rows; y++) {
+//					Destroy (grid [x, y].gameObject);
+//				}
+//			}
+//		}
+//	}
 
 	public void clearHighlights(){
 		for (int x = 0; x < cols; x++) {
@@ -169,16 +165,16 @@ public class Board : MonoBehaviour {
 	public bool checkIfTilesAreVisibleToEachother(Tile a, Tile b){
 		bool returnVal = true;
 		//get the direction
-		float dist = Vector3.Distance (a.transform.position, b.transform.position);
-		Vector3 dir3 = b.transform.position - a.transform.position;
+		float dist = a.Pos.getDist(b.Pos);// Vector3.Distance (a.transform.position, b.transform.position);
+		Vector3 dir3 = b.Pos.getV3() - a.Pos.getV3();// b.transform.position - a.transform.position;
 		Vector2 dir = new Vector2(dir3.x, dir3.y);
 		//turn off tiles with no cover
 		turnOffAllTileCollidersExcept(Tile.Cover.Full);
 		//turn off the colliders on these tiles too
-		a.collider.enabled = false;
-		b.collider.enabled = false;
+		a.GO.collider.enabled = false;
+		b.GO.collider.enabled = false;
 		//shoot the ray!
-		RaycastHit2D hit = Physics2D.Raycast(a.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		RaycastHit2D hit = Physics2D.Raycast(a.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
 		if (hit.collider != null) {
 			returnVal = false;
 		}
@@ -443,13 +439,13 @@ public class Board : MonoBehaviour {
 	public Tile getFirstTileWithCover(Tile start, Tile end){
 		Tile returnVal = null;
 		//get the direction
-		float dist = Vector3.Distance (start.transform.position, end.transform.position);
-		Vector3 dir3 = end.transform.position - start.transform.position;
+		float dist = start.Pos.getDist(end.Pos);//  Vector3.Distance (start.transform.position, end.transform.position);
+		Vector3 dir3 = end.Pos.getV3() - start.Pos.getV3();// end.transform.position - start.transform.position;
 		Vector2 dir = new Vector2(dir3.x, dir3.y);
 		//turn off tiles with no cover
 		turnOffAllTileCollidersBelow(Tile.Cover.Part);
 		//shoot the ray!
-		RaycastHit2D hit = Physics2D.Raycast(start.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		RaycastHit2D hit = Physics2D.Raycast(start.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
 		if (hit.collider != null) {
 			returnVal = hit.collider.gameObject.GetComponent<Tile> ();
 		}
@@ -486,8 +482,8 @@ public class Board : MonoBehaviour {
 
 	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
 		//get the direction
-		float dist = Vector3.Distance (sourceTile.transform.position, targetTile.transform.position);
-		Vector3 dir3 = targetTile.transform.position - sourceTile.transform.position;
+		float dist = sourceTile.Pos.getDist(targetTile.Pos);// Vector3.Distance (sourceTile.transform.position, targetTile.transform.position);
+		Vector3 dir3 = targetTile.Pos.getV3() - sourceTile.Pos.getV3();	// targetTile.transform.position - sourceTile.transform.position;
 		Vector2 dir = new Vector2(dir3.x, dir3.y);
 
 		//debug line
@@ -496,7 +492,7 @@ public class Board : MonoBehaviour {
 		//check for full cover
 		turnOffAllTileCollidersExcept(Tile.Cover.Full);
 
-		RaycastHit2D fullHit = Physics2D.Raycast(sourceTile.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		RaycastHit2D fullHit = Physics2D.Raycast(sourceTile.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
 		if (fullHit.collider != null) {
 			turnOnAllTileColliders ();
 			return Tile.Cover.Full;
@@ -508,12 +504,12 @@ public class Board : MonoBehaviour {
 		for (int i = 0; i < 4; i++) {
 			if (targetTile.Adjacent [i] != null) {
 				if (targetTile.Adjacent [i].CoverVal == Tile.Cover.Part) {
-					targetTile.Adjacent [i].collider.enabled = true;
+					targetTile.Adjacent [i].GO.collider.enabled = true;
 				}
 			}
 		}
 
-		RaycastHit2D partHit = Physics2D.Raycast(sourceTile.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
+		RaycastHit2D partHit = Physics2D.Raycast(sourceTile.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
 		if (partHit.collider != null) {
 			turnOnAllTileColliders ();
 			return Tile.Cover.Part;
@@ -528,28 +524,28 @@ public class Board : MonoBehaviour {
 	void turnOffAllTileColliders(){
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
-				grid [x, y].collider.enabled = false;
+				grid [x, y].GO.collider.enabled = false;
 			}
 		}
 	}
 	void turnOffAllTileCollidersExcept(Tile.Cover coverLevelToKeepOn){
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
-				grid [x, y].collider.enabled = grid [x, y].CoverVal == coverLevelToKeepOn;
+				grid [x, y].GO.collider.enabled = grid [x, y].CoverVal == coverLevelToKeepOn;
 			}
 		}
 	}
 	void turnOffAllTileCollidersBelow(Tile.Cover coverLevelToKeepOn){
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
-				grid [x, y].collider.enabled = (int)grid [x, y].CoverVal >= (int)coverLevelToKeepOn;
+				grid [x, y].GO.collider.enabled = (int)grid [x, y].CoverVal >= (int)coverLevelToKeepOn;
 			}
 		}
 	}
 	void turnOnAllTileColliders(){
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
-				grid [x, y].collider.enabled = true;
+				grid [x, y].GO.collider.enabled = true;
 			}
 		}
 	}
