@@ -327,7 +327,7 @@ public class Card : MonoBehaviour {
 		string text = "Weapon +"+Owner.Weapon.baseDamage+"\n";
 
 		//then the damage mod for this card
-		string cardSymbol = damageMod >= 0 ? "+" : "-";
+		string cardSymbol = damageMod >= 0 ? "+" : "";
 		text += "Card "+cardSymbol+damageMod+"\n";
 
 		//check my charms

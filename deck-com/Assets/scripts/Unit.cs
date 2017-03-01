@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using System.Xml;
 
 public class Unit : MonoBehaviour {
 
@@ -46,9 +47,9 @@ public class Unit : MonoBehaviour {
 	public TextAsset deckList;
 
 	//weapons and charms
-	public GameObject[] itemPrefabs;
-	private Item weapon;
-	private List<Item> charms = new List<Item>();
+	public string[] charmIDs;
+	private Charm weapon;
+	private List<Charm> charms = new List<Charm>();
 
 	//utility
 	private bool mouseIsOver;
@@ -71,9 +72,12 @@ public class Unit : MonoBehaviour {
 		deckObj.gameObject.name = unitName + "_deck";
 		deck = deckObj.GetComponent<Deck> ();
 
-		//spawn the items
-		for (int i = 0; i < itemPrefabs.Length; i++) {
-			addCharm (itemPrefabs [i]);
+		//spawn the chamrs
+		//THIS NEEDS TO PULL FROM XML OR SOMETHING!
+		//addCharm("long_bow");	//TEST
+		//addCharm("extra_card");	//TEST
+		for (int i = 0; i < charmIDs.Length; i++) {
+			addCharm (charmIDs [i]);
 		}
 
 		//the first item is the weapon
@@ -88,23 +92,21 @@ public class Unit : MonoBehaviour {
 	}
 	public virtual void setupCustom(){}
 
-	public void addCharm(GameObject charmPrefab){
-		GameObject itemObj = Instantiate (charmPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-		Item thisItem =  itemObj.GetComponent<Item> ();
-		thisItem.setup (this, charms.Count);
-		itemObj.name = unitName + "_" + thisItem.name;
-		thisItem.setActive (isActive);
-		charms.Add (thisItem);
+	public void addCharm(string idName){
+		Charm thisCharm = CharmManager.instance.getCharmFromIdName (idName, this);
+		if (isActive) {
+			thisCharm.setActive (true);
+		}
+		charms.Add (thisCharm);
 	}
 
-	public void removeCharm(Item charmToRemove){
-		//kill this one
-		Destroy (charmToRemove.gameObject);
+	public void removeCharm(Charm charmToRemove){
+		charmToRemove.isDead = true;
 		charms.Remove (charmToRemove);
 
 		//space out the others
 		for (int i = 0; i < charms.Count; i++) {
-			charms[i].setPos (i);
+			charms [i].offsetID = i;
 		}
 	}
 
@@ -426,13 +428,13 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-	public Item Weapon{
+	public Charm Weapon{
 		get{
 			return this.weapon;
 		}
 	}
 
-	public List<Item> Charms{
+	public List<Charm> Charms{
 		get{
 			return this.charms;
 		}

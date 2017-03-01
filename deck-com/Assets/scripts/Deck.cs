@@ -37,7 +37,7 @@ public class Deck : MonoBehaviour {
 		owner = _owner;
 
 		//create a card for each one in the list and add it to the deck
-		List<GameObject> cardPrefabs = owner.GM.cm.getCardPrefabsFromTextFile (deckList);
+		List<GameObject> cardPrefabs = CardManager.instance.getCardPrefabsFromTextFile (deckList);
 		for (int i = 0; i < cardPrefabs.Count; i++) {
 			addCardToDrawPile ( spawnCard(cardPrefabs[i]) );
 		}

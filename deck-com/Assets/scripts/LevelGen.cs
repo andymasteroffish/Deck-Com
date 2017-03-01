@@ -24,7 +24,6 @@ public class LevelGen : MonoBehaviour {
 	}
 
 	public Tile[,] loadLevelFromText(TextAsset file){
-		Debug.Log ("get it now pls");
 		string[] lines = file.text.Split ('\n');
 		int gridW = lines [0].Length;
 		int gridH = lines.Length;

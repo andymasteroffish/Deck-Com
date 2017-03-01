@@ -4,13 +4,25 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour {
 
+	public static CardManager instance = null;
+
 	public GameObject[] cardPrefabs;
 
 	private Dictionary<string, GameObject> cards = new Dictionary<string, GameObject>();
 
-	public void setup(){
+	void Awake(){
+		if (instance == null) {
+			instance = this;
+		} else if (instance != this) {
+			Destroy (gameObject);
+		}
+
 		populateDictionary ();
 	}
+
+//	public void setup(){
+//		populateDictionary ();
+//	}
 
 	private void populateDictionary(){
 		for (int i = 0; i < cardPrefabs.Length; i++) {

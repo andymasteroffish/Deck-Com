@@ -6,8 +6,8 @@ public class GameManager : MonoBehaviour {
 
 	public float debugAnimationTimeMod;
 
-	public CardManager cm;
-	public GameObjectManager gameObjectManager;
+	//public CardManager cardManager;
+	//public GameObjectManager gameObjectManager;
 
 	public CameraControl cam;
 	public Board board;
@@ -28,8 +28,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		cm.setup ();
-
+		
 		board.reset ();
 
 		roundNum = 0;

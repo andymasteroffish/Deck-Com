@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Card_GiveCharm : Card {
 
-	public GameObject charmPrefab;
+	public string idNameOfGift;
 	public bool anyUnit;
 
 	public string infoText;
@@ -26,7 +26,7 @@ public class Card_GiveCharm : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-		unit.addCharm (charmPrefab);
+		unit.addCharm (idNameOfGift);
 
 		finish ();
 	}

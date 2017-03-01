@@ -37,7 +37,7 @@ public class Tile {
 		setCover (_cover);
 
 		if (usesGameObject) {
-			GO = gm.gameObjectManager.getTileGO ();
+			GO = GameObjectManager.instance.getTileGO ();
 			GO.activate (this);
 		} else {
 			GO = null;
