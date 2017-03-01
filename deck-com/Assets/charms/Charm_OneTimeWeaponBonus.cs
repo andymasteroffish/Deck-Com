@@ -17,9 +17,7 @@ public class Charm_OneTimeWeaponBonus : Charm {
 		setup (node, _owner);
 	}
 
-	public override void setupCustom(XmlNode node){
-		
-	}
+
 
 	public override int getWeaponDamageMod(Card card, Unit target){
 		return damageMod;
