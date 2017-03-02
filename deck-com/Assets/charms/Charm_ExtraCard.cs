@@ -7,9 +7,9 @@ public class Charm_ExtraCard : Charm {
 
 	private int numExtraCards;
 
-	public Charm_ExtraCard(XmlNode node, Unit _owner){
+	public Charm_ExtraCard(XmlNode _node){
+		node = _node;
 		numExtraCards = int.Parse (node ["extra_cards"].InnerXml);
-		setup (node, _owner);
 	}
 
 	public override void resetRoundCustom(){

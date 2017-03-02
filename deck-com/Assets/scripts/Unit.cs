@@ -93,7 +93,8 @@ public class Unit : MonoBehaviour {
 	public virtual void setupCustom(){}
 
 	public void addCharm(string idName){
-		Charm thisCharm = CharmManager.instance.getCharmFromIdName (idName, this);
+		Charm thisCharm = CharmManager.instance.getCharmFromIdName (idName);
+		thisCharm.setup (this, true);
 		if (isActive) {
 			thisCharm.setActive (true);
 		}

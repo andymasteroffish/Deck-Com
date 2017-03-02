@@ -10,11 +10,11 @@ public class Charm_OneTimeWeaponBonus : Charm {
 
 	public bool expiresAtEndOfTurn;
 
-	public Charm_OneTimeWeaponBonus(XmlNode node, Unit _owner){
+	public Charm_OneTimeWeaponBonus(XmlNode _node){
+		node = _node;
 		damageMod = int.Parse (node ["damageMod"].InnerXml);
 		rangeMod = int.Parse (node ["rangeMod"].InnerXml);
 		expiresAtEndOfTurn = bool.Parse(node ["expires_at_turn_end"].InnerXml);
-		setup (node, _owner);
 	}
 
 

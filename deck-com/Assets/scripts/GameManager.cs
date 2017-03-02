@@ -43,16 +43,6 @@ public class GameManager : MonoBehaviour {
 
 			units.Add (thisUnit);
 		}
-//
-//		units [0].setup (this, 2, 2);
-//		board.Grid [2, 2].setCover (Tile.Cover.None);
-//
-//		units [1].setup (this, 4, 2);
-//		board.Grid [4, 2].setCover (Tile.Cover.None);
-//
-//		units [2].setup (this, 3, 3);
-//		board.Grid [3, 3].setCover (Tile.Cover.None);
-
 
 		foreach(Unit unit in units){
 			unit.reset ();

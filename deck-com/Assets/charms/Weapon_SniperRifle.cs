@@ -5,11 +5,8 @@ using System.Xml;
 
 public class Weapon_SniperRifle : Charm {
 
-	public Weapon_SniperRifle(XmlNode node, Unit _owner){
-		setup (node, _owner);
-	}
-
-	public override void setupCustom(XmlNode node){
+	public Weapon_SniperRifle(XmlNode _node){
+		node = _node;
 		baseDamage = int.Parse(node ["damage"].InnerText);
 		baseRange = int.Parse(node ["range"].InnerText);
 	}

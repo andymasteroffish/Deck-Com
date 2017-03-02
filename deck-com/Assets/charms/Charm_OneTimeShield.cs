@@ -7,9 +7,9 @@ public class Charm_OneTimeShield : Charm {
 
 	public int damagePrevented;
 
-	public Charm_OneTimeShield(XmlNode node, Unit _owner){
+	public Charm_OneTimeShield(XmlNode _node){
+		node = _node;
 		damagePrevented = int.Parse (node ["damagePrevented"].InnerXml);
-		setup (node, _owner);
 	}
 
 	public override int getDamageTakenMod(Card card, Unit source){

@@ -9,8 +9,8 @@ public class Charm_HealRing : Charm {
 	public int healIncrease;
 
 
-	public Charm_HealRing(XmlNode node, Unit _owner){
-		setup (node, _owner);
+	public Charm_HealRing(XmlNode _node){
+		node = _node;
 	}
 	public override void resetRoundCustom(){
 		usedThisRound = false;

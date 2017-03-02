@@ -31,42 +31,43 @@ public class CharmManager : MonoBehaviour {
 		//getCharmFromIdName("long bow");
 	}
 
-	public Charm getCharmFromIdName(string charmIdName, Unit owner){
+	public Charm getCharmFromIdName(string charmIdName){
 		foreach (XmlNode node in nodes) {
 			if (node.Attributes ["idName"].Value == charmIdName) {
-				return	getCharmFromXMLNode (node, owner);
+				return	getCharmFromXMLNode (node);
 			}
 		}
 		Debug.Log ("COULD NOT FIND CHARM ID: " + charmIdName);
 		return null;
 	}
 
-	public Charm getCharmFromXMLNode(XmlNode node, Unit owner){
+	public Charm getCharmFromXMLNode(XmlNode node){
 		Charm thisCharm = null;
 
 		string scriptName = node ["script"].InnerText;// node.Attributes ["script"].Value;
 
 		if (scriptName == "Weapon_Basic") {
-			thisCharm = new Weapon_Basic (node, owner);
+			thisCharm = new Weapon_Basic (node);
 		}
 		else if (scriptName == "Weapon_SniperRifle") {
-			thisCharm = new Weapon_SniperRifle (node, owner);
+			thisCharm = new Weapon_SniperRifle (node);
 		}
 		else if (scriptName == "Charm_ExtraCard") {
-			thisCharm = new Charm_ExtraCard (node, owner);
+			thisCharm = new Charm_ExtraCard (node);
 		}
 		else if (scriptName == "Charm_HealRing") {
-			thisCharm = new Charm_HealRing (node, owner);
+			thisCharm = new Charm_HealRing (node);
 		}
 		else if (scriptName == "Charm_OneTimeWeaponBonus") {
-			thisCharm = new Charm_OneTimeWeaponBonus (node, owner);
+			thisCharm = new Charm_OneTimeWeaponBonus (node);
 		}
 		else if (scriptName == "Charm_OneTimeShield") {
-			thisCharm = new Charm_OneTimeShield (node, owner);
+			thisCharm = new Charm_OneTimeShield (node);
 		}
 		else{
 			Debug.Log ("SCRIPT NAME FOR CHARM NOT FOUND: "+scriptName);
 		}
+
 
 		return thisCharm;
 	}
