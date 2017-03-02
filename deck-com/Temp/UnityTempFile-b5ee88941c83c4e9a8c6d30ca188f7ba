@@ -4,11 +4,13 @@
 -langversion:4
 -out:'Temp/Assembly-CSharp.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/Managed/UnityEngine.dll'
+-r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/PlaymodeTestsRunner/UnityEngine.PlaymodeTestsRunner.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll'
+-r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/UnityPurchasing/UnityEngine.Purchasing.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll'
 -r:'/Applications/Unity5.5.1/Unity5.5.1.app/Contents/Managed/UnityEditor.dll'
 -r:'/Applications/Unity5.5.1/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll'
@@ -79,6 +81,8 @@
 -define:UNITY_EDITOR_64
 -define:UNITY_EDITOR_OSX
 -define:UNITY_TEAM_LICENSE
+'Assets/cards/Card.cs'
+'Assets/cards/CardGO.cs'
 'Assets/cards/_card_scripts/Card_Attack.cs'
 'Assets/cards/_card_scripts/Card_AttackIgnoreWeapon.cs'
 'Assets/cards/_card_scripts/Card_BasicAOEAttack.cs'
@@ -93,6 +97,7 @@
 'Assets/cards/_card_scripts/Card_TeamDash.cs'
 'Assets/cards/_card_scripts/Card_Teleport.cs'
 'Assets/charms/Charm.cs'
+'Assets/charms/CharmGO.cs'
 'Assets/charms/Charm_ExtraCard.cs'
 'Assets/charms/Charm_HealRing.cs'
 'Assets/charms/Charm_OneTimeShield.cs'
@@ -102,9 +107,7 @@
 'Assets/outlines_old/SpriteOutline_old.cs'
 'Assets/scripts/Board.cs'
 'Assets/scripts/CameraControl.cs'
-'Assets/scripts/Card.cs'
 'Assets/scripts/CardManager.cs'
-'Assets/scripts/CharmGO.cs'
 'Assets/scripts/CharmManager.cs'
 'Assets/scripts/Deck.cs'
 'Assets/scripts/GameManager.cs'

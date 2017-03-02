@@ -178,7 +178,7 @@ public class Deck : MonoBehaviour {
 	//visual things
 	void alignCardsInHand(){
 		for (int i=0; i<hand.Count; i++){
-			hand[i].setPos (cardStartPos.localPosition + cardSpacing * (float)i, i);
+			hand [i].orderInhand = i;
 		}
 	}
 

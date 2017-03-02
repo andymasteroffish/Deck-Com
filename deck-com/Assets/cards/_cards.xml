@@ -1,0 +1,13 @@
+<cards>
+  <card idName="move3">
+    <name>Move 3</name>
+    <script>Card_Movement</script>
+    <range>3</range>
+  </card>
+  <card idName="attack">
+    <name>Attack</name>
+    <script>Card_Attack</script>
+    <rangeMod>1</rangeMod>
+    <damageMod>2</damageMod>
+  </card>
+</cards>

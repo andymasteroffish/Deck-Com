@@ -1,49 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine.UI;
+using System.Xml;
 
-public class Card : MonoBehaviour {
+public class Card {
 
 	public enum CardType{Attack, AttackSpecial, Movement, Aid, Other};
 
 	public string name;
+	public string description;
 
-	[System.NonSerialized]
 	public CardType type;
-	[System.NonSerialized]
 	public int baseActionCost;
-
-	[System.NonSerialized]
-	public Text nameField;
-	[System.NonSerialized]
-	public Text textField;
-	[System.NonSerialized]
-	public SpriteRenderer spriteRend;
 
 	private bool isActive;
 	private bool waitingForTile, waitingForUnit, waitingForChoice;
 
-	private bool mouseIsOver;
+	public bool mouseIsOver;
 	private bool isDisabled;
 
-	private float order;
+	public int orderInHand;
 
 	private Unit owner;
 	private Deck deck;
 
 	//some colors
-	[System.NonSerialized]
 	public Color moveHighlightColor = new Color(0.5f, 0.5f, 1f);
-	[System.NonSerialized]
 	public Color attackHighlightColor  = new Color(1f, 0.5f, 0.5f);
-	[System.NonSerialized]
 	public Color aidHighlightColor  = new Color(0.5f, 1f, 0.5f);
-	[System.NonSerialized]
 	public Color otherHighlightColor  = new Color(1f, 0.5f, 1f);
 
-	private bool doingAnimation;
-
+	//this constructor should not be used. The derived cards are the only thing that should be used
+	public Card(){}
 
 	public void setup(Unit _owner, Deck _deck){
 		owner = _owner;
@@ -82,36 +70,12 @@ public class Card : MonoBehaviour {
 		cancel ();
 	}
 
-	public void setPos(Vector3 newPos, int _order){
-		order = (float)_order;
-		transform.localPosition = newPos;
-		cancel ();
-	}
-
-	
 	// Update is called once per frame
 	void Update () {
 		//check if this can be played
-		setDisabled (checkIfCanBePlayed() == false);
+		isDisabled = !checkIfCanBePlayed();
 
-		Vector3 spritePos = new Vector3 (0, 0, order * -0.1f);
-		Color col = new Color (1, 1, 1, 1);
-		if (mouseIsOver) {
-			spritePos.z += -2;
-			spritePos.y = 0.5f;
-		}
 
-		if (isActive) {
-			spritePos.z += -5;
-			spritePos.y = 2;
-		}
-
-		if (isDisabled) {
-			col = new Color (1, 1, 1, 0.4f);
-		}
-
-		spriteRend.transform.localPosition = spritePos;
-		spriteRend.color = col;
 			
 	}
 
@@ -163,9 +127,6 @@ public class Card : MonoBehaviour {
 	}
 	public virtual void passInUnitCustom(Unit unit){}
 
-	public void setDisabled(bool val){
-		isDisabled = val;
-	}
 
 	public void finish(bool destroyCard = false){
 		owner.GM.targetInfoText.turnOff ();
@@ -216,71 +177,71 @@ public class Card : MonoBehaviour {
 	//animations
 	//**********************************
 
-	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone, bool permanentlyDestroyCard = false){
-		doingAnimation = true;
+//	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone, bool permanentlyDestroyCard = false){
+//		doingAnimation = true;
+//
+//		yield return new WaitForSeconds (0.05f);
+//
+//		float timer = time  * Owner.GM.debugAnimationTimeMod;
+//		float startScale = transform.localScale.x;
+//
+//		while (timer > 0) {
+//			timer -= Time.deltaTime;
+//			timer = Mathf.Max (0, timer);
+//
+//			float newScale = timer / time;
+//			newScale = Mathf.Pow (newScale, 2);
+//			transform.localScale = new Vector3 (newScale, newScale, newScale);
+//
+//			yield return null;
+//		}
+//
+//		deck.removeCardFromHand (this);
+//
+//
+//		transform.localScale = new Vector3 (1, 1, 1);	
+//
+//		if (markAsPlayedWhenDone) {
+//			owner.markCardPlayed (this);
+//		}
+//
+//		if (!permanentlyDestroyCard) {
+//			deck.discardCard (this);
+//		} else {
+//			deck.destroyCard (this);
+//		}
+//
+//		doingAnimation = false;
+//	}
 
-		yield return new WaitForSeconds (0.05f);
-
-		float timer = time  * Owner.GM.debugAnimationTimeMod;
-		float startScale = transform.localScale.x;
-
-		while (timer > 0) {
-			timer -= Time.deltaTime;
-			timer = Mathf.Max (0, timer);
-
-			float newScale = timer / time;
-			newScale = Mathf.Pow (newScale, 2);
-			transform.localScale = new Vector3 (newScale, newScale, newScale);
-
-			yield return null;
-		}
-
-		deck.removeCardFromHand (this);
-
-
-		transform.localScale = new Vector3 (1, 1, 1);	
-
-		if (markAsPlayedWhenDone) {
-			owner.markCardPlayed (this);
-		}
-
-		if (!permanentlyDestroyCard) {
-			deck.discardCard (this);
-		} else {
-			deck.destroyCard (this);
-		}
-
-		doingAnimation = false;
-	}
-
-	public void startDrawAnimation(){
-		StartCoroutine( doDrawAnimaiton (0.5f, transform.localPosition));
-	}
-
-	IEnumerator doDrawAnimaiton(float time, Vector3 targetPos){
-		doingAnimation = true;
-		float timer = 0;
-
-		time *= Owner.GM.debugAnimationTimeMod;
-
-		Vector3 startPos = targetPos;
-		startPos.y -= 2;	//guessing
-
-
-		while (timer < time) {
-			timer += Time.deltaTime;
-			float prc = timer / time;
-
-			transform.localPosition = Vector3.Lerp (startPos, targetPos, prc);
-
-			yield return null;
-		}
-
-		transform.localPosition = targetPos;
-
-
-		doingAnimation = false;
-	}
+//	public void startDrawAnimation(){
+//		StartCoroutine( doDrawAnimaiton (0.5f, transform.localPosition));
+//	}
+//
+//	IEnumerator doDrawAnimaiton(float time, Vector3 targetPos){
+//		doingAnimation = true;
+//		float timer = 0;
+//
+//		time *= Owner.GM.debugAnimationTimeMod;
+//
+//		Vector3 startPos = targetPos;
+//		startPos.y -= 2;	//guessing
+//
+//
+//		while (timer < time) {
+//			timer += Time.deltaTime;
+//			float prc = timer / time;
+//
+//			transform.localPosition = Vector3.Lerp (startPos, targetPos, prc);
+//
+//			yield return null;
+//		}
+//
+//		transform.localPosition = targetPos;
+//
+//
+//		doingAnimation = false;
+//	}
 
 	//**********************************
 	//showing information when a potential target is moused over
