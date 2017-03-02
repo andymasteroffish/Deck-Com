@@ -18,6 +18,7 @@ public class TileGO : MonoBehaviour {
 		tile = _tile;
 		isActive = true;
 		gameObject.SetActive (true);
+		transform.position = tile.Pos.getV3 ();
 		//refresh ();
 	}
 
@@ -28,29 +29,36 @@ public class TileGO : MonoBehaviour {
 	}
 
 
-//	void Update () {
-//		if (tile.IsHighlighted) {
-//			Debug.Log ("I'm " + tile.highlightCol + " at " + Time.time);
-//			spriteRend.color = Color.red;
-//		}
-//	}
-
-	public void refresh(){
-		transform.position = tile.Pos.getV3 ();
-
-		spriteRend.sprite = coverSprites [(int)tile.CoverVal];
-
-		if (tile.spawnProperty == Tile.SpawnProperty.Exit) {
-			spriteRend.sprite = goalSprite;
-		}
-
+	void Update () {
 		if (tile.IsHighlighted) {
 			spriteRend.color = tile.highlightCol;
 		} else {
-			//Debug.Log ("time " + Time.time);
-			spriteRend.color = new Color (1, 1, 1);
+			spriteRend.color = Color.white;
+		}
+
+		if (tile.spawnProperty == Tile.SpawnProperty.Exit) {
+			spriteRend.sprite = goalSprite;
+		} else {
+			spriteRend.sprite = coverSprites [(int)tile.CoverVal];
 		}
 	}
+
+//	public void refresh(){
+//		transform.position = tile.Pos.getV3 ();
+//
+//		spriteRend.sprite = coverSprites [(int)tile.CoverVal];
+//
+//		if (tile.spawnProperty == Tile.SpawnProperty.Exit) {
+//			spriteRend.sprite = goalSprite;
+//		}
+//
+//		if (tile.IsHighlighted) {
+//			spriteRend.color = tile.highlightCol;
+//		} else {
+//			//Debug.Log ("time " + Time.time);
+//			spriteRend.color = new Color (1, 1, 1);
+//		}
+//	}
 
 	void OnMouseEnter(){
 		tile.MouseIsOver = true;

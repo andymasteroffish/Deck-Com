@@ -6,8 +6,14 @@ public class Tile {
 
 	private GameManager gm;
 
+
+	public bool useGameObject;
+
+	//REMOVE THIS ONCE YOUR BOARD DOE SNOT USE RAYCASTING!!!!
 	//if this tile does not need any visual representaiton, the GameObject will be null
 	public TileGO GO;
+
+
 
 	public enum Direction{Up, Right, Down, Left, None};
 	public enum Cover{None, Part, Full};
@@ -28,17 +34,20 @@ public class Tile {
 
 	//public BoxCollider2D collider;
 
-	public Tile(int x, int y, Cover _cover, SpawnProperty _spawnProperty, bool usesGameObject, GameManager _gm){
+	public Tile(int x, int y, Cover _cover, SpawnProperty _spawnProperty, bool _useGameObject, GameManager _gm){
 		gm = _gm;
 		spawnProperty = _spawnProperty;
+
+		useGameObject = _useGameObject;
 
 		pos = new TilePos (x,y);
 
 		setCover (_cover);
 
-		if (usesGameObject) {
+		if (useGameObject) {
+			//GameObjectManager.instance.getTileGO ().activate (this);
 			GO = GameObjectManager.instance.getTileGO ();
-			GO.activate (this);
+			GO.activate(this);
 		} else {
 			GO = null;
 		}
@@ -53,10 +62,6 @@ public class Tile {
 	public void setInfo(Tile[] _adjacent){
 		for (int i = 0; i < 4; i++) {
 			adjacent [i] = _adjacent [i];
-		}
-
-		if (GO != null) {
-			GO.refresh ();
 		}
 	}
 
@@ -73,17 +78,11 @@ public class Tile {
 
 	public void setCover(Cover newCover){
 		cover = newCover;
-		if (GO != null) {
-			GO.refresh ();
-		}
 	}
 
 	public void setHighlighted(bool val, Color col){
 		isHighlighted = val;
 		highlightCol = col;
-		if (GO != null) {
-			GO.refresh ();
-		}
 	}
 	public void setHighlighted(bool val){
 		setHighlighted (val, Color.white);
