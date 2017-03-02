@@ -10,7 +10,7 @@ public class Card_MoveAttackAOE : Card {
 	public override void setupCustom(){
 		type = CardType.Movement;
 
-		textField.text = "move up to " + range + " spaces and deal "+damage+" to ALL adjacent units";
+		description = "move up to " + range + " spaces and deal "+damage+" to ALL adjacent units";
 	}
 
 	public override void mouseEnterEffects(){

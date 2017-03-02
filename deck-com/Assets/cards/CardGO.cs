@@ -33,13 +33,14 @@ public class CardGO : MonoBehaviour {
 
 		if (needsAnimationPositions) {
 			startPos = GameObject.Find ("card_startPos").transform.position;
-			restPos = GameObject.Find ("card_endPos").transform.position;
+			restPos = GameObject.Find ("card_restPos").transform.position;
 			endPos = GameObject.Find ("card_endPos").transform.position;
 		}
 
 		gameObject.name = "card "+card.Owner.name+" "+card.name;
 
 		transform.position = startPos;
+		spriteRend.transform.localPosition = Vector3.zero;
 		StartCoroutine (doMoveAnimation (getPos(), moveTime, false));
 	}
 
@@ -59,19 +60,22 @@ public class CardGO : MonoBehaviour {
 
 		//set the position (if we're not sliding it)
 		if (!doingAnimation) {
-			Vector3 spritePos = getPos();
+			Vector3 spritePos = new Vector3 (0, 0, 0);
 
 			if (card.mouseIsOver) {
 				spritePos.z += -2;
 				spritePos.y = mouseOverYRaise;
 			}
 
-			if (isActive) {
+			if (card.IsActive) {
 				spritePos.z += -5;
 				spritePos.y = activeYRaise;
 			}
 
-			spriteRend.transform.position = spritePos;
+
+			spriteRend.transform.localPosition = spritePos;
+
+			transform.position = getPos ();
 		}
 
 		//set the color
@@ -82,15 +86,40 @@ public class CardGO : MonoBehaviour {
 		spriteRend.color = col;
 
 		//check if it is time to go away
+
+		//destroying a card entirely
+		if (!doingAnimation && card.isDead) {
+			StartCoroutine(doDestroyAnimation(moveTime));
+		}
+
+		//putting a card in the discard
+		if (!doingAnimation && !card.Owner.deck.Hand.Contains (card)) {
+			StartCoroutine(doMoveAnimation(endPos, moveTime, true));
+		}
+
+		//moving to a different player
+		if (!doingAnimation && !card.Owner.IsActive){
+			StartCoroutine(doMoveAnimation(startPos, moveTime, true));
+		}
 	}
 
 	Vector3 getPos(){
-		return restPos + new Vector3 (xSpacing * card.orderInHand, 0, card.orderInHand * -0.1f)
+		return restPos + new Vector3 (xSpacing * card.orderInHand, 0, card.orderInHand * -0.1f);
 	}
 
+	void OnMouseEnter(){
+		card.MouseIsOver = true;
+	}
+	void OnMouseExit(){
+		card.MouseIsOver = false;
+	}
 
 	IEnumerator doMoveAnimation(Vector3 target, float time, bool deactivateWhenDone){
 		doingAnimation = true;
+
+		Vector3 startPos = transform.position;
+
+		time *= card.Owner.GM.debugAnimationTimeMod;
 
 		float timer = 0;
 
@@ -98,7 +127,7 @@ public class CardGO : MonoBehaviour {
 			timer += Time.deltaTime;
 			float prc = Mathf.Clamp (timer / time, 0, 1);
 			prc = Mathf.Pow (prc, 0.75f);
-			transform.position = Vector3.Lerp (start, target, prc);
+			transform.position = Vector3.Lerp (startPos, target, prc);
 			yield return null;
 		}
 
@@ -110,7 +139,7 @@ public class CardGO : MonoBehaviour {
 		}
 	}
 
-	IEnumerator doDeathAnimation(float time){
+	IEnumerator doDestroyAnimation(float time){
 		doingAnimation = true;
 
 		yield return new WaitForSeconds (0.05f);
@@ -129,22 +158,23 @@ public class CardGO : MonoBehaviour {
 			yield return null;
 		}
 
-		deck.removeCardFromHand (this);
+		//deck.removeCardFromHand (this);
 
 
 		transform.localScale = new Vector3 (1, 1, 1);	
 
-		if (markAsPlayedWhenDone) {
-			owner.markCardPlayed (this);
-		}
-
-		if (!permanentlyDestroyCard) {
-			deck.discardCard (this);
-		} else {
-			deck.destroyCard (this);
-		}
+//		if (markAsPlayedWhenDone) {
+//			owner.markCardPlayed (this);
+//		}
+//
+//		if (!permanentlyDestroyCard) {
+//			deck.discardCard (this);
+//		} else {
+//			deck.destroyCard (this);
+//		}
 
 		doingAnimation = false;
+		deactivate ();
 	}
 
 	//setters and getters

@@ -181,9 +181,9 @@ public class Unit : MonoBehaviour {
 		//discard the hand
 		deck.discardHand();
 
-		while (deck.areAnimationsHappening()){
-			yield return null;
-		}
+//		while (deck.areAnimationsHappening()){
+//			yield return null;
+//		}
 
 		yield return new WaitForSeconds (0.2f * gm.debugAnimationTimeMod);
 
@@ -192,11 +192,11 @@ public class Unit : MonoBehaviour {
 			deck.drawCard ();
 		}
 
-		while (deck.areAnimationsHappening ()) {
-			yield return null;
-		}
+//		while (deck.areAnimationsHappening ()) {
+//			yield return null;
+//		}
 
-		yield return new WaitForSeconds (1f * gm.debugAnimationTimeMod);	//a second to see the new cards
+		yield return new WaitForSeconds (0.5f * gm.debugAnimationTimeMod);	//a second to see the new cards
 
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].turnEndPostDiscard ();
@@ -222,6 +222,9 @@ public class Unit : MonoBehaviour {
 
 		//reduce the actions
 		actionsLeft -= card.getNumActionsNeededToPlay();
+
+		//check which cards can still be played
+		deck.updateCardsDisabled();
 	}
 
 	//input
@@ -337,9 +340,9 @@ public class Unit : MonoBehaviour {
 			return true;
 		}
 
-		if (deck.areAnimationsHappening()){
-			return true;
-		}
+//		if (deck.areAnimationsHappening()){
+//			return true;
+//		}
 
 		return false;
 	}

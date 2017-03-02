@@ -14,7 +14,7 @@ public class Card_AttackIgnoreWeapon : Card {
 		string damageText = "Damage: " + damage;
 		string rangeText = "Range: " + Mathf.Floor(range);
 
-		textField.text = damageText + "\n" + rangeText + "\nDoes not use weapon.";
+		description = damageText + "\n" + rangeText + "\nDoes not use weapon.";
 	}
 
 	public override void mouseEnterEffects(){

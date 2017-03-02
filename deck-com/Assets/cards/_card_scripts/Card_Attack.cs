@@ -1,24 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_Attack : Card {
 
 	public int damageMod;
-	public int rangeAdjust;
+	public int rangeMod;
 
+	public Card_Attack(XmlNode _node){
+		node = _node;
+
+		rangeMod = int.Parse (node ["rangeMod"].InnerXml);
+		damageMod = int.Parse (node ["damageMod"].InnerXml);
+
+	}
 
 	public override void setupCustom(){
 		type = Card.CardType.Attack;
 
 		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
-		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
+		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
 
-		textField.text = damageText + "\n" + rangeText;
+		description = damageText + "\n" + rangeText;
 	}
 
 	public override void mouseEnterEffects(){
-		mouseEnterForWeapon (rangeAdjust);
+		mouseEnterForWeapon (rangeMod);
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
@@ -27,7 +35,7 @@ public class Card_Attack : Card {
 
 	public override void selectCardCustom(){
 
-		selectCardForWeapon (rangeAdjust);
+		selectCardForWeapon (rangeMod);
 	}
 
 	public override void passInUnitCustom(Unit unit){

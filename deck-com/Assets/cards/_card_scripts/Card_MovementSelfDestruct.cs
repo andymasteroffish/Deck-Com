@@ -12,7 +12,7 @@ public class Card_MovementSelfDestruct : Card {
 
 		baseActionCost = 0;
 
-		textField.text = "move up to " + range + " spaces. Costs 0 acitons. One Time Use.";
+		description = "move up to " + range + " spaces. Costs 0 acitons. One Time Use.";
 	}
 
 	public override void mouseEnterEffects(){

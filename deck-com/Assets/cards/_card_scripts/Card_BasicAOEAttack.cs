@@ -16,12 +16,12 @@ public class Card_BasicAOEAttack : Card {
 
 		type = CardType.AttackSpecial;
 
-		textField.text = "Deals " + damage + " damage in area.\nRange "+throwRange;
+		description = "Deals " + damage + " damage in area.\nRange "+throwRange;
 		if (destroysCover){
-			textField.text+="\nDestroys cover";
+			description += "\nDestroys cover";
 		}
 		if (harmsFriendly){
-			textField.text+="\ncan hurt allies";
+			description += "\ncan hurt allies";
 		}
 	}
 

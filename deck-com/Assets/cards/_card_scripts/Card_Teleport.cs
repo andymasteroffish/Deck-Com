@@ -14,7 +14,7 @@ public class Card_Teleport : Card {
 	public override void setupCustom(){
 		type = CardType.Other;
 
-		textField.text = "teleport a visible unit up to "+moveRange+" spaces";
+		description = "teleport a visible unit up to "+moveRange+" spaces";
 	}
 
 	public override void mouseEnterEffects(){

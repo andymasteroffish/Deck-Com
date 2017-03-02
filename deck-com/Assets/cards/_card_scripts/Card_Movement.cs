@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_Movement : Card {
 
@@ -9,15 +10,31 @@ public class Card_Movement : Card {
 	public int bonusActions;
 	public int bonusCards;
 
+	public Card_Movement(XmlNode _node){
+		node = _node;
+		range = int.Parse (node ["range"].InnerText);
+
+		if (node ["bonus_actions"] != null) {
+			bonusActions = int.Parse (node ["bonus_actions"].InnerText);
+		} else {
+			bonusActions = 0;
+		}
+		if (node ["bonus_cards"] != null) {
+			bonusCards = int.Parse (node ["bonus_cards"].InnerText);
+		} else {
+			bonusCards = 0;
+		}
+	}
+
 	public override void setupCustom(){
 		type = Card.CardType.Movement;
 
-		textField.text = "move up to " + range + " spaces";
+		description = "move up to " + range + " spaces";
 		if (bonusActions > 0) {
-			textField.text += "\n+" + bonusActions + " action(s)";
+			description += "\n+" + bonusActions + " action(s)";
 		}
 		if (bonusCards > 0) {
-			textField.text += "\n+" + bonusCards + " card(s)";
+			description += "\n+" + bonusCards + " card(s)";
 		}
 	}
 

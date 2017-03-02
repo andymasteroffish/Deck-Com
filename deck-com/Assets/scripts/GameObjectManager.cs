@@ -8,9 +8,11 @@ public class GameObjectManager : MonoBehaviour {
 
 	public GameObject tilePrefab;
 	public GameObject charmPrefab;
+	public GameObject cardPrefab;
 
 	private List<TileGO> tiles = new List<TileGO>();
 	private List<CharmGO> charms = new List<CharmGO>();
+	private List<CardGO> cards = new List<CardGO> ();
 
 	void Awake(){
 		if (instance == null) {
@@ -47,6 +49,21 @@ public class GameObjectManager : MonoBehaviour {
 		GameObject obj = Instantiate(charmPrefab) as GameObject;
 		CharmGO GO = obj.GetComponent<CharmGO> ();
 		charms.Add (GO);
+		return GO;
+	}
+
+	public CardGO getCardGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < cards.Count; i++) {
+			if (cards [i].IsActive == false) {
+				return cards [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(cardPrefab) as GameObject;
+		CardGO GO = obj.GetComponent<CardGO> ();
+		cards.Add (GO);
 		return GO;
 	}
 

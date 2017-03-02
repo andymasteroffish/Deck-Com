@@ -37,9 +37,10 @@ public class Deck : MonoBehaviour {
 		owner = _owner;
 
 		//create a card for each one in the list and add it to the deck
-		List<GameObject> cardPrefabs = CardManager.instance.getCardPrefabsFromTextFile (deckList);
-		for (int i = 0; i < cardPrefabs.Count; i++) {
-			addCardToDrawPile ( spawnCard(cardPrefabs[i]) );
+		List<Card> cards = CardManager.instance.getDeckFromTextFile (deckList);
+		for (int i = 0; i < cards.Count; i++) {
+			cards [i].setup (owner, this);
+			addCardToDrawPile ( cards[i] );
 		}
 
 		shuffle ();
@@ -51,24 +52,36 @@ public class Deck : MonoBehaviour {
 		setActive (false);
 	}
 
-	public Card spawnCard(GameObject prefab){
-		GameObject cardObj = Instantiate (prefab, Vector3.zero, Quaternion.identity) as GameObject;
-		cardObj.transform.parent = transform;
-		Card thisCard = cardObj.GetComponent<Card> ();
-		thisCard.setup (owner, this);
-		cardObj.gameObject.SetActive (false);
-		return thisCard;
-	}
+//	public Card spawnCard(GameObject prefab){
+//
+//
+//
+//		GameObject cardObj = Instantiate (prefab, Vector3.zero, Quaternion.identity) as GameObject;
+//		cardObj.transform.parent = transform;
+//		Card thisCard = cardObj.GetComponent<Card> ();
+//		thisCard.setup (owner, this);
+//		cardObj.gameObject.SetActive (false);
+//		return thisCard;
+//	}
 
 	//starting the turn
 	public void setActive(bool _isActive){
 		isActive = _isActive;
+
+		if (isActive) {
+			for (int i = 0; i < hand.Count; i++) {
+				hand [i].setOwnerActive ();
+			}
+		}
+
 		float moveTime = 0.2f;
 		if (isActive) {
 			StartCoroutine (doMoveAnimation (startPos.position, Vector3.zero, moveTime));
 		} else {
 			StartCoroutine (doMoveAnimation (Vector3.zero, endPos.position, moveTime));
 		}
+
+		updateCardsDisabled ();
 	}
 
 	//manipulating the deck
@@ -80,7 +93,6 @@ public class Deck : MonoBehaviour {
 			drawPile [slotA] = drawPile [slotB];
 			drawPile [slotB] = temp;
 		}
-
 	}
 
 	public void drawCards(int num){
@@ -100,30 +112,36 @@ public class Deck : MonoBehaviour {
 	}
 
 	public void addCardToHand(Card card){
-		card.gameObject.SetActive (true);
-		card.gameObject.transform.parent = handTransform;
-		card.reset ();
+		//Debug.Log ("add " + card.name + " to hand of " + owner.unitName);
+		//card.gameObject.SetActive (true);
+		//card.gameObject.transform.parent = handTransform;
+		card.resetCard ();
 
 		hand.Add (card);
 		alignCardsInHand ();
 
-		card.startDrawAnimation ();
+		if (owner.IsActive) {
+			card.setOwnerActive ();
+		}
+
+		//card.startDrawAnimation ();
 	}
 
 	public void addCardToDrawPile(Card card){
 		drawPile.Add (card);
-		card.gameObject.transform.parent = drawPileTransform;
-		card.gameObject.SetActive (false);
+		//card.gameObject.transform.parent = drawPileTransform;
+		//card.gameObject.SetActive (false);
 	}
 	public void addCardToDiscard(Card card){
 		discardPile.Add (card);
-		card.gameObject.transform.parent = discardPileTransform;
-		card.gameObject.SetActive (false);
+		//card.gameObject.transform.parent = discardPileTransform;
+		//card.gameObject.SetActive (false);
 		alignCardsInHand ();
 	}
 
 	public void destroyCard(Card card){
-		Destroy (card.gameObject);
+		card.isDead = true;
+		//Destroy (card.gameObject);
 		owner.GM.clearActiveCard ();
 		alignCardsInHand ();
 	}
@@ -139,6 +157,12 @@ public class Deck : MonoBehaviour {
 	public void discardHand(){
 		for (int i = hand.Count-1; i >= 0; i--) {
 			hand [i].discard ();
+		}
+	}
+
+	public void updateCardsDisabled(){
+		for (int i=0; i<hand.Count; i++){
+			hand [i].updateIsDisabled ();
 		}
 	}
 
@@ -178,7 +202,7 @@ public class Deck : MonoBehaviour {
 	//visual things
 	void alignCardsInHand(){
 		for (int i=0; i<hand.Count; i++){
-			hand [i].orderInhand = i;
+			hand [i].orderInHand = i;
 		}
 	}
 
@@ -230,16 +254,23 @@ public class Deck : MonoBehaviour {
 	}
 
 	//checking for animations
-	public bool areAnimationsHappening(){
-		if (doingAnimation) {
-			return true;
-		}
-		foreach (Card card in hand) {
-			if (card.DoingAnimation) {
-				return true;
-			}
-		}
+//	public bool areAnimationsHappening(){
+//		if (doingAnimation) {
+//			return true;
+//		}
+//		foreach (Card card in hand) {
+//			if (card.DoingAnimation) {
+//				return true;
+//			}
+//		}
+//
+//		return false;
+//	}
 
-		return false;
+	//setters and getters
+	public List<Card> Hand{
+		get{
+			return this.hand;
+		}
 	}
 }

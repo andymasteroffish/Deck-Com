@@ -12,15 +12,15 @@ public class Card_BasicTargetBonus : Card {
 	public override void setupCustom(){
 		type = CardType.Aid;
 
-		textField.text = "Gain";
+		description = "Gain";
 		if (numCardsToDraw > 0) {
-			textField.text += "\n+" + numCardsToDraw + " card(s)";
+			description += "\n+" + numCardsToDraw + " card(s)";
 		}
 		if (numActionsToGain > 0) {
-			textField.text += "\n+" + numActionsToGain + " actions(s)";
+			description += "\n+" + numActionsToGain + " actions(s)";
 		}
 		if (anyUnit) {
-			textField.text += "\n(any unit)";
+			description += "\n(any unit)";
 		}
 	}
 	

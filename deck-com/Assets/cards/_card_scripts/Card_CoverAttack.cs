@@ -14,7 +14,7 @@ public class Card_CoverAttack : Card {
 		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
 		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
 
-		textField.text = damageText + "\n" + rangeText+"\nCan go through cover, destroying it";
+		description = damageText + "\n" + rangeText+"\nCan go through cover, destroying it";
 	}
 
 	public override void mouseEnterEffects(){

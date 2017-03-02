@@ -6,14 +6,14 @@ public class Card_TeamDash : Card {
 
 	public int range;
 
-	public GameObject giftCardPrefab;
+	public string giftCardID;
 
 	private bool onGiftStep = false;
 
 	public override void setupCustom(){
 		type = Card.CardType.Movement;
 
-		textField.text = "move up to " + range + " spaces and give an a free "+range+" space move";
+		description = "move up to " + range + " spaces and give an a free "+range+" space move";
 	}
 
 	public override void mouseEnterEffects(){
@@ -39,7 +39,9 @@ public class Card_TeamDash : Card {
 	public override void passInUnitCustom(Unit unit){
 
 		Debug.Log (unit.name + " gets a card");
-		unit.deck.addCardToHand (unit.deck.spawnCard (giftCardPrefab));
+		Card gift = CardManager.instance.getCardFromIdName (giftCardID);
+		gift.setup (unit, unit.deck);
+		unit.deck.addCardToHand (gift);
 		onGiftStep = false;
 
 		finish ();

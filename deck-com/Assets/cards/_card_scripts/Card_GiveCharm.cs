@@ -13,7 +13,7 @@ public class Card_GiveCharm : Card {
 	// Use this for initialization
 	public override void setupCustom(){
 		type = CardType.Other;
-		textField.text = infoText;
+		description = infoText;
 	}
 	
 	public override void selectCardCustom(){

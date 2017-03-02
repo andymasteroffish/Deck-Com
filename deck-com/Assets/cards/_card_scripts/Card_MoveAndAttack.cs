@@ -12,7 +12,7 @@ public class Card_MoveAndAttack : Card {
 	public override void setupCustom(){
 		type = CardType.Attack;
 
-		textField.text = "move up to " + moveRange + " spaces and attack at "+damageMod+" damage";
+		description = "move up to " + moveRange + " spaces and attack at "+damageMod+" damage";
 	}
 
 	public override void mouseEnterEffects(){

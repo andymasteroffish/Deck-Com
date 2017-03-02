@@ -10,6 +10,8 @@ public class Card {
 	public string name;
 	public string description;
 
+	public XmlNode node;
+
 	public CardType type;
 	public int baseActionCost;
 
@@ -24,6 +26,9 @@ public class Card {
 	private Unit owner;
 	private Deck deck;
 
+	//some state shit
+	public bool isDead;
+
 	//some colors
 	public Color moveHighlightColor = new Color(0.5f, 0.5f, 1f);
 	public Color attackHighlightColor  = new Color(1f, 0.5f, 0.5f);
@@ -37,46 +42,61 @@ public class Card {
 		owner = _owner;
 		deck = _deck;
 
-		doingAnimation = false;
+		isDead = false;
 
-		//find all the parts
-		Transform[] ts = gameObject.transform.GetComponentsInChildren<Transform>();
-		foreach (Transform t in ts){
-			if (t.gameObject.name == "NameText") {
-				nameField = t.gameObject.GetComponent<Text> ();
-			}
-			if (t.gameObject.name == "BodyText") {
-				textField = t.gameObject.GetComponent<Text> ();
-			}
-			if (t.gameObject.name == "sprite") {
-				spriteRend = t.gameObject.GetComponent<SpriteRenderer> ();
-			}
+		name = node ["name"].InnerText;
+
+		baseActionCost = 1;
+		if (node ["action_cost"] != null) {
+			baseActionCost = int.Parse(node ["action_cost"].InnerText);
 		}
 
-		nameField.text = name;
+//		doingAnimation = false;
+//
+//		//find all the parts
+//		Transform[] ts = gameObject.transform.GetComponentsInChildren<Transform>();
+//		foreach (Transform t in ts){
+//			if (t.gameObject.name == "NameText") {
+//				nameField = t.gameObject.GetComponent<Text> ();
+//			}
+//			if (t.gameObject.name == "BodyText") {
+//				textField = t.gameObject.GetComponent<Text> ();
+//			}
+//			if (t.gameObject.name == "sprite") {
+//				spriteRend = t.gameObject.GetComponent<SpriteRenderer> ();
+//			}
+//		}
+//
+//		nameField.text = name;
 		//textField.text = "Hey, I'm testin over here! "+Random.Range(0,999).ToString();
 
 		//default values
 		baseActionCost = 1;
 		type = CardType.Other;
 
-		//custom stiff
+		//custom setup
 		setupCustom ();
+
+		//check if the description needs to be overwritten
+		if (node ["desc"] != null) {
+			description = node ["desc"].InnerText;
+		}
 	}
 	public virtual void setupCustom(){}
 
-	public void reset(){
-		isDisabled = false;
+	public void resetCard(){
+		updateIsDisabled ();
 		cancel ();
 	}
 
-	// Update is called once per frame
-	void Update () {
+	public void setOwnerActive(){
+		GameObjectManager.instance.getCardGO ().activate (this);
+	}
+
+
+	public void updateIsDisabled () {
 		//check if this can be played
 		isDisabled = !checkIfCanBePlayed();
-
-
-			
 	}
 
 	//by default, cards just need an aciton to be played
@@ -130,10 +150,21 @@ public class Card {
 
 	public void finish(bool destroyCard = false){
 		owner.GM.targetInfoText.turnOff ();
-		StartCoroutine(doDeathAnimation(0.5f, true, destroyCard));
+		//StartCoroutine(doDeathAnimation(0.5f, true, destroyCard));
+
+		owner.markCardPlayed (this);
+
+		deck.removeCardFromHand (this);
+
+		if (!destroyCard) {
+			deck.discardCard (this);
+		} else {
+			deck.destroyCard (this);
+		}
 	}
 	public void discard(){
-		StartCoroutine(doDeathAnimation(0.5f, false));
+		deck.removeCardFromHand (this);
+		deck.discardCard (this);
 	}
 
 	public bool isWaitingForInput(){
@@ -339,6 +370,9 @@ public class Card {
 		get{
 			return this.mouseIsOver;
 		}
+		set{
+			mouseIsOver = value;
+		}
 	}
 
 	public bool IsDisabled{
@@ -388,9 +422,11 @@ public class Card {
 		}
 	}
 
-	public bool DoingAnimation{
-		get{
-			return this.doingAnimation;
-		}
-	}
+//	public bool DoingAnimation{
+//		get{
+//			return this.doingAnimation;
+//		}
+//	}
+
+
 }

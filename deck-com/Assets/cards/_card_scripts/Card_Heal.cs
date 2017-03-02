@@ -10,7 +10,7 @@ public class Card_Heal : Card {
 	public override void setupCustom(){
 		type = CardType.Aid;
 
-		textField.text = "heals "+healAmount+" at range "+range;
+		description = "heals "+healAmount+" at range "+range;
 	}
 
 	public override void mouseEnterEffects(){
