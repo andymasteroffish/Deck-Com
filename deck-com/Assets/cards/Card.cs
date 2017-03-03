@@ -158,7 +158,7 @@ public class Card {
 
 	void OnMouseEnter(){
 		mouseIsOver = true;
-		if (Owner.GM.ActiveCard == null) {
+		if (Owner.GM.activeCard == null) {
 			mouseEnterEffects ();
 		}
 	}
@@ -166,7 +166,7 @@ public class Card {
 
 	void OnMouseExit(){
 		mouseIsOver = false;
-		if (!isActive && Owner.GM.ActiveCard == null) {
+		if (!isActive && Owner.GM.activeCard == null) {
 			owner.GM.board.clearHighlights ();
 		}
 		mouseExitEffects ();

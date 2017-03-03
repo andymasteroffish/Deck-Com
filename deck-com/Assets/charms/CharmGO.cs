@@ -65,7 +65,7 @@ public class CharmGO : MonoBehaviour {
 	IEnumerator doMoveAnimation(Vector3 start, Vector3 target, float time, bool deactivateWhenDone){
 		doingAnimation = true;
 
-		time *= charm.Owner.GM.debugAnimationTimeMod;
+		time *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
 		float timer = 0;
 
 		while (timer < time) {

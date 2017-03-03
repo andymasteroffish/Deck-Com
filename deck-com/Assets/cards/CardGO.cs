@@ -109,13 +109,13 @@ public class CardGO : MonoBehaviour {
 
 	void OnMouseEnter(){
 		card.MouseIsOver = true;
-		if (card.Owner.GM.ActiveCard == null) {
+		if (card.Owner.GM.activeCard == null) {
 			card.mouseEnterEffects ();
 		}
 	}
 	void OnMouseExit(){
 		card.MouseIsOver = false;
-		if (!card.IsActive && card.Owner.GM.ActiveCard == null) {
+		if (!card.IsActive && card.Owner.GM.activeCard == null) {
 			card.Owner.GM.board.clearHighlights ();
 		}
 		card.mouseExitEffects ();
@@ -126,7 +126,7 @@ public class CardGO : MonoBehaviour {
 
 		Vector3 startPos = transform.position;
 
-		time *= card.Owner.GM.debugAnimationTimeMod;
+		time *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
 
 		float timer = 0;
 
@@ -151,7 +151,7 @@ public class CardGO : MonoBehaviour {
 
 		yield return new WaitForSeconds (0.05f);
 
-		float timer = time  * card.Owner.GM.debugAnimationTimeMod;
+		float timer = time  * GameManagerTacticsInterface.instance.debugAnimationTimeMod;
 		float startScale = transform.localScale.x;
 
 		while (timer > 0) {
