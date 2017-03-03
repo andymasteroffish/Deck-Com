@@ -40,8 +40,6 @@ public class Unit : MonoBehaviour {
 	private bool doingAnimation;
 
 	//decks and cards
-	public GameObject deckPrefab;
-	[System.NonSerialized]
 	public Deck deck;
 
 	public TextAsset deckList;
@@ -68,9 +66,7 @@ public class Unit : MonoBehaviour {
 		healthText = canvasObj.GetComponentInChildren<Text> ();
 
 		//spawn deck
-		GameObject deckObj = Instantiate (deckPrefab, Vector3.zero, Quaternion.identity) as GameObject;
-		deckObj.gameObject.name = unitName + "_deck";
-		deck = deckObj.GetComponent<Deck> ();
+		deck = new Deck();
 
 		//spawn the chamrs
 		//THIS NEEDS TO PULL FROM XML OR SOMETHING!
