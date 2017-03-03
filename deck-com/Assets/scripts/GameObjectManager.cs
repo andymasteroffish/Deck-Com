@@ -10,11 +10,13 @@ public class GameObjectManager : MonoBehaviour {
 	public GameObject charmPrefab;
 	public GameObject cardPrefab;
 	public GameObject actionMarkerPrefab;
+	public GameObject unitPrefab;
 
 	private List<TileGO> tiles = new List<TileGO>();
 	private List<CharmGO> charms = new List<CharmGO>();
 	private List<CardGO> cards = new List<CardGO> ();
 	private List<ActionMarkerGO> actionMarkers = new List<ActionMarkerGO>();
+	private List<UnitGO> units = new List<UnitGO> ();
 
 	void Awake(){
 		if (instance == null) {
@@ -82,6 +84,31 @@ public class GameObjectManager : MonoBehaviour {
 		ActionMarkerGO GO = obj.GetComponent<ActionMarkerGO> ();
 		actionMarkers.Add (GO);
 		return GO;
+	}
+
+	public UnitGO getUnitGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < units.Count; i++) {
+			if (units [i].IsActive == false) {
+				return units [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(unitPrefab) as GameObject;
+		UnitGO GO = obj.GetComponent<UnitGO> ();
+		units.Add (GO);
+		return GO;
+	}
+
+	public UnitGO findUnitGO(Unit target){
+		for (int i = 0; i < units.Count; i++) {
+			if (units [i].Owner == target) {
+				return units [i];
+			}
+		}
+		Debug.Log ("COULD NOT FIND UNIT");
+		return null;
 	}
 
 }

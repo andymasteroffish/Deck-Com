@@ -9,10 +9,6 @@ public class CardManager : MonoBehaviour {
 
 	public static CardManager instance = null;
 
-	//public GameObject[] cardPrefabs;
-
-	//private Dictionary<string, GameObject> cards = new Dictionary<string, GameObject>();
-
 	public TextAsset xmlText;
 
 	private XmlDocument fullXML;

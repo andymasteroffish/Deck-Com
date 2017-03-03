@@ -25,7 +25,6 @@ public class Card_Attack : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Debug.Log ("mouse enter");
 		mouseEnterForWeapon (rangeMod);
 	}
 

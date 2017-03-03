@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour {
 	public CameraControl cam;
 	public Board board;
 
-	public GameObject[] spawnList;
+	public string[] spawnList;
+	//public GameObject[] spawnList;
 
 	private List<Unit> units = new List<Unit>();
 
@@ -33,15 +34,13 @@ public class GameManager : MonoBehaviour {
 
 		roundNum = 0;
 
-		//place the players
+
+		//place the units
 		for (int i = 0; i < spawnList.Length; i++) {
-			GameObject unitObj = Instantiate (spawnList [i]) as GameObject;
-			Unit thisUnit = unitObj.GetComponent<Unit> ();
-
-			Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( thisUnit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
-			thisUnit.setup (this, spawnTile);
-
-			units.Add (thisUnit);
+			Unit unit = UnitManager.instance.getUnitFromIdName (spawnList [i]);
+			Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
+			unit.setup (this, spawnTile);
+			units.Add (unit);
 		}
 
 		foreach(Unit unit in units){
@@ -98,8 +97,8 @@ public class GameManager : MonoBehaviour {
 			}
 			//check potential targets
 			board.checkClick ();
-			foreach(Unit unit in units){
-				unit.checkGeneralClick ();
+			for (int i = units.Count - 1; i >= 0; i--) {
+				units[i].checkGeneralClick ();
 			}
 		}
 
@@ -256,11 +255,11 @@ public class GameManager : MonoBehaviour {
 
 	//checking for things
 	public bool areAnimationsHappening(){
-		foreach(Unit unit in units){
-			if (unit.areAnimationsHappening()){
-				return true;
-			}
-		}
+//		foreach(Unit unit in units){
+//			if (unit.areAnimationsHappening()){
+//				return true;
+//			}
+//		}
 
 		return false;
 	}

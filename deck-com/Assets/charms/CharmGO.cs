@@ -32,7 +32,7 @@ public class CharmGO : MonoBehaviour {
 			endTrans = GameObject.Find ("charmEndPos").transform;
 		}
 
-		gameObject.name = "charm "+charm.Owner.name+" "+charm.name;
+		gameObject.name = "charm "+charm.Owner.unitName+" "+charm.name;
 
 		setAnimationPositions ();
 		StartCoroutine (doMoveAnimation (startPos, endPos, moveTime, false));

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Xml;
 
-public class Unit : MonoBehaviour {
+public class Unit {
 
 	//some basic info
 	public string unitName;
@@ -18,26 +18,19 @@ public class Unit : MonoBehaviour {
 	private bool turnIsDone;
 
 	//stats
-	public int baseHealth;
-	private int health;
+	public int baseHealth = 5;
+	public int health;
+	public bool isDead;
 
-	public int baseHandSize;
+	public int baseHandSize = 4;
 
-	public int baseActions;
+	public int baseActions = 2;
 	private int actionsLeft;
 
 	//display
-	public SpriteRenderer spriteRend;
-
-	public GameObject canvasPrefab;
-	private Text healthText;
-
-	public GameObject spriteOutlinePrefab;
-	private SpriteOutline outline = null;
-
 	private bool isHighlighted;
-
-	private bool doingAnimation;
+	public Color highlightCol;
+	public Sprite sprite;
 
 	//decks and cards
 	public Deck deck;
@@ -45,34 +38,50 @@ public class Unit : MonoBehaviour {
 	public TextAsset deckList;
 
 	//weapons and charms
-	public string[] charmIDs;
+	private List<string> charmIDs;
 	private Charm weapon;
 	private List<Charm> charms = new List<Charm>();
 
 	//utility
-	private bool mouseIsOver;
+	public bool mouseIsOver;
 
+	public Unit(XmlNode node){
+		unitName = node ["name"].InnerXml;
+		isPlayerControlled = bool.Parse(node["player_controlled"].InnerXml);
+		deckList = Resources.Load<TextAsset> (node ["deck"].InnerXml);
+		sprite = Resources.Load<Sprite> (node ["sprite"].InnerXml);
+
+		if (node ["base_health"] != null) {
+			baseHealth = int.Parse(node ["base_health"].InnerText);
+		}
+		if (node ["hand_size"] != null) {
+			baseHandSize = int.Parse(node ["hand_size"].InnerText);
+		}
+		if (node ["actions"] != null) {
+			baseActions = int.Parse(node ["actions"].InnerText);
+		}
+
+
+		charmIDs = new List<string> ();
+		XmlNodeList childNodes = node["charms"].ChildNodes;
+		foreach (XmlNode n in childNodes) {
+			if (n.Name == "charm") {
+				charmIDs.Add (n.InnerXml);
+			}
+		}
+	}
 
 	public void setup(GameManager _gm,Tile startTile){
 		gm = _gm;
 		curTile = startTile;
-		transform.position = curTile.Pos.getV3 ();// curTile.transform.position;
 
 		health = baseHealth;
-
-		//spawn the canvas for displaying info
-		GameObject canvasObj = Instantiate(canvasPrefab, transform.position, Quaternion.identity) as GameObject;
-		canvasObj.transform.SetParent(transform);
-		healthText = canvasObj.GetComponentInChildren<Text> ();
+		isDead = false;
 
 		//spawn deck
 		deck = new Deck();
 
-		//spawn the chamrs
-		//THIS NEEDS TO PULL FROM XML OR SOMETHING!
-		//addCharm("long_bow");	//TEST
-		//addCharm("extra_card");	//TEST
-		for (int i = 0; i < charmIDs.Length; i++) {
+		for (int i = 0; i < charmIDs.Count; i++) {
 			addCharm (charmIDs [i]);
 		}
 
@@ -85,6 +94,9 @@ public class Unit : MonoBehaviour {
 		setHighlighted (false);
 
 		setupCustom ();
+
+		//create the game object shell
+		GameObjectManager.instance.getUnitGO().activate(this);
 	}
 	public virtual void setupCustom(){}
 
@@ -113,8 +125,6 @@ public class Unit : MonoBehaviour {
 			deck.drawCard ();
 		}
 		actionsLeft = 0;
-
-		healthText.text = "HP: " + health;
 	}
 
 	public void resetRound(){
@@ -137,38 +147,9 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-	// Update is called once per frame
-	void Update () {
-		//bounce the sprite when it is active
-		float spriteScale = 1;
-		if (isActive && !turnIsDone) {
-			spriteScale = 1.0f + Mathf.Abs(Mathf.Sin (Time.time * 2) * 0.1f);
-		}
-		spriteRend.gameObject.transform.localScale = new Vector3 (spriteScale, spriteScale, spriteScale);
-
-		//greying when turn is done
-		if (!isHighlighted) {
-			Color colThisFrame = new Color (1, 1, 1, 1);
-			if (turnIsDone && gm.IsPlayerTurn == isPlayerControlled) {
-				colThisFrame = new Color (0.3f, 0.3f, 0.3f, 0.5f);
-			}
-			spriteRend.color = colThisFrame;
-		}
-
-		//show health
-		healthText.text = "HP: " + health+"/"+baseHealth;
-
-		//keeping them raised up for clicking
-		transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
-	}
 
 	//ending the turn
 	public void endTurn(){
-		StartCoroutine (doEndTurn ());
-	}
-
-	IEnumerator doEndTurn(){
-		doingAnimation = true;
 		turnIsDone = true;
 
 		for (int i=charms.Count-1; i>=0; i--){
@@ -180,36 +161,20 @@ public class Unit : MonoBehaviour {
 		//discard the hand
 		deck.discardHand();
 
-//		while (deck.areAnimationsHappening()){
-//			yield return null;
-//		}
-
-		yield return new WaitForSeconds (0.2f * gm.debugAnimationTimeMod);
-
 		//draw to hand size
 		for (int i = 0; i < baseHandSize; i++) {
 			deck.drawCard ();
 		}
 
-//		while (deck.areAnimationsHappening ()) {
-//			yield return null;
-//		}
-
-		yield return new WaitForSeconds (0.5f * gm.debugAnimationTimeMod);	//a second to see the new cards
-
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].turnEndPostDiscard ();
 		}
-
-		yield return new WaitForSeconds (0.5f * gm.debugAnimationTimeMod);
 
 		if (isPlayerControlled) {
 			gm.tabActivePlayerUnit (1);
 		} else {
 			gm.tabActiveAIUnit (1);
 		}
-
-		doingAnimation = false;
 	}
 
 	//playing a cards
@@ -241,8 +206,6 @@ public class Unit : MonoBehaviour {
 	//movement
 	public void moveTo(Tile target){
 		curTile = target;
-		StartCoroutine(doMoveAnimation(target.Pos.getV3(), 0.5f));
-		//StartCoroutine(doMoveAnimation(target.transform.position, 0.5f));
 	}
 
 	//damage and health
@@ -284,7 +247,9 @@ public class Unit : MonoBehaviour {
 	}
 
 	public void killUnit(){
-		StartCoroutine(doDeathAnimation(0.5f));
+		isDead = true;
+		gm.removeUnit (this);
+		//StartCoroutine(doDeathAnimation(0.5f));
 	}
 
 	//other effects
@@ -292,98 +257,40 @@ public class Unit : MonoBehaviour {
 		actionsLeft += num;
 	}
 
-
-	//animations
-	IEnumerator doMoveAnimation(Vector3 target, float time){
-		doingAnimation = true;
-
-		Vector3 startPos = transform.position;
-		float timer = 0;
-
-		while (timer < time) {
-			timer += Time.deltaTime;
-			float prc = Mathf.Clamp (timer / time, 0, 1);
-			prc = Mathf.Pow (prc, 0.75f);
-			transform.position = Vector3.Lerp (startPos, target, prc);
-			yield return null;
-		}
-
-		doingAnimation = false;
-		transform.position = target;
-	}
-
-	IEnumerator doDeathAnimation(float time){
-		doingAnimation = true;
-
-		float timer = time * gm.debugAnimationTimeMod;
-		float startScale = transform.localScale.x;
-
-		while (timer > 0) {
-			timer -= Time.deltaTime;
-			timer = Mathf.Max (0, timer);
-
-			float newScale = timer / time;
-			newScale = Mathf.Pow (newScale, 2);
-			transform.localScale = new Vector3 (newScale, newScale, newScale);
-
-			yield return null;
-		}
-
-		Destroy (gameObject);
-		gm.removeUnit (this);
-
-	}
-
-	public bool areAnimationsHappening(){
-		if (doingAnimation){
-			return true;
-		}
-
-//		if (deck.areAnimationsHappening()){
-//			return true;
-//		}
-
-		return false;
-	}
-
 	//highlighting
 	public void setHighlighted(bool val, Color col){
-		if (outline == null) {
-			createOutlineObj ();
-		}
+//		if (outline == null) {
+//			createOutlineObj ();
+//		}
 
 		isHighlighted = val;
-		if (isHighlighted) {
-			outline.turnOn (col);
-			//spriteRend.color = col;
-		} else {
-			outline.turnOff ();
-			//spriteRend.color = new Color (1, 1, 1);
-		}
+		highlightCol = col;
+//		if (isHighlighted) {
+//			outline.turnOn (col);
+//			//spriteRend.color = col;
+//		} else {
+//			outline.turnOff ();
+//			//spriteRend.color = new Color (1, 1, 1);
+//		}
 	}
 	public void setHighlighted(bool val){
 		setHighlighted (val, Color.white);
 	}
 
-	private void createOutlineObj(){
-		GameObject outlineObj = Instantiate(spriteOutlinePrefab, spriteRend.gameObject.transform.position, Quaternion.identity) as GameObject;
-		outlineObj.transform.parent = spriteRend.gameObject.transform;
-		outline = outlineObj.GetComponent<SpriteOutline> ();
-		outline.setup ();
-	}
+
 
 	//utility
 
-	void OnMouseEnter(){
-		mouseIsOver = true;
-		if (isHighlighted) {
-			GM.ActiveCard.potentialTargetMouseOver (this);
-		}
-	}
-	void OnMouseExit(){
-		mouseIsOver = false;
-		GM.targetInfoText.unitRollOff(this);
-	}
+//	void OnMouseEnter(){
+//		mouseIsOver = true;
+//		if (isHighlighted) {
+//			GM.ActiveCard.potentialTargetMouseOver (this);
+//		}
+//	}
+//	void OnMouseExit(){
+//		mouseIsOver = false;
+//		GM.targetInfoText.unitRollOff(this);
+//	}
 
 
 	//stters getters
@@ -406,12 +313,6 @@ public class Unit : MonoBehaviour {
 		}
 	}
 
-
-	public bool DoingAnimation{
-		get{
-			return this.doingAnimation;
-		}
-	}
 
 	public bool IsActive{
 		get{

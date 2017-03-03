@@ -37,7 +37,7 @@ public class CardGO : MonoBehaviour {
 			endPos = GameObject.Find ("card_endPos").transform.position;
 		}
 
-		gameObject.name = "card "+card.Owner.name+" "+card.name;
+		gameObject.name = "card "+card.Owner.unitName+" "+card.name;
 
 		transform.position = startPos;
 		spriteRend.transform.localPosition = Vector3.zero;

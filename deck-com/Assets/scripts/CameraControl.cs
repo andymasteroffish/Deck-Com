@@ -6,12 +6,12 @@ public class CameraControl : MonoBehaviour {
 	private bool freeControl;
 	public float freeControlSpeed;
 
-	private Unit targetUnit = null;
+	private UnitGO targetUnit = null;
 	public float targetLerp;
 
 
 	public void setTarget(Unit target){
-		targetUnit = target;
+		targetUnit = GameObjectManager.instance.findUnitGO(target);
 		freeControl = false;
 	}
 

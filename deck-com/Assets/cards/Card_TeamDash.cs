@@ -45,8 +45,6 @@ public class Card_TeamDash : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-
-		Debug.Log (unit.name + " gets a card");
 		Card gift = CardManager.instance.getCardFromIdName (giftCardID);
 		gift.setup (unit, unit.deck);
 		unit.deck.addCardToHand (gift);
