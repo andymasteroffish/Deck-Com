@@ -6,6 +6,6 @@ attackBasic
 attackBasic
 heal
 heal
-gainAnAction
-drawACard
+gain-an-action
+draw-a-card
 moveCantrip

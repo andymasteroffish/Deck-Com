@@ -5,6 +5,6 @@ attackBasic
 attackBasic
 attackBasic
 healLight
-gainAnAction
-drawACard
-drawACard
+gain-an-action
+draw-a-card
+draw-a-card

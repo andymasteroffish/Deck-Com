@@ -25,7 +25,7 @@
     <range>6</range>
   </card>
 
-  <card idName="attack">
+  <card idName="attackBasic">
     <name>Attack</name>
     <script>Card_Attack</script>
     <damage_mod>0</damage_mod>

@@ -12,8 +12,8 @@ public class Card_CoverAttack : Card {
 	public Card_CoverAttack(XmlNode _node){
 		node = _node;
 
-		damageMod = int.Parse (node ["damageMod"].InnerXml);
-		rangeMod = int.Parse (node ["rangeMod"].InnerXml);
+		damageMod = int.Parse (node ["damage_mod"].InnerXml);
+		rangeMod = int.Parse (node ["range_mod"].InnerXml);
 
 	}
 
