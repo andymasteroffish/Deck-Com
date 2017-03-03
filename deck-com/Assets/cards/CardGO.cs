@@ -15,9 +15,9 @@ public class CardGO : MonoBehaviour {
 
 	private bool isActive;
 
-	public float xSpacing;	//1.5
-	public float mouseOverYRaise; //0.5
-	public float activeYRaise;	//2
+	public float xSpacing;	
+	public float mouseOverYRaise; 
+	public float activeYRaise;	
 
 	public float moveTime;
 

@@ -9,10 +9,12 @@ public class GameObjectManager : MonoBehaviour {
 	public GameObject tilePrefab;
 	public GameObject charmPrefab;
 	public GameObject cardPrefab;
+	public GameObject actionMarkerPrefab;
 
 	private List<TileGO> tiles = new List<TileGO>();
 	private List<CharmGO> charms = new List<CharmGO>();
 	private List<CardGO> cards = new List<CardGO> ();
+	private List<ActionMarkerGO> actionMarkers = new List<ActionMarkerGO>();
 
 	void Awake(){
 		if (instance == null) {
@@ -64,6 +66,21 @@ public class GameObjectManager : MonoBehaviour {
 		GameObject obj = Instantiate(cardPrefab) as GameObject;
 		CardGO GO = obj.GetComponent<CardGO> ();
 		cards.Add (GO);
+		return GO;
+	}
+
+	public ActionMarkerGO getActionMarkerGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < actionMarkers.Count; i++) {
+			if (actionMarkers [i].IsActive == false) {
+				return actionMarkers [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(actionMarkerPrefab) as GameObject;
+		ActionMarkerGO GO = obj.GetComponent<ActionMarkerGO> ();
+		actionMarkers.Add (GO);
 		return GO;
 	}
 

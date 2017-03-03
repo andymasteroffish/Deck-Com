@@ -136,6 +136,9 @@ public class Unit : MonoBehaviour {
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].setActive (isActive);
 		}
+		if (isActive) {
+			GameObjectManager.instance.getActionMarkerGO ().activate (this, 1);
+		}
 	}
 
 	// Update is called once per frame

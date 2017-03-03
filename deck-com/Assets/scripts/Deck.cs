@@ -21,10 +21,10 @@ public class Deck : MonoBehaviour {
 	public Transform cardStartPos;
 	public Vector3 cardSpacing;
 
-	public Transform actionOrbStartPos;
-	public float actionOrbSpacing;
-	private List<SpriteRenderer> actionOrbSprites = new List<SpriteRenderer>();
-	public GameObject actionOrbPrefab;
+//	public Transform actionOrbStartPos;
+//	public float actionOrbSpacing;
+//	private List<SpriteRenderer> actionOrbSprites = new List<SpriteRenderer>();
+//	public GameObject actionOrbPrefab;
 
 	//sliding in when a unit starts their turn
 	private Transform startPos, endPos;
@@ -228,17 +228,17 @@ public class Deck : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		//making sure we have the right orb count
-		if (owner.ActionsLeft > actionOrbSprites.Count) {
-			GameObject orbObj = Instantiate (actionOrbPrefab, actionOrbStartPos.position + new Vector3 (actionOrbSpacing * actionOrbSprites.Count, 0, 0), Quaternion.identity) as GameObject;
-			orbObj.transform.parent = transform;
-			actionOrbSprites.Add(orbObj.GetComponent<SpriteRenderer>());
-		}
-		if (owner.ActionsLeft < actionOrbSprites.Count && actionOrbSprites.Count > 0) {
-			Destroy (actionOrbSprites [actionOrbSprites.Count - 1].gameObject);
-			actionOrbSprites.RemoveAt (actionOrbSprites.Count - 1);
-
-		}
+//		//making sure we have the right orb count
+//		if (owner.ActionsLeft > actionOrbSprites.Count) {
+//			GameObject orbObj = Instantiate (actionOrbPrefab, actionOrbStartPos.position + new Vector3 (actionOrbSpacing * actionOrbSprites.Count, 0, 0), Quaternion.identity) as GameObject;
+//			orbObj.transform.parent = transform;
+//			actionOrbSprites.Add(orbObj.GetComponent<SpriteRenderer>());
+//		}
+//		if (owner.ActionsLeft < actionOrbSprites.Count && actionOrbSprites.Count > 0) {
+//			Destroy (actionOrbSprites [actionOrbSprites.Count - 1].gameObject);
+//			actionOrbSprites.RemoveAt (actionOrbSprites.Count - 1);
+//
+//		}
 
 	
 	}
