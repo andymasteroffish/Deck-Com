@@ -1,11 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_Heal : Card {
 
-	public int range;
 	public int healAmount;
+	public int range;
+
+	public Card_Heal(XmlNode _node){
+		node = _node;
+
+		healAmount = int.Parse (node ["heal"].InnerXml);
+		range = int.Parse (node ["range"].InnerXml);
+	}
 
 	public override void setupCustom(){
 		type = CardType.Aid;

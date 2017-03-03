@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Xml;
 
 public class Card_BasicTargetBonus : Card {
 
@@ -8,7 +9,15 @@ public class Card_BasicTargetBonus : Card {
 	public int numCardsToDraw;
 	public int numActionsToGain;
 
-	// Use this for initialization
+	public Card_BasicTargetBonus(XmlNode _node){
+		node = _node;
+
+		anyUnit = bool.Parse (node ["any_unit"].InnerXml);
+		numCardsToDraw = int.Parse (node ["cards_to_draw"].InnerXml);
+		numActionsToGain = int.Parse (node ["actions_to_gain"].InnerXml);
+	}
+
+
 	public override void setupCustom(){
 		type = CardType.Aid;
 

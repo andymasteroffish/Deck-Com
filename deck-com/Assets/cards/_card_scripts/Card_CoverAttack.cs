@@ -1,29 +1,42 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_CoverAttack : Card {
 
 	public int damageMod;
-	public int rangeAdjust;
+	public int rangeMod;
 
+
+	public Card_CoverAttack(XmlNode _node){
+		node = _node;
+
+		damageMod = int.Parse (node ["damageMod"].InnerXml);
+		rangeMod = int.Parse (node ["rangeMod"].InnerXml);
+
+	}
 
 	public override void setupCustom(){
 		type = CardType.Attack;
 
 		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
-		string rangeText = "Range: " + (rangeAdjust >= 0 ? "+" : "") + rangeAdjust;
+		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
 
 		description = damageText + "\n" + rangeText+"\nCan go through cover, destroying it";
 	}
 
 	public override void mouseEnterEffects(){
-		mouseEnterForWeapon (rangeAdjust);
+		mouseEnterForWeapon (rangeMod);
+	}
+
+	public override void setPotentialTargetInfo(Unit unit){
+		setPotentialTargetInfoTextForWeapon (unit, damageMod);
 	}
 
 	public override void selectCardCustom(){
 
-		selectCardForWeapon (rangeAdjust);
+		selectCardForWeapon (rangeMod);
 
 	}
 

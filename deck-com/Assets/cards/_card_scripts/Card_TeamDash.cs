@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_TeamDash : Card {
 
@@ -9,6 +10,13 @@ public class Card_TeamDash : Card {
 	public string giftCardID;
 
 	private bool onGiftStep = false;
+
+	public Card_TeamDash(XmlNode _node){
+		node = _node;
+
+		range = int.Parse (node ["range"].InnerXml);
+		giftCardID = node ["gift_id"].InnerXml;
+	}
 
 	public override void setupCustom(){
 		type = Card.CardType.Movement;

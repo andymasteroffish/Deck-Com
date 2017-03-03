@@ -447,7 +447,7 @@ public class Board : MonoBehaviour {
 		//shoot the ray!
 		RaycastHit2D hit = Physics2D.Raycast(start.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
 		if (hit.collider != null) {
-			returnVal = hit.collider.gameObject.GetComponent<Tile> ();
+			returnVal = hit.collider.gameObject.GetComponent<TileGO> ().MyTile;
 		}
 
 		turnOnAllTileColliders ();

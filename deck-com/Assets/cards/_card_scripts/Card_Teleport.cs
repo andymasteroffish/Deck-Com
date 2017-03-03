@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_Teleport : Card {
 
@@ -10,6 +11,13 @@ public class Card_Teleport : Card {
 	private bool onTeleportStep = false;
 
 	private Unit selectedUnit;
+
+	public Card_Teleport(XmlNode _node){
+		node = _node;
+
+		targetRange = int.Parse (node ["target_range"].InnerXml);
+		moveRange = int.Parse (node ["move_range"].InnerXml);
+	}
 
 	public override void setupCustom(){
 		type = CardType.Other;

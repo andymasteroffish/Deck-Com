@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_BasicAOEAttack : Card {
 
@@ -11,6 +12,16 @@ public class Card_BasicAOEAttack : Card {
 	public bool destroysCover;
 	public bool harmsFriendly;
 
+	public Card_BasicAOEAttack(XmlNode _node){
+		node = _node;
+
+		damage = int.Parse (node ["damage"].InnerXml);
+		throwRange = int.Parse (node ["throw_range"].InnerXml);
+		damageRange = float.Parse (node ["damage_range"].InnerXml);
+
+		destroysCover = bool.Parse (node ["destroy_cover"].InnerXml);
+		harmsFriendly = bool.Parse (node ["harms_friendly"].InnerXml);
+	}
 
 	public override void setupCustom(){
 

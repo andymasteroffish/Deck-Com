@@ -109,9 +109,16 @@ public class CardGO : MonoBehaviour {
 
 	void OnMouseEnter(){
 		card.MouseIsOver = true;
+		if (card.Owner.GM.ActiveCard == null) {
+			card.mouseEnterEffects ();
+		}
 	}
 	void OnMouseExit(){
 		card.MouseIsOver = false;
+		if (!card.IsActive && card.Owner.GM.ActiveCard == null) {
+			card.Owner.GM.board.clearHighlights ();
+		}
+		card.mouseExitEffects ();
 	}
 
 	IEnumerator doMoveAnimation(Vector3 target, float time, bool deactivateWhenDone){
@@ -158,20 +165,7 @@ public class CardGO : MonoBehaviour {
 			yield return null;
 		}
 
-		//deck.removeCardFromHand (this);
-
-
 		transform.localScale = new Vector3 (1, 1, 1);	
-
-//		if (markAsPlayedWhenDone) {
-//			owner.markCardPlayed (this);
-//		}
-//
-//		if (!permanentlyDestroyCard) {
-//			deck.discardCard (this);
-//		} else {
-//			deck.destroyCard (this);
-//		}
 
 		doingAnimation = false;
 		deactivate ();

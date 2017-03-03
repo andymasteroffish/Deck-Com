@@ -69,6 +69,40 @@ public class CardManager : MonoBehaviour {
 		else if (scriptName == "Card_Attack") {
 			thisCard = new Card_Attack (node);
 		}
+		else if (scriptName == "Card_AttackIgnoreWeapon") {
+			thisCard = new  Card_AttackIgnoreWeapon(node);
+		}
+		else if (scriptName == "Card_BasicAOEAttack") {
+			thisCard = new Card_BasicAOEAttack (node);
+		}
+		else if (scriptName == "Card_BasicTargetBonus") {
+			thisCard = new Card_BasicTargetBonus (node);
+		}
+		else if (scriptName == "Card_CoverAttack") {
+			thisCard = new Card_CoverAttack (node);
+		}
+		else if (scriptName == "Card_GiveCharm") {
+			thisCard = new Card_GiveCharm (node);
+		}
+		else if (scriptName == "Card_Heal") {
+			thisCard = new Card_Heal (node);
+		}
+		else if (scriptName == "Card_MoveAndAttack") {
+			thisCard = new Card_MoveAndAttack (node);
+		}
+		else if (scriptName == "Card_MoveAttackAOE") {
+			thisCard = new Card_MoveAttackAOE (node);
+		}
+		else if (scriptName == "Card_MovementSelfDestruct") {
+			thisCard = new Card_MovementSelfDestruct (node);
+		}
+		else if (scriptName == "Card_TeamDash") {
+			thisCard = new Card_TeamDash (node);
+		}
+		else if (scriptName == "Card_Teleport") {
+			thisCard = new Card_Teleport (node);
+		}
+
 		else{
 			Debug.Log ("SCRIPT NAME FOR CHARM NOT FOUND: "+scriptName);
 		}

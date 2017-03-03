@@ -1,8 +1,6 @@
 move3
 move3
-move3
-move3
 attack
 attack
-attack
-attack
+teleport
+teleport

@@ -56,7 +56,7 @@
     <expires_at_turn_end>True</expires_at_turn_end>
   </charm>
   <charm idName="aim_charm">
-    <name>Focus</name>
+    <name>Aim</name>
     <script>Charm_OneTimeWeaponBonus</script>
     <desc>Next attack does +1 damage</desc>
     <damageMod>1</damageMod>

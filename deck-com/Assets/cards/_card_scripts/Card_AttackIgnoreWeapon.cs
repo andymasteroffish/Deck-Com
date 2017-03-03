@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_AttackIgnoreWeapon : Card {
 
 	public int damage;
 	public float range;
 
+	public Card_AttackIgnoreWeapon(XmlNode _node){
+		node = _node;
+
+		damage = int.Parse (node ["damage"].InnerXml);
+		range = float.Parse (node ["range"].InnerXml);
+	}
 
 	public override void setupCustom(){
-		type = Card.CardType.Attack;
+		type = Card.CardType.Other;
 
 		string damageText = "Damage: " + damage;
 		string rangeText = "Range: " + Mathf.Floor(range);

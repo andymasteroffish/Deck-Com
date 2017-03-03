@@ -1,11 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_MoveAttackAOE : Card {
 
-	public int range;
 	public int damage;
+	public int range;
+
+
+	public Card_MoveAttackAOE(XmlNode _node){
+		node = _node;
+
+		damage = int.Parse(node["damage"].InnerXml);
+		range = int.Parse(node["range"].InnerXml);
+	}
 
 	public override void setupCustom(){
 		type = CardType.Movement;

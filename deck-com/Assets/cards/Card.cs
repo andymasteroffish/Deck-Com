@@ -51,25 +51,6 @@ public class Card {
 			baseActionCost = int.Parse(node ["action_cost"].InnerText);
 		}
 
-//		doingAnimation = false;
-//
-//		//find all the parts
-//		Transform[] ts = gameObject.transform.GetComponentsInChildren<Transform>();
-//		foreach (Transform t in ts){
-//			if (t.gameObject.name == "NameText") {
-//				nameField = t.gameObject.GetComponent<Text> ();
-//			}
-//			if (t.gameObject.name == "BodyText") {
-//				textField = t.gameObject.GetComponent<Text> ();
-//			}
-//			if (t.gameObject.name == "sprite") {
-//				spriteRend = t.gameObject.GetComponent<SpriteRenderer> ();
-//			}
-//		}
-//
-//		nameField.text = name;
-		//textField.text = "Hey, I'm testin over here! "+Random.Range(0,999).ToString();
-
 		//default values
 		baseActionCost = 1;
 		type = CardType.Other;
@@ -188,9 +169,9 @@ public class Card {
 		if (!isActive && Owner.GM.ActiveCard == null) {
 			owner.GM.board.clearHighlights ();
 		}
-		mosueExitEffects ();
+		mouseExitEffects ();
 	}
-	public virtual void mosueExitEffects(){}
+	public virtual void mouseExitEffects(){}
 
 	public string getInfoStringForCover(Tile.Cover coverVal){
 		if (coverVal == Tile.Cover.Full) {
@@ -204,75 +185,6 @@ public class Card {
 	}
 
 
-	//**********************************
-	//animations
-	//**********************************
-
-//	IEnumerator doDeathAnimation(float time, bool markAsPlayedWhenDone, bool permanentlyDestroyCard = false){
-//		doingAnimation = true;
-//
-//		yield return new WaitForSeconds (0.05f);
-//
-//		float timer = time  * Owner.GM.debugAnimationTimeMod;
-//		float startScale = transform.localScale.x;
-//
-//		while (timer > 0) {
-//			timer -= Time.deltaTime;
-//			timer = Mathf.Max (0, timer);
-//
-//			float newScale = timer / time;
-//			newScale = Mathf.Pow (newScale, 2);
-//			transform.localScale = new Vector3 (newScale, newScale, newScale);
-//
-//			yield return null;
-//		}
-//
-//		deck.removeCardFromHand (this);
-//
-//
-//		transform.localScale = new Vector3 (1, 1, 1);	
-//
-//		if (markAsPlayedWhenDone) {
-//			owner.markCardPlayed (this);
-//		}
-//
-//		if (!permanentlyDestroyCard) {
-//			deck.discardCard (this);
-//		} else {
-//			deck.destroyCard (this);
-//		}
-//
-//		doingAnimation = false;
-//	}
-
-//	public void startDrawAnimation(){
-//		StartCoroutine( doDrawAnimaiton (0.5f, transform.localPosition));
-//	}
-//
-//	IEnumerator doDrawAnimaiton(float time, Vector3 targetPos){
-//		doingAnimation = true;
-//		float timer = 0;
-//
-//		time *= Owner.GM.debugAnimationTimeMod;
-//
-//		Vector3 startPos = targetPos;
-//		startPos.y -= 2;	//guessing
-//
-//
-//		while (timer < time) {
-//			timer += Time.deltaTime;
-//			float prc = timer / time;
-//
-//			transform.localPosition = Vector3.Lerp (startPos, targetPos, prc);
-//
-//			yield return null;
-//		}
-//
-//		transform.localPosition = targetPos;
-//
-//
-//		doingAnimation = false;
-//	}
 
 	//**********************************
 	//showing information when a potential target is moused over

@@ -11,9 +11,8 @@ public class Card_Attack : Card {
 	public Card_Attack(XmlNode _node){
 		node = _node;
 
-		rangeMod = int.Parse (node ["rangeMod"].InnerXml);
-		damageMod = int.Parse (node ["damageMod"].InnerXml);
-
+		rangeMod = int.Parse (node ["range_mod"].InnerXml);
+		damageMod = int.Parse (node ["damage_mod"].InnerXml);
 	}
 
 	public override void setupCustom(){
@@ -26,6 +25,7 @@ public class Card_Attack : Card {
 	}
 
 	public override void mouseEnterEffects(){
+		Debug.Log ("mouse enter");
 		mouseEnterForWeapon (rangeMod);
 	}
 

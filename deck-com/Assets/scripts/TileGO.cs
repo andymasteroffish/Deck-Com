@@ -74,4 +74,11 @@ public class TileGO : MonoBehaviour {
 			return this.isActive;
 		}
 	}
+
+	public Tile MyTile {
+		get {
+			return this.tile;
+		}
+
+	}
 }

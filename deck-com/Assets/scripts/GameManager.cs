@@ -166,6 +166,9 @@ public class GameManager : MonoBehaviour {
 	//switching units
 
 	void setActiveUnit(Unit newActive){
+		if (newActive == activeUnit) {
+			return;
+		}
 		activeUnit = newActive;
 		foreach (Unit unit in units){
 			unit.setActive ( unit==activeUnit);

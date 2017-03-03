@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class Card_MoveAndAttack : Card {
 
@@ -8,6 +9,13 @@ public class Card_MoveAndAttack : Card {
 	public int damageMod;
 
 	private bool onAttackStep = false;
+
+	public Card_MoveAndAttack(XmlNode _node){
+		node = _node;
+
+		moveRange = int.Parse (node ["range"].InnerXml);
+		damageMod = int.Parse (node ["damage_mod"].InnerXml);
+	}
 
 	public override void setupCustom(){
 		type = CardType.Attack;

@@ -180,9 +180,9 @@ public class Deck : MonoBehaviour {
 	}
 
 	public void cancel(){
-		foreach (Card card in hand) {
-			if (card.IsActive) {
-				card.cancel ();
+		for (int i=hand.Count-1; i>=0; i--){
+			if (hand[i].IsActive) {
+				hand[i].cancel ();
 			}
 		}
 	}
