@@ -25,16 +25,6 @@ public class UnitManager : MonoBehaviour {
 		fullXML.LoadXml (xmlText.text);
 		nodes = fullXML.GetElementsByTagName ("unit");
 	}
-	
-//	public List<Unit> createAllUnits(){
-//		List<Unit> units = new List<Unit> ();
-//
-//		foreach (XmlNode node in nodes) {
-//			units.Add (getUnitFromNode (node));
-//		}
-//
-//		return units;
-//	}
 
 	public Unit getUnitFromIdName(string idName){
 		foreach (XmlNode node in nodes) {
@@ -47,12 +37,6 @@ public class UnitManager : MonoBehaviour {
 	}
 
 	public Unit getUnitFromNode(XmlNode node){
-
-//		string unitName = node["name"].InnerXml;
-//		string spriteFile = node ["sprite"].InnerXml;
-//		TextAsset deckList;
-//		List<string> charmIDs = new List<string> ();
-
 		Unit unit = new Unit (node);
 
 		return unit;
