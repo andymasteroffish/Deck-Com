@@ -32,7 +32,9 @@ public class DBDeck {
 		XmlNodeList childNodes = node["charms"].ChildNodes;
 		foreach (XmlNode n in childNodes) {
 			if (n.Name == "charm") {
-				charms.Add(CharmManager.instance.getCharmFromIdName (n.InnerXml));
+				Charm thisCharm = CharmManager.instance.getCharmFromIdName (n.InnerXml);
+				thisCharm.setup (null, false);
+				charms.Add(thisCharm);
 			}
 		}
 	}

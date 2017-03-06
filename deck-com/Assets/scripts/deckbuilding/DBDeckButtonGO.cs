@@ -21,10 +21,18 @@ public class DBDeckButtonGO : MonoBehaviour {
 
 	public Vector3 spacing;
 
+	public GameObject charmPrefab;
+	public Vector3 charmStartPos;
+	public float charmYSpacing;
+	private List<GameObject> charmIcons = new List<GameObject>();
+
+
 	public void activate(DBDeck _deck){
 		isActive = true;
 		deck = _deck;
 		gameObject.SetActive (true);
+
+		gameObject.name = "DBButton_" + deck.displayName;
 
 		if (needsPosInfo){
 			needsPosInfo = false;
@@ -37,6 +45,18 @@ public class DBDeckButtonGO : MonoBehaviour {
 		iconSpriteRend.sprite = deck.sprite;
 		nameText.text = deck.displayName;
 		descText.text = deck.cards.Count + " cards";
+
+		//THIS IS UGLY. YOU SHOULD POOL THESE
+		for (int i = 0; i < charmIcons.Count; i++) {
+			Destroy (charmIcons [i]);
+		}
+
+		for (int i = 0; i < deck.charms.Count; i++) {
+			GameObject charmObj = Instantiate (charmPrefab);
+			charmObj.transform.parent = transform;
+			charmObj.transform.position = charmStartPos + new Vector3 (0, charmYSpacing * i, 0);
+			charmObj.GetComponentInChildren<Text>().text = deck.charms[i].name;
+		}
 
 	}
 
@@ -71,6 +91,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 		if (DBManagerInterface.instance.manager.activeDeck == deck) {
 			transform.position = topCenterPoint;
 		}
+
 	}
 
 	void OnMouseEnter(){

@@ -29,7 +29,9 @@ public class Charm  {
 		owner = _owner;
 		useGameObject = _useGameObject;
 
-		offsetID = owner.Charms.Count;
+		if (owner != null) {
+			offsetID = owner.Charms.Count;
+		}
 
 		isDead = false;
 
