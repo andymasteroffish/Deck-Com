@@ -138,7 +138,8 @@ public class Board {
 				if (source.Pos.getDist (grid [x, y].Pos) <= range) {
 
 					//if it is, check if a line can be drawn between it and any adjacent, unnocupied tiles
-					List<Tile> tiles = getAdjacentTiles (source, false, Tile.Cover.Part);
+					//List<Tile> tiles = new List<Tile>();
+					List<Tile> tiles =  getAdjacentTiles (source, false, Tile.Cover.Part);
 					tiles.Add (source);	//get adjacent does not include the source by default
 					bool doneChecking = false;
 
@@ -159,24 +160,12 @@ public class Board {
 
 	//draws a ray between two tiles and returns true if no full cover blocked it
 	public bool checkIfTilesAreVisibleToEachother(Tile a, Tile b){
-		bool returnVal = true;
-		//get the direction
-		float dist = a.Pos.getDist(b.Pos);// Vector3.Distance (a.transform.position, b.transform.position);
-		Vector3 dir3 = b.Pos.getV3() - a.Pos.getV3();// b.transform.position - a.transform.position;
-		Vector2 dir = new Vector2(dir3.x, dir3.y);
-		//turn off tiles with no cover
-		turnOffAllTileCollidersExcept(Tile.Cover.Full);
-		//turn off the colliders on these tiles too
-		a.GO.collider.enabled = false;
-		b.GO.collider.enabled = false;
-		//shoot the ray!
-		RaycastHit2D hit = Physics2D.Raycast(a.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
-		if (hit.collider != null) {
-			returnVal = false;
-		}
 
-		turnOnAllTileColliders ();
-		return returnVal;
+		if (raytrace (a, b, Tile.Cover.Full) == null) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	//**********************
@@ -417,63 +406,17 @@ public class Board {
 		return matches [(int)Random.Range (0, matches.Count)];
 	}
 
-	//this can be optimized a lot
-	public List<Tile> getTilesInDist(Tile start, float dist){
-		List<Tile> tiles = new List<Tile> ();
-
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				if (start.Pos.getDist (grid [x, y].Pos) <= dist) {
-					tiles.Add (grid [x, y]);
-				}
-			}
-		}
-
-		return tiles;
-	}
-
 	public Tile getFirstTileWithCover(Tile start, Tile end){
 		Tile returnVal = null;
-		//get the direction
-		float dist = start.Pos.getDist(end.Pos);//  Vector3.Distance (start.transform.position, end.transform.position);
-		Vector3 dir3 = end.Pos.getV3() - start.Pos.getV3();// end.transform.position - start.transform.position;
-		Vector2 dir = new Vector2(dir3.x, dir3.y);
-		//turn off tiles with no cover
-		turnOffAllTileCollidersBelow(Tile.Cover.Part);
-		//shoot the ray!
-		RaycastHit2D hit = Physics2D.Raycast(start.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
-		if (hit.collider != null) {
-			returnVal = hit.collider.gameObject.GetComponent<TileGO> ().MyTile;
-		}
 
-		turnOnAllTileColliders ();
-		return returnVal;
+		return raytrace (start, end, Tile.Cover.Part, null, true);
 	}
 
 	//checking cover
 	public Tile.Cover getCover(Unit sourceUnit, Unit targetUnit){
 
-		//check the line from the player, but also the adjacent squares that are not cover themselves
-		List<Tile.Cover> coverVals = new List<Tile.Cover>();
-
-		coverVals.Add( getCover (sourceUnit.CurTile, targetUnit.CurTile) );
-		for (int i = 0; i < 4; i++) {
-			if (sourceUnit.CurTile.Adjacent [i] != null) {
-				if (sourceUnit.CurTile.Adjacent [i].CoverVal == Tile.Cover.None) {
-					coverVals.Add (getCover (sourceUnit.CurTile.Adjacent [i], targetUnit.CurTile));
-				}
-			}
-		}
-
-		//go through and find the best possible shot (lowest cover val)
-		Tile.Cover returnVal = Tile.Cover.Full;
-		foreach (Tile.Cover cover in coverVals) {
-			if ((int)cover < (int)returnVal) {
-				returnVal = cover;
-			}
-		}
-
-		return returnVal;
+		//just get the line from the source to the target
+		return getCover (sourceUnit.CurTile, targetUnit.CurTile);
 	}
 
 	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
@@ -486,34 +429,25 @@ public class Board {
 		//Debug.DrawLine(sourceTile.transform.position, sourceTile.transform.position+new Vector3(dir.x, dir.y, 0), Color.red);
 
 		//check for full cover
-		turnOffAllTileCollidersExcept(Tile.Cover.Full);
-
-		RaycastHit2D fullHit = Physics2D.Raycast(sourceTile.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
-		if (fullHit.collider != null) {
-			turnOnAllTileColliders ();
+		if (raytrace (sourceTile, targetTile, Tile.Cover.Full) != null) {
 			return Tile.Cover.Full;
 		}
 
-		//check for partial cover. Only tiles adjacent to the target count for this
-		turnOffAllTileColliders();
-		//turn on coliders for tiles adjacent to our target
+		//and for partial cover
+		//only tiles directly adjacent to a unit should provide partial cover
+		List<Tile> tilesThatCanCoverTarget = new List<Tile>();
 		for (int i = 0; i < 4; i++) {
 			if (targetTile.Adjacent [i] != null) {
 				if (targetTile.Adjacent [i].CoverVal == Tile.Cover.Part) {
-					targetTile.Adjacent [i].GO.collider.enabled = true;
+					tilesThatCanCoverTarget.Add (targetTile.Adjacent [i]);
 				}
 			}
 		}
-
-		RaycastHit2D partHit = Physics2D.Raycast(sourceTile.GO.transform.position, dir, dist, 1 <<  LayerMask.NameToLayer ("Tile"));
-		if (partHit.collider != null) {
-			turnOnAllTileColliders ();
+		if (raytrace (sourceTile, targetTile, Tile.Cover.Part, tilesThatCanCoverTarget, false) != null) {
 			return Tile.Cover.Part;
 		}
 
-
-
-		turnOnAllTileColliders ();
+		//if nothing hit, then there is no cover
 		return Tile.Cover.None;
 	}
 
@@ -561,6 +495,136 @@ public class Board {
 		return newDamage;
 	}
 
+	//shooting rays
+	//from http://playtechs.blogspot.ca/2007/03/raytracing-on-grid.html
+	public Tile raytrace(Tile tileA, Tile tileB, Tile.Cover coverLevelToCheck, List<Tile> onlyBarriersToCheck = null, bool checkCoverLevelOrHigher = false)
+	{
+		//Debug.Log ("start ray from " + tileA.Pos.getV2 () + " to " + tileB.Pos.getV2 ());
+		int dx = Mathf.Abs(tileB.Pos.x - tileA.Pos.x);
+		int dy = Mathf.Abs(tileB.Pos.y - tileA.Pos.y);
+		int x = tileA.Pos.x; // x0;
+		int y = tileA.Pos.y; //y0;
+		int n = 1 + dx + dy;
+		int x_inc = (tileB.Pos.x > tileA.Pos.x) ? 1 : -1;
+		int y_inc = (tileB.Pos.y > tileA.Pos.y) ? 1 : -1;
+		int error = dx - dy;
+		dx *= 2;
+		dy *= 2;
+
+		for (; n > 0; --n)
+		{
+			//grid [x, y].setHighlighted (true, Color.cyan);
+
+			if (x >= 0 && x < cols && y >= 0 && y < rows) {
+				bool coverMatches = grid [x, y].CoverVal == coverLevelToCheck;
+				if (checkCoverLevelOrHigher) {
+					coverMatches = (int)grid [x, y].CoverVal >= (int)coverLevelToCheck;
+				}
+				if (coverMatches) {
+
+					bool canReturnThisTile = true;
+					if (onlyBarriersToCheck != null) {
+						canReturnThisTile = false;
+						foreach (Tile t in onlyBarriersToCheck) {
+							if (t.Pos.x == x && t.Pos.y == y) {
+								canReturnThisTile = true;
+							}
+						}
+					}
+
+					if (canReturnThisTile) {
+						return grid [x, y];
+					}
+				}
+			}
+
+			if (error > 0)
+			{
+				x += x_inc;
+				error -= dy;
+			}
+			else
+			{
+				y += y_inc;
+				error += dx;
+			}
+		}
+
+		return null;
+	}
+
+	//also from http://playtechs.blogspot.ca/2007/03/raytracing-on-grid.html
+	Tile raytraceFloat(float x0, float y0, float x1, float y1, Tile.Cover coverLevelToCheck)
+	{
+		float dx = Mathf.Abs(x1 - x0);
+		float dy = Mathf.Abs(y1 - y0);
+
+		int x = (int)(Mathf.Floor(x0));
+		int y = (int)(Mathf.Floor(y0));
+
+		int n = 1;
+		int x_inc, y_inc;
+		float error;
+
+		if (dx == 0)
+		{
+			x_inc = 0;
+			error = Mathf.Infinity;// std::numeric_limits<double>::infinity();
+		}
+		else if (x1 > x0)
+		{
+			x_inc = 1;
+			n += (int)(Mathf.Floor(x1)) - x;
+			error = (Mathf.Floor(x0) + 1 - x0) * dy;
+		}
+		else
+		{
+			x_inc = -1;
+			n += x - (int)Mathf.Floor(x1);
+			error = (x0 - Mathf.Floor(x0)) * dy;
+		}
+
+		if (dy == 0)
+		{
+			y_inc = 0;
+			error -= Mathf.Infinity;
+		}
+		else if (y1 > y0)
+		{
+			y_inc = 1;
+			n += (int)(Mathf.Floor(y1)) - y;
+			error -= (Mathf.Floor(y0) + 1 - y0) * dx;
+		}
+		else
+		{
+			y_inc = -1;
+			n += y - (int)(Mathf.Floor(y1));
+			error -= (y0 - Mathf.Floor(y0)) * dx;
+		}
+
+		for (; n > 0; --n)
+		{
+			//visit(x, y);
+			if (x >= 0 && x < cols && y >= 0 && y < rows) {
+				if (grid [x, y].CoverVal == coverLevelToCheck) {
+					return grid [x, y];
+				}
+			}
+
+			if (error > 0)
+			{
+				y += y_inc;
+				error -= dx;
+			}
+			else
+			{
+				x += x_inc;
+				error += dy;
+			}
+		}
+
+		return null;
+	}
 
 	//setters and getters
 

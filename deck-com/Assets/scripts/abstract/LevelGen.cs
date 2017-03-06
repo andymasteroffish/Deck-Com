@@ -37,11 +37,6 @@ public class LevelGen {
 
 				//make the tile
 				grid [x, y] = new Tile(x, y, cover, spawnProperty, true, GameManagerTacticsInterface.instance.gm);
-
-//				GameObject tileObj = Instantiate (tilePrefab, new Vector3 (x, y, 0), Quaternion.identity) as GameObject;
-//				tileObj.transform.parent = transform;
-//				grid [x, y] = tileObj.GetComponent<Tile> ();
-//				grid [x, y].setup (cover, spawnProperty);
 			}
 		}
 

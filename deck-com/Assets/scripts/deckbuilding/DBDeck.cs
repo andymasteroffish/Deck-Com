@@ -37,6 +37,21 @@ public class DBDeck {
 		}
 	}
 
+	public DBDeck(TextAsset unusedCardsList, int _order){
+		idName = "unused";
+		displayName = "Unused Cards";
+		sprite = Resources.Load<Sprite> ("unused_cards_icon");
+		order = _order;
+
+		//deck
+		cards = CardManager.instance.getDeckFromTextFile (unusedCardsList);
+		for (int i = 0; i < cards.Count; i++) {
+			cards [i].setup (null, null);
+		}
+
+		//no charms
+	}
+
 	public void setAsActive(){
 		for (int i = 0; i < cards.Count; i++) {
 			DBManagerInterface.instance.getCardGO ().activate (cards[i], i);

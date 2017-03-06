@@ -55,7 +55,16 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			gm.cancel ();
 		}
-		
+
+		//testing
+		if (Input.GetKeyDown(KeyCode.C)){
+			gm.board.clearHighlights();
+		}
+//		Tile targetTest = gm.board.Grid [4, 6];
+//		gm.board.raytrace (gm.units [0].CurTile, targetTest, Tile.Cover.Full);
+//		Vector3 dist = targetTest.Pos.getV3 () - gm.units [0].CurTile.Pos.getV3 ();
+//		Debug.DrawLine(gm.units [0].CurTile.Pos.getV3(), targetTest.Pos.getV3(), Color.red);
+
 	}
 
 	//FILL THIS IN!!!!!

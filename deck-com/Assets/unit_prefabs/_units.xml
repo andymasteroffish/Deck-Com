@@ -50,7 +50,7 @@
   </unit>
   <unit idName = "goblin_king">
     <name>Goblin King</name>
-    <sprite>gobin_king</sprite>
+    <sprite>goblin_king</sprite>
     <deck>goblin_king_deck</deck>
     <player_controlled>false</player_controlled>
     <base_health>8</base_health>

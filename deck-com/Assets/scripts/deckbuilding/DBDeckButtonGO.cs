@@ -16,7 +16,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 	public Text nameText, descText;
 
 	private bool needsPosInfo = true;
-	private Vector3 topLeftPoint;
+	private Vector3 topLeftPoint, topCenterPoint;
 	private Vector3 homePos;
 
 	public Vector3 spacing;
@@ -29,6 +29,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 		if (needsPosInfo){
 			needsPosInfo = false;
 			topLeftPoint = GameObject.Find("deckButtonTopLeft").transform.position;
+			topCenterPoint = GameObject.Find("deckButtonTopCenter").transform.position;
 		}
 
 		homePos = topLeftPoint + spacing * deck.order;
@@ -56,7 +57,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
-			DBManagerInterface.instance.click (deck);
+			DBManagerInterface.instance.clickDeck (deck);
 		}
 
 		//keeping it where it needs to be
@@ -64,6 +65,11 @@ public class DBDeckButtonGO : MonoBehaviour {
 			transform.position = homePos;
 		} else {
 			transform.position = homePos - new Vector3 (10, 0, 0);
+		}
+
+		//putting it up top when the deck is selected
+		if (DBManagerInterface.instance.manager.activeDeck == deck) {
+			transform.position = topCenterPoint;
 		}
 	}
 

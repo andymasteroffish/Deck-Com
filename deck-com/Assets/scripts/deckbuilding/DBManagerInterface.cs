@@ -8,6 +8,7 @@ public class DBManagerInterface : MonoBehaviour {
 	public static DBManagerInterface instance;
 
 	public TextAsset unitList;
+	public TextAsset unusedCardsList;
 
 	public DBManager manager;
 
@@ -16,6 +17,8 @@ public class DBManagerInterface : MonoBehaviour {
 
 	public GameObject cardButtonPrefab;
 	private List<DBCardGO> cardButtons = new List<DBCardGO> ();
+
+	public GameObject[] deckViewButtons;
 
 	void Awake(){
 		if (instance == null) {
@@ -27,16 +30,35 @@ public class DBManagerInterface : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		manager = new DBManager (unitList);
+		manager = new DBManager (unitList, unusedCardsList);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (manager.activeDeck != null) {
+			for (int i = 0; i < deckViewButtons.Length; i++) {
+				bool shouldShow = manager.activeDeck != manager.unusedCardsDeck || i ==0 ;
+				deckViewButtons [i].SetActive ( shouldShow );
+			}
+		} else {
+			for (int i = 0; i < deckViewButtons.Length; i++) {
+				deckViewButtons [i].SetActive (false);
+			}
+		}
+
+		//some keyboard stuff
+		if (Input.GetKeyDown (KeyCode.Escape)) {
+			manager.cancel ();
+		}
 	}
 
-	public void click(DBDeck deck){
-		manager.click (deck);
+	public void clickDeck(DBDeck deck){
+		manager.setDeckActive (deck);
+	}
+
+	public void cancel(){
+		Debug.Log ("cancel");
+		manager.cancel ();
 	}
 
 

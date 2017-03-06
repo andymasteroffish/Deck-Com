@@ -1,4 +1,11 @@
 <cards>
+  <card idName="move6freeTest">
+    <name>Move 6</name>
+    <script>Card_Movement</script>
+    <action_cost>0</action_cost>
+    <range>6</range>
+  </card>
+  
   <card idName="move2">
     <name>Move 2</name>
     <script>Card_Movement</script>

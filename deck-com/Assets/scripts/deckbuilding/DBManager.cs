@@ -12,8 +12,9 @@ public class DBManager {
 	public List<DBDeck> decks = new List<DBDeck> ();
 
 	public DBDeck activeDeck;
+	public DBDeck unusedCardsDeck;
 
-	public DBManager(TextAsset unitList){
+	public DBManager(TextAsset unitList, TextAsset unusedCardsList){
 
 		activeDeck = null;
 
@@ -23,30 +24,32 @@ public class DBManager {
 		nodes = fullXML.GetElementsByTagName ("unit");
 
 		//go through each unit and make a deck if it is player controlled
-		int i=0;
 		foreach (XmlNode node in nodes) {
 			if (bool.Parse (node ["player_controlled"].InnerXml)) {
-				DBDeck deck = new DBDeck (node, i);
+				DBDeck deck = new DBDeck (node, decks.Count);
 				decks.Add (deck);
 
 				//and make a button for it
 				DBManagerInterface.instance.getDeckButtonGO().activate(deck);
-
-				i++;
 			}
-
 		}
 
+		//make a special deck of unused cards
+		unusedCardsDeck = new DBDeck(unusedCardsList, decks.Count);
+		decks.Add (unusedCardsDeck);
+		DBManagerInterface.instance.getDeckButtonGO().activate(unusedCardsDeck);
+			
+
 	}
 
-	public void click(DBDeck deck){
-		Debug.Log("ya clicked "+deck.displayName);
-		setDeckActive (deck);
-	}
 
 	public void setDeckActive(DBDeck deck){
 		activeDeck = deck;
 
 		activeDeck.setAsActive ();
+	}
+
+	public void cancel(){
+		activeDeck = null;
 	}
 }

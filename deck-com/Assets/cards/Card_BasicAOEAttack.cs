@@ -46,10 +46,12 @@ public class Card_BasicAOEAttack : Card {
 	}
 
 	public override void passInTileCustom(Tile tile){
-		List<Tile> tiles = Owner.GM.board.getTilesInDist (tile, damageRange);
+		List<Tile> tiles = Owner.GM.board.getTilesInRange (tile, damageRange, Tile.Cover.Full, true);// Owner.GM.board.getTilesInDist (tile, damageRange);
 
 		for (int i = 0; i < tiles.Count; i++) {
-			tiles [i].setCover (Tile.Cover.None);
+			if (destroysCover) {
+				tiles [i].setCover (Tile.Cover.None);
+			}
 			Unit thisUnit = Owner.GM.board.getUnitOnTile (tiles [i]);
 			if (thisUnit != null) {
 				if (harmsFriendly || (thisUnit.isPlayerControlled != Owner.isPlayerControlled)) {
