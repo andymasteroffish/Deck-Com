@@ -14,9 +14,13 @@ public class DBManager {
 	public DBDeck activeDeck;
 	public DBDeck unusedCardsDeck;
 
+	public bool unusedCardsOpen;
+
 	public DBManager(TextAsset unitList, TextAsset unusedCardsList){
 
 		activeDeck = null;
+
+		unusedCardsOpen = false;
 
 		//build the xml
 		fullXML = new XmlDocument ();
@@ -42,14 +46,37 @@ public class DBManager {
 
 	}
 
+	public void addUnusedCardToDeck(Card cardToAdd){
+		activeDeck.addCard (cardToAdd);
+		unusedCardsOpen = false;
+	}
 
+	//selects a deck for viewing/editting
 	public void setDeckActive(DBDeck deck){
 		activeDeck = deck;
 
 		activeDeck.setAsActive ();
 	}
 
+	//opens the list of unused cards on top of the active deck
+	public void openUnusedCards(){
+		unusedCardsDeck.setAsUnusedActive ();
+		unusedCardsOpen = true;
+	}
+
+	//steps back one
 	public void cancel(){
+		if (unusedCardsOpen) {
+			unusedCardsOpen = false;
+		} else {
+			activeDeck = null;
+		}
+	}
+
+	//saves changes to active deck and goes back
+	public void saveChanges(){
+		unusedCardsDeck.RemoveCards (activeDeck.cardsToAdd);
+		activeDeck.saveChanges ();
 		activeDeck = null;
 	}
 }

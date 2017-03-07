@@ -14,7 +14,7 @@ public class DBCardGO : MonoBehaviour {
 	private Vector3 homePos;
 	public Vector3 spacing;
 
-	public int numCardsPerCol;
+	public int numCardsPerCol, numCardsPerColumnUnusedCards;
 
 	public Text nameField;
 	public Text descField;
@@ -30,10 +30,14 @@ public class DBCardGO : MonoBehaviour {
 
 	private bool mouseIsOver;
 
+	//positiong the cards used to select from the unused list
+	private bool isUnusedCardSelector;
+	public Vector3 unusedCardOffset;
 
-	public void activate(Card _card, int _order){
+	public void activate(Card _card, int _order, bool _isUnusedCardSelector){
 		card = _card;
 		order = _order;
+		isUnusedCardSelector = _isUnusedCardSelector;
 
 		isActive = true;
 		gameObject.SetActive (true);
@@ -42,6 +46,10 @@ public class DBCardGO : MonoBehaviour {
 
 		int col = order / numCardsPerCol;
 		int row = order % numCardsPerCol;
+		if (isUnusedCardSelector) {
+			col = order / numCardsPerColumnUnusedCards;
+			row = order % numCardsPerColumnUnusedCards;
+		}
 
 		if (needPosInfo) {
 			needPosInfo = false;
@@ -49,8 +57,13 @@ public class DBCardGO : MonoBehaviour {
 		}
 		homePos = topLeftPoint + new Vector3(spacing.x * col, spacing.y * row, spacing.z * row);
 
+		if (isUnusedCardSelector) {
+			homePos += unusedCardOffset;
+		}
+
 		transform.position = homePos;
 		spriteRend.transform.localPosition = Vector3.zero;
+		spriteRend.color = Color.white;
 
 		//set the text
 		nameField.text = card.name;
@@ -69,7 +82,21 @@ public class DBCardGO : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		//clicks
+		if (mouseIsOver && Input.GetMouseButtonDown (0)) {
+			if (isUnusedCardSelector) {
+				DBManagerInterface.instance.manager.addUnusedCardToDeck (card);
+			}
+		}
 
+		//set the sprite color if this is a real ass button
+		if (isUnusedCardSelector) {
+			if (mouseIsOver) {
+				spriteRend.color = new Color (0.75f, 0.75f, 0.75f);
+			} else {
+				spriteRend.color = new Color (1f, 1f, 1f);
+			}
+		}
 
 		//set the position (if we're not sliding it)
 		if (!doingAnimation) {
@@ -83,7 +110,10 @@ public class DBCardGO : MonoBehaviour {
 		}
 
 		//time to die?
-		if (DBManagerInterface.instance.manager.activeDeck == null) {
+		if (!isUnusedCardSelector && DBManagerInterface.instance.manager.activeDeck == null) {
+			deactivate ();
+		}
+		if (isUnusedCardSelector && !DBManagerInterface.instance.manager.unusedCardsOpen) {
 			deactivate ();
 		}
 
@@ -121,6 +151,11 @@ public class DBCardGO : MonoBehaviour {
 		}
 	}
 
+
+
+	public void setSpriteColor(Color col){
+		spriteRend.color = col;
+	}
 
 	//setters and getters
 	public bool IsActive{

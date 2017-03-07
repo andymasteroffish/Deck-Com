@@ -20,6 +20,8 @@ public class DBManagerInterface : MonoBehaviour {
 
 	public GameObject[] deckViewButtons;
 
+	public GameObject unusedCardSelectionBG;
+
 	void Awake(){
 		if (instance == null) {
 			instance = this;
@@ -37,7 +39,19 @@ public class DBManagerInterface : MonoBehaviour {
 	void Update () {
 		if (manager.activeDeck != null) {
 			for (int i = 0; i < deckViewButtons.Length; i++) {
-				bool shouldShow = manager.activeDeck != manager.unusedCardsDeck || i ==0 ;
+				bool shouldShow = true;
+				//hide all buttons but cancel if the unused deck is the only one open
+				if (manager.activeDeck == manager.unusedCardsDeck && i != 0){
+					shouldShow = false;
+				}
+				//when the unused list is open for selected, only cancel should appear
+				if (manager.unusedCardsOpen) {
+					shouldShow = i == 0;
+				}
+				//the save button should only show up if changes have been made
+				if (i==2 && manager.activeDeck != null && manager.activeDeck.cardsToAdd.Count == 0) {
+					shouldShow = false;
+				}
 				deckViewButtons [i].SetActive ( shouldShow );
 			}
 		} else {
@@ -45,6 +59,10 @@ public class DBManagerInterface : MonoBehaviour {
 				deckViewButtons [i].SetActive (false);
 			}
 		}
+
+		//turn the card selector backgorund on if that is active
+		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen);
+			
 
 		//some keyboard stuff
 		if (Input.GetKeyDown (KeyCode.Escape)) {
@@ -61,7 +79,17 @@ public class DBManagerInterface : MonoBehaviour {
 		manager.cancel ();
 	}
 
+	public void openAddCardScreen(){
+		if (manager.activeDeck != null && manager.activeDeck != manager.unusedCardsDeck) {
+			manager.openUnusedCards ();
+		}
+	}
 
+	public void saveChanges(){
+		manager.saveChanges();
+	}
+
+	//supplying the shell objects
 	public DBDeckButtonGO getDeckButtonGO(){
 		//check if we have any inactive in the list
 		for (int i = 0; i < deckButtons.Count; i++) {

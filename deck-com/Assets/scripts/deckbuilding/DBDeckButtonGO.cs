@@ -101,7 +101,6 @@ public class DBDeckButtonGO : MonoBehaviour {
 		mouseIsOver = false;
 	}
 
-
 	public bool IsActive{
 		get{
 			return this.isActive;

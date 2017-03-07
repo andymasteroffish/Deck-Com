@@ -10,6 +10,7 @@ public class DBDeck {
 	public Sprite sprite;
 
 	public List<Card> cards;
+	public List<Card> cardsToAdd = new List<Card>();
 	public List<Charm> charms = new List<Charm>();
 
 	public int order;
@@ -56,8 +57,49 @@ public class DBDeck {
 
 	public void setAsActive(){
 		for (int i = 0; i < cards.Count; i++) {
-			DBManagerInterface.instance.getCardGO ().activate (cards[i], i);
+			DBManagerInterface.instance.getCardGO ().activate (cards[i], i, false);
 		}
+		cardsToAdd.Clear ();
+	}
+
+	public void setAsUnusedActive(){
+		int orderCount = 0;
+		for (int i = 0; i < cards.Count; i++) {
+			//first check that this card is not already in the added list
+			bool canAdd = true;
+			foreach (Card card in DBManagerInterface.instance.manager.activeDeck.cardsToAdd) {
+				if (card == cards [i]) {
+					canAdd = false;
+				}
+			}
+			if (canAdd) {
+				DBManagerInterface.instance.getCardGO ().activate (cards [i], orderCount, true);
+				orderCount++;
+			}
+		}
+	}
+
+	public void addCard(Card card){
+		int order = cards.Count + cardsToAdd.Count;
+		cardsToAdd.Add (card);
+		card.setup (null, null);
+		DBCardGO GO = DBManagerInterface.instance.getCardGO ();
+		GO.activate (card, order, false);
+		GO.setSpriteColor (Color.cyan);
+	}
+
+	public void RemoveCards(List<Card> cardsToRemove){
+		for (int i = 0; i < cardsToRemove.Count; i++) {
+			cards.Remove (cardsToRemove [i]);
+		}
+	}
+
+	public void saveChanges(){
+		//add everything in the to-add list to the deck and then clear it
+		for (int i = 0; i < cardsToAdd.Count; i++) {
+			cards.Add (cardsToAdd [i]);
+		}
+		cardsToAdd.Clear ();
 	}
 
 
