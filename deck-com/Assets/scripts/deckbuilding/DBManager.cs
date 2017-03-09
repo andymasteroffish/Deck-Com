@@ -46,6 +46,19 @@ public class DBManager {
 		unusedCardsDeck = new DBDeck(unusedCardsList, decks.Count);
 		decks.Add (unusedCardsDeck);
 		DBManagerInterface.instance.getDeckButtonGO().activate(unusedCardsDeck);
+
+
+		//TESTING KILL ME
+		//ON MAC, THIS WILL GO ON THE SAME LEVEL AS DATA, FRAMEWOKRS, RESOURCES ETC
+		Debug.Log (Application.dataPath);
+		XmlDocument testDoc = new XmlDocument();
+		testDoc.Load (Application.dataPath + "/test_load/thisisatest.xml");
+		Debug.Log (testDoc.InnerXml);
+
+		//XmlNode testNode = new XmlNode ();
+		testDoc.InnerXml = "<testing>wut up</testing>";
+
+		testDoc.Save(Application.dataPath + "/test_load/thisisatest.xml");
 			
 
 	}
