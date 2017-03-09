@@ -26,6 +26,9 @@ public class Card {
 	private Unit owner;
 	private Deck deck;
 
+	//adding the card to a deck
+	private int costToAddToDeck;
+
 	//some state shit
 	public bool isDead;
 
@@ -49,6 +52,11 @@ public class Card {
 		baseActionCost = 1;
 		if (node ["action_cost"] != null) {
 			baseActionCost = int.Parse(node ["action_cost"].InnerText);
+		}
+
+		costToAddToDeck = 2;
+		if (node ["add_to_deck_cost"] != null) {
+			costToAddToDeck = int.Parse(node ["add_to_deck_cost"].InnerText);
 		}
 
 		//default values
@@ -331,6 +339,12 @@ public class Card {
 		}
 		set{
 			isActive = value;
+		}
+	}
+
+	public int CostToAddToDeck{
+		get{
+			return this.costToAddToDeck;
 		}
 	}
 

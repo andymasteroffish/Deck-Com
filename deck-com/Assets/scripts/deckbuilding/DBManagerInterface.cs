@@ -22,6 +22,8 @@ public class DBManagerInterface : MonoBehaviour {
 
 	public GameObject unusedCardSelectionBG;
 
+	public TextMesh moneyText;
+
 	void Awake(){
 		if (instance == null) {
 			instance = this;
@@ -48,10 +50,6 @@ public class DBManagerInterface : MonoBehaviour {
 				if (manager.unusedCardsOpen) {
 					shouldShow = i == 0;
 				}
-				//the save button should only show up if changes have been made
-				if (i==2 && manager.activeDeck != null && manager.activeDeck.cardsToAdd.Count == 0) {
-					shouldShow = false;
-				}
 				deckViewButtons [i].SetActive ( shouldShow );
 			}
 		} else {
@@ -63,6 +61,8 @@ public class DBManagerInterface : MonoBehaviour {
 		//turn the card selector backgorund on if that is active
 		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen);
 			
+		//update the money
+		moneyText.text = "$"+manager.money;
 
 		//some keyboard stuff
 		if (Input.GetKeyDown (KeyCode.Escape)) {
@@ -85,9 +85,9 @@ public class DBManagerInterface : MonoBehaviour {
 		}
 	}
 
-	public void saveChanges(){
-		manager.saveChanges();
-	}
+//	public void saveChanges(){
+//		manager.saveChanges();
+//	}
 
 	//supplying the shell objects
 	public DBDeckButtonGO getDeckButtonGO(){

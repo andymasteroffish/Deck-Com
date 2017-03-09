@@ -83,15 +83,21 @@ public class DBDeck {
 		int order = cards.Count + cardsToAdd.Count;
 		cardsToAdd.Add (card);
 		card.setup (null, null);
-		DBCardGO GO = DBManagerInterface.instance.getCardGO ();
-		GO.activate (card, order, false);
-		GO.setSpriteColor (Color.cyan);
+		if (DBManagerInterface.instance.manager.activeDeck == this) {
+			DBCardGO GO = DBManagerInterface.instance.getCardGO ();
+			GO.activate (card, order, false);
+			GO.setSpriteColor (Color.cyan);
+		}
 	}
 
-	public void RemoveCards(List<Card> cardsToRemove){
+	public void removeCards(List<Card> cardsToRemove){
 		for (int i = 0; i < cardsToRemove.Count; i++) {
 			cards.Remove (cardsToRemove [i]);
 		}
+	}
+
+	public void removeCardToAdd(Card card){
+		cardsToAdd.Remove (card);
 	}
 
 	public void saveChanges(){
@@ -102,6 +108,13 @@ public class DBDeck {
 		cardsToAdd.Clear ();
 	}
 
+	public int getCurrentSaveCost(){
+		int returnVal = 0;
+		for (int i = 0; i < cardsToAdd.Count; i++) {
+			returnVal += cardsToAdd [i].CostToAddToDeck;
+		}
+		return returnVal;
+	}
 
 	public void saveXML(){
 

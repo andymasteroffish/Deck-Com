@@ -44,7 +44,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 
 		iconSpriteRend.sprite = deck.sprite;
 		nameText.text = deck.displayName;
-		descText.text = deck.cards.Count + " cards";
+
 
 		//THIS IS UGLY. YOU SHOULD POOL THESE
 		for (int i = 0; i < charmIcons.Count; i++) {
@@ -68,6 +68,8 @@ public class DBDeckButtonGO : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		descText.text = deck.cards.Count + " cards";
 
 		//tint the frame when ghighlighted
 		if (mouseIsOver) {

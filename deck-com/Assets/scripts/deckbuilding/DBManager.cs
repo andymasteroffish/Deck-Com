@@ -16,11 +16,15 @@ public class DBManager {
 
 	public bool unusedCardsOpen;
 
+	public int money;
+
 	public DBManager(TextAsset unitList, TextAsset unusedCardsList){
 
 		activeDeck = null;
 
 		unusedCardsOpen = false;
+
+		money = 5; //testing
 
 		//build the xml
 		fullXML = new XmlDocument ();
@@ -51,6 +55,13 @@ public class DBManager {
 		unusedCardsOpen = false;
 	}
 
+	public void deckCardClicked(Card card){
+		if (activeDeck != unusedCardsDeck && activeDeck.cardsToAdd.Contains (card)) {
+			activeDeck.removeCardToAdd (card);
+			unusedCardsDeck.addCard (card);
+		}
+	}
+
 	//selects a deck for viewing/editting
 	public void setDeckActive(DBDeck deck){
 		activeDeck = deck;
@@ -75,7 +86,8 @@ public class DBManager {
 
 	//saves changes to active deck and goes back
 	public void saveChanges(){
-		unusedCardsDeck.RemoveCards (activeDeck.cardsToAdd);
+		money -= activeDeck.getCurrentSaveCost ();
+		unusedCardsDeck.removeCards (activeDeck.cardsToAdd);
 		activeDeck.saveChanges ();
 		activeDeck = null;
 	}

@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class DBCardGO : MonoBehaviour {
 
+	private DBManager manager;
+
 	private Card card;
 	private int order;
 
@@ -36,32 +38,22 @@ public class DBCardGO : MonoBehaviour {
 
 	public void activate(Card _card, int _order, bool _isUnusedCardSelector){
 		card = _card;
-		order = _order;
 		isUnusedCardSelector = _isUnusedCardSelector;
+
+		manager = DBManagerInterface.instance.manager;
 
 		isActive = true;
 		gameObject.SetActive (true);
 
 		gameObject.name = "card "+card.name;
 
-		int col = order / numCardsPerCol;
-		int row = order % numCardsPerCol;
-		if (isUnusedCardSelector) {
-			col = order / numCardsPerColumnUnusedCards;
-			row = order % numCardsPerColumnUnusedCards;
-		}
-
 		if (needPosInfo) {
 			needPosInfo = false;
 			topLeftPoint = GameObject.Find ("cardTopLeft").transform.position;
 		}
-		homePos = topLeftPoint + new Vector3(spacing.x * col, spacing.y * row, spacing.z * row);
 
-		if (isUnusedCardSelector) {
-			homePos += unusedCardOffset;
-		}
+		setPos (_order);
 
-		transform.position = homePos;
 		spriteRend.transform.localPosition = Vector3.zero;
 		spriteRend.color = Color.white;
 
@@ -70,6 +62,25 @@ public class DBCardGO : MonoBehaviour {
 		descField.text = card.description;
 
 		mouseIsOver = false;
+	}
+
+	public void setPos(int _order){
+		order = _order;
+
+		int col = order / numCardsPerCol;
+		int row = order % numCardsPerCol;
+		if (isUnusedCardSelector) {
+			col = order / numCardsPerColumnUnusedCards;
+			row = order % numCardsPerColumnUnusedCards;
+		}
+
+		homePos = topLeftPoint + new Vector3(spacing.x * col, spacing.y * row, spacing.z * row);
+
+		if (isUnusedCardSelector) {
+			homePos += unusedCardOffset;
+		}
+
+		transform.position = homePos;
 	}
 
 	public void deactivate(){
@@ -85,7 +96,9 @@ public class DBCardGO : MonoBehaviour {
 		//clicks
 		if (mouseIsOver && Input.GetMouseButtonDown (0)) {
 			if (isUnusedCardSelector) {
-				DBManagerInterface.instance.manager.addUnusedCardToDeck (card);
+				manager.addUnusedCardToDeck (card);
+			} else {
+				manager.deckCardClicked (card);
 			}
 		}
 
@@ -109,11 +122,30 @@ public class DBCardGO : MonoBehaviour {
 			spriteRend.transform.localPosition = spritePos;
 		}
 
-		//time to die?
-		if (!isUnusedCardSelector && DBManagerInterface.instance.manager.activeDeck == null) {
-			deactivate ();
+		//recently added cards can be rmeoved and may need to be repositioned
+		if (manager.activeDeck.cardsToAdd.Contains (card)) {
+			int thisOrder = manager.activeDeck.cards.Count;
+			for (int i = 0; i < manager.activeDeck.cardsToAdd.Count; i++) {
+				thisOrder++;
+				if (manager.activeDeck.cardsToAdd [i] == card) {
+					break;
+				}
+			}
+			setPos (thisOrder);
+//			if (order >= manager.activeDeck.cardsToAdd.Count + manager.activeDeck.cards.Count) {
+//				setPos (order - 1);
+//			}
 		}
-		if (isUnusedCardSelector && !DBManagerInterface.instance.manager.unusedCardsOpen) {
+
+		//time to die?
+		if (!isUnusedCardSelector) {
+			if (manager.activeDeck == null) {
+				deactivate ();
+			} else if (manager.activeDeck.cards.Contains (card)==false && manager.activeDeck.cardsToAdd.Contains (card)==false) {
+				deactivate ();
+			}
+		}
+		if (isUnusedCardSelector && !manager.unusedCardsOpen) {
 			deactivate ();
 		}
 
@@ -126,30 +158,30 @@ public class DBCardGO : MonoBehaviour {
 		mouseIsOver = false;
 	}
 
-	IEnumerator doMoveAnimation(Vector3 target, float time, bool deactivateWhenDone){
-		doingAnimation = true;
-
-		Vector3 startPos = transform.position;
-
-		time *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
-
-		float timer = 0;
-
-		while (timer < time) {
-			timer += Time.deltaTime;
-			float prc = Mathf.Clamp (timer / time, 0, 1);
-			prc = Mathf.Pow (prc, 0.75f);
-			transform.position = Vector3.Lerp (startPos, target, prc);
-			yield return null;
-		}
-
-		doingAnimation = false;
-		transform.position = target;
-
-		if (deactivateWhenDone) {
-			deactivate ();
-		}
-	}
+//	IEnumerator doMoveAnimation(Vector3 target, float time, bool deactivateWhenDone){
+//		doingAnimation = true;
+//
+//		Vector3 startPos = transform.position;
+//
+//		time *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
+//
+//		float timer = 0;
+//
+//		while (timer < time) {
+//			timer += Time.deltaTime;
+//			float prc = Mathf.Clamp (timer / time, 0, 1);
+//			prc = Mathf.Pow (prc, 0.75f);
+//			transform.position = Vector3.Lerp (startPos, target, prc);
+//			yield return null;
+//		}
+//
+//		doingAnimation = false;
+//		transform.position = target;
+//
+//		if (deactivateWhenDone) {
+//			deactivate ();
+//		}
+//	}
 
 
 
