@@ -23,10 +23,6 @@ public class CharmManager : MonoBehaviour {
 		nodes = fullXML.GetElementsByTagName ("charm");
 	}
 
-	void Start () {
-		//testing
-		//getCharmFromIdName("long bow");
-	}
 
 	public Charm getCharmFromIdName(string charmIdName){
 		foreach (XmlNode node in nodes) {

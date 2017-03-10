@@ -9,3 +9,4 @@ bladeDash
 village
 village
 heal
+shield

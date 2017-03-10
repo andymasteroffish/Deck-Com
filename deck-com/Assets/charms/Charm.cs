@@ -10,6 +10,8 @@ public class Charm  {
 	public string name, description;
 	public CharmType type;
 
+	public int costToAddToDeck;
+
 	public int baseDamage, baseRange;	//only used for weapons. All other charms will ignore these values
 
 	private Unit owner;
@@ -37,7 +39,11 @@ public class Charm  {
 
 		isDead = false;
 
+		costToAddToDeck = 3;
+
 		name = node ["name"].InnerText;
+
+		type = CharmType.Charm;	//default to char, so wepaons should change this in setupCustom
 
 		setupCustom ();
 

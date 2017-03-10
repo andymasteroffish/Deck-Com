@@ -21,11 +21,6 @@ public class DBDeckButtonGO : MonoBehaviour {
 
 	public Vector3 spacing;
 
-	public GameObject charmPrefab;
-	public Vector3 charmStartPos;
-	public float charmYSpacing;
-	private List<GameObject> charmIcons = new List<GameObject>();
-
 
 	public void activate(DBDeck _deck){
 		isActive = true;
@@ -45,17 +40,8 @@ public class DBDeckButtonGO : MonoBehaviour {
 		iconSpriteRend.sprite = deck.sprite;
 		nameText.text = deck.displayName;
 
-
-		//THIS IS UGLY. YOU SHOULD POOL THESE
-		for (int i = 0; i < charmIcons.Count; i++) {
-			Destroy (charmIcons [i]);
-		}
-
-		for (int i = 0; i < deck.charms.Count; i++) {
-			GameObject charmObj = Instantiate (charmPrefab);
-			charmObj.transform.parent = transform;
-			charmObj.transform.position = charmStartPos + new Vector3 (0, charmYSpacing * i, 0);
-			charmObj.GetComponentInChildren<Text>().text = deck.charms[i].name;
+		for (int i = 0; i < 2; i++) {
+			DBManagerInterface.instance.getCharmGO ().activate (deck, this, (Charm.CharmType)i);
 		}
 
 	}
@@ -64,6 +50,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 		isActive = false;
 		deck = null;
 		gameObject.SetActive (false);
+		gameObject.name = "deck unused";
 	}
 	
 	// Update is called once per frame

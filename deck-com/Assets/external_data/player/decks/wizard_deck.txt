@@ -9,6 +9,3 @@ heal
 gain-an-action
 draw-a-card
 moveCantrip
-teleport
-teleport
-shield

@@ -6,9 +6,14 @@ using System.Xml;
 public class Weapon_SniperRifle : Charm {
 
 	public Weapon_SniperRifle(XmlNode _node){
+		
 		node = _node;
 		baseDamage = int.Parse(node ["damage"].InnerText);
 		baseRange = int.Parse(node ["range"].InnerText);
+	}
+
+	public override void setupCustom(){
+		type = CharmType.Weapon;
 	}
 
 	public override int getCardActionCostMod(Card card){

@@ -44,7 +44,7 @@ public class DBSaveButton : MonoBehaviour {
 
 		//figure out when this thing should be on
 		bool shouldShow = false;
-		if (manager.activeDeck != null && manager.activeDeck.cardsToAdd.Count > 0) {
+		if (manager.activeDeck != null && (manager.activeDeck.cardsToAdd.Count > 0 || manager.activeDeck.weaponToAdd != null || manager.activeDeck.charmToAdd != null)) {
 			shouldShow = true;
 
 			//and if it is on, set the text

@@ -12,6 +12,12 @@ public class DBManagerInterface : MonoBehaviour {
 	public GameObject deckButtonPrefab;
 	private List<DBDeckButtonGO> deckButtons = new List<DBDeckButtonGO> ();
 
+	public GameObject charmButtonPrefab;
+	private List<DBCharmGO> charmButtons = new List<DBCharmGO> ();
+
+	public GameObject unusedCharmButtonPrefab;
+	private List<DBUnusedCharmGO> unusedCharmButtons = new List<DBUnusedCharmGO> ();
+
 	public GameObject cardButtonPrefab;
 	private List<DBCardGO> cardButtons = new List<DBCardGO> ();
 
@@ -59,7 +65,7 @@ public class DBManagerInterface : MonoBehaviour {
 		startButton.SetActive (manager.activeDeck == null);
 
 		//turn the card selector backgorund on if that is active
-		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen);
+		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen || manager.unusedCharmsOpen);
 			
 		//update the money
 		moneyText.text = "$"+manager.money;
@@ -120,6 +126,36 @@ public class DBManagerInterface : MonoBehaviour {
 		GameObject obj = Instantiate(cardButtonPrefab) as GameObject;
 		DBCardGO GO = obj.GetComponent<DBCardGO> ();
 		cardButtons.Add (GO);
+		return GO;
+	}
+
+	public DBCharmGO getCharmGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < charmButtons.Count; i++) {
+			if (charmButtons [i].IsActive == false) {
+				return charmButtons [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(charmButtonPrefab) as GameObject;
+		DBCharmGO GO = obj.GetComponent<DBCharmGO> ();
+		charmButtons.Add (GO);
+		return GO;
+	}
+
+	public DBUnusedCharmGO getUnusedCharmGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < unusedCharmButtons.Count; i++) {
+			if (unusedCharmButtons [i].IsActive == false) {
+				return unusedCharmButtons [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(unusedCharmButtonPrefab) as GameObject;
+		DBUnusedCharmGO GO = obj.GetComponent<DBUnusedCharmGO> ();
+		unusedCharmButtons.Add (GO);
 		return GO;
 	}
 }

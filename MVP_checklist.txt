@@ -9,9 +9,9 @@ MVP for Deck-Com
 [ ] - Loot screen at the end of a match
 	[ ] - save money, unused cards, unused charms
 
-[ ] - Being able to edit decks between matches
+[X] - Being able to edit decks between matches
 	[X] - spend money to add cards
-	[ ] - spend money to change charms
+	[X] - spend money to change charms
 	[X] - save decks/charms
 
 [ ] - 10 new charms

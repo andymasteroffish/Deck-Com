@@ -13,7 +13,11 @@ public class DBDeck {
 	public List<Card> cards;
 	public List<Card> cardsToAdd = new List<Card>();
 
-	public List<Charm> charms = new List<Charm>();
+	public Charm curWeapon, curCharm = null;
+	public Charm weaponToAdd, charmToAdd = null;
+
+	//public List<Charm> charms = new List<Charm>();
+	//public List<Charm> charmsToAdd = new List<Charm>();
 
 	public int order;
 
@@ -44,9 +48,15 @@ public class DBDeck {
 		foreach (XmlNode n in childNodes) {
 			if (n.Name == "charm") {
 				string charmID = n.InnerXml;
-				Charm thisCharm = CharmManager.instance.getCharmFromIdName (charmID);
-				thisCharm.setup (null, false, charmID);
-				charms.Add(thisCharm);
+				if (charmID.Length > 1) {
+					Charm thisCharm = CharmManager.instance.getCharmFromIdName (charmID);
+					thisCharm.setup (null, false, charmID);
+					if (thisCharm.type == Charm.CharmType.Weapon) {
+						curWeapon = thisCharm;
+					} else {
+						curCharm = thisCharm;
+					}
+				}
 			}
 		}
 	}
@@ -64,7 +74,6 @@ public class DBDeck {
 			cards [i].setup (null, null);
 		}
 
-		//no charms
 	}
 
 	public void setAsActive(){
@@ -72,6 +81,16 @@ public class DBDeck {
 			DBManagerInterface.instance.getCardGO ().activate (cards[i], i, false);
 		}
 		cardsToAdd.Clear ();
+
+		weaponToAdd = null;
+		charmToAdd = null;
+	}
+
+	public void setAsInactive(){
+		cardsToAdd.Clear ();
+
+		weaponToAdd = null;
+		charmToAdd = null;
 	}
 
 	public void setAsUnusedActive(){
@@ -113,6 +132,13 @@ public class DBDeck {
 	}
 
 	public void saveChanges(){
+		//check if charms have been changed
+		if (weaponToAdd != null) {
+			curWeapon = weaponToAdd;
+		}
+		if (charmToAdd != null) {
+			curCharm = charmToAdd;
+		}
 		//add everything in the to-add list to the deck and then clear it
 		for (int i = 0; i < cardsToAdd.Count; i++) {
 			cards.Add (cardsToAdd [i]);
@@ -125,6 +151,14 @@ public class DBDeck {
 		for (int i = 0; i < cardsToAdd.Count; i++) {
 			returnVal += cardsToAdd [i].CostToAddToDeck;
 		}
+
+		if (weaponToAdd != null) {
+			returnVal += weaponToAdd.costToAddToDeck;
+		}
+		if (charmToAdd != null) {
+			returnVal += charmToAdd.costToAddToDeck;
+		}
+
 		return returnVal;
 	}
 
@@ -138,8 +172,9 @@ public class DBDeck {
 		xmlText += "<player_controlled>true</player_controlled>\n";
 
 		xmlText += "<charms>\n";
-		for (int i = 0; i < charms.Count; i++) {
-			xmlText += "<charm>" + charms [i].idName + "</charm>\n";
+		xmlText += "<charm>" + curWeapon.idName + "</charm>\n";
+		if (curCharm != null) {
+			xmlText += "<charm>" + curCharm.idName + "</charm>\n";
 		}
 		xmlText += "</charms>\n";
 

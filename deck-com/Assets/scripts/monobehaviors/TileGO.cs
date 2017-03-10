@@ -26,6 +26,7 @@ public class TileGO : MonoBehaviour {
 		tile = null;
 		isActive = false;
 		gameObject.SetActive (false);
+		gameObject.name = "tile unused";
 	}
 
 
