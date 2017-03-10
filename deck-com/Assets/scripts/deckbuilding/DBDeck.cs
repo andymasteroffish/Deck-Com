@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
+using System.IO;
 
 public class DBDeck {
 
@@ -11,20 +12,29 @@ public class DBDeck {
 
 	public List<Card> cards;
 	public List<Card> cardsToAdd = new List<Card>();
+
 	public List<Charm> charms = new List<Charm>();
 
 	public int order;
+
+	private string deckListPath;
+
+	//saving info
+	string spriteName;
+	string deckListShortName;
 
 	public DBDeck(XmlNode node, int _order){
 		//general stuff
 		idName = node.Attributes ["idName"].Value;
 		displayName = node ["name"].InnerXml;
-		sprite = Resources.Load<Sprite> (node ["sprite"].InnerXml);
+		spriteName = node ["sprite"].InnerXml;
+		sprite = Resources.Load<Sprite> (spriteName);
 		order = _order;
 
 		//deck
-		TextAsset deckList = Resources.Load<TextAsset> (node ["deck"].InnerXml);
-		cards = CardManager.instance.getDeckFromTextFile (deckList);
+		deckListShortName = node ["deck"].InnerXml;
+		deckListPath = Application.dataPath + "/external_data/player/decks/"+deckListShortName+".txt";
+		cards = CardManager.instance.getDeckFromTextFile (deckListPath);
 		for (int i = 0; i < cards.Count; i++) {
 			cards [i].setup (null, null);
 		}
@@ -33,21 +43,23 @@ public class DBDeck {
 		XmlNodeList childNodes = node["charms"].ChildNodes;
 		foreach (XmlNode n in childNodes) {
 			if (n.Name == "charm") {
-				Charm thisCharm = CharmManager.instance.getCharmFromIdName (n.InnerXml);
-				thisCharm.setup (null, false);
+				string charmID = n.InnerXml;
+				Charm thisCharm = CharmManager.instance.getCharmFromIdName (charmID);
+				thisCharm.setup (null, false, charmID);
 				charms.Add(thisCharm);
 			}
 		}
 	}
 
-	public DBDeck(TextAsset unusedCardsList, int _order){
+	public DBDeck(string unusedCardFilePath, int _order){
 		idName = "unused";
 		displayName = "Unused Cards";
 		sprite = Resources.Load<Sprite> ("unused_cards_icon");
 		order = _order;
 
 		//deck
-		cards = CardManager.instance.getDeckFromTextFile (unusedCardsList);
+		deckListPath = unusedCardFilePath;
+		cards = CardManager.instance.getDeckFromTextFile (deckListPath);
 		for (int i = 0; i < cards.Count; i++) {
 			cards [i].setup (null, null);
 		}
@@ -116,8 +128,33 @@ public class DBDeck {
 		return returnVal;
 	}
 
-	public void saveXML(){
+	public string getXML(){
+		string xmlText = "";
+		xmlText += "<unit idName = '" + idName + "'>\n";
 
+		xmlText += "<name>" + displayName + "</name>\n";
+		xmlText += "<sprite>" + spriteName + "</sprite>\n";
+		xmlText += "<deck>" + deckListShortName + "</deck>\n";
+		xmlText += "<player_controlled>true</player_controlled>\n";
+
+		xmlText += "<charms>\n";
+		for (int i = 0; i < charms.Count; i++) {
+			xmlText += "<charm>" + charms [i].idName + "</charm>\n";
+		}
+		xmlText += "</charms>\n";
+
+		xmlText += "</unit>";
+
+		return xmlText;
+	}
+
+	public void saveDeckFile(){
+		string[] lines = new string[cards.Count];
+		for (int i = 0; i < cards.Count; i++) {
+			lines [i] = cards [i].idName;
+		}
+
+		File.WriteAllLines(deckListPath, lines);
 	}
 
 }

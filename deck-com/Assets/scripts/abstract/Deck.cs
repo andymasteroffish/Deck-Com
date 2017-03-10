@@ -15,11 +15,11 @@ public class Deck {
 	}
 
 	//setup
-	public void setup(Unit _owner, TextAsset deckList){
+	public void setup(Unit _owner, string deckListPath){
 		owner = _owner;
 
 		//create a card for each one in the list and add it to the deck
-		List<Card> cards = CardManager.instance.getDeckFromTextFile (deckList);
+		List<Card> cards = CardManager.instance.getDeckFromTextFile (deckListPath);
 		for (int i = 0; i < cards.Count; i++) {
 			cards [i].setup (owner, this);
 			addCardToDrawPile ( cards[i] );

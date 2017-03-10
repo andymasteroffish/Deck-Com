@@ -1,0 +1,11 @@
+move3
+move4
+move4
+move5
+attackBasic
+attackBasic
+heal
+heal
+gain-an-action
+draw-a-card
+moveCantrip

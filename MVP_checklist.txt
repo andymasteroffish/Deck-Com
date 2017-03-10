@@ -12,9 +12,7 @@ MVP for Deck-Com
 [ ] - Being able to edit decks between matches
 	[X] - spend money to add cards
 	[ ] - spend money to change charms
-	[ ] - save decks/charms
-	[ ] - Select which 3 decks you want to use on deck select screen
-	[ ] - Buy new blank decks on deck edit screen
+	[X] - save decks/charms
 
 [ ] - 10 new charms
 [ ] - 5 new weapons

@@ -9,9 +9,6 @@ public class CharmManager : MonoBehaviour {
 
 	public static CharmManager instance = null;	
 
-	public TextAsset xmlText;
-
-	private XmlDocument fullXML;
 	private XmlNodeList nodes;
 
 	void Awake () {
@@ -21,8 +18,8 @@ public class CharmManager : MonoBehaviour {
 			Destroy (gameObject);
 		}
 
-		fullXML = new XmlDocument ();
-		fullXML.LoadXml (xmlText.text);
+		XmlDocument fullXML = new XmlDocument ();
+		fullXML.Load (Application.dataPath + "/external_data/charms.xml");
 		nodes = fullXML.GetElementsByTagName ("charm");
 	}
 

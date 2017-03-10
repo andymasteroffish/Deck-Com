@@ -7,7 +7,7 @@ public class Card {
 
 	public enum CardType{Attack, AttackSpecial, Movement, Aid, Other};
 
-	public string name;
+	public string name, idName;
 	public string description;
 
 	public XmlNode node;
@@ -44,6 +44,7 @@ public class Card {
 	public void setup(Unit _owner, Deck _deck){
 		owner = _owner;
 		deck = _deck;
+		idName = node.Attributes ["idName"].Value;
 
 		isDead = false;
 

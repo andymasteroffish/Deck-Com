@@ -7,9 +7,6 @@ public class DBManagerInterface : MonoBehaviour {
 
 	public static DBManagerInterface instance;
 
-	public TextAsset unitList;
-	public TextAsset unusedCardsList;
-
 	public DBManager manager;
 
 	public GameObject deckButtonPrefab;
@@ -34,7 +31,7 @@ public class DBManagerInterface : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		manager = new DBManager (unitList, unusedCardsList);
+		manager = new DBManager ();
 	}
 	
 	// Update is called once per frame
@@ -75,7 +72,6 @@ public class DBManagerInterface : MonoBehaviour {
 	}
 
 	public void cancel(){
-		Debug.Log ("cancel");
 		manager.cancel ();
 	}
 

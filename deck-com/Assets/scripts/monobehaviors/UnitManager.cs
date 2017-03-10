@@ -9,10 +9,10 @@ public class UnitManager : MonoBehaviour {
 
 	public static UnitManager instance = null;
 
-	public TextAsset xmlText;
+	//public TextAsset xmlText;
+	//private XmlDocument fullXML;
 
-	private XmlDocument fullXML;
-	private XmlNodeList nodes;
+	private XmlNodeList playerNodes, foeNodes;
 
 	void Awake(){
 		if (instance == null) {
@@ -21,13 +21,23 @@ public class UnitManager : MonoBehaviour {
 			Destroy (gameObject);
 		}
 
-		fullXML = new XmlDocument ();
-		fullXML.LoadXml (xmlText.text);
-		nodes = fullXML.GetElementsByTagName ("unit");
+
+		XmlDocument foeXML = new XmlDocument ();
+		foeXML.Load(Application.dataPath + "/external_data/foes/units.xml");
+		XmlDocument playerXML = new XmlDocument ();
+		playerXML.Load(Application.dataPath + "/external_data/player/player_info.xml");
+
+		foeNodes = foeXML.GetElementsByTagName ("unit");
+		playerNodes = playerXML.GetElementsByTagName ("unit");
 	}
 
 	public Unit getUnitFromIdName(string idName){
-		foreach (XmlNode node in nodes) {
+		foreach (XmlNode node in foeNodes) {
+			if (node.Attributes ["idName"].Value == idName) {
+				return	getUnitFromNode (node);
+			}
+		}
+		foreach (XmlNode node in playerNodes) {
 			if (node.Attributes ["idName"].Value == idName) {
 				return	getUnitFromNode (node);
 			}

@@ -9,9 +9,8 @@ public class CardManager : MonoBehaviour {
 
 	public static CardManager instance = null;
 
-	public TextAsset xmlText;
+	//public TextAsset xmlText;
 
-	private XmlDocument fullXML;
 	private XmlNodeList nodes;
 
 	void Awake(){
@@ -21,22 +20,24 @@ public class CardManager : MonoBehaviour {
 			Destroy (gameObject);
 		}
 
-		fullXML = new XmlDocument ();
-		fullXML.LoadXml (xmlText.text);
+		XmlDocument fullXML = new XmlDocument ();
+		fullXML.Load (Application.dataPath + "/external_data/cards.xml");
 		nodes = fullXML.GetElementsByTagName ("card");
 	}
 
-	public List<Card> getDeckFromTextFile(TextAsset file){
+	public List<Card> getDeckFromTextFile(string filePath){
 		List<Card> deck = new List<Card> ();
 
-		string[] lines = file.text.Split ('\n');
+		string fileText = File.ReadAllText (filePath);
+
+		string[] lines = fileText.Split ('\n');
 		for (int i = 0; i < lines.Length; i++) {
 			if (lines [i].Length > 1) {
 				Card thisCard = getCardFromIdName (lines [i]);
 				if (thisCard != null) {
 					deck.Add (thisCard);
 				} else {
-					Debug.Log ("BAD CARD NAME: "+lines [i]+" in deck "+file.name);
+					Debug.Log ("BAD CARD NAME: "+lines [i]+" in deck "+filePath);
 				}
 			}
 		}

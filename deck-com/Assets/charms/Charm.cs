@@ -20,14 +20,16 @@ public class Charm  {
 	private bool useGameObject;
 
 	public XmlNode node;
+	public string idName;
 
 	//this should never be used as only the derived classes should be used in game
 	public Charm(){}
 
-	public void setup(Unit _owner, bool _useGameObject){
+	public void setup(Unit _owner, bool _useGameObject, string _idName){
 
 		owner = _owner;
 		useGameObject = _useGameObject;
+		idName = _idName;
 
 		if (owner != null) {
 			offsetID = owner.Charms.Count;

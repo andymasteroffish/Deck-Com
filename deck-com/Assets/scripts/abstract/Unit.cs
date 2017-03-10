@@ -35,7 +35,7 @@ public class Unit {
 	//decks and cards
 	public Deck deck;
 
-	public TextAsset deckList;
+	public string deckListPath;
 
 	//weapons and charms
 	private List<string> charmIDs;
@@ -48,7 +48,12 @@ public class Unit {
 	public Unit(XmlNode node){
 		unitName = node ["name"].InnerXml;
 		isPlayerControlled = bool.Parse(node["player_controlled"].InnerXml);
-		deckList = Resources.Load<TextAsset> (node ["deck"].InnerXml);
+
+		deckListPath = Application.dataPath + "/external_data/";
+		deckListPath += isPlayerControlled ? "player/" : "foes/";
+		deckListPath += "decks/";
+		deckListPath += node ["deck"].InnerXml + ".txt";
+
 		sprite = Resources.Load<Sprite> (node ["sprite"].InnerXml);
 
 		if (node ["base_health"] != null) {
@@ -71,7 +76,7 @@ public class Unit {
 		}
 	}
 
-	public void setup(GameManager _gm,Tile startTile){
+	public void setup(GameManager _gm, Tile startTile){
 		gm = _gm;
 		curTile = startTile;
 
@@ -89,7 +94,7 @@ public class Unit {
 		weapon = charms[0];
 
 		//set them up
-		deck.setup (this, deckList);
+		deck.setup (this, deckListPath);
 
 		setHighlighted (false);
 
@@ -102,7 +107,7 @@ public class Unit {
 
 	public void addCharm(string idName){
 		Charm thisCharm = CharmManager.instance.getCharmFromIdName (idName);
-		thisCharm.setup (this, true);
+		thisCharm.setup (this, true, idName);
 		if (isActive) {
 			thisCharm.setActive (true);
 		}

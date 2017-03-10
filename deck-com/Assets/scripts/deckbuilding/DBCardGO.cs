@@ -122,21 +122,6 @@ public class DBCardGO : MonoBehaviour {
 			spriteRend.transform.localPosition = spritePos;
 		}
 
-		//recently added cards can be rmeoved and may need to be repositioned
-		if (manager.activeDeck.cardsToAdd.Contains (card)) {
-			int thisOrder = manager.activeDeck.cards.Count;
-			for (int i = 0; i < manager.activeDeck.cardsToAdd.Count; i++) {
-				thisOrder++;
-				if (manager.activeDeck.cardsToAdd [i] == card) {
-					break;
-				}
-			}
-			setPos (thisOrder);
-//			if (order >= manager.activeDeck.cardsToAdd.Count + manager.activeDeck.cards.Count) {
-//				setPos (order - 1);
-//			}
-		}
-
 		//time to die?
 		if (!isUnusedCardSelector) {
 			if (manager.activeDeck == null) {
@@ -147,6 +132,18 @@ public class DBCardGO : MonoBehaviour {
 		}
 		if (isUnusedCardSelector && !manager.unusedCardsOpen) {
 			deactivate ();
+		}
+
+		//recently added cards can be removed and may need to be repositioned
+		if (manager.activeDeck != null && manager.activeDeck.cardsToAdd.Contains (card)) {
+			int thisOrder = manager.activeDeck.cards.Count;
+			for (int i = 0; i < manager.activeDeck.cardsToAdd.Count; i++) {
+				thisOrder++;
+				if (manager.activeDeck.cardsToAdd [i] == card) {
+					break;
+				}
+			}
+			setPos (thisOrder);
 		}
 
 	}
