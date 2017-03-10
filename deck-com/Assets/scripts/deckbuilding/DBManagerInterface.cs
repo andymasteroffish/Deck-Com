@@ -16,6 +16,7 @@ public class DBManagerInterface : MonoBehaviour {
 	private List<DBCardGO> cardButtons = new List<DBCardGO> ();
 
 	public GameObject[] deckViewButtons;
+	public GameObject startButton;
 
 	public GameObject unusedCardSelectionBG;
 
@@ -55,6 +56,8 @@ public class DBManagerInterface : MonoBehaviour {
 			}
 		}
 
+		startButton.SetActive (manager.activeDeck == null);
+
 		//turn the card selector backgorund on if that is active
 		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen);
 			
@@ -84,6 +87,10 @@ public class DBManagerInterface : MonoBehaviour {
 //	public void saveChanges(){
 //		manager.saveChanges();
 //	}
+
+	public void startGame(){
+		UnityEngine.SceneManagement.SceneManager.LoadScene ("tactics_game");
+	}
 
 	//supplying the shell objects
 	public DBDeckButtonGO getDeckButtonGO(){

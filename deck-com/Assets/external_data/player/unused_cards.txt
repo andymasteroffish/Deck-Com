@@ -1,6 +1,3 @@
-teleport
-teleport
 move4
 grenade
 bladeDash
-shield
