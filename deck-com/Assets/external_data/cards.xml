@@ -1,4 +1,5 @@
 <cards>
+  
   <card idName="move6freeTest">
     <name>Move 6</name>
     <script>Card_Movement</script>
@@ -6,6 +7,11 @@
     <range>6</range>
   </card>
   
+  <card idName="loot">
+    <name>Loot</name>
+    <script>Card_Loot</script>
+  </card>
+
   <card idName="move2">
     <name>Move 2</name>
     <script>Card_Movement</script>

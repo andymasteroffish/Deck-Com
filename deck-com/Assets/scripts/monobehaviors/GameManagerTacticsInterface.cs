@@ -15,6 +15,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public string[] spawnList;
 
+	public GameObject pickupLootButton;
+
 	void Awake () {
 		if (instance == null) {
 			instance = this;
@@ -56,15 +58,13 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			gm.cancel ();
 		}
 
-		//testing
-		if (Input.GetKeyDown(KeyCode.C)){
-			gm.board.clearHighlights();
-		}
-//		Tile targetTest = gm.board.Grid [4, 6];
-//		gm.board.raytrace (gm.units [0].CurTile, targetTest, Tile.Cover.Full);
-//		Vector3 dist = targetTest.Pos.getV3 () - gm.units [0].CurTile.Pos.getV3 ();
-//		Debug.DrawLine(gm.units [0].CurTile.Pos.getV3(), targetTest.Pos.getV3(), Color.red);
+		//showing the loot button if applicable
+		pickupLootButton.SetActive( gm.activeUnit.CanPickupLoot);
 
+	}
+
+	public void pickUpLoot(){
+		gm.activeUnit.pickUpLoot ();
 	}
 
 	//FILL THIS IN!!!!!

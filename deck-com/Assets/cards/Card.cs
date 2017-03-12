@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Card {
 
-	public enum CardType{Attack, AttackSpecial, Movement, Aid, Other};
+	public enum CardType{Attack, AttackSpecial, Movement, Aid, Loot, Other};
 
 	public string name, idName;
 	public string description;

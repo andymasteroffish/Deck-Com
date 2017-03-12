@@ -2,19 +2,19 @@ MVP for Deck-Com
 
 [ ] - Basic AI
 
-[ ] - Collect Loot In Game
-	[ ] money loot
-	[ ] booster pack loot (set of random cards)
+[X] - Collect Loot In Game
 
 [ ] - Loot screen at the end of a match
-	[ ] - save money, unused cards, unused charms
+	[ ] save money, unused cards, unused charms
+	[ ] money loot
+	[ ] booster pack loot (set of random cards)
 
 [X] - Being able to edit decks between matches
 	[X] - spend money to add cards
 	[X] - spend money to change charms
 	[X] - save decks/charms
 
-[ ] - 10 new charms
+[ ] - 8 new charms
 [ ] - 5 new weapons
 [ ] - 3 new foes 
 

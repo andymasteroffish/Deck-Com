@@ -13,6 +13,7 @@ public class Board {
 
 	private Tile[,] grid = null;
 
+	private List<Loot> loot = new List<Loot>();
 	//public GameObject tilePrefab;
 
 	public int partialCoverDamageReduction = 1;
@@ -27,6 +28,8 @@ public class Board {
 	public void reset(){
 		//clear ();
 		grid = levelGen.getTestLevel ();// new Tile[cols, rows];
+
+		loot.Clear ();
 
 		cols = grid.GetLength (0);
 		rows = grid.GetLength (1);
@@ -66,10 +69,35 @@ public class Board {
 			}
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
 
+	//checking if anythign should happen when a unit dies
+	public void checksWhenUnitDies(Unit deadUnit){
+		//should loot drop?
+		for (int i = 0; i < loot.Count; i++) {
+			loot [i].checkShouldDrop (deadUnit);
+		}
+	}
+
+	//some loot specific functions
+	public bool checkIfUnitIsCloseToLoot(Unit unit){
+		for (int i = 0; i < loot.Count; i++) {
+			if (loot [i].canBeCollected (unit)) {
+				Debug.Log ("this boy can pick up that loot");
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void collectLootNearUnit(Unit unit){
+		for (int i = loot.Count-1; i >= 0; i--) {
+			if (loot [i].canBeCollected (unit)) {
+				Debug.Log ("collecting loot " + i);
+				loot [i].collect (unit);
+				loot.RemoveAt (i);
+			}
+		}
+		unit.CanPickupLoot = false;
 	}
 
 	//**********************
@@ -634,4 +662,9 @@ public class Board {
 		}
 	}
 
+	public List<Loot> LootList {
+		get {
+			return this.loot;
+		}
+	}
 }

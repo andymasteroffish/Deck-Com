@@ -1,6 +1,6 @@
 <player>
   <info>
-    <money>1</money>
+    <money>8</money>
   </info>
   <unit idName="wizard">
     <name>Wizard</name>
@@ -8,7 +8,7 @@
     <deck>wizard_deck</deck>
     <player_controlled>true</player_controlled>
     <charms>
-      <charm>goblin_king_wep</charm>
+      <charm>wizard_staff</charm>
       <charm>heal_ring</charm>
     </charms>
   </unit>
@@ -18,7 +18,7 @@
     <deck>ranger_deck</deck>
     <player_controlled>true</player_controlled>
     <charms>
-      <charm>wizard_staff</charm>
+      <charm>long_bow</charm>
       <charm>extra_card</charm>
     </charms>
   </unit>
@@ -29,7 +29,6 @@
     <player_controlled>true</player_controlled>
     <charms>
       <charm>sniper_rifle</charm>
-      <charm>extra_card</charm>
     </charms>
   </unit>
 </player>

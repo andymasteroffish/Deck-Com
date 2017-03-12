@@ -49,6 +49,20 @@ public class GameManager {
 			unit.reset ();
 		}
 
+		//add some loot to some of them TESTING
+		List<Unit> potentialHolders = new List<Unit>();
+		for (int i = 0; i < units.Count; i++) {
+			if (units [i].isPlayerControlled == false) {
+				potentialHolders.Add (units [i]);
+			}
+		}
+		for (int i = 0; i < 4; i++) {
+			Unit holder = potentialHolders [(int)Random.Range (0, potentialHolders.Count)];
+			potentialHolders.Remove (holder);
+			Loot loot = new Loot (holder, Loot.Type.money, 1);
+			board.LootList.Add (loot);
+		}
+
 		startPlayerTurn ();
 
 	}

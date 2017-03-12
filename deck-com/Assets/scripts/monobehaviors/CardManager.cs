@@ -60,6 +60,9 @@ public class CardManager : MonoBehaviour {
 
 		string scriptName = node ["script"].InnerText;
 
+		if (scriptName == "Card_Loot") {
+			thisCard = new Card_Loot (node);
+		}
 		if (scriptName == "Card_Movement") {
 			thisCard = new Card_Movement (node);
 		}

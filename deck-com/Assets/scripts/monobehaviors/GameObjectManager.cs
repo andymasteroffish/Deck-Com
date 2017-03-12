@@ -11,12 +11,14 @@ public class GameObjectManager : MonoBehaviour {
 	public GameObject cardPrefab;
 	public GameObject actionMarkerPrefab;
 	public GameObject unitPrefab;
+	public GameObject lootPrefab;
 
 	private List<TileGO> tiles = new List<TileGO>();
 	private List<CharmGO> charms = new List<CharmGO>();
 	private List<CardGO> cards = new List<CardGO> ();
 	private List<ActionMarkerGO> actionMarkers = new List<ActionMarkerGO>();
 	private List<UnitGO> units = new List<UnitGO> ();
+	private List<LootGO> loot = new List<LootGO> ();
 
 	void Awake(){
 		if (instance == null) {
@@ -111,4 +113,18 @@ public class GameObjectManager : MonoBehaviour {
 		return null;
 	}
 
+	public LootGO getLootGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < loot.Count; i++) {
+			if (loot [i].IsActive == false) {
+				return loot [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(lootPrefab) as GameObject;
+		LootGO GO = obj.GetComponent<LootGO> ();
+		loot.Add (GO);
+		return GO;
+	}
 }

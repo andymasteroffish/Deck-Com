@@ -9,4 +9,4 @@ bladeDash
 village
 village
 heal
-shield
+teleport

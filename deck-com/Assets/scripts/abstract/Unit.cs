@@ -42,6 +42,9 @@ public class Unit {
 	private Charm weapon;
 	private List<Charm> charms = new List<Charm>();
 
+	//loot
+	private bool canPickUpLoot;
+
 	//utility
 	public bool mouseIsOver;
 
@@ -82,6 +85,8 @@ public class Unit {
 
 		health = baseHealth;
 		isDead = false;
+
+		canPickUpLoot = false;
 
 		//spawn deck
 		deck = new Deck();
@@ -149,6 +154,10 @@ public class Unit {
 		}
 		if (isActive) {
 			GameObjectManager.instance.getActionMarkerGO ().activate (this, 1);
+			//if this is the player, maybe there is delicious loot!
+			if (isPlayerControlled){
+				canPickUpLoot = gm.board.checkIfUnitIsCloseToLoot (this);
+			}
 		}
 	}
 
@@ -194,6 +203,11 @@ public class Unit {
 
 		//check which cards can still be played
 		deck.updateCardsDisabled();
+
+		//if this is the player, maybe there is delicious loot!
+		if (isPlayerControlled){
+			canPickUpLoot = gm.board.checkIfUnitIsCloseToLoot (this);
+		}
 	}
 
 	//input
@@ -205,6 +219,10 @@ public class Unit {
 
 	public void checkActiveClick(){
 		deck.checkClick ();
+	}
+
+	public void pickUpLoot(){
+		gm.board.collectLootNearUnit (this);
 	}
 		
 
@@ -254,7 +272,7 @@ public class Unit {
 	public void killUnit(){
 		isDead = true;
 		gm.removeUnit (this);
-		//StartCoroutine(doDeathAnimation(0.5f));
+		gm.board.checksWhenUnitDies (this);
 	}
 
 	//other effects
@@ -264,19 +282,8 @@ public class Unit {
 
 	//highlighting
 	public void setHighlighted(bool val, Color col){
-//		if (outline == null) {
-//			createOutlineObj ();
-//		}
-
 		isHighlighted = val;
 		highlightCol = col;
-//		if (isHighlighted) {
-//			outline.turnOn (col);
-//			//spriteRend.color = col;
-//		} else {
-//			outline.turnOff ();
-//			//spriteRend.color = new Color (1, 1, 1);
-//		}
 	}
 	public void setHighlighted(bool val){
 		setHighlighted (val, Color.white);
@@ -346,6 +353,15 @@ public class Unit {
 	public List<Charm> Charms{
 		get{
 			return this.charms;
+		}
+	}
+
+	public bool CanPickupLoot{
+		get{
+			return this.canPickUpLoot;
+		}
+		set{
+			canPickUpLoot = value;
 		}
 	}
 }
