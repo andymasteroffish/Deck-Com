@@ -82,7 +82,6 @@ public class Board {
 	public bool checkIfUnitIsCloseToLoot(Unit unit){
 		for (int i = 0; i < loot.Count; i++) {
 			if (loot [i].canBeCollected (unit)) {
-				Debug.Log ("this boy can pick up that loot");
 				return true;
 			}
 		}

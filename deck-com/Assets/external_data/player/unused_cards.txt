@@ -2,3 +2,10 @@ move4
 grenade
 bladeDash
 shield
+draw-a-card
+teleport
+move3
+focus
+move4
+move3
+attackBasic

@@ -60,10 +60,11 @@ public class CardManager : MonoBehaviour {
 
 		string scriptName = node ["script"].InnerText;
 
+
 		if (scriptName == "Card_Loot") {
 			thisCard = new Card_Loot (node);
 		}
-		if (scriptName == "Card_Movement") {
+		else if (scriptName == "Card_Movement") {
 			thisCard = new Card_Movement (node);
 		}
 		else if (scriptName == "Card_Attack") {
@@ -104,7 +105,7 @@ public class CardManager : MonoBehaviour {
 		}
 
 		else{
-			Debug.Log ("SCRIPT NAME FOR CHARM NOT FOUND: "+scriptName);
+			Debug.Log ("SCRIPT NAME FOR CARD NOT FOUND: "+scriptName);
 		}
 
 
@@ -112,5 +113,14 @@ public class CardManager : MonoBehaviour {
 	}
 
 
+	public List<string> getIDListAtLevel(int level){
+		List<string> returnVal = new List<string> ();
+		foreach (XmlNode node in nodes) {
+			if (int.Parse(node["level"].InnerXml) == level && level >= 0) {
+				returnVal.Add (node.Attributes ["idName"].Value);
+			}
+		}
+		return returnVal;
+	}
 
 }

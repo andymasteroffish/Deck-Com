@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
+using System.IO;
 
 public class Deck {
 	
@@ -92,7 +94,7 @@ public class Deck {
 		alignCardsInHand ();
 	}
 
-	void putDiscardInDrawPile(){
+	public void putDiscardInDrawPile(){
 		while (discardPile.Count > 0) {
 			addCardToDrawPile (discardPile [0]);
 			discardPile.RemoveAt (0);
@@ -161,6 +163,35 @@ public class Deck {
 		return false;
 	}
 
+	//finishing the game
+	public List<Card_Loot> syphonLootFromDrawPile(){
+		List<Card_Loot> loot = new List<Card_Loot> ();
+		for (int i=drawPile.Count-1; i >= 0; i--){
+			if (drawPile [i].type == Card.CardType.Loot) {
+				Card_Loot lootCard = (Card_Loot)drawPile [i];
+				drawPile.RemoveAt (i);
+				loot.Add (lootCard);
+			}
+		}
+		return loot;
+	}
+
+	//saving
+	public void saveDrawPile(string filePath){
+		sortDrawPileAlphabetically ();
+
+		string[] lines = new string[drawPile.Count];
+		for (int i = 0; i < drawPile.Count; i++) {
+			lines [i] = drawPile [i].idName;
+		}
+
+		File.WriteAllLines(filePath, lines);
+	}
+
+	//sorting
+	public void sortDrawPileAlphabetically(){
+		//FILL THIS IN
+	}
 
 	//setters and getters
 	public List<Card> Hand{

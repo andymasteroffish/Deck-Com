@@ -4,7 +4,7 @@
     <sprite>grunt</sprite>
     <deck>grunt_deck</deck>
     <player_controlled>false</player_controlled>
-    <base_health>2</base_health>
+    <base_health>1</base_health>
     <hand_size>3</hand_size>
     <charms>
       <charm>grunt_wep</charm>

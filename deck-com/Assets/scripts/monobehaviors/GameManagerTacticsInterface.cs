@@ -17,6 +17,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public GameObject pickupLootButton;
 
+	private bool doingAnimation;
+
+
 	void Awake () {
 		if (instance == null) {
 			instance = this;
@@ -29,6 +32,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	void Start(){
 		gm.targetInfoText = targetInfoText;
 		gm.setup (spawnList);
+		doingAnimation = false;
 	}
 
 	void Update () {
@@ -61,14 +65,37 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		//showing the loot button if applicable
 		pickupLootButton.SetActive( gm.activeUnit.CanPickupLoot);
 
+		//is the game over
+		if (gm.GameIsOver && !areAnimationsHappening()) {
+			StartCoroutine (doEndGame());
+		}
+
 	}
 
 	public void pickUpLoot(){
 		gm.activeUnit.pickUpLoot ();
 	}
 
+	IEnumerator doEndGame(){
+		float timer = 0;
+		doingAnimation = true;
+
+		float pauseTime = 1 * debugAnimationTimeMod;
+		while (timer < pauseTime){
+			timer += Time.deltaTime;
+			yield return null;
+		}
+
+		Debug.Log ("load pls");
+		doingAnimation = false;
+		UnityEngine.SceneManagement.SceneManager.LoadScene ("endGameResport");
+	}
+
 	//FILL THIS IN!!!!!
 	public bool areAnimationsHappening(){
+		if (doingAnimation){
+			return true;
+		}
 		//		foreach(Unit unit in units){
 		//			if (unit.areAnimationsHappening()){
 		//				return true;

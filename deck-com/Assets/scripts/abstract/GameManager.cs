@@ -25,6 +25,10 @@ public class GameManager {
 	private bool isPlayerTurn;
 	private int roundNum;
 
+	//finishing
+	private bool gameIsOver;
+	private bool playerWins;
+
 	public GameManager(){
 	}
 
@@ -34,6 +38,8 @@ public class GameManager {
 		board.reset ();
 
 		roundNum = 0;
+		gameIsOver = false;
+		playerWins = false;
 
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 
@@ -56,7 +62,7 @@ public class GameManager {
 				potentialHolders.Add (units [i]);
 			}
 		}
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < potentialHolders.Count; i++) {
 			Unit holder = potentialHolders [(int)Random.Range (0, potentialHolders.Count)];
 			potentialHolders.Remove (holder);
 			Loot loot = new Loot (holder, Loot.Type.money, 1);
@@ -86,11 +92,11 @@ public class GameManager {
 	void startAITurn(){
 		isPlayerTurn = false;
 
-		List<Unit> unitsAI = getAIUnits ();
-		if (unitsAI.Count == 0) {
-			Debug.Log ("YOU WIN");
+		if (checkGameOver()) {
+			endGame ();
 		} else {
 			//start the AI
+			List<Unit> unitsAI = getAIUnits ();
 			foreach (Unit unit in unitsAI) {
 				unit.resetRound ();
 			}
@@ -222,6 +228,41 @@ public class GameManager {
 		}
 	}
 
+	public bool checkGameOver(){
+		List<Unit> unitsAI = getAIUnits ();
+		if (unitsAI.Count == 0) {
+			return true;
+		}
+		return false;
+	}
+
+	public void endGame(){
+		gameIsOver = true;
+
+		List<Unit> unitsAI = getAIUnits ();
+		playerWins = unitsAI.Count == 0;
+
+		Debug.Log ("pls save everything thanks");
+		List <Unit> playerUnits = getPlayerUnits ();
+
+		List<Card_Loot> loot = new List<Card_Loot> ();
+		for (int i = 0; i < playerUnits.Count; i++) {
+			playerUnits [i].endGame ();
+			List<Card_Loot> unitLoot = playerUnits [i].syphonLoot ();
+			foreach (Card_Loot lootCard in unitLoot) {
+				loot.Add (lootCard);
+			}
+		}
+
+		//save the decks
+		for (int i = 0; i < playerUnits.Count; i++) {
+			playerUnits [i].saveDeckFile ();
+		}
+
+		//save whatever info needs to be passed to the next scene
+		EndGameInfoHolder.instance.lootList = loot;
+	}
+
 	//killing units
 	public void removeUnit(Unit deadOne){
 		units.Remove (deadOne);
@@ -263,6 +304,18 @@ public class GameManager {
 	public bool IsPlayerTurn {
 		get {
 			return this.isPlayerTurn;
+		}
+	}
+
+	public bool GameIsOver{
+		get{
+			return this.gameIsOver;
+		}
+	}
+
+	public bool PlayerWinds{
+		get{
+			return this.playerWins;
 		}
 	}
 

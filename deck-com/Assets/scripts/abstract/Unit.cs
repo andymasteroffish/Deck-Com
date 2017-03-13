@@ -289,20 +289,21 @@ public class Unit {
 		setHighlighted (val, Color.white);
 	}
 
+	//saving and cleaning up at the end of the game
 
+	public void endGame(){
+		//move all cards to the deck
+		deck.discardHand();
+		deck.putDiscardInDrawPile ();
+	}
 
-	//utility
+	public List<Card_Loot> syphonLoot(){
+		return deck.syphonLootFromDrawPile ();
+	}
 
-//	void OnMouseEnter(){
-//		mouseIsOver = true;
-//		if (isHighlighted) {
-//			GM.ActiveCard.potentialTargetMouseOver (this);
-//		}
-//	}
-//	void OnMouseExit(){
-//		mouseIsOver = false;
-//		GM.targetInfoText.unitRollOff(this);
-//	}
+	public void saveDeckFile(){
+		deck.saveDrawPile (deckListPath);
+	}
 
 
 	//stters getters
