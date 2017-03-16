@@ -4,10 +4,10 @@ MVP for Deck-Com
 
 [X] - Collect Loot In Game
 
-[ ] - Loot screen at the end of a match
-	[ ] save money, unused cards, unused charms
-	[ ] money loot
-	[ ] booster pack loot (set of random cards)
+[X] - Loot screen at the end of a match
+	[X] save money, unused cards, unused charms
+	[X] money loot
+	[X] booster pack loot (set of random cards)
 
 [X] - Being able to edit decks between matches
 	[X] - spend money to add cards

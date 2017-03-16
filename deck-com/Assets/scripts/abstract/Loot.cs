@@ -18,10 +18,10 @@ public class Loot {
 
 	public bool isDone;
 
-	public Loot(Unit holder, Type _type, int _level){
+	public Loot(Unit holder, int _level){
 		curUnit = holder;
 		curTile = null;
-		type = _type;
+		type = Random.value > 0.5f ? Loot.Type.booster : Loot.Type.money;
 		level = _level;
 		isDone = false;
 	}

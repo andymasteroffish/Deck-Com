@@ -45,10 +45,6 @@ public class Card_Movement : Card {
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
-//		List<Tile> selectable = Owner.GM.board.getTilesInRange (Owner.CurTile, range);
-//		foreach (Tile tile in selectable) {
-//			tile.setHighlighted (true);
-//		}
 	}
 
 	public override void passInTileCustom(Tile tile){
@@ -60,5 +56,9 @@ public class Card_Movement : Card {
 			Owner.deck.drawCards (bonusCards);
 		}
 		finish ();
+	}
+
+	public virtual int getAIMovementRange(){
+		return range;
 	}
 }

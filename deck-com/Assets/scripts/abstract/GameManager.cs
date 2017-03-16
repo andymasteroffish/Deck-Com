@@ -65,7 +65,7 @@ public class GameManager {
 		for (int i = 0; i < potentialHolders.Count; i++) {
 			Unit holder = potentialHolders [(int)Random.Range (0, potentialHolders.Count)];
 			potentialHolders.Remove (holder);
-			Loot loot = new Loot (holder, Loot.Type.money, 1);
+			Loot loot = new Loot (holder, 1);
 			board.LootList.Add (loot);
 		}
 

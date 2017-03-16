@@ -1,6 +1,6 @@
 <player>
   <info>
-    <money>47</money>
+    <money>34</money>
   </info>
   <unit idName="wizard">
     <name>Wizard</name>
@@ -19,7 +19,6 @@
     <player_controlled>true</player_controlled>
     <charms>
       <charm>long_bow</charm>
-      <charm>extra_card</charm>
     </charms>
   </unit>
   <unit idName="tank">

@@ -42,4 +42,8 @@ public class Card_Attack : Card {
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}
+
+	public override int getAIAttackRange(){
+		return getRangeForWeapon(rangeMod);
+	}
 }

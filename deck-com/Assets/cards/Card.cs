@@ -214,12 +214,18 @@ public class Card {
 	//some actions that are common enough to standardize
 	//**********************************
 
-	public void mouseEnterForWeapon(int rangeMod){
+	public int getRangeForWeapon(int rangeMod){
 		int range = Owner.Weapon.baseRange + rangeMod;
 
 		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
 			range += owner.Charms [i].getWeaponRangeMod (this);
 		}
+
+		return range;
+	}
+
+	public void mouseEnterForWeapon(int rangeMod){
+		int range = getRangeForWeapon (rangeMod);
 
 		owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
 	}
@@ -285,8 +291,22 @@ public class Card {
 		return damageVal;
 	}
 
-	//setters getters
+	//**********************************
+	//AI stuff
+	//**********************************
 
+	public virtual int getAIMovementRange(){
+		Debug.Log ("AI Movement range not settup for this card");
+		return 0;
+	}
+	public virtual int getAIAttackRange(){
+		Debug.Log ("AI Attack range not settup for this card");
+		return 0;
+	}
+
+	//**********************************
+	//ssetters and getters
+	//**********************************
 	public bool MouseIsOver{
 		get{
 			return this.mouseIsOver;
