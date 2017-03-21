@@ -58,7 +58,11 @@ public class Card_Movement : Card {
 		finish ();
 	}
 
-	public virtual int getAIMovementRange(){
-		return range;
+	public override void resolveFromMove(MoveInfo move){
+		passInTileCustom ( Owner.board.Grid[move.targetTilePos.x, move.targetTilePos.y]);
 	}
+
+//	public override int getAIMovementRange(){
+//		return range;
+//	}
 }

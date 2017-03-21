@@ -82,7 +82,6 @@ public class EndGameManager {
 					listToUse = k;
 				}
 			}
-			Debug.Log ("list to use: " + listToUse);
 			if (possibleCardIDs[listToUse].Count == 0) listToUse++;
 
 			int idNum = (int)Random.Range (0, possibleCardIDs [listToUse].Count);

@@ -193,7 +193,7 @@ public class Card {
 		return "No Cover";
 	}
 
-
+	public virtual void resolveFromMove(MoveInfo move){}
 
 	//**********************************
 	//showing information when a potential target is moused over
@@ -295,14 +295,14 @@ public class Card {
 	//AI stuff
 	//**********************************
 
-	public virtual int getAIMovementRange(){
-		Debug.Log ("AI Movement range not settup for this card");
-		return 0;
-	}
-	public virtual int getAIAttackRange(){
-		Debug.Log ("AI Attack range not settup for this card");
-		return 0;
-	}
+//	public virtual int getAIMovementRange(){
+//		Debug.Log ("AI Movement range not settup for this card");
+//		return 0;
+//	}
+//	public virtual int getAIAttackRange(){
+//		Debug.Log ("AI Attack range not settup for this card");
+//		return 0;
+//	}
 
 	//**********************************
 	//ssetters and getters

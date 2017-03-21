@@ -4,16 +4,8 @@ using System.Collections.Generic;
 
 public class GameManager {
 	
-	//public CardManager cardManager;
-	//public GameObjectManager gameObjectManager;
-
 	private CameraControl cam;
 	public Board board;
-
-	//public string[] spawnList;
-	//public GameObject[] spawnList;
-
-	public List<Unit> units = new List<Unit>();
 
 	public Unit activeUnit;
 
@@ -40,34 +32,18 @@ public class GameManager {
 		roundNum = 0;
 		gameIsOver = false;
 		playerWins = false;
-
+			
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 
 		//place the units
 		for (int i = 0; i < spawnList.Length; i++) {
 			Unit unit = UnitManager.instance.getUnitFromIdName (spawnList [i]);
 			Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
-			unit.setup (this, spawnTile);
-			units.Add (unit);
+			unit.setup (this, board, spawnTile);
+			board.units.Add (unit);
 		}
 
-		foreach(Unit unit in units){
-			unit.reset ();
-		}
-
-		//add some loot to some of them TESTING
-		List<Unit> potentialHolders = new List<Unit>();
-		for (int i = 0; i < units.Count; i++) {
-			if (units [i].isPlayerControlled == false) {
-				potentialHolders.Add (units [i]);
-			}
-		}
-		for (int i = 0; i < potentialHolders.Count; i++) {
-			Unit holder = potentialHolders [(int)Random.Range (0, potentialHolders.Count)];
-			potentialHolders.Remove (holder);
-			Loot loot = new Loot (holder, 1);
-			board.LootList.Add (loot);
-		}
+		board.resetUnitsAndLoot ();
 
 		startPlayerTurn ();
 
@@ -114,9 +90,7 @@ public class GameManager {
 		}
 		//check potential targets
 		board.checkClick ();
-		for (int i = units.Count - 1; i >= 0; i--) {
-			units[i].checkGeneralClick ();
-		}
+
 	}
 
 	public void endUnitTurn(){
@@ -160,7 +134,7 @@ public class GameManager {
 			return;
 		}
 		activeUnit = newActive;
-		foreach (Unit unit in units){
+		foreach (Unit unit in board.units){
 			unit.setActive ( unit==activeUnit);
 			if (!unit.IsActive) {
 				unit.deck.cancel ();
@@ -263,15 +237,12 @@ public class GameManager {
 		EndGameInfoHolder.instance.lootList = loot;
 	}
 
-	//killing units
-	public void removeUnit(Unit deadOne){
-		units.Remove (deadOne);
-	}
+
 
 	//unit tools
 	public List<Unit> getAIUnits(){
 		List<Unit> aiUnits = new List<Unit> ();
-		foreach (Unit unit in units){
+		foreach (Unit unit in board.units){
 			if (!unit.isPlayerControlled) {
 				aiUnits.Add (unit);
 			}
@@ -280,7 +251,7 @@ public class GameManager {
 	}
 	public List<Unit> getPlayerUnits(){
 		List<Unit> aiUnits = new List<Unit> ();
-		foreach (Unit unit in units){
+		foreach (Unit unit in board.units){
 			if (unit.isPlayerControlled) {
 				aiUnits.Add (unit);
 			}
@@ -318,16 +289,4 @@ public class GameManager {
 			return this.playerWins;
 		}
 	}
-
-//	public Card ActiveCard{
-//		get{
-//			return this.activeCard;
-//		}
-//	}
-
-//	public List<Unit> Units{
-//		get{
-//			return this.units;
-//		}
-//	}
 }

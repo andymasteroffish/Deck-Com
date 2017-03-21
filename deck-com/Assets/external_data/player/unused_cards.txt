@@ -5,3 +5,8 @@ attackBasic
 move3
 move2
 focus
+attackR1D-1
+attackR1
+focus
+move4
+draw-a-card

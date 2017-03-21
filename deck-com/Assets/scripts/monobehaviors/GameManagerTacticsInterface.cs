@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public float debugAnimationTimeMod;
+	public bool debugDoNotShuffle;
 
 	public static GameManagerTacticsInterface instance;
 
@@ -68,6 +69,24 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		//is the game over
 		if (gm.GameIsOver && !areAnimationsHappening()) {
 			StartCoroutine (doEndGame());
+		}
+
+		//testing
+		if (Input.GetKeyDown (KeyCode.T)) {
+			Debug.Log ("GO attack!");
+			MoveInfo move = new MoveInfo ();
+			Unit actingUnit = gm.getPlayerUnits () [0];
+			move.card = actingUnit.deck.Hand [0];
+			move.targetTilePos = new TilePos (1, 3);
+			gm.board.resolveMove (move);
+		}
+		if (Input.GetKeyDown (KeyCode.Y)) {
+			Debug.Log ("GO mmove!");
+			MoveInfo move = new MoveInfo ();
+			Unit actingUnit = gm.getPlayerUnits () [0];
+			move.card = actingUnit.deck.Hand [1];
+			move.targetTilePos = new TilePos (3, 3);
+			gm.board.resolveMove (move);
 		}
 
 	}

@@ -10,6 +10,7 @@ public class Unit {
 	public string unitName;
 
 	private GameManager gm;
+	public Board board;
 
 	public bool isPlayerControlled;
 
@@ -79,8 +80,9 @@ public class Unit {
 		}
 	}
 
-	public void setup(GameManager _gm, Tile startTile){
+	public void setup(GameManager _gm, Board _board, Tile startTile){
 		gm = _gm;
+		board = _board;
 		curTile = startTile;
 
 		health = baseHealth;
@@ -156,7 +158,7 @@ public class Unit {
 			GameObjectManager.instance.getActionMarkerGO ().activate (this, 1);
 			//if this is the player, maybe there is delicious loot!
 			if (isPlayerControlled){
-				canPickUpLoot = gm.board.checkIfUnitIsCloseToLoot (this);
+				canPickUpLoot = board.checkIfUnitIsCloseToLoot (this);
 			}
 		}
 	}
@@ -206,7 +208,7 @@ public class Unit {
 
 		//if this is the player, maybe there is delicious loot!
 		if (isPlayerControlled){
-			canPickUpLoot = gm.board.checkIfUnitIsCloseToLoot (this);
+			canPickUpLoot = board.checkIfUnitIsCloseToLoot (this);
 		}
 	}
 
@@ -222,7 +224,7 @@ public class Unit {
 	}
 
 	public void pickUpLoot(){
-		gm.board.collectLootNearUnit (this);
+		board.collectLootNearUnit (this);
 	}
 		
 
@@ -271,8 +273,8 @@ public class Unit {
 
 	public void killUnit(){
 		isDead = true;
-		gm.removeUnit (this);
-		gm.board.checksWhenUnitDies (this);
+		board.removeUnit (this);
+		board.checksWhenUnitDies (this);
 	}
 
 	//other effects

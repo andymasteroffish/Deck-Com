@@ -13,8 +13,8 @@ public class Board {
 
 	private Tile[,] grid = null;
 
-	private List<Loot> loot = new List<Loot>();
-	//public GameObject tilePrefab;
+	public List<Unit> units = new List<Unit>();
+	public List<Loot> loot = new List<Loot>();
 
 	public int partialCoverDamageReduction = 1;
 	public float fullCoverDamagePrc = 0.5f;
@@ -50,14 +50,48 @@ public class Board {
 		clearHighlights ();
 	}
 
+	public void resetUnitsAndLoot(){
+		foreach(Unit unit in units){
+			unit.reset ();
+		}
 
+		//add some loot to some of them TESTING
+		List<Unit> potentialHolders = new List<Unit>();
+		for (int i = 0; i < units.Count; i++) {
+			if (units [i].isPlayerControlled == false) {
+				potentialHolders.Add (units [i]);
+			}
+		}
+		for (int i = 0; i < potentialHolders.Count; i++) {
+			Unit holder = potentialHolders [(int)Random.Range (0, potentialHolders.Count)];
+			potentialHolders.Remove (holder);
+			Loot thisLoot = new Loot (holder, 1);
+			loot.Add (thisLoot);
+		}
+	}
+
+	//**************************
+	//game functions
+	//**************************
+
+	//killing units
+	public void removeUnit(Unit deadOne){
+		units.Remove (deadOne);
+	}
+
+	//resolving moves
+	public void resolveMove(MoveInfo move){
+		move.card.resolveFromMove (move);
+	}
+
+	//setting things to be selectables
 	public void clearHighlights(){
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
 				grid [x, y].setHighlighted (false);
 			}
 		}
-		foreach (Unit unit in gm.units) {
+		foreach (Unit unit in units) {
 			unit.setHighlighted (false);
 		}
 	}
@@ -67,6 +101,9 @@ public class Board {
 			for (int y = 0; y < rows; y++) {
 				grid [x, y].checkClick ();
 			}
+		}
+		for (int i = units.Count - 1; i >= 0; i--) {
+			units[i].checkGeneralClick ();
 		}
 	}
 
@@ -106,7 +143,7 @@ public class Board {
 		clearHighlights ();
 		List<Tile> selectable = getTilesInMoveRange (source, range, true, true);
 		foreach (Tile tile in selectable) {
-			foreach (Unit unit in gm.units) {
+			foreach (Unit unit in units) {
 				if (unit.CurTile == tile) {
 					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 						unit.setHighlighted (true, col);
@@ -120,7 +157,7 @@ public class Board {
 		clearHighlights ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
 		foreach (Tile tile in selectable) {
-			foreach (Unit unit in gm.units) {
+			foreach (Unit unit in units) {
 				if (unit.CurTile == tile) {
 					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 						unit.setHighlighted (true, col);
@@ -131,7 +168,7 @@ public class Board {
 	}
 
 	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
-		foreach (Unit unit in gm.units) {
+		foreach (Unit unit in units) {
 			if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 				unit.setHighlighted (true, col);
 			}
@@ -257,7 +294,7 @@ public class Board {
 						//is it unoccupied (or are we allowing occupied tiles?
 						bool unfilled = true;
 						if (!includeOccupied) {
-							foreach (Unit unit in gm.units) {
+							foreach (Unit unit in units) {
 								if (unit.CurTile == grid [x, y]) {
 									unfilled = false;
 								}
@@ -346,7 +383,7 @@ public class Board {
 						//is it unoccupied (or are we allowing occupied tiles)?
 						bool unfilled = true;
 						if (!includeOccupied) {
-							foreach (Unit unit in gm.units) {
+							foreach (Unit unit in units) {
 								if (unit.CurTile == grid [x, y]) {
 									unfilled = false;
 								}
@@ -409,10 +446,13 @@ public class Board {
 		return units;
 	}
 
+	public Unit getUnitOnTile(TilePos pos){
+		return getUnitOnTile (grid [pos.x, pos.y]);
+	}
 	public Unit getUnitOnTile(Tile tile){
-		for (int i=0; i<gm.units.Count; i++){
-			if (gm.units[i].CurTile == tile) {
-				return gm.units[i];
+		for (int i=0; i<units.Count; i++){
+			if (units[i].CurTile == tile) {
+				return units[i];
 			}
 		}
 		return null;
@@ -661,9 +701,4 @@ public class Board {
 		}
 	}
 
-	public List<Loot> LootList {
-		get {
-			return this.loot;
-		}
-	}
 }

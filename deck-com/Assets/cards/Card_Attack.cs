@@ -43,7 +43,12 @@ public class Card_Attack : Card {
 		finish ();
 	}
 
-	public override int getAIAttackRange(){
-		return getRangeForWeapon(rangeMod);
+	public override void resolveFromMove(MoveInfo move){
+		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
+		passInUnitCustom (targetUnit);
 	}
+
+//	public override int getAIAttackRange(){
+//		return getRangeForWeapon(rangeMod);
+//	}
 }

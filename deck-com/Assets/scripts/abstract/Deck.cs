@@ -45,6 +45,9 @@ public class Deck {
 
 	//manipulating the deck
 	void shuffle(){
+		if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
+			return;
+		}
 		for (int i = 0; i < drawPile.Count * 50; i++) {
 			int slotA = (int)Random.Range (0, drawPile.Count);
 			int slotB = (int)Random.Range (0, drawPile.Count);
