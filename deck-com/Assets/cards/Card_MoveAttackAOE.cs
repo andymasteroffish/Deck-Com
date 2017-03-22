@@ -23,18 +23,18 @@ public class Card_MoveAttackAOE : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForTile = true;
-		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
 	}
 
 	public override void passInTileCustom(Tile tile){
 		Owner.moveTo (tile);
 
-		List<Unit> units = Owner.GM.board.getAdjacentUnits (tile, true);
+		List<Unit> units = Owner.board.getAdjacentUnits (tile, true);
 		for (int i = 0; i < units.Count; i++) {
 			doDamageToUnit (units [i], damage);
 			//units [i].takeDamage (damage);

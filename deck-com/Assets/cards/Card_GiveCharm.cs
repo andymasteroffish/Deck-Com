@@ -25,7 +25,7 @@ public class Card_GiveCharm : Card {
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		if (anyUnit) {
-			Owner.GM.board.highlightAllUnits (true, true, aidHighlightColor);
+			Owner.board.highlightAllUnits (true, true, aidHighlightColor);
 		} else {
 			Owner.setHighlighted (true, aidHighlightColor);
 		}

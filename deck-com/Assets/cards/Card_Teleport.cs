@@ -26,14 +26,14 @@ public class Card_Teleport : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, targetRange, otherHighlightColor);
+		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, targetRange, otherHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		onTeleportStep = false;
 
-		Owner.GM.board.highlightUnitsInVisibleRange (Owner.CurTile, targetRange, true, true, otherHighlightColor);
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, targetRange, true, true, otherHighlightColor);
 
 	}
 
@@ -46,7 +46,7 @@ public class Card_Teleport : Card {
 			selectedUnit = unit;
 
 			//highlight available spots
-			Owner.GM.board.highlightTilesInRange(selectedUnit.CurTile, moveRange, Tile.Cover.Part, false, otherHighlightColor);
+			Owner.board.highlightTilesInRange(selectedUnit.CurTile, moveRange, Tile.Cover.Part, false, otherHighlightColor);
 		}
 	}
 
@@ -54,7 +54,7 @@ public class Card_Teleport : Card {
 	public override void passInTileCustom(Tile tile){
 		if (onTeleportStep) {
 			selectedUnit.moveTo (tile);
-			Owner.GM.board.clearHighlights ();
+			Owner.board.clearHighlights ();
 
 			onTeleportStep = false;
 			WaitingForTile = false;

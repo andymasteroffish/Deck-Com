@@ -24,20 +24,20 @@ public class Card_MoveAndAttack : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		onAttackStep = false;
-		Owner.GM.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
 	}
 
 	//moving
 	public override void passInTileCustom(Tile tile){
 		if (!onAttackStep) {
 			Owner.moveTo (tile);
-			Owner.GM.board.clearHighlights ();
+			Owner.board.clearHighlights ();
 
 			onAttackStep = true;
 			WaitingForUnit = true;

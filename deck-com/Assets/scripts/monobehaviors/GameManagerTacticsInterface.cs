@@ -73,7 +73,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//testing
 		if (Input.GetKeyDown (KeyCode.T)) {
-			float startTime = Time.time;
+			float startTime = Time.realtimeSinceStartup;
+			Board.debugCounter = 0;
 			TurnInfo turn = gm.getAIMove (0, gm.board, gm.board, 0);
 			turn.print (gm.board);
 //			for (int i=0; i<gm.board.units[0].deck.Hand.Count; i++){
@@ -82,24 +83,24 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 //					Board newBoard = gm.board.resolveMoveAndReturnResultingBoard (move);
 //				}
 //			}
-			Debug.Log ("it took " + (Time.time - startTime));
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime)+ " seconds and "+Board.debugCounter+" boards");
 		}
 		if (Input.GetKeyDown (KeyCode.Y)) {
 			Debug.Log ("GO mmove!");
-
-			MoveInfo move = new MoveInfo ();
-			move.unitID = 0;
-			move.cardID = 1;
-			move.targetTilePos = new TilePos (3, 3);
-			Board board1 = gm.board.resolveMoveAndReturnResultingBoard (move);
-			board1.print();
-
-			MoveInfo move2 = new MoveInfo ();
-			move2.unitID = 0;
-			move2.cardID = 2;
-			move2.targetTilePos = new TilePos (2, 4);
-			Board board2 = board1.resolveMoveAndReturnResultingBoard (move2);
-			board2.print();
+//
+//			MoveInfo move = new MoveInfo ();
+//			move.unitID = 0;
+//			move.cardIDName = gm.board.units[;
+//			move.targetTilePos = new TilePos (3, 3);
+//			Board board1 = gm.board.resolveMoveAndReturnResultingBoard (move);
+//			board1.print();
+//
+//			MoveInfo move2 = new MoveInfo ();
+//			move2.unitID = 0;
+//			move2.cardIDName = 2;
+//			move2.targetTilePos = new TilePos (2, 4);
+//			Board board2 = board1.resolveMoveAndReturnResultingBoard (move2);
+//			board2.print();
 		}
 		if (Input.GetKeyDown (KeyCode.P)) {
 			gm.board.print ();

@@ -239,11 +239,11 @@ public class GameManager {
 
 	//AI shit
 	public TurnInfo getAIMove(int unitID, Board curBoard, Board originalBoard, int curDepth){
-		Debug.Log ("get move at depth " + curDepth);
+		//Debug.Log ("get move at depth " + curDepth);
 		List<MoveInfo> allMoves = curBoard.getAllMovesForUnit (unitID);
 
 		if (allMoves.Count == 0) {
-			Debug.Log ("null at depth " + curDepth);
+			//Debug.Log ("null at depth " + curDepth);
 			return null;
 		}
 
@@ -262,6 +262,8 @@ public class GameManager {
 			TurnInfo turn = new TurnInfo (move);
 
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
+			//evaluate
+			newBoard.compareBoardSates(originalBoard, !curBoard.units[unitID].isPlayerControlled, ref turn);
 
 			TurnInfo followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth+1);
 
@@ -269,16 +271,26 @@ public class GameManager {
 				turn.addMoves (followingMoves);
 			}
 
-			//evaluate
-			newBoard.compareBoardSates(originalBoard, ref turn);
 			potentialTurns.Add (turn);
 		}
 
-		//sort the potential turns based on the evaluation
-
-		//return the best one
-
-		return potentialTurns[0];
+		//find the best one
+		//int bestID = 0;
+		int bestValue = -1000;
+		for (int i = 0; i < potentialTurns.Count; i++) {
+			if (potentialTurns [i].totalValue > bestValue) {
+				bestValue = potentialTurns [i].totalValue;
+			}
+		}
+		//get a list of all moves with that value
+		List<TurnInfo> goodTurns = new List<TurnInfo>();
+		for (int i = 0; i < potentialTurns.Count; i++) {
+			if (potentialTurns [i].totalValue == bestValue) {
+				goodTurns.Add(potentialTurns [i]);
+			}
+		}
+		//return one of them
+		return goodTurns[ (int)Random.Range(0,goodTurns.Count) ];
 	}
 
 

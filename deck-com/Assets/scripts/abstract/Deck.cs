@@ -64,6 +64,15 @@ public class Deck {
 		updateCardsDisabled ();
 	}
 
+	public Card getCardInHandFromID(string idName){
+		for (int i=0; i<hand.Count; i++){
+			if (hand[i].idName == idName){
+				return hand [i];
+			}
+		}
+		Debug.Log ("HAND CARD NOT FOUND!");
+		return null;
+	}
 	//manipulating the deck
 	void shuffle(){
 		if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {

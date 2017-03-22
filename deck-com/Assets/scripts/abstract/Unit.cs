@@ -266,7 +266,7 @@ public class Unit {
 		//reduce the actions
 		actionsLeft -= card.getNumActionsNeededToPlay();
 
-		Debug.Log ("I just played " + card.name + " and have " + actionsLeft + " actions left");
+		//Debug.Log ("I just played " + card.name + " and have " + actionsLeft + " actions left");
 
 		//check which cards can still be played
 		deck.updateCardsDisabled();

@@ -116,7 +116,7 @@ public class CardGO : MonoBehaviour {
 	void OnMouseExit(){
 		card.MouseIsOver = false;
 		if (!card.IsActive && card.Owner.GM.activeCard == null) {
-			card.Owner.GM.board.clearHighlights ();
+			card.Owner.board.clearHighlights ();
 		}
 		card.mouseExitEffects ();
 	}

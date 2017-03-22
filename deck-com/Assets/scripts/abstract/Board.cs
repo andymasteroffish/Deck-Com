@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class Board {
 
-	public static int debugCounter;
+	public static int debugCounter;	//testing
 	
 	private LevelGen levelGen;
 
@@ -35,7 +35,7 @@ public class Board {
 		isAISim = true;
 
 		debugCounter++;
-		Debug.Log ("board num " + debugCounter);
+		//Debug.Log ("board num " + debugCounter);
 
 		levelGen = null;
 		//info
@@ -133,11 +133,11 @@ public class Board {
 
 	//resolving moves
 	public void resolveMove(MoveInfo move){
-		units [move.unitID].deck.Hand [move.cardID].resolveFromMove (move);
+		units [move.unitID].deck.getCardInHandFromID(move.cardIDName).resolveFromMove (move);
 	}
 
 	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
-		Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
+		//Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
 		units [move.unitID].isActingAIUnit = true;
 		Board newBoard = new Board(this);
 		newBoard.resolveMove (move);
@@ -762,28 +762,27 @@ public class Board {
 		int actionsLeft = units [unitID].ActionsLeft;
 		Debug.Log ("unit actions "+actionsLeft+" hand count " + units [unitID].deck.Hand.Count);
 		for (int i = 0; i < units [unitID].deck.Hand.Count; i++) {
-			Debug.Log (units [unitID].deck.Hand[i].idName + " needs " + units [unitID].deck.Hand [i].getNumActionsNeededToPlay ());
+			//Debug.Log (units [unitID].deck.Hand[i].idName + " needs " + units [unitID].deck.Hand [i].getNumActionsNeededToPlay ());
 			if (actionsLeft >= units [unitID].deck.Hand [i].getNumActionsNeededToPlay ()) {
-				Debug.Log ("add moves for card");
+				//Debug.Log ("add moves for card");
 				//UNION WOULD REMOVE DUPLICATES
 				moves.AddRange(getAllMovesForCard(unitID, i));
 			}
 		}
-		Debug.Log ("found " + moves.Count + " moves");
+		//Debug.Log ("found " + moves.Count + " moves");
 		return moves;
 	}
 	public List<MoveInfo> getAllMovesForCard(int unitID, int cardID){
 		List<MoveInfo> moves = new List<MoveInfo> ();
 		clearHighlights ();
-		units[unitID].deck.Hand[cardID].selectCard (true);
-		if (units [unitID].deck.Hand [cardID].Owner.board != this) {
-			Debug.Log ("FUCK");
-		}
+		Card thisCard = units [unitID].deck.Hand [cardID];
+		thisCard.selectCard (true);
+
 		//go through all highlighted tiles
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
 				if (grid [x, y].IsHighlighted) {
-					MoveInfo move = new MoveInfo (unitID, cardID, grid [x, y].Pos);
+					MoveInfo move = new MoveInfo (unitID, thisCard.idName, grid [x, y].Pos);
 					moves.Add (move);
 				}
 			}
@@ -792,13 +791,13 @@ public class Board {
 		//go through all highlighted units
 		for (int i = 0; i < units.Count; i++) {
 			if (units [i].IsHighlighted) {
-				MoveInfo move = new MoveInfo (unitID, cardID, units[i].CurTile.Pos);
+				MoveInfo move = new MoveInfo (unitID, thisCard.idName, units[i].CurTile.Pos);
 				moves.Add (move);
 			}
 		}
 
 		//Debug.Log ("found " + moves.Count + " moves for " + units [unitID].deck.Hand [cardID].idName);
-		units [unitID].deck.Hand [cardID].cancel ();
+		thisCard.cancel ();
 		clearHighlights ();
 		return moves;
 	}
@@ -813,10 +812,76 @@ public class Board {
 		return -1;
 	}
 
-	public void compareBoardSates(Board oldBoard, ref TurnInfo turnInfo){
-		//PLACEHOLDER
-		turnInfo.isFlanking = true;
-		turnInfo.lowestCover = Tile.Cover.Full;
+	public void compareBoardSates(Board oldBoard, bool rootingForAI, ref TurnInfo info){
+		//create unit lists. These lists should line up exactly. it is bad if they don't
+		List<Unit> curAllies = new List<Unit>();
+		List<Unit> oldAllies = new List<Unit>();
+		List<Unit> curEnemies = new List<Unit> ();
+		List<Unit> oldEnemies = new List<Unit>();
+
+		info.resetEvaluations ();
+
+		//sepeare them into allies on enemies depending on which side we are trying to get a move for
+		foreach (Unit unit in units) {
+			if (unit.isPlayerControlled == rootingForAI) {
+				//Debug.Log ("I hate " + unit.unitName + " on " + unit.CurTile.Pos.x + "," + unit.CurTile.Pos.y);
+				curEnemies.Add (unit);
+			} else {
+				//Debug.Log ("I love " + unit.unitName + " on " + unit.CurTile.Pos.x + "," + unit.CurTile.Pos.y);
+				curAllies.Add (unit);
+			}
+		}
+		foreach (Unit unit in oldBoard.units) {
+			if (unit.isPlayerControlled == rootingForAI) {
+				oldEnemies.Add (unit);
+			} else {
+				oldAllies.Add (unit);
+			}
+		}
+
+		//sanity check
+		if (oldEnemies.Count != curEnemies.Count || oldAllies.Count != curAllies.Count) {
+			Debug.Log ("BAD BAD BAD BAD");
+		}
+
+		for (int i = 0; i < oldEnemies.Count; i++) {
+			//will enemies be damaged?
+			if (curEnemies[i].health != oldEnemies[i].health){
+				info.numEnemiesDamaged++;
+				info.totalEnemyDamage += oldEnemies[i].health-curEnemies[i].health;
+			}
+
+			//will enemies be killed?
+			if (curEnemies[i].isDead && !oldEnemies[i].isDead){
+				info.numEnemiesKilled ++;
+			}
+		}
+
+		for (int i = 0; i < oldAllies.Count; i++) {
+			//will allies be damaged?
+			if (curAllies[i].health != oldAllies[i].health){
+				info.numAlliesDamaged++;
+				info.totalAllyDamage += oldAllies[i].health-curAllies[i].health;
+			}
+
+			//will allies be killed?
+			if (curAllies[i].isDead && !oldAllies[i].isDead){
+				info.numAlliesKilled ++;
+			}
+		}
+
+		//what is the average cover for allies?
+
+		//are any allies flanked?
+
+		//what is the average cover for enemies?
+
+		//are any enemies flanked?
+
+		//have allies retreated or advanced?
+
+		//tally it all up
+		info.calculateTotalValue();
 	}
 
 	//*************

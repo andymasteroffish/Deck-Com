@@ -178,7 +178,7 @@ public class Card {
 	void OnMouseExit(){
 		mouseIsOver = false;
 		if (!isActive && Owner.GM.activeCard == null) {
-			owner.GM.board.clearHighlights ();
+			Owner.board.clearHighlights ();
 		}
 		mouseExitEffects ();
 	}
@@ -229,7 +229,7 @@ public class Card {
 	public void mouseEnterForWeapon(int rangeMod){
 		int range = getRangeForWeapon (rangeMod);
 
-		owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
+		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
 	}
 
 	public void selectCardForWeapon(int rangeMod){
@@ -240,7 +240,7 @@ public class Card {
 			range += owner.Charms [i].getWeaponRangeMod (this);
 		}
 
-		Owner.GM.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
 	}
 
 	public void setPotentialTargetInfoTextForWeapon(Unit unit, int damageMod){
@@ -264,7 +264,7 @@ public class Card {
 		}
 
 		//calculate cover
-		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
+		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
 		text += "\n"+getInfoStringForCover (coverVal)+"\n";
 
 		//print the total
@@ -281,8 +281,8 @@ public class Card {
 			damageVal += owner.Charms [i].getWeaponDamageMod (this, unit);
 		}
 
-		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
-		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
+		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
+		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
 
 		if (damageVal < 0) {
 			damageVal = 0;

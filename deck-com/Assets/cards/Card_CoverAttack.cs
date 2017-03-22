@@ -43,8 +43,8 @@ public class Card_CoverAttack : Card {
 	public override void passInUnitCustom(Unit unit){
 
 		//kill cover
-		while (Owner.GM.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile) != null) {
-			Owner.GM.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile).setCover (Tile.Cover.None); 
+		while (Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile) != null) {
+			Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile).setCover (Tile.Cover.None); 
 		}
 
 		//do the damage

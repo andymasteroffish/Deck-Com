@@ -37,22 +37,22 @@ public class Card_BasicAOEAttack : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.GM.board.highlightTilesInVisibleRange(Owner.CurTile, throwRange, attackHighlightColor);
+		Owner.board.highlightTilesInVisibleRange(Owner.CurTile, throwRange, attackHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForTile = true;
-		Owner.GM.board.highlightTilesInVisibleRange(Owner.CurTile, throwRange, attackHighlightColor);
+		Owner.board.highlightTilesInVisibleRange(Owner.CurTile, throwRange, attackHighlightColor);
 	}
 
 	public override void passInTileCustom(Tile tile){
-		List<Tile> tiles = Owner.GM.board.getTilesInRange (tile, damageRange, Tile.Cover.Full, true);// Owner.GM.board.getTilesInDist (tile, damageRange);
+		List<Tile> tiles = Owner.board.getTilesInRange (tile, damageRange, Tile.Cover.Full, true);// Owner.board.getTilesInDist (tile, damageRange);
 
 		for (int i = 0; i < tiles.Count; i++) {
 			if (destroysCover) {
 				tiles [i].setCover (Tile.Cover.None);
 			}
-			Unit thisUnit = Owner.GM.board.getUnitOnTile (tiles [i]);
+			Unit thisUnit = Owner.board.getUnitOnTile (tiles [i]);
 			if (thisUnit != null) {
 				if (harmsFriendly || (thisUnit.isPlayerControlled != Owner.isPlayerControlled)) {
 					doDamageToUnit (thisUnit, damage);

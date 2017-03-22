@@ -25,7 +25,7 @@ public class Card_AttackIgnoreWeapon : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.GM.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
+		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
@@ -45,7 +45,7 @@ public class Card_AttackIgnoreWeapon : Card {
 		}
 
 		//calculate cover
-		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
+		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
 		text += "\n"+getInfoStringForCover (coverVal)+"\n";
 
 		//print the total
@@ -57,14 +57,14 @@ public class Card_AttackIgnoreWeapon : Card {
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
-		Owner.GM.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){
 		int damageVal = damage;
 
-		Tile.Cover coverVal = Owner.GM.board.getCover (Owner, unit);
-		damageVal = Owner.GM.board.getNewDamageValFromCover (damageVal, coverVal);
+		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
+		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
 
 		if (damageVal < 0) {
 			damageVal = 0;
