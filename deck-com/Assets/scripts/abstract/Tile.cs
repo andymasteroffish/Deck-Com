@@ -4,20 +4,19 @@ using System.Collections;
 
 public class Tile {
 
+	public enum Direction{Up, Right, Down, Left, None};
+	public enum Cover{None, Part, Full};
+	public enum SpawnProperty{None, Player, Foe, Exit};
+
+
 	private GameManager gm;
 
 
 	public bool useGameObject;
 
-	//REMOVE THIS ONCE YOUR BOARD DOE SNOT USE RAYCASTING!!!!
+	//REMOVE THIS ONCE YOUR BOARD DOES NOT USE RAYCASTING!!!!
 	//if this tile does not need any visual representaiton, the GameObject will be null
 	public TileGO GO;
-
-
-
-	public enum Direction{Up, Right, Down, Left, None};
-	public enum Cover{None, Part, Full};
-	public enum SpawnProperty{None, Player, Foe, Exit};
 
 	private Cover cover;
 	public SpawnProperty spawnProperty;
@@ -57,6 +56,19 @@ public class Tile {
 		highlightCol = Color.white;
 
 		setHighlighted (false);
+	}
+
+	//creating new tiles for AI
+	public Tile(Tile parent){
+		pos = parent.pos;	//tile pos never changes so it can be a direct reference
+		spawnProperty = parent.spawnProperty;
+
+		useGameObject = false;
+		GO = null;
+
+		cover = parent.cover;
+		isHighlighted = parent.isHighlighted;
+		highlightCol = parent.highlightCol;
 	}
 
 	public void setInfo(Tile[] _adjacent){

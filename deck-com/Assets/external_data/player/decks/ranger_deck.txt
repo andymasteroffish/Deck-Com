@@ -1,6 +1,6 @@
 attackBasic
 move4
-attackBasic
+move6
 attackBasic
 attackBasic
 attackBasic

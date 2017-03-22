@@ -56,7 +56,7 @@ public class Charm  {
 	public virtual void setupCustom(){}
 
 	public void setActive(bool isActive){
-		//when we first actovate, get a new shell game object to display the charm
+		//when we first activate, get a new shell game object to display the charm
 		if (isActive && useGameObject) {
 			GameObjectManager.instance.getCharmGO ().activate(this);
 		}

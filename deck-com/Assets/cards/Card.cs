@@ -102,9 +102,11 @@ public class Card {
 		return actionCost;
 	}
 		
-	public void selectCard(){
-		isActive = true;
-		owner.GM.setCardActive (this);
+	public void selectCard(bool isForAI=false){
+		if (!isForAI) {
+			isActive = true;
+			owner.GM.setCardActive (this);
+		}
 		selectCardCustom ();
 	}
 	public virtual void selectCardCustom(){}

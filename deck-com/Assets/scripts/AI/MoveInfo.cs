@@ -4,17 +4,20 @@ using UnityEngine;
 
 public class MoveInfo {
 
-	//public Unit actingUnit;
-	public Card card;
+	public int unitID;
+	public int cardID;
+
 	public TilePos targetTilePos; //can refer to a tile or unit on that tile
-
-	public TilePos secondTarget;
-
-
-	//values for evaluating AI moves
-	public Tile.Cover lowestCover;
-	public bool isFlanking;
-	//etc.
+	public TilePos secondTarget;	//this should probably just be an array or a list
 
 
+
+	public MoveInfo(){
+	}
+
+	public MoveInfo(int unit, int card, TilePos target){
+		unitID = unit;
+		cardID = card;
+		targetTilePos = target;
+	}
 }

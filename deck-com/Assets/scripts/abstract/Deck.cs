@@ -9,16 +9,37 @@ public class Deck {
 	private Unit owner;
 
 	//the piles
-	private List<Card> drawPile = new List<Card> ();
-	private List<Card> discardPile = new List<Card> ();
-	private List<Card> hand = new List<Card>();
+	private List<Card> drawPile;// = new List<Card> ();
+	private List<Card> discardPile;// = new List<Card> ();
+	private List<Card> hand;// = new List<Card>();
 
 	public Deck(){
+	}
+
+	//creating an AI deck
+	public Deck(Deck parent, Unit _owner){
+		owner = _owner;
+
+		drawPile = new List<Card> ();
+		discardPile = new List<Card> ();
+		hand = new List<Card>();
+
+		//let's try leaving deck and discard empty and only fill up hand
+		//THIS WILL MAKE AI FOR CARDS THAT DRAW CARDS OR OTHERWISE MANIPULATE THE DECK IMPOSSIBLE
+		foreach (Card card in parent.hand) {
+			Card newCard = CardManager.instance.getCardFromXMLNode (card.node);
+			newCard.setup (owner, this);
+			hand.Add (newCard);
+		}
 	}
 
 	//setup
 	public void setup(Unit _owner, string deckListPath){
 		owner = _owner;
+
+		drawPile = new List<Card> ();
+		discardPile = new List<Card> ();
+		hand = new List<Card>();
 
 		//create a card for each one in the list and add it to the deck
 		List<Card> cards = CardManager.instance.getDeckFromTextFile (deckListPath);

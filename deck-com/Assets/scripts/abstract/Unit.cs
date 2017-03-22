@@ -18,6 +18,8 @@ public class Unit {
 	private bool isActive;
 	private bool turnIsDone;
 
+	public bool useGO;
+
 	//stats
 	public int baseHealth = 5;
 	public int health;
@@ -49,6 +51,12 @@ public class Unit {
 	//utility
 	public bool mouseIsOver;
 
+	//some stuff for AI work
+	public bool isAISimUnit;
+	public bool isActingAIUnit;		//gets cards and deck when an AI board is made
+	public bool unitHasChangedFlag;	//indiactes that something has ocurred to this unit in the process of resolving an AI move
+	public int  aiHandSize;
+
 	public Unit(XmlNode node){
 		unitName = node ["name"].InnerXml;
 		isPlayerControlled = bool.Parse(node["player_controlled"].InnerXml);
@@ -78,6 +86,12 @@ public class Unit {
 				charmIDs.Add (n.InnerXml);
 			}
 		}
+
+		useGO = true;
+
+		isActingAIUnit = false;
+		isAISimUnit = false;
+		unitHasChangedFlag = false;
 	}
 
 	public void setup(GameManager _gm, Board _board, Tile startTile){
@@ -105,16 +119,65 @@ public class Unit {
 
 		setHighlighted (false);
 
-		setupCustom ();
-
 		//create the game object shell
-		GameObjectManager.instance.getUnitGO().activate(this);
+		if (useGO) {
+			GameObjectManager.instance.getUnitGO ().activate (this);
+		}
 	}
-	public virtual void setupCustom(){}
+
+	//creating a duplicate unit for AI
+	public Unit(Unit parent, Board _board, Tile _curTile){
+		gm = parent.gm;
+		board = _board;
+		curTile = _curTile;
+
+		useGO = false;
+
+		unitName = parent.unitName;
+
+		isActingAIUnit = parent.isActingAIUnit;
+		unitHasChangedFlag = parent.unitHasChangedFlag;
+		isAISimUnit = true;
+
+		isPlayerControlled = parent.isPlayerControlled;
+		sprite = null;
+
+		baseHealth = parent.baseHealth;
+		health = parent.health;
+		isDead = parent.isDead;
+
+		canPickUpLoot = parent.canPickUpLoot;
+
+		baseHandSize = parent.baseHandSize;
+
+		if (!isActingAIUnit) {
+			deck = null;
+			aiHandSize = parent.aiHandSize;
+			if (parent.deck != null) {
+				aiHandSize = parent.deck.Hand.Count;
+			}
+		} else {
+			deck = new Deck (parent.deck, this);
+		}
+
+		baseActions = parent.baseActions;
+		actionsLeft = parent.actionsLeft;
+
+		//this is ugly
+		charms = new List<Charm> ();
+		for (int i = 0; i < parent.charms.Count; i++) {
+			addCharm (parent.charms [i].idName);
+		}
+		weapon = charms[0];
+
+		isHighlighted = parent.isHighlighted;
+		highlightCol = parent.highlightCol;
+
+	}
 
 	public void addCharm(string idName){
 		Charm thisCharm = CharmManager.instance.getCharmFromIdName (idName);
-		thisCharm.setup (this, true, idName);
+		thisCharm.setup (this, useGO, idName);
 		if (isActive) {
 			thisCharm.setActive (true);
 		}
@@ -203,6 +266,8 @@ public class Unit {
 		//reduce the actions
 		actionsLeft -= card.getNumActionsNeededToPlay();
 
+		Debug.Log ("I just played " + card.name + " and have " + actionsLeft + " actions left");
+
 		//check which cards can still be played
 		deck.updateCardsDisabled();
 
@@ -273,8 +338,10 @@ public class Unit {
 
 	public void killUnit(){
 		isDead = true;
-		board.removeUnit (this);
-		board.checksWhenUnitDies (this);
+		if (!isAISimUnit) {
+			board.removeUnit (this);
+			board.checksWhenUnitDies (this);
+		}
 	}
 
 	//other effects
@@ -322,7 +389,7 @@ public class Unit {
 		}
 	}
 
-	public float ActionsLeft{
+	public int ActionsLeft{
 		get{
 			return this.actionsLeft;
 		}

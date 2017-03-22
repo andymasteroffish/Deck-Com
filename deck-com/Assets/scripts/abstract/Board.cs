@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class Board {
 
-	private GameManager gm;
+	public static int debugCounter;
+	
 	private LevelGen levelGen;
 
 	private int cols, rows;
@@ -13,15 +14,67 @@ public class Board {
 
 	private Tile[,] grid = null;
 
-	public List<Unit> units = new List<Unit>();
-	public List<Loot> loot = new List<Loot>();
+	public List<Unit> units;
+	public List<Loot> loot;
 
 	public int partialCoverDamageReduction = 1;
 	public float fullCoverDamagePrc = 0.5f;
 
+	public bool isAISim;
+
 	public Board(){
-		gm = GameManagerTacticsInterface.instance.gm;
+		isAISim = false;
+		debugCounter = 0;
+		units = new List<Unit> ();
+		loot = new List<Loot> ();
 		levelGen = new LevelGen ();
+	}
+
+	//creating a board for AI stuff
+	public Board(Board parent){
+		isAISim = true;
+
+		debugCounter++;
+		Debug.Log ("board num " + debugCounter);
+
+		levelGen = null;
+		//info
+		cols = parent.cols;
+		rows = parent.rows;
+		partialCoverDamageReduction = parent.partialCoverDamageReduction;
+		fullCoverDamagePrc = parent.fullCoverDamagePrc;
+		diagonalVal = parent.diagonalVal;
+
+		//tiles
+		grid = new Tile[cols,rows];
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				grid [x, y] = new Tile (parent.grid [x, y]);
+			}
+		}
+
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				Tile[] adjacent = new Tile[] {null, null, null, null};
+				if (x < cols-1)	adjacent [(int)Tile.Direction.Right]= grid [x+1, y];
+				if (x > 0)		adjacent [(int)Tile.Direction.Left] = grid [x-1, y];
+				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
+				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
+				grid [x, y].setInfo (adjacent);
+			}
+		}
+
+		//units
+		units = new List<Unit>();
+		for (int i = 0; i < parent.units.Count; i++) {
+			Tile startTile = grid [parent.units [i].CurTile.Pos.x, parent.units [i].CurTile.Pos.y];
+			Unit thisUnit = new Unit (parent.units [i], this, startTile);
+			units.Add (thisUnit);
+		}
+
+		//loot is not represented and can stay empty
+		loot = new List<Loot>();
+
 	}
 
 
@@ -43,7 +96,6 @@ public class Board {
 				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
 				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
 				grid [x, y].setInfo (adjacent);
-				//grid[x,y].transform.parent = transform;
 			}
 		}
 
@@ -81,7 +133,15 @@ public class Board {
 
 	//resolving moves
 	public void resolveMove(MoveInfo move){
-		move.card.resolveFromMove (move);
+		units [move.unitID].deck.Hand [move.cardID].resolveFromMove (move);
+	}
+
+	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
+		Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
+		units [move.unitID].isActingAIUnit = true;
+		Board newBoard = new Board(this);
+		newBoard.resolveMove (move);
+		return newBoard;
 	}
 
 	//setting things to be selectables
@@ -691,6 +751,131 @@ public class Board {
 		}
 
 		return null;
+	}
+
+
+	//*************
+	//AI stuff
+	//*************
+	public List<MoveInfo> getAllMovesForUnit(int unitID){
+		List<MoveInfo> moves = new List<MoveInfo> ();
+		int actionsLeft = units [unitID].ActionsLeft;
+		Debug.Log ("unit actions "+actionsLeft+" hand count " + units [unitID].deck.Hand.Count);
+		for (int i = 0; i < units [unitID].deck.Hand.Count; i++) {
+			Debug.Log (units [unitID].deck.Hand[i].idName + " needs " + units [unitID].deck.Hand [i].getNumActionsNeededToPlay ());
+			if (actionsLeft >= units [unitID].deck.Hand [i].getNumActionsNeededToPlay ()) {
+				Debug.Log ("add moves for card");
+				//UNION WOULD REMOVE DUPLICATES
+				moves.AddRange(getAllMovesForCard(unitID, i));
+			}
+		}
+		Debug.Log ("found " + moves.Count + " moves");
+		return moves;
+	}
+	public List<MoveInfo> getAllMovesForCard(int unitID, int cardID){
+		List<MoveInfo> moves = new List<MoveInfo> ();
+		clearHighlights ();
+		units[unitID].deck.Hand[cardID].selectCard (true);
+		if (units [unitID].deck.Hand [cardID].Owner.board != this) {
+			Debug.Log ("FUCK");
+		}
+		//go through all highlighted tiles
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				if (grid [x, y].IsHighlighted) {
+					MoveInfo move = new MoveInfo (unitID, cardID, grid [x, y].Pos);
+					moves.Add (move);
+				}
+			}
+		}
+
+		//go through all highlighted units
+		for (int i = 0; i < units.Count; i++) {
+			if (units [i].IsHighlighted) {
+				MoveInfo move = new MoveInfo (unitID, cardID, units[i].CurTile.Pos);
+				moves.Add (move);
+			}
+		}
+
+		//Debug.Log ("found " + moves.Count + " moves for " + units [unitID].deck.Hand [cardID].idName);
+		units [unitID].deck.Hand [cardID].cancel ();
+		clearHighlights ();
+		return moves;
+	}
+
+	public int getUnitID(Unit unit){
+		for(int i=0; i<units.Count; i++){
+			if (units[i] == unit){
+				return i;
+			}
+		}
+		Debug.Log ("UNIT NOT FOUND");
+		return -1;
+	}
+
+	public void compareBoardSates(Board oldBoard, ref TurnInfo turnInfo){
+		//PLACEHOLDER
+		turnInfo.isFlanking = true;
+		turnInfo.lowestCover = Tile.Cover.Full;
+	}
+
+	//*************
+	//testing
+	//*************
+	public void print(){
+		string output ="";
+		for (int y = rows-1; y >= 0; y--) {
+			string thisLine = "";
+			for (int x = 0; x < cols; x++) {
+				char thisChar = '-';
+				if (grid [x, y].CoverVal == Tile.Cover.Full) {
+					thisChar = 'X';
+				}
+				if (grid [x, y].CoverVal == Tile.Cover.Part) {
+					thisChar = '/';
+				}
+				foreach (Unit unit in units) {
+					if (unit.CurTile.Pos.x == x && unit.CurTile.Pos.y == y) {
+						if (unit.isPlayerControlled) {
+							thisChar = 'P';
+						} else {
+							if (unit.isDead) {
+								thisChar = 'D';
+							}
+							if (unit.health == 0) {
+								thisChar = '0';
+							}
+							if (unit.health == 1) {
+								thisChar = '1';
+							}
+							if (unit.health == 2) {
+								thisChar = '2';
+							}
+							if (unit.health == 3) {
+								thisChar = '3';
+							}
+							if (unit.health == 4) {
+								thisChar = '4';
+							}
+							if (unit.health == 5) {
+								thisChar = '5';
+							}
+							if (unit.health == 6) {
+								thisChar = '6';
+							}
+							if (unit.health == 7) {
+								thisChar = '7';
+							}
+						}
+					}
+				}
+				thisLine += thisChar;
+			}
+			thisLine += "\n";
+			output += thisLine;
+		}
+
+		Debug.Log (output);
 	}
 
 	//setters and getters

@@ -237,6 +237,49 @@ public class GameManager {
 		EndGameInfoHolder.instance.lootList = loot;
 	}
 
+	//AI shit
+	public TurnInfo getAIMove(int unitID, Board curBoard, Board originalBoard, int curDepth){
+		Debug.Log ("get move at depth " + curDepth);
+		List<MoveInfo> allMoves = curBoard.getAllMovesForUnit (unitID);
+
+		if (allMoves.Count == 0) {
+			Debug.Log ("null at depth " + curDepth);
+			return null;
+		}
+
+//		//take a look at how this move will look
+//		foreach(MoveInfo move in allMoves){
+//			Board newBoard = board.resolveMoveAndReturnResultingBoard (move);
+//			newBoard.compareBoardSates (board, ref move);
+//		}
+
+		//sort it to get the top X moves
+
+		//actually, let's just try it where we do all possible moves and let them all play out
+		List<TurnInfo> potentialTurns = new List<TurnInfo>();
+
+		foreach (MoveInfo move in allMoves) {
+			TurnInfo turn = new TurnInfo (move);
+
+			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
+
+			TurnInfo followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth+1);
+
+			if (followingMoves != null) {
+				turn.addMoves (followingMoves);
+			}
+
+			//evaluate
+			newBoard.compareBoardSates(originalBoard, ref turn);
+			potentialTurns.Add (turn);
+		}
+
+		//sort the potential turns based on the evaluation
+
+		//return the best one
+
+		return potentialTurns[0];
+	}
 
 
 	//unit tools
