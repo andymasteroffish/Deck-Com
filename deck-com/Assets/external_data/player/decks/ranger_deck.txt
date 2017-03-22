@@ -1,11 +1,11 @@
 move4
+bladeDash
 move4
 attackBasic
 attackBasic
 attackBasic
-moveAndAttack
-moveAndAttack
-bladeDash
 village
 village
+moveAndAttack
+moveAndAttack
 heal

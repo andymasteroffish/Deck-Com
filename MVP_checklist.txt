@@ -1,6 +1,6 @@
 MVP for Deck-Com
 
-[ ] - Basic AI
+[X] - Basic AI
 
 [X] - Collect Loot In Game
 

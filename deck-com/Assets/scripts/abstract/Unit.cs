@@ -57,6 +57,9 @@ public class Unit {
 	public bool unitHasChangedFlag;	//indiactes that something has ocurred to this unit in the process of resolving an AI move
 	public int  aiHandSize;
 
+	public TurnInfo aiTurnInfo;
+	public int curAITurnStep;
+
 	public Unit(XmlNode node){
 		unitName = node ["name"].InnerXml;
 		isPlayerControlled = bool.Parse(node["player_controlled"].InnerXml);
@@ -224,6 +227,13 @@ public class Unit {
 				canPickUpLoot = board.checkIfUnitIsCloseToLoot (this);
 			}
 		}
+
+		if (!isPlayerControlled && isActive){
+			Debug.Log ("GET ME SPIDERMAN");
+			aiTurnInfo = gm.getAIMove(board.getUnitID(this), board, board, 0);
+			aiTurnInfo.print (board);
+			curAITurnStep = 0;
+		}
 	}
 
 
@@ -253,6 +263,15 @@ public class Unit {
 			gm.tabActivePlayerUnit (1);
 		} else {
 			gm.tabActiveAIUnit (1);
+		}
+	}
+
+	public void turnEndCleanUp(){
+		isActingAIUnit = false;
+		if (isDead){
+			Debug.Log ("clean up " + unitName);
+			board.removeUnit (this);
+			board.checksWhenUnitDies (this);
 		}
 	}
 
@@ -338,10 +357,6 @@ public class Unit {
 
 	public void killUnit(){
 		isDead = true;
-		if (!isAISimUnit) {
-			board.removeUnit (this);
-			board.checksWhenUnitDies (this);
-		}
 	}
 
 	//other effects

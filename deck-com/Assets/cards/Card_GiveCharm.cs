@@ -36,4 +36,9 @@ public class Card_GiveCharm : Card {
 
 		finish ();
 	}
+
+	public override void resolveFromMove(MoveInfo move){
+		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
+		passInUnitCustom (targetUnit);
+	}
 }

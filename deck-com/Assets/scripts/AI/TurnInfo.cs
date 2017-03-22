@@ -18,6 +18,9 @@ public class TurnInfo {
 	public int totalAllyDamage;
 	public int numAlliesKilled;
 
+	//enemies/allies aided
+
+	//should like getting new charms too if they'll last more than the one turn
 
 	public TurnInfo(MoveInfo move){
 		totalValue = 0;
@@ -86,6 +89,6 @@ public class TurnInfo {
 
 		totalValue = (int)total;	//roudning to into to make other math easier
 
-		Debug.Log ("tot val " + totalValue);
+		//Debug.Log ("tot val " + totalValue);
 	}
 }

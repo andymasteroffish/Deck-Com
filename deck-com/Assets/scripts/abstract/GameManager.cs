@@ -95,7 +95,19 @@ public class GameManager {
 
 	public void endUnitTurn(){
 		clearActiveCard ();
+		for (int i = board.units.Count-1; i >= 0; i--) {
+			board.units [i].turnEndCleanUp ();
+		}
 		activeUnit.endTurn ();
+	}
+
+	public void advanceAITurn(){
+		if (activeUnit.curAITurnStep >= activeUnit.aiTurnInfo.moves.Count) {
+			activeUnit.endTurn ();
+		} else {
+			board.resolveMove (activeUnit.aiTurnInfo.moves [activeUnit.curAITurnStep]);
+			activeUnit.curAITurnStep++;
+		}
 	}
 
 	public void cancel(){

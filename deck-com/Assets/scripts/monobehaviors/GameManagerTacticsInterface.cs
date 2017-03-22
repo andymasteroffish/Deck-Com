@@ -55,7 +55,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//ending the turn for a unit
 		if (Input.GetKeyDown (KeyCode.Space)) {
-			gm.endUnitTurn ();
+			if (gm.activeUnit.isPlayerControlled) {
+				gm.endUnitTurn ();
+			} else {
+				gm.advanceAITurn ();
+			}
 		}
 
 		//pressing escape to cancel a move

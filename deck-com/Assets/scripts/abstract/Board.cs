@@ -218,7 +218,7 @@ public class Board {
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
 		foreach (Tile tile in selectable) {
 			foreach (Unit unit in units) {
-				if (unit.CurTile == tile) {
+				if (unit.CurTile == tile && !unit.isDead) {
 					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 						unit.setHighlighted (true, col);
 					}
@@ -760,7 +760,7 @@ public class Board {
 	public List<MoveInfo> getAllMovesForUnit(int unitID){
 		List<MoveInfo> moves = new List<MoveInfo> ();
 		int actionsLeft = units [unitID].ActionsLeft;
-		Debug.Log ("unit actions "+actionsLeft+" hand count " + units [unitID].deck.Hand.Count);
+		//Debug.Log ("unit actions "+actionsLeft+" hand count " + units [unitID].deck.Hand.Count);
 		for (int i = 0; i < units [unitID].deck.Hand.Count; i++) {
 			//Debug.Log (units [unitID].deck.Hand[i].idName + " needs " + units [unitID].deck.Hand [i].getNumActionsNeededToPlay ());
 			if (actionsLeft >= units [unitID].deck.Hand [i].getNumActionsNeededToPlay ()) {
