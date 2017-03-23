@@ -51,8 +51,6 @@ public class TurnInfo {
 		Unit unit = board.units [moves [0].unitID];
 		Debug.Log ("MY SEXY ASS TURN for "+unit.unitName);
 		Debug.Log ("value: " + totalValue);
-		calculateTotalValue ();
-		Debug.Log ("value: " + totalValue);
 		for (int i = 0; i < moves.Count; i++) {
 			Debug.Log (i + ": "+moves[i].cardIDName+" targetting "+moves[i].targetTilePos.x+","+moves[i].targetTilePos.y);
 		}

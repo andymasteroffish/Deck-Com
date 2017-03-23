@@ -195,7 +195,10 @@ public class Card {
 		return "No Cover";
 	}
 
-	public virtual void resolveFromMove(MoveInfo move){}
+	public virtual void resolveFromMove(MoveInfo move){
+		Debug.Log ("problem with: "+idName+" CARD HAS NOT BEEN SETUP TO RESOLVE FROM MOVE. THIS RESULT WILL PROBABLY BE NONSENSE");
+		finish ();
+	}
 
 	//**********************************
 	//showing information when a potential target is moused over

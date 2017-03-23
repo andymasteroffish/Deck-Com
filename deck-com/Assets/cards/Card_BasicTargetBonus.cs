@@ -48,4 +48,9 @@ public class Card_BasicTargetBonus : Card {
 
 		finish ();
 	}
+
+	public override void resolveFromMove(MoveInfo move){
+		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
+		passInUnitCustom (targetUnit);
+	}
 }

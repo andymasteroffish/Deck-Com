@@ -43,4 +43,8 @@ public class Card_MoveAttackAOE : Card {
 
 		finish ();
 	}
+
+	public override void resolveFromMove(MoveInfo move){
+		passInTileCustom ( Owner.board.Grid[move.targetTilePos.x, move.targetTilePos.y]);
+	}
 }

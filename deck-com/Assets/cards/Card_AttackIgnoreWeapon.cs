@@ -74,4 +74,9 @@ public class Card_AttackIgnoreWeapon : Card {
 		doDamageToUnit( unit, damage );
 		finish ();
 	}
+
+	public override void resolveFromMove(MoveInfo move){
+		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
+		passInUnitCustom (targetUnit);
+	}
 }

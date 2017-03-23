@@ -1,5 +1,7 @@
 move3
-aim
+bladeDash
+grenade
+coverAttack
 team_dash_gift
 attackR1D-1
 attackBasic
@@ -7,7 +9,6 @@ attackBasic
 move3
 attackBasic
 attackBasic
-
 move3
 move3
 move3

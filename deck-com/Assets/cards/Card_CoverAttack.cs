@@ -52,4 +52,9 @@ public class Card_CoverAttack : Card {
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}
+
+	public override void resolveFromMove(MoveInfo move){
+		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
+		passInUnitCustom (targetUnit);
+	}
 }

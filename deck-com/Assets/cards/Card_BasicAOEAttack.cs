@@ -62,6 +62,9 @@ public class Card_BasicAOEAttack : Card {
 		}
 
 		finish ();
+	}
 
+	public override void resolveFromMove(MoveInfo move){
+		passInTileCustom ( Owner.board.Grid[move.targetTilePos.x, move.targetTilePos.y]);
 	}
 }

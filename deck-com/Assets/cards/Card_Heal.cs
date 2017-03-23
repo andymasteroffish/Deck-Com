@@ -47,4 +47,9 @@ public class Card_Heal : Card {
 		unit.heal (healVal);
 		finish ();
 	}
+
+	public override void resolveFromMove(MoveInfo move){
+		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
+		passInUnitCustom (targetUnit);
+	}
 }
