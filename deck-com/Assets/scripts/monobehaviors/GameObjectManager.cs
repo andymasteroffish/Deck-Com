@@ -12,6 +12,7 @@ public class GameObjectManager : MonoBehaviour {
 	public GameObject actionMarkerPrefab;
 	public GameObject unitPrefab;
 	public GameObject lootPrefab;
+	public GameObject targetPrefab;
 
 	private List<TileGO> tiles = new List<TileGO>();
 	private List<CharmGO> charms = new List<CharmGO>();
@@ -19,6 +20,7 @@ public class GameObjectManager : MonoBehaviour {
 	private List<ActionMarkerGO> actionMarkers = new List<ActionMarkerGO>();
 	private List<UnitGO> units = new List<UnitGO> ();
 	private List<LootGO> loot = new List<LootGO> ();
+	private List<TargetGO> targets = new List<TargetGO>();
 
 	void Awake(){
 		if (instance == null) {
@@ -58,6 +60,17 @@ public class GameObjectManager : MonoBehaviour {
 		return GO;
 	}
 
+	public bool checkForDuplicateCharmGO(CharmGO charmGO){
+		for (int i = 0; i < charms.Count; i++) {
+			if (charms [i].IsActive) {
+				if (charms [i].parentCharm == charmGO.parentCharm && charms [i] != charmGO) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public CardGO getCardGO(){
 		//check if we have any inactive in the list
 		for (int i = 0; i < cards.Count; i++) {
@@ -73,6 +86,17 @@ public class GameObjectManager : MonoBehaviour {
 		return GO;
 	}
 
+	public bool checkForDuplicateCardGO(CardGO cardGO){
+		for (int i = 0; i < cards.Count; i++) {
+			if (cards [i].IsActive) {
+				if (cards [i].parentCard == cardGO.parentCard && cards [i] != cardGO) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	public ActionMarkerGO getActionMarkerGO(){
 		//check if we have any inactive in the list
 		for (int i = 0; i < actionMarkers.Count; i++) {
@@ -86,6 +110,17 @@ public class GameObjectManager : MonoBehaviour {
 		ActionMarkerGO GO = obj.GetComponent<ActionMarkerGO> ();
 		actionMarkers.Add (GO);
 		return GO;
+	}
+
+	public bool checkForDuplicateActionMarker(ActionMarkerGO marker){
+		for (int i = 0; i < actionMarkers.Count; i++) {
+			if (actionMarkers [i].IsActive) {
+				if (actionMarkers [i].Owner == marker.Owner && actionMarkers[i].IDNum == marker.IDNum && actionMarkers [i] != marker) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	public UnitGO getUnitGO(){
@@ -126,5 +161,28 @@ public class GameObjectManager : MonoBehaviour {
 		LootGO GO = obj.GetComponent<LootGO> ();
 		loot.Add (GO);
 		return GO;
+	}
+
+	public TargetGO getTargetGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < targets.Count; i++) {
+			if (targets [i].IsActive == false && !targets[i].DoingAnimation) {
+				return targets [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(targetPrefab) as GameObject;
+		TargetGO go = obj.GetComponent<TargetGO> ();
+		targets.Add (go);
+		return go;
+	}
+
+	public void turnOffAllTargets(){
+		for (int i = 0; i < targets.Count; i++) {
+			if (targets [i].IsActive) {
+				targets [i].deactivate ();
+			}
+		}
 	}
 }

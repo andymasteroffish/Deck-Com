@@ -9,3 +9,5 @@ village
 moveAndAttack
 moveAndAttack
 heal
+draw-a-card
+move3

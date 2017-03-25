@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/scenes/tactics_game.unity
+- path: Assets/scenes/deck_building.unity
   isLoaded: 1
   isActive: 1

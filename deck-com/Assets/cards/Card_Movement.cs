@@ -62,7 +62,4 @@ public class Card_Movement : Card {
 		passInTileCustom ( Owner.board.Grid[move.targetTilePos.x, move.targetTilePos.y]);
 	}
 
-//	public override int getAIMovementRange(){
-//		return range;
-//	}
 }

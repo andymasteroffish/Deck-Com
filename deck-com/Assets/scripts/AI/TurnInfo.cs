@@ -55,13 +55,15 @@ public class TurnInfo {
 			Debug.Log (i + ": "+moves[i].cardIDName+" targetting "+moves[i].targetTilePos.x+","+moves[i].targetTilePos.y);
 		}
 
-		Debug.Log ("stats:");
-		Debug.Log ("enemies damaged: " + numEnemiesDamaged);
-		Debug.Log ("total enemy damage: " + totalEnemyDamage);
-		Debug.Log ("enemies killed: " + numEnemiesKilled);
-		Debug.Log ("allies damaged: " + numAlliesDamaged);
-		Debug.Log ("total ally damage: " + totalAllyDamage);
-		Debug.Log ("allies killed: " + numAlliesKilled);
+		if (false) {
+			Debug.Log ("stats:");
+			Debug.Log ("enemies damaged: " + numEnemiesDamaged);
+			Debug.Log ("total enemy damage: " + totalEnemyDamage);
+			Debug.Log ("enemies killed: " + numEnemiesKilled);
+			Debug.Log ("allies damaged: " + numAlliesDamaged);
+			Debug.Log ("total ally damage: " + totalAllyDamage);
+			Debug.Log ("allies killed: " + numAlliesKilled);
+		}
 	}
 
 	public void resetEvaluations(){

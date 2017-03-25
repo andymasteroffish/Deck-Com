@@ -25,17 +25,44 @@ public class CardGO : MonoBehaviour {
 	//private Transform enterTrans, restTrans, endTrans = null;
 	bool needsAnimationPositions = true;
 	private Vector3 startPos, restPos, endPos;	//rest pos is the position of the far left card when it is not being raised up
+	private Vector3 startPosPlayer, restPosPlayer, endPosPlayer;
+	private Vector3 startPosAI, restPosAI, endPosAI;
+
+	private Vector3 aiRevealPos;
+	private bool inAiRevealSpot;
+
+	private bool playerControlled;
 
 	public void activate(Card _card){
 		card = _card;
 		isActive = true;
+		//check if this is redundant
+		if (GameObjectManager.instance.checkForDuplicateCardGO (this) == true) {
+			deactivate ();
+			return;
+		}
+
 		gameObject.SetActive (true);
 
+		playerControlled = card.Owner.isPlayerControlled;
+
+		inAiRevealSpot = false;
+
 		if (needsAnimationPositions) {
-			startPos = GameObject.Find ("card_startPos").transform.position;
-			restPos = GameObject.Find ("card_restPos").transform.position;
-			endPos = GameObject.Find ("card_endPos").transform.position;
+			startPosPlayer = GameObject.Find ("card_player_startPos").transform.position;
+			restPosPlayer = GameObject.Find ("card_player_restPos").transform.position;
+			endPosPlayer = GameObject.Find ("card_player_endPos").transform.position;
+
+			startPosAI = GameObject.Find ("card_ai_startPos").transform.position;
+			restPosAI = GameObject.Find ("card_ai_restPos").transform.position;
+			endPosAI = GameObject.Find ("card_ai_endPos").transform.position;
+
+			aiRevealPos = GameObject.Find ("card_ai_revealPos").transform.position;
 		}
+
+		startPos = playerControlled ? startPosPlayer : startPosAI;
+		restPos = playerControlled ? restPosPlayer : restPosAI;
+		endPos = playerControlled ? endPosPlayer : endPosAI;
 
 		gameObject.name = "card "+card.Owner.unitName+" "+card.name;
 
@@ -53,13 +80,12 @@ public class CardGO : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
 		//set the text
 		nameField.text = card.name;
 		descField.text = card.description;
 
 		//set the position (if we're not sliding it)
-		if (!doingAnimation) {
+		if (!doingAnimation && !inAiRevealSpot) {
 			Vector3 spritePos = new Vector3 (0, 0, 0);
 
 			if (card.mouseIsOver) {
@@ -85,7 +111,7 @@ public class CardGO : MonoBehaviour {
 		}
 		spriteRend.color = col;
 
-		//check if it is time to go away
+		//check if we need to move
 
 		//destroying a card entirely
 		if (!doingAnimation && card.isDead) {
@@ -94,6 +120,7 @@ public class CardGO : MonoBehaviour {
 
 		//putting a card in the discard
 		if (!doingAnimation && !card.Owner.deck.Hand.Contains (card)) {
+			StopAllCoroutines();
 			StartCoroutine(doMoveAnimation(endPos, moveTime, true));
 		}
 
@@ -101,6 +128,14 @@ public class CardGO : MonoBehaviour {
 		if (!doingAnimation && !card.Owner.IsActive){
 			StartCoroutine(doMoveAnimation(startPos, moveTime, true));
 		}
+
+
+		//showing an AI card
+		if (!doingAnimation && card.revealAICardFlag && !inAiRevealSpot) {
+			inAiRevealSpot = true;
+			StartCoroutine (doMoveAnimation (aiRevealPos, moveTime, false));
+		}
+			
 	}
 
 	Vector3 getPos(){
@@ -108,17 +143,21 @@ public class CardGO : MonoBehaviour {
 	}
 
 	void OnMouseEnter(){
-		card.MouseIsOver = true;
-		if (card.Owner.GM.activeCard == null) {
-			card.mouseEnterEffects ();
+		if (card.Owner.isPlayerControlled) {
+			card.MouseIsOver = true;
+			if (card.Owner.GM.activeCard == null) {
+				card.mouseEnterEffects ();
+			}
 		}
 	}
 	void OnMouseExit(){
-		card.MouseIsOver = false;
-		if (!card.IsActive && card.Owner.GM.activeCard == null) {
-			card.Owner.board.clearHighlights ();
+		if (card.Owner.isPlayerControlled) {
+			card.MouseIsOver = false;
+			if (!card.IsActive && card.Owner.GM.activeCard == null) {
+				card.Owner.board.clearHighlights ();
+			}
+			card.mouseExitEffects ();
 		}
-		card.mouseExitEffects ();
 	}
 
 	IEnumerator doMoveAnimation(Vector3 target, float time, bool deactivateWhenDone){
@@ -183,6 +222,12 @@ public class CardGO : MonoBehaviour {
 	public bool DoingAnimation {
 		get {
 			return this.doingAnimation;
+		}
+	}
+
+	public Card parentCard{
+		get{
+			return this.card;
 		}
 	}
 }

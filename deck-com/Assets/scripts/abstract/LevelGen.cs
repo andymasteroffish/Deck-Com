@@ -9,7 +9,7 @@ public class LevelGen {
 	}
 
 	public Tile[,] getTestLevel(){
-		return loadLevelFromText ( Resources.Load<TextAsset>("maps/aitestlevel") );
+		return loadLevelFromText ( Resources.Load<TextAsset>("maps/"+GameManagerTacticsInterface.instance.mapName) );
 	}
 
 	public Tile[,] loadLevelFromText(TextAsset file){

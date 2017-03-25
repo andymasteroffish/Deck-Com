@@ -18,19 +18,33 @@ public class CharmGO : MonoBehaviour {
 	private bool isActive;
 
 	//sliding in and out
-	private Transform startTrans, endTrans = null;
 	private Vector3 startPos, endPos;
+	private Vector3 startPosPlayer, endPosPlayer;
+	private Vector3 startPosAI, endPosAI;
+	private bool needsPositions = true;
 	private bool doingAnimation;
 
 	public void activate(Charm _charm){
 		charm = _charm;
 		isActive = true;
+		//check if this is redundant
+		if (GameObjectManager.instance.checkForDuplicateCharmGO (this) == true) {
+			deactivate ();
+			return;
+		}
+
 		gameObject.SetActive (true);
 
-		if (startTrans == null) {
-			startTrans = GameObject.Find ("charmStartPos").transform;
-			endTrans = GameObject.Find ("charmEndPos").transform;
+		if (needsPositions == true) {
+			needsPositions = false;
+			startPosPlayer = GameObject.Find ("charm_player_startPos").transform.position;
+			endPosPlayer = GameObject.Find ("charm_player_endPos").transform.position;
+			startPosAI = GameObject.Find ("charm_ai_startPos").transform.position;
+			endPosAI = GameObject.Find ("charm_ai_endPos").transform.position;
 		}
+
+		startPos = charm.Owner.isPlayerControlled ? startPosPlayer : startPosAI;
+		endPos = charm.Owner.isPlayerControlled ? endPosPlayer : endPosAI;
 
 		gameObject.name = "charm "+charm.Owner.unitName+" "+charm.name;
 
@@ -57,8 +71,8 @@ public class CharmGO : MonoBehaviour {
 	}
 
 	private void setAnimationPositions(){
-		startPos = new Vector3 (startTrans.position.x, startTrans.position.y + charm.offsetID * ySpacing, startTrans.position.z);
-		endPos = new Vector3 (endTrans.position.x, endTrans.position.y + charm.offsetID * ySpacing, endTrans.position.z);
+		startPos = new Vector3 (startPos.x, startPos.y + charm.offsetID * ySpacing, startPos.z);
+		endPos = new Vector3 (endPos.x, endPos.y + charm.offsetID * ySpacing, endPos.z);
 	}
 
 
@@ -96,6 +110,11 @@ public class CharmGO : MonoBehaviour {
 	public bool DoingAnimation {
 		get {
 			return this.doingAnimation;
+		}
+	}
+	public Charm parentCharm{
+		get{
+			return this.charm;
 		}
 	}
 }

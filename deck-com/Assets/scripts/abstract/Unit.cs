@@ -230,8 +230,11 @@ public class Unit {
 
 		if (!isPlayerControlled && isActive){
 			Debug.Log ("GET ME SPIDERMAN");
+			float startTime = Time.realtimeSinceStartup;
+			Board.debugCounter = 0;
 			aiTurnInfo = gm.getAIMove(board.getUnitID(this), board, board, 0);
 			aiTurnInfo.print (board);
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards");
 			curAITurnStep = 0;
 		}
 	}

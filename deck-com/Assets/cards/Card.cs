@@ -33,13 +33,19 @@ public class Card {
 	public bool isDead;
 
 	//some colors
+	public Dictionary<CardType, Color> highlightColors = new Dictionary<CardType, Color>();
 	public Color moveHighlightColor = new Color(0.5f, 0.5f, 1f);
 	public Color attackHighlightColor  = new Color(1f, 0.5f, 0.5f);
 	public Color aidHighlightColor  = new Color(0.5f, 1f, 0.5f);
 	public Color otherHighlightColor  = new Color(1f, 0.5f, 1f);
 
+	public Color baseHighlightColor;
+
 	//this constructor should not be used. The derived cards are the only thing that should be used
 	public Card(){}
+
+	//a few flags for display
+	public bool revealAICardFlag;
 
 	public void setup(Unit _owner, Deck _deck){
 		owner = _owner;
@@ -64,8 +70,20 @@ public class Card {
 		baseActionCost = 1;
 		type = CardType.Other;
 
+		revealAICardFlag = false;
+
+		//set the colors
+		highlightColors.Add(CardType.Attack, new Color(1f, 0.5f, 0.5f));
+		highlightColors.Add(CardType.AttackSpecial, new Color(1f, 0.5f, 0.5f));
+		highlightColors.Add(CardType.Movement, new Color(0.5f, 0.5f, 1f));
+		highlightColors.Add(CardType.Aid, new Color(0.5f, 1f, 0.5f));
+		highlightColors.Add(CardType.Loot, new Color(0.5f, 0.5f, 0.5f));
+		highlightColors.Add(CardType.Other, new Color(1f, 0.5f, 1f));
+
 		//custom setup
 		setupCustom ();
+
+		baseHighlightColor = highlightColors [type];
 
 		//check if the description needs to be overwritten
 		if (node ["desc"] != null) {
@@ -120,8 +138,8 @@ public class Card {
 			owner.GM.clearActiveCard ();
 			owner.GM.targetInfoText.turnOff ();
 		}
+		revealAICardFlag = false;
 		cancelCustom ();
-
 	}
 	public virtual void cancelCustom(){}
 
@@ -142,7 +160,7 @@ public class Card {
 
 	public void finish(bool destroyCard = false){
 		owner.GM.targetInfoText.turnOff ();
-		//StartCoroutine(doDeathAnimation(0.5f, true, destroyCard));
+		revealAICardFlag = false;
 
 		owner.markCardPlayed (this);
 
@@ -296,18 +314,6 @@ public class Card {
 		return damageVal;
 	}
 
-	//**********************************
-	//AI stuff
-	//**********************************
-
-//	public virtual int getAIMovementRange(){
-//		Debug.Log ("AI Movement range not settup for this card");
-//		return 0;
-//	}
-//	public virtual int getAIAttackRange(){
-//		Debug.Log ("AI Attack range not settup for this card");
-//		return 0;
-//	}
 
 	//**********************************
 	//ssetters and getters

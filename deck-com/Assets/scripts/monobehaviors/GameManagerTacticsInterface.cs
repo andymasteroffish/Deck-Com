@@ -14,11 +14,14 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public TargetInfoText targetInfoText;
 
+	public string mapName;
 	public string[] spawnList;
 
 	public GameObject pickupLootButton;
 
 	private bool doingAnimation;
+
+	public int aiTurnPhase;
 
 
 	void Awake () {
@@ -39,81 +42,89 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	void Update () {
 
 		//getting input
-
-		//clicks
-		if (Input.GetMouseButtonDown (0) && !areAnimationsHappening()) {
-			gm.checkClick ();
-		}
+		bool ignoreFurtherInput = false;
 
 		//tabbing
-		if (Input.GetKeyDown (KeyCode.Tab) && !areAnimationsHappening()) {
+		if (Input.GetKeyDown (KeyCode.Tab)) {
 			gm.tab (1);
+			ignoreFurtherInput = true;
 		}
-		if (Input.GetKeyDown (KeyCode.LeftShift) && !areAnimationsHappening()) {
+		if (Input.GetKeyDown (KeyCode.LeftShift)) {
 			gm.tab (-1);
+			ignoreFurtherInput = true;
 		}
 
-		//ending the turn for a unit
-		if (Input.GetKeyDown (KeyCode.Space)) {
-			if (gm.activeUnit.isPlayerControlled) {
+		//input for player turn
+		if (gm.IsPlayerTurn) {
+			//clicks
+			if (Input.GetMouseButtonDown (0) && !areAnimationsHappening()) {
+				gm.checkClick ();
+			}
+
+			//ending the turn for a unit
+			if (Input.GetKeyDown (KeyCode.Space)) {
 				gm.endUnitTurn ();
-			} else {
-				gm.advanceAITurn ();
+			}
+
+			//pressing escape to cancel a move
+			if (Input.GetKeyDown (KeyCode.Escape)) {
+				gm.cancel ();
+			}
+
+			//showing the loot button if applicable
+			pickupLootButton.SetActive (gm.activePlayerUnit.CanPickupLoot);
+		}
+		//input for AI turn
+		else {
+			if (!ignoreFurtherInput && Input.anyKeyDown) {
+				advanceAITurn ();
 			}
 		}
 
-		//pressing escape to cancel a move
-		if (Input.GetKeyDown (KeyCode.Escape)) {
-			gm.cancel ();
-		}
-
-		//showing the loot button if applicable
-		pickupLootButton.SetActive( gm.activeUnit.CanPickupLoot);
 
 		//is the game over
 		if (gm.GameIsOver && !areAnimationsHappening()) {
 			StartCoroutine (doEndGame());
 		}
 
-		//testing
-		if (Input.GetKeyDown (KeyCode.T)) {
-			float startTime = Time.realtimeSinceStartup;
-			Board.debugCounter = 0;
-			TurnInfo turn = gm.getAIMove (0, gm.board, gm.board, 0);
-			turn.print (gm.board);
-//			for (int i=0; i<gm.board.units[0].deck.Hand.Count; i++){
-//				List<MoveInfo> moves = gm.board.getAllMovesForCard (0, i);
-//				foreach (MoveInfo move in moves) {
-//					Board newBoard = gm.board.resolveMoveAndReturnResultingBoard (move);
-//				}
-//			}
-			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime)+ " seconds and "+Board.debugCounter+" boards");
-		}
-		if (Input.GetKeyDown (KeyCode.Y)) {
-			Debug.Log ("GO mmove!");
-//
-//			MoveInfo move = new MoveInfo ();
-//			move.unitID = 0;
-//			move.cardIDName = gm.board.units[;
-//			move.targetTilePos = new TilePos (3, 3);
-//			Board board1 = gm.board.resolveMoveAndReturnResultingBoard (move);
-//			board1.print();
-//
-//			MoveInfo move2 = new MoveInfo ();
-//			move2.unitID = 0;
-//			move2.cardIDName = 2;
-//			move2.targetTilePos = new TilePos (2, 4);
-//			Board board2 = board1.resolveMoveAndReturnResultingBoard (move2);
-//			board2.print();
-		}
-		if (Input.GetKeyDown (KeyCode.P)) {
-			gm.board.print ();
-		}
 
 	}
 
 	public void pickUpLoot(){
-		gm.activeUnit.pickUpLoot ();
+		gm.activePlayerUnit.pickUpLoot ();
+	}
+
+	public void startNewAIUnitTurn(){
+		Debug.Log ("hello");
+		aiTurnPhase = 0;
+	}
+	private void advanceAITurn(){
+		aiTurnPhase++;
+		Debug.Log ("ai turn pahse: " + aiTurnPhase);
+
+		//are we done?
+		if (aiTurnPhase == 1 && gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {
+			gm.endAITurn ();
+			return;
+		}
+
+		//otherwise reveal the card and mark the target
+		if (aiTurnPhase == 1) {
+			//turn on the reveal flag
+			string cardIDName = gm.activeAIUnit.aiTurnInfo.moves[gm.activeAIUnit.curAITurnStep].cardIDName;
+			Card thisCard = gm.activeAIUnit.deck.getCardInHandFromID (cardIDName);
+			thisCard.revealAICardFlag = true; 
+			//spawn one or more targets
+			GameObjectManager.instance.getTargetGO().activate(gm.activeAIUnit.aiTurnInfo.moves[gm.activeAIUnit.curAITurnStep].targetTilePos, thisCard.baseHighlightColor);
+		}
+
+		//play the card
+		if (aiTurnPhase == 2) {
+			gm.advanceAITurn ();
+			aiTurnPhase = 0;
+			//remove targets
+			GameObjectManager.instance.turnOffAllTargets();
+		}
 	}
 
 	IEnumerator doEndGame(){

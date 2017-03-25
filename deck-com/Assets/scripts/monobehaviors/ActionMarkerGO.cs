@@ -9,6 +9,7 @@ public class ActionMarkerGO : MonoBehaviour {
 	private int idNum;
 
 	private bool needsStartPos = true;
+	private Transform startPosPlayer, startPosAI;
 	private Transform startPos;
 	public float xSpacing;
 
@@ -20,17 +21,25 @@ public class ActionMarkerGO : MonoBehaviour {
 
 	public void activate(Unit unit, int _idNum){
 		isActive = true;
-		gameObject.SetActive(true);
-
 		owner = unit;
 		idNum = _idNum;
+		//check if this is redundant
+		if (GameObjectManager.instance.checkForDuplicateActionMarker (this) == true) {
+			deactivate ();
+			return;
+		}
+
+		gameObject.SetActive(true);
 
 		child = null;
 
 		if (needsStartPos){
 			needsStartPos = false;
-			startPos = GameObject.Find("actionMarker_startPos").transform;
+			startPosPlayer = GameObject.Find("actionMarker_player_startPos").transform;
+			startPosAI = GameObject.Find("actionMarker_ai_startPos").transform;
 		}
+
+		startPos = owner.isPlayerControlled ? startPosPlayer : startPosAI;
 
 		gameObject.name = "action_marker "+unit.unitName;
 
@@ -110,6 +119,16 @@ public class ActionMarkerGO : MonoBehaviour {
 	public bool DoingAnimation {
 		get {
 			return this.doingAnimation;
+		}
+	}
+	public Unit Owner {
+		get {
+			return this.owner;
+		}
+	}
+	public int IDNum{
+		get{
+			return this.idNum;
 		}
 	}
 }

@@ -7,7 +7,8 @@ public class GameManager {
 	private CameraControl cam;
 	public Board board;
 
-	public Unit activeUnit;
+	public Unit activePlayerUnit;
+	public Unit activeAIUnit;
 
 	public Card activeCard;
 
@@ -60,7 +61,7 @@ public class GameManager {
 		foreach(Unit unit in unitsPlayer){
 			unit.resetRound ();
 		}
-		setActiveUnit (unitsPlayer [0]);
+		setActivePlayerUnit (unitsPlayer [0]);
 
 		clearActiveCard ();
 	}
@@ -76,7 +77,7 @@ public class GameManager {
 			foreach (Unit unit in unitsAI) {
 				unit.resetRound ();
 			}
-			setActiveUnit (unitsAI [0]);
+			setActiveAIUnit (unitsAI [0]);
 		}
 
 		clearActiveCard ();
@@ -86,7 +87,7 @@ public class GameManager {
 	public void checkClick(){
 		//see if they clicked a card to play (but only if they are not in the process of playing one)
 		if (activeCard == null) {
-			activeUnit.checkActiveClick ();
+			activePlayerUnit.checkActiveClick ();
 		}
 		//check potential targets
 		board.checkClick ();
@@ -98,20 +99,19 @@ public class GameManager {
 		for (int i = board.units.Count-1; i >= 0; i--) {
 			board.units [i].turnEndCleanUp ();
 		}
-		activeUnit.endTurn ();
+		activePlayerUnit.endTurn ();
 	}
 
 	public void advanceAITurn(){
-		if (activeUnit.curAITurnStep >= activeUnit.aiTurnInfo.moves.Count) {
-			activeUnit.endTurn ();
-		} else {
-			board.resolveMove (activeUnit.aiTurnInfo.moves [activeUnit.curAITurnStep]);
-			activeUnit.curAITurnStep++;
-		}
+		board.resolveMove (activeAIUnit.aiTurnInfo.moves [activeAIUnit.curAITurnStep]);
+		activeAIUnit.curAITurnStep++;
+	}
+	public void endAITurn(){
+		activeAIUnit.endTurn ();
 	}
 
 	public void cancel(){
-		activeUnit.deck.cancel ();
+		activePlayerUnit.deck.cancel ();
 	}
 
 	//Input for cards that are about to be played
@@ -119,13 +119,11 @@ public class GameManager {
 		if (activeCard != null) {
 			activeCard.passInTile (tile);
 		}
-		//activeUnit.deck.passInTile (tile);
 	}
 	public void unitClicked(Unit unit){
 		if (activeCard != null) {
 			activeCard.passInUnit (unit);
 		}
-		//activeUnit.deck.passInUnit (unit);
 	}
 
 	public void setCardActive(Card newCard){
@@ -141,34 +139,51 @@ public class GameManager {
 
 	//switching units
 
-	void setActiveUnit(Unit newActive){
-		if (newActive == activeUnit) {
-			return;
-		}
-		activeUnit = newActive;
-		foreach (Unit unit in board.units){
-			unit.setActive ( unit==activeUnit);
+	void setActivePlayerUnit(Unit newActive){
+//		if (newActive == activePlayerUnit) {
+//			return;
+//		}
+		activePlayerUnit = newActive;
+		List<Unit> playerUnits = getPlayerUnits ();
+		foreach (Unit unit in playerUnits){
+			unit.setActive ( unit==activePlayerUnit);
 			if (!unit.IsActive) {
 				unit.deck.cancel ();
 			}
 		}
 		cam.setTarget (newActive);
+
+		//no AI units can be active
+		activeAIUnit = null;
+		List<Unit> AIUnits = getAIUnits ();
+		foreach (Unit unit in AIUnits){
+			unit.setActive (false);
+		}
+	}
+
+	void setActiveAIUnit(Unit newActive){
+		if (newActive == activeAIUnit) {
+			return;
+		}
+		activeAIUnit = newActive;
+		List<Unit> playerUnits = getAIUnits ();
+		foreach (Unit unit in playerUnits){
+			unit.setActive ( unit==activeAIUnit);
+		}
+		cam.setTarget (newActive);
+		GameManagerTacticsInterface.instance.startNewAIUnitTurn ();
 	}
 
 	public void tab(int dir){
 		clearActiveCard ();
-		if (isPlayerTurn) {
-			tabActivePlayerUnit (dir);
-		} else {
-			tabActiveAIUnit (dir);
-		}
+		tabActivePlayerUnit (dir);
 	}
 
 	public void tabActivePlayerUnit(int dir){
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		int idNum = -1;
 		for (int i = 0; i < unitsPlayer.Count; i++) {
-			if (unitsPlayer [i] == activeUnit) {
+			if (unitsPlayer [i] == activePlayerUnit) {
 				idNum = i;
 			}
 		}
@@ -183,7 +198,7 @@ public class GameManager {
 
 		//if we found one, great, otherwise, go to the next turn
 		if (count <= unitsPlayer.Count) {
-			setActiveUnit (unitsPlayer [idNum]);
+			setActivePlayerUnit (unitsPlayer [idNum]);
 		} else {
 			startAITurn ();
 		}
@@ -193,7 +208,7 @@ public class GameManager {
 		List<Unit> unitsAI = getAIUnits ();
 		int idNum = -1;
 		for (int i = 0; i < unitsAI.Count; i++) {
-			if (unitsAI [i] == activeUnit) {
+			if (unitsAI [i] == activeAIUnit) {
 				idNum = i;
 			}
 		}
@@ -208,8 +223,10 @@ public class GameManager {
 
 		//if we found one, great, otherwise, go to the next turn
 		if (count <= unitsAI.Count) {
-			setActiveUnit (unitsAI [idNum]);
+			Debug.Log ("go next AI");
+			setActiveAIUnit (unitsAI [idNum]);
 		} else {
+			Debug.Log ("start players");
 			startPlayerTurn ();
 		}
 	}
