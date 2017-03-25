@@ -296,6 +296,11 @@ public class Unit {
 		if (isPlayerControlled){
 			canPickUpLoot = board.checkIfUnitIsCloseToLoot (this);
 		}
+
+		//if there's no loot to pick up and we're out of actions try to mvoe on
+		if (isPlayerControlled && !isAISimUnit && actionsLeft == 0 && !canPickUpLoot) {
+			gm.tabActivePlayerUnitSkippingExausted (1);
+		}
 	}
 
 	//input

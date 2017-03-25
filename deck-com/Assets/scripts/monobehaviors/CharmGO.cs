@@ -64,7 +64,7 @@ public class CharmGO : MonoBehaviour {
 		nameField.text = charm.name;
 		descField.text = charm.description;
 
-		if ( (!charm.Owner.IsActive || charm.isDead) && !doingAnimation) {
+		if ( (!charm.Owner.IsActive || charm.isDead || charm.Owner.isDead) && !doingAnimation) {
 			StartCoroutine (doMoveAnimation (endPos, startPos, moveTime, true));
 		}
 

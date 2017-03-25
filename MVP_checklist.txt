@@ -1,7 +1,7 @@
 MVP for Deck-Com
 
 [X] - Basic AI
-	[ ] - Telegraph AI moves
+	[X] - Telegraph AI moves
 
 [X] - Collect Loot In Game
 

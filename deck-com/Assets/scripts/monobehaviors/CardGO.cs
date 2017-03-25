@@ -129,6 +129,10 @@ public class CardGO : MonoBehaviour {
 			StartCoroutine(doMoveAnimation(startPos, moveTime, true));
 		}
 
+		//player death
+		if (!doingAnimation && card.Owner.isDead){
+			StartCoroutine(doMoveAnimation(startPos, moveTime, true));
+		}
 
 		//showing an AI card
 		if (!doingAnimation && card.revealAICardFlag && !inAiRevealSpot) {

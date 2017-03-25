@@ -63,6 +63,11 @@ public class GameManager {
 		}
 		setActivePlayerUnit (unitsPlayer [0]);
 
+		if (activeAIUnit != null) {
+			activeAIUnit.setActive (false);
+			activeAIUnit = null;
+		}
+
 		clearActiveCard ();
 	}
 
@@ -190,30 +195,26 @@ public class GameManager {
 		tabActivePlayerUnit (dir);
 	}
 
-//	public void tabActivePlayerUnit(int dir){
-//		List<Unit> unitsPlayer = getPlayerUnits ();
-//		int idNum = -1;
-//		for (int i = 0; i < unitsPlayer.Count; i++) {
-//			if (unitsPlayer [i] == activePlayerUnit) {
-//				idNum = i;
-//			}
-//		}
-//
-//		//find the next unit who's turn is not over
-//		int count = 0;
-//		idNum = (idNum + dir + unitsPlayer.Count) % unitsPlayer.Count;
-//		while (unitsPlayer [idNum].TurnIsDone && count < unitsPlayer.Count + 1) {
-//			idNum = (idNum + 1) % unitsPlayer.Count;
-//			count++;
-//		}
-//
-//		//if we found one, great, otherwise, go to the next turn
-//		if (count <= unitsPlayer.Count) {
-//			setActivePlayerUnit (unitsPlayer [idNum]);
-//		} else {
-//			startAITurn ();
-//		}
-//	}
+	public void tabActivePlayerUnitSkippingExausted(int dir){
+		List<Unit> unitsPlayer = getPlayerUnits ();
+		int idNum = -1;
+		for (int i = 0; i < unitsPlayer.Count; i++) {
+			if (unitsPlayer [i] == activePlayerUnit) {
+				idNum = i;
+			}
+		}
+
+		//find the next unit who's turn is not over
+		int count = 0;
+		idNum = (idNum + dir + unitsPlayer.Count) % unitsPlayer.Count;
+		while (unitsPlayer [idNum].ActionsLeft == 0 && count < unitsPlayer.Count + 1) {
+			idNum = (idNum + 1) % unitsPlayer.Count;
+			count++;
+		}
+
+		setActivePlayerUnit (unitsPlayer [idNum]);
+	}
+
 	public void tabActivePlayerUnit(int dir){
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		int idNum = -1;
