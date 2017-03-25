@@ -232,6 +232,12 @@ public class Unit {
 			float startTime = Time.realtimeSinceStartup;
 			Board.debugCounter = 0;
 			aiTurnInfo = gm.getAIMove(board.getUnitID(this), board, board, 0);
+			//if there were no viable moves, just create an empty turn info
+			if (aiTurnInfo == null) {
+				MoveInfo thisMove = new MoveInfo ();
+				thisMove.passMove = true;
+				aiTurnInfo = new TurnInfo (thisMove);
+			}
 			aiTurnInfo.print (board);
 			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
 			curAITurnStep = 0;

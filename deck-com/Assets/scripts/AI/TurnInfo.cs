@@ -60,7 +60,11 @@ public class TurnInfo {
 		Debug.Log ("MY SEXY ASS TURN for "+unit.unitName);
 		Debug.Log ("value: " + totalValue);
 		for (int i = 0; i < moves.Count; i++) {
-			Debug.Log (i + ": "+moves[i].cardIDName+" targetting "+moves[i].targetTilePos.x+","+moves[i].targetTilePos.y);
+			if (moves [i].passMove) {
+				Debug.Log (i + ": PASS");
+			} else {
+				Debug.Log (i + ": " + moves [i].cardIDName + " targetting " + moves [i].targetTilePos.x + "," + moves [i].targetTilePos.y);
+			}
 		}
 
 		if (true) {

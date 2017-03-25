@@ -4,6 +4,7 @@ move3
 attackBasic
 attackBasic
 attackBasic
-attackR2
-focus
-grenade
+healLight
+gain-an-action
+draw-a-card
+draw-a-card

@@ -1,13 +1,11 @@
 move4
-bladeDash
 move4
 attackBasic
 attackBasic
 attackBasic
-village
-village
 moveAndAttack
 moveAndAttack
+bladeDash
+village
+village
 heal
-draw-a-card
-move3

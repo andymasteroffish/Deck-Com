@@ -133,7 +133,9 @@ public class Board {
 
 	//resolving moves
 	public void resolveMove(MoveInfo move){
-		units [move.unitID].deck.getCardInHandFromID(move.cardIDName).resolveFromMove (move);
+		if (move.passMove == false) {
+			units [move.unitID].deck.getCardInHandFromID (move.cardIDName).resolveFromMove (move);
+		}
 	}
 
 	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
@@ -328,7 +330,7 @@ public class Board {
 						float newDist = cur.distFromStart + distVal;
 
 						//is it passable? none or partial cover are both passable
-						Tile.Cover maxCover = includeWalls ? Tile.Cover.Full : Tile.Cover.Part;
+						Tile.Cover maxCover = includeWalls ? Tile.Cover.Full : Tile.Cover.None;
 						bool passable =  (int)grid[x,y].CoverVal <= (int)maxCover;
 
 						//corners need to have one of the cardinal direcitons open as well

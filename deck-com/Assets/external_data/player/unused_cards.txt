@@ -1,10 +1,6 @@
+teleport
+teleport
 move4
 grenade
+bladeDash
 shield
-attackBasic
-move2
-focus
-attackR1D-1
-attackR1
-focus
-move4

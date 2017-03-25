@@ -107,11 +107,16 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		//otherwise reveal the card and mark the target
 		if (aiTurnPhase == 1) {
 			//turn on the reveal flag
-			string cardIDName = gm.activeAIUnit.aiTurnInfo.moves[gm.activeAIUnit.curAITurnStep].cardIDName;
-			Card thisCard = gm.activeAIUnit.deck.getCardInHandFromID (cardIDName);
-			thisCard.revealAICardFlag = true; 
-			//spawn one or more targets
-			GameObjectManager.instance.getTargetGO().activate(gm.activeAIUnit.aiTurnInfo.moves[gm.activeAIUnit.curAITurnStep].targetTilePos, thisCard.baseHighlightColor);
+			if (gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].passMove == false) {
+				string cardIDName = gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].cardIDName;
+				Card thisCard = gm.activeAIUnit.deck.getCardInHandFromID (cardIDName);
+				thisCard.revealAICardFlag = true; 
+				//spawn one or more targets
+				GameObjectManager.instance.getTargetGO ().activate (gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].targetTilePos, thisCard.baseHighlightColor);
+			} else {
+				gm.endAITurn ();
+				return;
+			}
 		}
 
 		//play the card

@@ -256,7 +256,9 @@ public class Card {
 			range += owner.Charms [i].getWeaponRangeMod (this);
 		}
 
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, highlightColors[CardType.Attack]);
+		bool includePlayer = !owner.isPlayerControlled;
+		bool includeAI = owner.isPlayerControlled;
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, includePlayer, includeAI, highlightColors[CardType.Attack]);
 	}
 
 	public void setPotentialTargetInfoTextForWeapon(Unit unit, int damageMod){

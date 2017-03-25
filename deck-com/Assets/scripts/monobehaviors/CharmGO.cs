@@ -71,8 +71,12 @@ public class CharmGO : MonoBehaviour {
 	}
 
 	private void setAnimationPositions(){
-		startPos = new Vector3 (startPos.x, startPos.y + charm.offsetID * ySpacing, startPos.z);
-		endPos = new Vector3 (endPos.x, endPos.y + charm.offsetID * ySpacing, endPos.z);
+		float thisYSpacing = ySpacing;
+		if (!charm.Owner.isPlayerControlled) {
+			thisYSpacing *= -1;
+		}
+		startPos = new Vector3 (startPos.x, startPos.y + charm.offsetID * thisYSpacing, startPos.z);
+		endPos = new Vector3 (endPos.x, endPos.y + charm.offsetID * thisYSpacing, endPos.z);
 	}
 
 

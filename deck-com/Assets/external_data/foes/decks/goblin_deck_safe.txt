@@ -2,7 +2,6 @@ move2
 move2
 move3
 move3
-teamDash
 aim
 attackBasic
 attackBasic
