@@ -870,6 +870,52 @@ public class Board {
 			}
 		}
 
+		//checking distance stuff
+		for (int i = 0; i < oldAllies.Count; i++) {
+
+			//this should be set in some kind of AI profile, but for now, let's say the goal is to be within weapons range minus a bit
+			float targetDistMin = curAllies[i].Weapon.baseRange;
+			float targetDistMax = curAllies [i].Weapon.baseRange - 3;
+
+			//are allies further or closer to enemies (include dead enemies so that moving close and making a kill doesn't count as a negative)
+			float oldClosestDist = 9999;
+			float oldFurtherstDist = 0;
+
+			foreach (Unit enemy in oldEnemies) {
+				float dist = enemy.CurTile.Pos.getDist (oldAllies [i].CurTile.Pos);
+				if (dist < oldClosestDist)		oldClosestDist = dist;
+				if (dist > oldFurtherstDist)	oldFurtherstDist = dist;
+			}
+
+
+			float curClosestDist = 9999;
+			float curFurtherstDist = 0;
+			foreach (Unit enemy in curEnemies) {
+				float dist = enemy.CurTile.Pos.getDist (curAllies [i].CurTile.Pos);
+				if (dist < curClosestDist)		curClosestDist = dist;
+				if (dist > curFurtherstDist)	curFurtherstDist = dist;
+			}
+
+			//get the differenc evalues
+			float oldFarDif = oldFurtherstDist - targetDistMin;
+			if (oldFarDif < 0)	oldFarDif = 0;
+			float curFarDif = curFurtherstDist - targetDistMin;
+			if (curFarDif < 0)	curFarDif = 0;
+
+			float oldCloseDif = targetDistMax- oldClosestDist;
+			if (oldCloseDif < 0)	oldCloseDif = 0;
+			float curCloseDif = targetDistMax - curClosestDist;
+			if (curCloseDif < 0)	curCloseDif = 0;
+
+			info.totalDistCloserToTargetDistances += oldFarDif - curFarDif;
+			info.totalDistCloserToTargetDistances += oldCloseDif - oldCloseDif;
+
+			if ( (curFarDif < oldFarDif && curCloseDif <= oldCloseDif) || (curCloseDif < oldCloseDif && curFarDif <= oldFarDif)) {
+				info.numUnitsCloserToTargetDist++;
+			}
+			 
+		}
+
 		//what is the average cover for allies?
 
 		//are any allies flanked?

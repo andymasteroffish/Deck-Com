@@ -21,8 +21,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	private bool doingAnimation;
 
-	public int aiTurnPhase;
-
+	private int aiTurnPhase;
 
 	void Awake () {
 		if (instance == null) {

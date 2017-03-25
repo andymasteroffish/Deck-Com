@@ -20,6 +20,15 @@ public class TurnInfo {
 
 	//enemies/allies aided
 
+	//being in cover (each unit is evaluated by the lowest cover value to any player unit)
+	public float prcAlliesInFullCover;
+	public float prcAlliesInPartCover;
+	public float prcAlliesInNoCover;
+
+	//moving to or from player units (these values can be negative if the move would make them further away)
+	public int numUnitsCloserToTargetDist;
+	public float totalDistCloserToTargetDistances;
+
 	//should like getting new charms too if they'll last more than the one turn
 
 	public TurnInfo(MoveInfo move){
@@ -55,7 +64,7 @@ public class TurnInfo {
 			Debug.Log (i + ": "+moves[i].cardIDName+" targetting "+moves[i].targetTilePos.x+","+moves[i].targetTilePos.y);
 		}
 
-		if (false) {
+		if (true) {
 			Debug.Log ("stats:");
 			Debug.Log ("enemies damaged: " + numEnemiesDamaged);
 			Debug.Log ("total enemy damage: " + totalEnemyDamage);
@@ -63,6 +72,9 @@ public class TurnInfo {
 			Debug.Log ("allies damaged: " + numAlliesDamaged);
 			Debug.Log ("total ally damage: " + totalAllyDamage);
 			Debug.Log ("allies killed: " + numAlliesKilled);
+
+			Debug.Log ("units closer to target: " + numUnitsCloserToTargetDist);
+			Debug.Log ("total dist closer: " + totalDistCloserToTargetDistances);
 		}
 	}
 
@@ -75,6 +87,9 @@ public class TurnInfo {
 		numAlliesDamaged = 0;
 		totalAllyDamage = 0;
 		numAlliesKilled = 0;
+
+		numUnitsCloserToTargetDist = 0;
+		totalDistCloserToTargetDistances = 0;
 	}
 
 	//YOU NEED TO FEED IN WEIGHTED DESIRES
@@ -82,10 +97,13 @@ public class TurnInfo {
 	public void calculateTotalValue(){
 		float total = 0;
 
-		total += totalEnemyDamage * 1;
-		total += numEnemiesKilled * 5;
-		total -= totalAllyDamage * 2;
-		total -= numAlliesKilled * 100;
+		total += totalEnemyDamage * 3;
+		total += numEnemiesKilled * 10;
+		total -= totalAllyDamage * 10;
+		total -= numAlliesKilled * 1000;
+
+		total += (float)numUnitsCloserToTargetDist * 1;
+		total += totalDistCloserToTargetDistances * 1;
 
 		totalValue = (int)total;	//roudning to into to make other math easier
 
