@@ -42,17 +42,15 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	void Update () {
 
 		//getting input
-		bool ignoreFurtherInput = false;
 
 		//tabbing
 		if (Input.GetKeyDown (KeyCode.Tab)) {
 			gm.tab (1);
-			ignoreFurtherInput = true;
 		}
 		if (Input.GetKeyDown (KeyCode.LeftShift)) {
 			gm.tab (-1);
-			ignoreFurtherInput = true;
 		}
+
 
 		//input for player turn
 		if (gm.IsPlayerTurn) {
@@ -63,7 +61,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 			//ending the turn for a unit
 			if (Input.GetKeyDown (KeyCode.Space)) {
-				gm.endUnitTurn ();
+				gm.endPlayerTurn ();
 			}
 
 			//pressing escape to cancel a move
@@ -73,10 +71,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 			//showing the loot button if applicable
 			pickupLootButton.SetActive (gm.activePlayerUnit.CanPickupLoot);
+
 		}
 		//input for AI turn
 		else {
-			if (!ignoreFurtherInput && Input.anyKeyDown) {
+			if (Input.GetKeyDown(KeyCode.Space)) {
 				advanceAITurn ();
 			}
 		}
@@ -95,12 +94,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	}
 
 	public void startNewAIUnitTurn(){
-		Debug.Log ("hello");
 		aiTurnPhase = 0;
 	}
 	private void advanceAITurn(){
 		aiTurnPhase++;
-		Debug.Log ("ai turn pahse: " + aiTurnPhase);
 
 		//are we done?
 		if (aiTurnPhase == 1 && gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {

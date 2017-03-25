@@ -22,14 +22,14 @@ public class Card_Heal : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInVisibleRange(Owner.CurTile, range, aidHighlightColor);
+		Owner.board.highlightTilesInVisibleRange(Owner.CurTile, range, baseHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		Debug.Log ("range: " + range);
 
-		Owner.board.highlightUnitsInVisibleRange(Owner.CurTile, range, true, true, aidHighlightColor);
+		Owner.board.highlightUnitsInVisibleRange(Owner.CurTile, range, true, true, baseHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){

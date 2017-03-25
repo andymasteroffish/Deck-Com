@@ -39,12 +39,12 @@ public class Card_Movement : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, baseHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForTile = true;
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, baseHighlightColor);
 	}
 
 	public override void passInTileCustom(Tile tile){

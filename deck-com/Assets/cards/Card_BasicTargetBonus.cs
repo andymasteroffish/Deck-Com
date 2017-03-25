@@ -36,9 +36,9 @@ public class Card_BasicTargetBonus : Card {
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		if (anyUnit) {
-			Owner.board.highlightAllUnits (true, true, aidHighlightColor);
+			Owner.board.highlightAllUnits (true, true, baseHighlightColor);
 		} else {
-			Owner.setHighlighted (true, aidHighlightColor);
+			Owner.setHighlighted (true, baseHighlightColor);
 		}
 	}
 

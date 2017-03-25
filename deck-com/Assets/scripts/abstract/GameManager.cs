@@ -94,13 +94,25 @@ public class GameManager {
 
 	}
 
-	public void endUnitTurn(){
+	public void endPlayerTurn(){
 		clearActiveCard ();
+		List<Unit> unitsPlayer = getPlayerUnits ();
+		for(int i=unitsPlayer.Count-1; i>=0; i--){
+			unitsPlayer[i].endTurn ();
+		}
+		//check if anything (including foes) has clean up effects
 		for (int i = board.units.Count-1; i >= 0; i--) {
 			board.units [i].turnEndCleanUp ();
 		}
-		activePlayerUnit.endTurn ();
+		startAITurn ();
 	}
+//	public void endUnitTurn(){
+//		clearActiveCard ();
+//		for (int i = board.units.Count-1; i >= 0; i--) {
+//			board.units [i].turnEndCleanUp ();
+//		}
+//		activePlayerUnit.endTurn ();
+//	}
 
 	public void advanceAITurn(){
 		board.resolveMove (activeAIUnit.aiTurnInfo.moves [activeAIUnit.curAITurnStep]);
@@ -108,6 +120,12 @@ public class GameManager {
 	}
 	public void endAITurn(){
 		activeAIUnit.endTurn ();
+		//check if anything has clean up effects
+		for (int i = board.units.Count-1; i >= 0; i--) {
+			board.units [i].turnEndCleanUp ();
+		}
+		//go to the next one
+		tabActiveAIUnit(1);
 	}
 
 	public void cancel(){
@@ -152,13 +170,6 @@ public class GameManager {
 			}
 		}
 		cam.setTarget (newActive);
-
-		//no AI units can be active
-		activeAIUnit = null;
-		List<Unit> AIUnits = getAIUnits ();
-		foreach (Unit unit in AIUnits){
-			unit.setActive (false);
-		}
 	}
 
 	void setActiveAIUnit(Unit newActive){
@@ -179,6 +190,30 @@ public class GameManager {
 		tabActivePlayerUnit (dir);
 	}
 
+//	public void tabActivePlayerUnit(int dir){
+//		List<Unit> unitsPlayer = getPlayerUnits ();
+//		int idNum = -1;
+//		for (int i = 0; i < unitsPlayer.Count; i++) {
+//			if (unitsPlayer [i] == activePlayerUnit) {
+//				idNum = i;
+//			}
+//		}
+//
+//		//find the next unit who's turn is not over
+//		int count = 0;
+//		idNum = (idNum + dir + unitsPlayer.Count) % unitsPlayer.Count;
+//		while (unitsPlayer [idNum].TurnIsDone && count < unitsPlayer.Count + 1) {
+//			idNum = (idNum + 1) % unitsPlayer.Count;
+//			count++;
+//		}
+//
+//		//if we found one, great, otherwise, go to the next turn
+//		if (count <= unitsPlayer.Count) {
+//			setActivePlayerUnit (unitsPlayer [idNum]);
+//		} else {
+//			startAITurn ();
+//		}
+//	}
 	public void tabActivePlayerUnit(int dir){
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		int idNum = -1;
@@ -187,21 +222,8 @@ public class GameManager {
 				idNum = i;
 			}
 		}
-
-		//find the next unit who's turn is not over
-		int count = 0;
-		idNum = (idNum + dir + unitsPlayer.Count) % unitsPlayer.Count;
-		while (unitsPlayer [idNum].TurnIsDone && count < unitsPlayer.Count + 1) {
-			idNum = (idNum + 1) % unitsPlayer.Count;
-			count++;
-		}
-
-		//if we found one, great, otherwise, go to the next turn
-		if (count <= unitsPlayer.Count) {
-			setActivePlayerUnit (unitsPlayer [idNum]);
-		} else {
-			startAITurn ();
-		}
+		int newIdNum = (idNum + dir + unitsPlayer.Count) % unitsPlayer.Count;
+		setActivePlayerUnit (unitsPlayer [newIdNum]);
 	}
 
 	public void tabActiveAIUnit(int dir){
@@ -223,10 +245,8 @@ public class GameManager {
 
 		//if we found one, great, otherwise, go to the next turn
 		if (count <= unitsAI.Count) {
-			Debug.Log ("go next AI");
 			setActiveAIUnit (unitsAI [idNum]);
 		} else {
-			Debug.Log ("start players");
 			startPlayerTurn ();
 		}
 	}

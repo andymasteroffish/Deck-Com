@@ -55,7 +55,8 @@ public class UnitGO : MonoBehaviour {
 			//greying when turn is done
 			if (!owner.IsHighlighted) {
 				Color colThisFrame = new Color (1, 1, 1, 1);
-				if (owner.TurnIsDone && owner.GM.IsPlayerTurn == owner.isPlayerControlled) {
+				if (owner.ActionsLeft == 0 && owner.GM.IsPlayerTurn == owner.isPlayerControlled){
+				//if (owner.TurnIsDone && owner.GM.IsPlayerTurn == owner.isPlayerControlled) {
 					colThisFrame = new Color (0.3f, 0.3f, 0.3f, 0.5f);
 				}
 				spriteRend.color = colThisFrame;

@@ -29,6 +29,12 @@ public class ActionMarkerGO : MonoBehaviour {
 			return;
 		}
 
+		//or if they don't have the current number of needed actions
+		if (owner.ActionsLeft < idNum) {
+			deactivate ();
+			return;
+		}
+
 		gameObject.SetActive(true);
 
 		child = null;

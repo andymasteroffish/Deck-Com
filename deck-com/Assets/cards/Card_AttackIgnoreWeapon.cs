@@ -25,7 +25,7 @@ public class Card_AttackIgnoreWeapon : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
+		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
@@ -57,7 +57,7 @@ public class Card_AttackIgnoreWeapon : Card {
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, baseHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){

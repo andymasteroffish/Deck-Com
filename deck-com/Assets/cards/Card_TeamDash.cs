@@ -25,13 +25,13 @@ public class Card_TeamDash : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, baseHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		onGiftStep = false;
 		WaitingForTile = true;
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, range, false, false, baseHighlightColor);
 	}
 
 	public override void passInTileCustom(Tile tile){
@@ -41,7 +41,7 @@ public class Card_TeamDash : Card {
 		WaitingForUnit = true;
 
 		Owner.board.clearHighlights ();
-		Owner.board.highlightAllUnits (true, true, moveHighlightColor);
+		Owner.board.highlightAllUnits (true, true, baseHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){

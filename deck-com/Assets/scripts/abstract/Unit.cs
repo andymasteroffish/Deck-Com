@@ -229,12 +229,11 @@ public class Unit {
 		}
 
 		if (!isPlayerControlled && isActive){
-			Debug.Log ("GET ME SPIDERMAN");
 			float startTime = Time.realtimeSinceStartup;
 			Board.debugCounter = 0;
 			aiTurnInfo = gm.getAIMove(board.getUnitID(this), board, board, 0);
 			aiTurnInfo.print (board);
-			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards");
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
 			curAITurnStep = 0;
 		}
 	}
@@ -262,17 +261,17 @@ public class Unit {
 			charms[i].turnEndPostDiscard ();
 		}
 
-		if (isPlayerControlled) {
-			gm.tabActivePlayerUnit (1);
-		} else {
-			gm.tabActiveAIUnit (1);
-		}
+//		if (isPlayerControlled) {
+//			gm.tabActivePlayerUnit (1);
+//		} else {
+//			gm.tabActiveAIUnit (1);
+//		}
 	}
 
 	public void turnEndCleanUp(){
 		isActingAIUnit = false;
 		if (isDead){
-			Debug.Log ("clean up " + unitName);
+			//Debug.Log ("clean up dead " + unitName);
 			board.removeUnit (this);
 			board.checksWhenUnitDies (this);
 		}

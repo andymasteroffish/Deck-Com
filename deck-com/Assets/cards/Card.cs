@@ -34,11 +34,6 @@ public class Card {
 
 	//some colors
 	public Dictionary<CardType, Color> highlightColors = new Dictionary<CardType, Color>();
-	public Color moveHighlightColor = new Color(0.5f, 0.5f, 1f);
-	public Color attackHighlightColor  = new Color(1f, 0.5f, 0.5f);
-	public Color aidHighlightColor  = new Color(0.5f, 1f, 0.5f);
-	public Color otherHighlightColor  = new Color(1f, 0.5f, 1f);
-
 	public Color baseHighlightColor;
 
 	//this constructor should not be used. The derived cards are the only thing that should be used
@@ -250,7 +245,7 @@ public class Card {
 	public void mouseEnterForWeapon(int rangeMod){
 		int range = getRangeForWeapon (rangeMod);
 
-		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, attackHighlightColor);
+		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, highlightColors[CardType.Attack]);
 	}
 
 	public void selectCardForWeapon(int rangeMod){
@@ -261,7 +256,7 @@ public class Card {
 			range += owner.Charms [i].getWeaponRangeMod (this);
 		}
 
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, attackHighlightColor);
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, highlightColors[CardType.Attack]);
 	}
 
 	public void setPotentialTargetInfoTextForWeapon(Unit unit, int damageMod){

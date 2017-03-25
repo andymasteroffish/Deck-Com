@@ -24,13 +24,13 @@ public class Card_MoveAndAttack : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, baseHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		onAttackStep = false;
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, moveHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, baseHighlightColor);
 	}
 
 	//moving

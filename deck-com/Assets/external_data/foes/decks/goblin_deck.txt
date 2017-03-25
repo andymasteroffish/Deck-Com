@@ -2,8 +2,8 @@ move3
 attackBasic
 move3
 attackBasic
-grenade
-coverAttack
+attackBasic
+move3
 attackR1D-1
 attackBasic
 attackBasic
