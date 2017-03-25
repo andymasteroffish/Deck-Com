@@ -820,6 +820,7 @@ public class Board {
 		List<Unit> oldEnemies = new List<Unit>();
 
 		info.resetEvaluations ();
+		info.totalAllies = curAllies.Count;
 
 		//sepeare them into allies on enemies depending on which side we are trying to get a move for
 		foreach (Unit unit in units) {
@@ -912,11 +913,21 @@ public class Board {
 
 			if ( (curFarDif < oldFarDif && curCloseDif <= oldCloseDif) || (curCloseDif < oldCloseDif && curFarDif <= oldFarDif)) {
 				info.numUnitsCloserToTargetDist++;
-			}
-			 
+			}	 
 		}
 
-		//what is the average cover for allies?
+		//what is the average cover for allies? This ignores the previous board state and only cares about where we are now
+		foreach (Unit ally in curAllies) {
+			Tile.Cover lowestCover = Tile.Cover.Full;
+			foreach (Unit enemy in curEnemies) {
+				Tile.Cover thisCover = getCover (enemy.CurTile, ally.CurTile);
+				if ((int)thisCover < (int)lowestCover) {
+					lowestCover = thisCover;
+				}	
+			}
+
+			info.numAlliesCover [(int)lowestCover]++;
+		}
 
 		//are any allies flanked?
 

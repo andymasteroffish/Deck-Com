@@ -8,6 +8,7 @@ public class TurnInfo {
 
 	public int totalValue;
 
+	public int totalAllies;
 
 	//values for evaluating AI moves
 	public int numEnemiesDamaged;
@@ -21,9 +22,7 @@ public class TurnInfo {
 	//enemies/allies aided
 
 	//being in cover (each unit is evaluated by the lowest cover value to any player unit)
-	public float prcAlliesInFullCover;
-	public float prcAlliesInPartCover;
-	public float prcAlliesInNoCover;
+	public int[] numAlliesCover = new int[3];
 
 	//moving to or from player units (these values can be negative if the move would make them further away)
 	public int numUnitsCloserToTargetDist;
@@ -75,11 +74,16 @@ public class TurnInfo {
 
 			Debug.Log ("units closer to target: " + numUnitsCloserToTargetDist);
 			Debug.Log ("total dist closer: " + totalDistCloserToTargetDistances);
+
+			Debug.Log ("allies in full cover " + numAlliesCover[(int)Tile.Cover.Full]);
+			Debug.Log ("allies in part cover " + numAlliesCover[(int)Tile.Cover.Part]);
+			Debug.Log ("allies in no cover " + numAlliesCover[(int)Tile.Cover.None]);
 		}
 	}
 
 	public void resetEvaluations(){
 		totalValue = 0;
+		totalAllies = 0;
 
 		numEnemiesDamaged = 0;
 		totalEnemyDamage = 0;
@@ -90,6 +94,10 @@ public class TurnInfo {
 
 		numUnitsCloserToTargetDist = 0;
 		totalDistCloserToTargetDistances = 0;
+
+		for (int i = 0; i < 3; i++) {
+			numAlliesCover [i] = 0;
+		}
 	}
 
 	//YOU NEED TO FEED IN WEIGHTED DESIRES
@@ -97,15 +105,19 @@ public class TurnInfo {
 	public void calculateTotalValue(){
 		float total = 0;
 
-		total += totalEnemyDamage * 3;
+		total += totalEnemyDamage * 2;
 		total += numEnemiesKilled * 10;
 		total -= totalAllyDamage * 10;
-		total -= numAlliesKilled * 1000;
+		total -= numAlliesKilled * 100;
 
 		total += (float)numUnitsCloserToTargetDist * 1;
 		total += totalDistCloserToTargetDistances * 1;
 
-		totalValue = (int)total;	//roudning to into to make other math easier
+		total += numAlliesCover [(int)Tile.Cover.Full] * 2;
+		total += numAlliesCover [(int)Tile.Cover.Part] * 0;
+		total += numAlliesCover [(int)Tile.Cover.None] * -5;
+
+		totalValue = (int)total;	//rounding to into to make other math easier
 
 		//Debug.Log ("tot val " + totalValue);
 	}

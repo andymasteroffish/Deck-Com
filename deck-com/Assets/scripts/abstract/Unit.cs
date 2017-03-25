@@ -21,7 +21,7 @@ public class Unit {
 	public bool useGO;
 
 	//stats
-	public int baseHealth = 5;
+	public int baseHealth = 8;
 	public int health;
 	public bool isDead;
 
@@ -298,9 +298,9 @@ public class Unit {
 		}
 
 		//if there's no loot to pick up and we're out of actions try to mvoe on
-		if (isPlayerControlled && !isAISimUnit && actionsLeft == 0 && !canPickUpLoot) {
-			gm.tabActivePlayerUnitSkippingExausted (1);
-		}
+//		if (isPlayerControlled && !isAISimUnit && actionsLeft == 0 && !canPickUpLoot) {
+//			gm.tabActivePlayerUnitSkippingExausted (1);
+//		}
 	}
 
 	//input

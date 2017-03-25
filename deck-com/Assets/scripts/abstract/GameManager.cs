@@ -326,7 +326,7 @@ public class GameManager {
 
 		//find the best one
 		//int bestID = 0;
-		int bestValue = -1000;
+		int bestValue = -9999;
 		for (int i = 0; i < potentialTurns.Count; i++) {
 			if (potentialTurns [i].totalValue > bestValue) {
 				bestValue = potentialTurns [i].totalValue;
@@ -340,6 +340,9 @@ public class GameManager {
 			}
 		}
 		//return one of them
+//		Debug.Log("best val: "+bestValue);
+//		Debug.Log("all god damn moves: "+potentialTurns.Count);
+//		Debug.Log("all good moves: "+goodTurns.Count);
 		return goodTurns[ (int)Random.Range(0,goodTurns.Count) ];
 	}
 
