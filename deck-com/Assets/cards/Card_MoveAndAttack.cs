@@ -30,7 +30,7 @@ public class Card_MoveAndAttack : Card {
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 		onAttackStep = false;
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, baseHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, highlightColors[CardType.Movement]);
 	}
 
 	//moving

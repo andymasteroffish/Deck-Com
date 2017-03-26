@@ -7,11 +7,23 @@ public class CameraControl : MonoBehaviour {
 	public float freeControlSpeed;
 
 	private UnitGO targetUnit = null;
+
+	private TilePos	targetTile;
+	private bool usingTargetTile = false;
+
 	public float targetLerp;
 
 
 	public void setTarget(Unit target){
 		targetUnit = GameObjectManager.instance.findUnitGO(target);
+		usingTargetTile = false;
+		freeControl = false;
+	}
+
+	public void setTarget(TilePos target){
+		targetUnit = null;
+		usingTargetTile = true;
+		targetTile = new TilePos (target);
 		freeControl = false;
 	}
 
@@ -19,6 +31,11 @@ public class CameraControl : MonoBehaviour {
 
 		if (!freeControl && targetUnit != null) {
 			Vector3 targetPos = targetUnit.transform.position;
+			targetPos.z = transform.position.z;
+			transform.position = Vector3.Lerp (transform.position, targetPos, targetLerp);
+		}
+		if (!freeControl && usingTargetTile) {
+			Vector3 targetPos = targetTile.getV3();
 			targetPos.z = transform.position.z;
 			transform.position = Vector3.Lerp (transform.position, targetPos, targetLerp);
 		}

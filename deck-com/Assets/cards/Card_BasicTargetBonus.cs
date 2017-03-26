@@ -45,7 +45,7 @@ public class Card_BasicTargetBonus : Card {
 	public override void passInUnitCustom(Unit unit){
 		unit.deck.drawCards (numCardsToDraw);
 		unit.gainActions (numActionsToGain);
-
+		unit.aiSimHasBeenAidedCount++;
 		finish ();
 	}
 

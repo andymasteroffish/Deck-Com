@@ -1,5 +1,7 @@
 grenade
 coverAttack
+aim
+aim
 move5
 move4
 move4

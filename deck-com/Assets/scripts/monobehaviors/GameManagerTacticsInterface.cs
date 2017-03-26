@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManagerTacticsInterface : MonoBehaviour {
 
+	private CameraControl cam;
+
 	public float debugAnimationTimeMod;
 	public bool debugDoNotShuffle;
 
@@ -13,6 +15,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public GameManager gm;
 
 	public TargetInfoText targetInfoText;
+	public GameObject aiTurnText;
 
 	public string mapName;
 	public string[] spawnList;
@@ -33,6 +36,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	}
 
 	void Start(){
+		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 		gm.targetInfoText = targetInfoText;
 		gm.setup (spawnList);
 		doingAnimation = false;
@@ -85,6 +89,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			StartCoroutine (doEndGame());
 		}
 
+		//showing AI turn text
+		aiTurnText.SetActive(!gm.IsPlayerTurn);
 
 	}
 
@@ -110,9 +116,21 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			if (gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].passMove == false) {
 				string cardIDName = gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].cardIDName;
 				Card thisCard = gm.activeAIUnit.deck.getCardInHandFromID (cardIDName);
+				TilePos targetPos = gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].targetTilePos;
 				thisCard.revealAICardFlag = true; 
 				//spawn one or more targets
-				GameObjectManager.instance.getTargetGO ().activate (gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].targetTilePos, thisCard.baseHighlightColor);
+				TargetGO target = GameObjectManager.instance.getTargetGO ();
+				target.activate (targetPos, thisCard.baseHighlightColor);
+				//focus camera on the target
+				cam.setTarget(targetPos);
+
+				//if the target is a unit and the card is an attack, let's get some info about the hit
+				Unit thisUnit = gm.board.getUnitOnTile(targetPos);
+				if (thisUnit != null) {
+					Debug.Log ("do it");
+					thisCard.setPotentialTargetInfo (thisUnit);
+				}
+
 			} else {
 				gm.endAITurn ();
 				return;

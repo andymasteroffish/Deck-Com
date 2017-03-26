@@ -68,6 +68,12 @@ public class CharmGO : MonoBehaviour {
 			StartCoroutine (doMoveAnimation (endPos, startPos, moveTime, true));
 		}
 
+		//sett he sprite color
+		Color col = new Color (1, 1, 1, 1);
+		if (charm.Owner.isPlayerControlled && !charm.Owner.GM.IsPlayerTurn) {
+			col = new Color (1, 1, 1, 0.4f);
+		}
+		spriteRend.color = col;
 	}
 
 	private void setAnimationPositions(){

@@ -28,7 +28,6 @@ public class ActionMarkerGO : MonoBehaviour {
 			deactivate ();
 			return;
 		}
-
 		//or if they don't have the current number of needed actions
 		if (owner.ActionsLeft < idNum) {
 			deactivate ();

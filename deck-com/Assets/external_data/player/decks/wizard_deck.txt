@@ -2,6 +2,7 @@ move3
 move4
 move4
 move5
+teleport
 attackBasic
 attackBasic
 heal

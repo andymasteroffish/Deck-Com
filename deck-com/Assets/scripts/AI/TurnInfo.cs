@@ -19,7 +19,9 @@ public class TurnInfo {
 	public int totalAllyDamage;
 	public int numAlliesKilled;
 
-	//enemies/allies aided
+	//enemies/allies aided (allies aided multipe times will count twice)
+	public int numAlliesAided;
+	public int numEnemiesAided;
 
 	//being in cover (each unit is evaluated by the lowest cover value to any player unit)
 	public int[] numAlliesCover = new int[3];
@@ -51,6 +53,16 @@ public class TurnInfo {
 			totalAllyDamage = other.totalAllyDamage;
 			numAlliesKilled = other.numAlliesKilled;
 
+			numAlliesAided = other.numAlliesAided;
+			numEnemiesAided = other.numEnemiesAided;
+
+			for (int i = 0; i < 3; i++) {
+				numAlliesCover [i] = other.numAlliesCover [i];
+			}
+
+			numUnitsCloserToTargetDist = other.numUnitsCloserToTargetDist;
+			totalDistCloserToTargetDistances = other.totalDistCloserToTargetDistances;
+
 			calculateTotalValue ();
 		}
 	}
@@ -76,6 +88,9 @@ public class TurnInfo {
 			Debug.Log ("total ally damage: " + totalAllyDamage);
 			Debug.Log ("allies killed: " + numAlliesKilled);
 
+			Debug.Log("num allies aided: "+numAlliesAided);
+			Debug.Log("num enemies aided: "+numEnemiesAided);
+
 			Debug.Log ("units closer to target: " + numUnitsCloserToTargetDist);
 			Debug.Log ("total dist closer: " + totalDistCloserToTargetDistances);
 
@@ -96,6 +111,9 @@ public class TurnInfo {
 		totalAllyDamage = 0;
 		numAlliesKilled = 0;
 
+		numAlliesAided = 0;
+		numEnemiesAided = 0;
+
 		numUnitsCloserToTargetDist = 0;
 		totalDistCloserToTargetDistances = 0;
 
@@ -113,6 +131,9 @@ public class TurnInfo {
 		total += numEnemiesKilled * 10;
 		total -= totalAllyDamage * 10;
 		total -= numAlliesKilled * 100;
+
+		total += numAlliesAided * 1;
+		total -= numEnemiesAided * 10;
 
 		total += (float)numUnitsCloserToTargetDist * 1;
 		total += totalDistCloserToTargetDistances * 1;

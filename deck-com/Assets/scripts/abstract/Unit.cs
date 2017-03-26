@@ -21,7 +21,7 @@ public class Unit {
 	public bool useGO;
 
 	//stats
-	public int baseHealth = 8;
+	public int baseHealth = 6;
 	public int health;
 	public bool isDead;
 
@@ -54,8 +54,8 @@ public class Unit {
 	//some stuff for AI work
 	public bool isAISimUnit;
 	public bool isActingAIUnit;		//gets cards and deck when an AI board is made
-	public bool unitHasChangedFlag;	//indiactes that something has ocurred to this unit in the process of resolving an AI move
 	public int  aiHandSize;
+	public int aiSimHasBeenAidedCount;
 
 	public TurnInfo aiTurnInfo;
 	public int curAITurnStep;
@@ -94,7 +94,6 @@ public class Unit {
 
 		isActingAIUnit = false;
 		isAISimUnit = false;
-		unitHasChangedFlag = false;
 	}
 
 	public void setup(GameManager _gm, Board _board, Tile startTile){
@@ -139,7 +138,6 @@ public class Unit {
 		unitName = parent.unitName;
 
 		isActingAIUnit = parent.isActingAIUnit;
-		unitHasChangedFlag = parent.unitHasChangedFlag;
 		isAISimUnit = true;
 
 		isPlayerControlled = parent.isPlayerControlled;
@@ -214,6 +212,10 @@ public class Unit {
 		}
 	}
 
+	public void resetAISimFlags(){
+		aiSimHasBeenAidedCount = 0;
+	}
+
 	public void setActive(bool _isActive){
 		isActive = _isActive;
 		deck.setActive (isActive);
@@ -231,6 +233,7 @@ public class Unit {
 		if (!isPlayerControlled && isActive){
 			float startTime = Time.realtimeSinceStartup;
 			Board.debugCounter = 0;
+			gm.resetAllAIFlags ();
 			aiTurnInfo = gm.getAIMove(board.getUnitID(this), board, board, 0);
 			//if there were no viable moves, just create an empty turn info
 			if (aiTurnInfo == null) {

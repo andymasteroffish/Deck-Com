@@ -1,3 +1,4 @@
+attackBasic
 move2
 move2
 move3

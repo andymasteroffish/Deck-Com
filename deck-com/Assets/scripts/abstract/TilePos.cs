@@ -82,10 +82,22 @@ public class TilePos {
 	}
 
 	public static bool operator ==(TilePos a, TilePos b){
+//		if (a == null && b == null) {
+//			return true;
+//		} else if (a == null || b == null) {
+//			return false;
+//		}
+	
 		return a.x==b.x && a.y==b.y;
 	}
 
 	public static bool operator !=(TilePos a, TilePos b){
+//		if (a == null && b == null) {
+//			return false;
+//		} else if (a == null || b == null) {
+//			return true;
+//		}
+
 		return !(a.x==b.x && a.y==b.y);
 	}
 	

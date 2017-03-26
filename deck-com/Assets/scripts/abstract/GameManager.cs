@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GameManager {
 	
-	private CameraControl cam;
+	private CameraControl cam;	//THIS SHOULD NOT BE HERE. MOVE THIS TO AN INTERFACE CLASS
 	public Board board;
 
 	public Unit activePlayerUnit;
@@ -82,10 +82,17 @@ public class GameManager {
 			foreach (Unit unit in unitsAI) {
 				unit.resetRound ();
 			}
-			setActiveAIUnit (unitsAI [0]);
+			setActiveAIUnit (unitsAI [(int)Random.Range(0,unitsAI.Count)]);
 		}
 
 		clearActiveCard ();
+	}
+
+	public void resetAllAIFlags(){
+		Debug.Log ("reset all AI flags");
+		foreach (Unit unit in board.units) {
+			unit.resetAISimFlags ();
+		}
 	}
 
 	//checking input

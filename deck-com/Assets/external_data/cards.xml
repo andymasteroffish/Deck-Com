@@ -93,7 +93,6 @@
     <range_mod>-1</range_mod>
     <level>0</level>
   </card>
-
   <card idName="aim">
     <name>Aim</name>
     <script>Card_GiveCharm</script>

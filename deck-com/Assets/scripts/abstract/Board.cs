@@ -858,6 +858,10 @@ public class Board {
 			if (curEnemies[i].isDead && !oldEnemies[i].isDead){
 				info.numEnemiesKilled ++;
 			}
+
+			//were enemies aided (bad!)
+			//this value gets reset at the start of each simulation, so the oldEnemy value will always be 0
+			info.numEnemiesAided += curEnemies[i].aiSimHasBeenAidedCount;
 		}
 
 		for (int i = 0; i < oldAllies.Count; i++) {
@@ -871,6 +875,9 @@ public class Board {
 			if (curAllies[i].isDead && !oldAllies[i].isDead){
 				info.numAlliesKilled ++;
 			}
+
+			//were allies aided? (good!)
+			info.numAlliesAided += curAllies[i].aiSimHasBeenAidedCount;
 		}
 
 		//checking distance stuff
@@ -899,7 +906,7 @@ public class Board {
 				if (dist > curFurtherstDist)	curFurtherstDist = dist;
 			}
 
-			//get the differenc evalues
+			//get the difference values
 			float oldFarDif = oldFurtherstDist - targetDistMin;
 			if (oldFarDif < 0)	oldFarDif = 0;
 			float curFarDif = curFurtherstDist - targetDistMin;
