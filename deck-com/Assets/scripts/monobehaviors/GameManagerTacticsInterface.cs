@@ -8,6 +8,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public float debugAnimationTimeMod;
 	public bool debugDoNotShuffle;
+	public bool debugPrintAIInfo;
 
 	public static GameManagerTacticsInterface instance;
 
@@ -91,6 +92,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//showing AI turn text
 		aiTurnText.SetActive(!gm.IsPlayerTurn);
+
+		//testing
+		//gm.board.getTilesInVisibleRange(gm.activePlayerUnit.CurTile, gm.activePlayerUnit.Weapon.baseRange);
 
 	}
 

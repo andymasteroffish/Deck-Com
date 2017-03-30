@@ -68,6 +68,7 @@ public class Card {
 		revealAICardFlag = false;
 
 		//set the colors
+		highlightColors.Clear();
 		highlightColors.Add(CardType.Attack, new Color(1f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.AttackSpecial, new Color(1f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.Movement, new Color(0.5f, 0.5f, 1f));
@@ -256,8 +257,8 @@ public class Card {
 			range += owner.Charms [i].getWeaponRangeMod (this);
 		}
 
-		bool includePlayer = !owner.isPlayerControlled;
-		bool includeAI = owner.isPlayerControlled;
+		bool includePlayer = true;//!owner.isPlayerControlled;
+		bool includeAI = true;//owner.isPlayerControlled;
 		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, includePlayer, includeAI, highlightColors[CardType.Attack]);
 	}
 

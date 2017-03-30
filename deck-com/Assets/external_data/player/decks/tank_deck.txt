@@ -13,3 +13,4 @@ attackBasic
 attackR1
 attackR1
 attackD1
+shield

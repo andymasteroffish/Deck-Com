@@ -24,7 +24,7 @@ public class Card_MoveAndAttack : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, baseHighlightColor);
+		Owner.board.highlightTilesInMoveRange (Owner.CurTile, moveRange, false, false, highlightColors[CardType.Movement]);
 	}
 
 	public override void selectCardCustom(){

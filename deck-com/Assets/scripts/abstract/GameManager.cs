@@ -296,6 +296,11 @@ public class GameManager {
 
 	//AI shit
 	public TurnInfo getAIMove(int unitID, Board curBoard, Board originalBoard, int curDepth){
+		float startTime = Time.realtimeSinceStartup;
+		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
+			Board.debugCounter = 0;	
+		}
+
 		//Debug.Log ("get move at depth " + curDepth);
 		List<MoveInfo> allMoves = curBoard.getAllMovesForUnit (unitID);
 
@@ -304,28 +309,22 @@ public class GameManager {
 			return null;
 		}
 
-//		//take a look at how this move will look
-//		foreach(MoveInfo move in allMoves){
-//			Board newBoard = board.resolveMoveAndReturnResultingBoard (move);
-//			newBoard.compareBoardSates (board, ref move);
-//		}
-
-		//sort it to get the top X moves
-
-		//actually, let's just try it where we do all possible moves and let them all play out
+		//find all possible moves that could follow
 		List<TurnInfo> potentialTurns = new List<TurnInfo>();
 
 		foreach (MoveInfo move in allMoves) {
 			TurnInfo turn = new TurnInfo (move);
-
+			//generate a board with this move
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
-			//evaluate
-			newBoard.compareBoardSates(originalBoard, !curBoard.units[unitID].isPlayerControlled, ref turn);
-
+			//find all of the moves the AI could make from there
 			TurnInfo followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth+1);
 
+			//if there were move moves, add them to the turn
 			if (followingMoves != null) {
 				turn.addMoves (followingMoves);
+			} else {
+				//if there were no further moves, this is the end of this set and we should evaluate the board
+				newBoard.compareBoardSates (originalBoard, !curBoard.units [unitID].isPlayerControlled, ref turn);
 			}
 
 			potentialTurns.Add (turn);
@@ -346,11 +345,17 @@ public class GameManager {
 				goodTurns.Add(potentialTurns [i]);
 			}
 		}
-		//return one of them
-//		Debug.Log("best val: "+bestValue);
-//		Debug.Log("all god damn moves: "+potentialTurns.Count);
-//		Debug.Log("all good moves: "+goodTurns.Count);
-		return goodTurns[ (int)Random.Range(0,goodTurns.Count) ];
+
+		//get the turn to return
+		TurnInfo returnVal = goodTurns[ (int)Random.Range(0,goodTurns.Count) ];
+
+		//print info if we should
+		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
+			returnVal.print (board);
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
+		}
+
+		return returnVal;
 	}
 
 

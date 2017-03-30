@@ -110,11 +110,12 @@ public class Board {
 		//add some loot to some of them TESTING
 		List<Unit> potentialHolders = new List<Unit>();
 		for (int i = 0; i < units.Count; i++) {
-			if (units [i].isPlayerControlled == false) {
+			if (!units [i].isPlayerControlled) {
 				potentialHolders.Add (units [i]);
 			}
 		}
 		for (int i = 0; i < potentialHolders.Count; i++) {
+			Debug.Log ("loot add");
 			Unit holder = potentialHolders [(int)Random.Range (0, potentialHolders.Count)];
 			potentialHolders.Remove (holder);
 			Loot thisLoot = new Loot (holder, 1);
@@ -135,6 +136,9 @@ public class Board {
 	public void resolveMove(MoveInfo move){
 		if (move.passMove == false) {
 			units [move.unitID].deck.getCardInHandFromID (move.cardIDName).resolveFromMove (move);
+		} else {
+			//if a unit passes, they lose all actions
+			units [move.unitID].ActionsLeft = 0;
 		}
 	}
 
@@ -264,8 +268,8 @@ public class Board {
 				if (source.Pos.getDist (grid [x, y].Pos) <= range) {
 
 					//if it is, check if a line can be drawn between it and any adjacent, unnocupied tiles
-					//List<Tile> tiles = new List<Tile>();
-					List<Tile> tiles =  getAdjacentTiles (source, false, Tile.Cover.Part);
+					List<Tile> tiles = new List<Tile>();
+					//List<Tile> tiles =  getAdjacentTiles (source, false, Tile.Cover.Part);
 					tiles.Add (source);	//get adjacent does not include the source by default
 					bool doneChecking = false;
 
@@ -281,13 +285,33 @@ public class Board {
 			}
 		}
 
+		//bleed once, adding any tiles adjacent to a currently visible tiles
+		List<Tile> bleedTiles = new List<Tile>();
+		foreach (Tile curTile in returnTiles) {
+			List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Part);//  getAdjacentTiles (source, false, Tile.Cover.Part);
+			foreach (Tile t in adjacentTiles) {
+				bleedTiles.Add (t);
+			}
+		}
+
+		//add 'em
+		foreach (Tile t in bleedTiles) {
+			if (returnTiles.Contains (t) == false) {
+				if (source.Pos.getDist (t.Pos) <= range) {
+					returnTiles.Add (t);
+				}
+			}
+		}
+
 		return returnTiles;
 	}
 
 	//draws a ray between two tiles and returns true if no full cover blocked it
 	public bool checkIfTilesAreVisibleToEachother(Tile a, Tile b){
 
+		//testing float raytrace
 		if (raytrace (a, b, Tile.Cover.Full) == null) {
+		//if (raytraceFloat(a.Pos.x, a.Pos.y, b.Pos.x, b.Pos.y, Tile.Cover.Full) == null){
 			return true;
 		} else {
 			return false;
@@ -662,6 +686,7 @@ public class Board {
 					}
 
 					if (canReturnThisTile) {
+						//Debug.DrawLine (new Vector3 (tileA.Pos.x, tileA.Pos.y, 0), new Vector3 (tileB.Pos.x, tileB.Pos.y, 0), Color.red);
 						return grid [x, y];
 					}
 				}
@@ -679,12 +704,19 @@ public class Board {
 			}
 		}
 
+		//Debug.DrawLine (new Vector3 (tileA.Pos.x, tileA.Pos.y, 0), new Vector3 (tileB.Pos.x, tileB.Pos.y, 0), Color.green);
 		return null;
 	}
 
 	//also from http://playtechs.blogspot.ca/2007/03/raytracing-on-grid.html
 	Tile raytraceFloat(float x0, float y0, float x1, float y1, Tile.Cover coverLevelToCheck)
 	{
+		float offset = 0.5f;
+		x0 += offset;
+		x1 += offset;
+		y0 += offset;
+		y1 += offset;
+
 		float dx = Mathf.Abs(x1 - x0);
 		float dy = Mathf.Abs(y1 - y0);
 
@@ -736,6 +768,7 @@ public class Board {
 			//visit(x, y);
 			if (x >= 0 && x < cols && y >= 0 && y < rows) {
 				if (grid [x, y].CoverVal == coverLevelToCheck) {
+					//Debug.DrawLine (new Vector3 (x0-offset, y0-offset, 0), new Vector3 (x1-offset, y1-offset, 0), Color.red);
 					return grid [x, y];
 				}
 			}
@@ -751,7 +784,7 @@ public class Board {
 				error += dy;
 			}
 		}
-
+		//Debug.DrawLine (new Vector3 (x0-offset, y0-offset, 0), new Vector3 (x1-offset, y1-offset, 0), Color.green);
 		return null;
 	}
 
@@ -762,15 +795,20 @@ public class Board {
 	public List<MoveInfo> getAllMovesForUnit(int unitID){
 		List<MoveInfo> moves = new List<MoveInfo> ();
 		int actionsLeft = units [unitID].ActionsLeft;
-		//Debug.Log ("unit actions "+actionsLeft+" hand count " + units [unitID].deck.Hand.Count);
 		for (int i = 0; i < units [unitID].deck.Hand.Count; i++) {
-			//Debug.Log (units [unitID].deck.Hand[i].idName + " needs " + units [unitID].deck.Hand [i].getNumActionsNeededToPlay ());
 			if (actionsLeft >= units [unitID].deck.Hand [i].getNumActionsNeededToPlay ()) {
-				//Debug.Log ("add moves for card");
 				//UNION WOULD REMOVE DUPLICATES
 				moves.AddRange(getAllMovesForCard(unitID, i));
 			}
 		}
+
+		//if the unit has at least one action, pass is also a viable move
+		if (actionsLeft >= 1) {
+			MoveInfo thisMove = new MoveInfo (unitID);
+			thisMove.passMove = true;
+			moves.Add (thisMove);
+		}
+
 		//Debug.Log ("found " + moves.Count + " moves");
 		return moves;
 	}

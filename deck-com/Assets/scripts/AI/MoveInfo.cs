@@ -16,6 +16,11 @@ public class MoveInfo {
 		passMove = false;
 	}
 
+	public MoveInfo(int unit){
+		passMove = true;
+		unitID = unit;
+	}
+
 	public MoveInfo(int unit, string card, TilePos target){
 		unitID = unit;
 		cardIDName = card;

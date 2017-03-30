@@ -1,8 +1,8 @@
 <player>
   <info>
-    <money>15</money>
+    <money>10</money>
   </info>
-  <unit idName = "wizard">
+  <unit idName="wizard">
     <name>Wizard</name>
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
@@ -12,7 +12,7 @@
       <charm>heal_ring</charm>
     </charms>
   </unit>
-  <unit idName = "ranger">
+  <unit idName="ranger">
     <name>Ranger</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
@@ -21,13 +21,14 @@
       <charm>long_bow</charm>
     </charms>
   </unit>
-  <unit idName = "tank">
+  <unit idName="tank">
     <name>Tank</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
     <player_controlled>true</player_controlled>
     <charms>
       <charm>sniper_rifle</charm>
+      <charm>extra_card</charm>
     </charms>
   </unit>
 </player>
