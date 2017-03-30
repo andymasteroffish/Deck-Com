@@ -18,6 +18,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public TargetInfoText targetInfoText;
 	public GameObject aiTurnText;
 
+	public float lootDropPrc;
+
 	public string mapName;
 	public string[] spawnList;
 

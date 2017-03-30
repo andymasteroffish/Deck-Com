@@ -3,3 +3,6 @@ teleport
 move4
 grenade
 bladeDash
+attackBasic
+focus
+draw-a-card

@@ -1,11 +1,11 @@
+attackBasic
+attackBasic
+village
+village
 move4
-move4
 attackBasic
-attackBasic
-attackBasic
+heal
 moveAndAttack
 moveAndAttack
 bladeDash
-village
-village
-heal
+move4

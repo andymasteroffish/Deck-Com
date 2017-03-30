@@ -46,6 +46,7 @@ public class Unit {
 	private List<Charm> charms = new List<Charm>();
 
 	//loot
+	private int challengeLevel;
 	private bool canPickUpLoot;
 
 	//utility
@@ -79,6 +80,11 @@ public class Unit {
 		}
 		if (node ["actions"] != null) {
 			baseActions = int.Parse(node ["actions"].InnerText);
+		}
+
+		challengeLevel = 1;
+		if (node ["level"] != null) {
+			challengeLevel = int.Parse(node ["level"].InnerText);
 		}
 
 
@@ -147,6 +153,7 @@ public class Unit {
 		health = parent.health;
 		isDead = parent.isDead;
 
+		challengeLevel = parent.ChallengeLevel;
 		canPickUpLoot = parent.canPickUpLoot;
 
 		baseHandSize = parent.baseHandSize;
@@ -272,7 +279,6 @@ public class Unit {
 		if (isDead){
 			//Debug.Log ("clean up dead " + unitName);
 			board.removeUnit (this);
-			board.checksWhenUnitDies (this);
 		}
 	}
 
@@ -363,6 +369,7 @@ public class Unit {
 
 	public void killUnit(){
 		isDead = true;
+		board.checksWhenUnitDies (this);
 	}
 
 	//other effects
@@ -456,6 +463,12 @@ public class Unit {
 		}
 		set{
 			canPickUpLoot = value;
+		}
+	}
+
+	public int ChallengeLevel{
+		get{
+			return this.challengeLevel;
 		}
 	}
 }

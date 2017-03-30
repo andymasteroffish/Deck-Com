@@ -1,6 +1,6 @@
 <player>
   <info>
-    <money>10</money>
+    <money>17</money>
   </info>
   <unit idName="wizard">
     <name>Wizard</name>

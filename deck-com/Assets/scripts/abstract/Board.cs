@@ -107,19 +107,25 @@ public class Board {
 			unit.reset ();
 		}
 
-		//add some loot to some of them TESTING
-		List<Unit> potentialHolders = new List<Unit>();
+		//add some loot to some of them
 		for (int i = 0; i < units.Count; i++) {
 			if (!units [i].isPlayerControlled) {
-				potentialHolders.Add (units [i]);
+				if (Random.value < GameManagerTacticsInterface.instance.lootDropPrc) {
+					Debug.Log (units [i].unitName + " got loot");
+					Loot thisLoot = new Loot (units [i]);
+					loot.Add (thisLoot);
+				}
 			}
 		}
-		for (int i = 0; i < potentialHolders.Count; i++) {
-			Debug.Log ("loot add");
-			Unit holder = potentialHolders [(int)Random.Range (0, potentialHolders.Count)];
-			potentialHolders.Remove (holder);
-			Loot thisLoot = new Loot (holder, 1);
-			loot.Add (thisLoot);
+
+		//if straight up nobody got loot, just select one
+		while(loot.Count == 0) {
+			Debug.Log ("come on man");
+			int randID = (int)Random.Range (0, units.Count);
+			if (!units [randID].isPlayerControlled) {
+				Loot thisLoot = new Loot (units [randID]);
+				loot.Add (thisLoot);
+			}
 		}
 	}
 
@@ -173,7 +179,7 @@ public class Board {
 		}
 	}
 
-	//checking if anythign should happen when a unit dies
+	//checking if anything should happen when a unit dies
 	public void checksWhenUnitDies(Unit deadUnit){
 		//should loot drop?
 		for (int i = 0; i < loot.Count; i++) {

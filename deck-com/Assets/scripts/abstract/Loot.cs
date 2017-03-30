@@ -18,11 +18,12 @@ public class Loot {
 
 	public bool isDone;
 
-	public Loot(Unit holder, int _level){
+	public Loot(Unit holder){
 		curUnit = holder;
 		curTile = null;
 		type = Random.value > 0.5f ? Loot.Type.booster : Loot.Type.money;
-		level = _level;
+		level = holder.ChallengeLevel;
+		Debug.Log ("loot level: " + level);
 		isDone = false;
 	}
 
