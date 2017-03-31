@@ -86,6 +86,29 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			}
 		}
 
+		//debug input
+		if (Input.GetKey(KeyCode.Z)){
+			//teleport
+			if (Input.GetKeyDown (KeyCode.T)) {
+				for (int x = 0; x < gm.board.Cols; x++) {
+					for (int y = 0; y < gm.board.Rows; y++) {
+						if (gm.board.Grid [x, y].MouseIsOver) {
+							gm.activePlayerUnit.moveTo (gm.board.Grid [x, y]);
+						}
+					}
+				}
+			}
+			//gain action
+			if (Input.GetKeyDown (KeyCode.A)) {
+				gm.activePlayerUnit.gainActions (1);
+			}
+			//draw card
+			if (Input.GetKeyDown (KeyCode.D)) {
+				gm.activePlayerUnit.deck.drawCard ();
+			}
+				
+		}
+
 
 		//is the game over
 		if (gm.GameIsOver && !areAnimationsHappening()) {

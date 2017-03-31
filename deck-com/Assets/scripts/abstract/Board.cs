@@ -1061,4 +1061,16 @@ public class Board {
 		}
 	}
 
+	public int Cols {
+		get {
+			return this.cols;
+		}
+	}
+
+	public int Rows {
+		get {
+			return this.rows;
+		}
+	}
+
 }

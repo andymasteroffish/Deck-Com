@@ -98,6 +98,11 @@ public class Deck {
 			shuffle ();
 		}
 
+		if (drawPile.Count == 0) {
+			Debug.Log ("no card to draw");
+			return;
+		}
+
 		addCardToHand (drawPile [0]);
 		drawPile.RemoveAt (0);
 	}
