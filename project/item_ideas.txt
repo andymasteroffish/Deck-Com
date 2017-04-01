@@ -1,9 +1,0 @@
-Item Ideas
-
-Action Ring
--gain an extra action
-
-Relentless knife
--Damage 3
--Range 3
--At the start of every turn, draw a temporary attack card

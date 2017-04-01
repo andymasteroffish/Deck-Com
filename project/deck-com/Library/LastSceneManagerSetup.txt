@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/scenes/deck_building.unity
-  isLoaded: 1
-  isActive: 1

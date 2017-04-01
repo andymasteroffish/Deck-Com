@@ -1,7 +1,0 @@
-move4
-move4
-attack
-attack
-move2
-move2
-move3

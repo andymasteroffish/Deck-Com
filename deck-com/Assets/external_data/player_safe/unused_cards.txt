@@ -2,5 +2,5 @@ teleport
 teleport
 move4
 grenade
-bladeDash
+blade_dash
 shield

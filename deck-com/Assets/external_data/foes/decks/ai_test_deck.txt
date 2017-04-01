@@ -1,14 +1,7 @@
 move4
 move4
-attackBasic
-attackBasic
+attack
+attack
 move2
 move2
 move3
-move3
-aim
-attackBasic
-attackBasic
-attackBasic
-attackR1D-1
-attackR1D-1
