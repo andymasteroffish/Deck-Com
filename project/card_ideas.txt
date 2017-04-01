@@ -1,0 +1,18 @@
+New Cards
+
+Terror
+enemies in the effected area cannot move closer to or attack units you control next turn
+
+Blood Ritual - 0 actions
+take 1 damage, draw a card and gain an action
+
+Mind Theft
+Look at an opponent’s hand. You may select a card form it. If you do permanently add it to your deck and destroy this card
+
+Mind Control
+Target unit gains an “Attack Friend” card
+
+Attack Friend
+Attack card that can only target allies
+No other attack card may be played while this is in hand. This cannot be discarded
+

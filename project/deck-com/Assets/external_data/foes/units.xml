@@ -1,0 +1,49 @@
+<units>
+  <unit idName = "test_boy">
+    <name>Test Boy</name>
+    <sprite>grunt</sprite>
+    <deck>ai_test_deck</deck>
+    <player_controlled>false</player_controlled>
+    <level>1</level>
+    <base_health>1</base_health>
+    <hand_size>4</hand_size>
+    <charms>
+      <charm>grunt_wep</charm>
+    </charms>
+  </unit>
+  <unit idName = "grunt">
+    <name>Grunt</name>
+    <sprite>grunt</sprite>
+    <deck>grunt_deck</deck>
+    <player_controlled>false</player_controlled>
+    <level>1</level>
+    <base_health>2</base_health>
+    <hand_size>3</hand_size>
+    <charms>
+      <charm>grunt_wep</charm>
+    </charms>
+  </unit>
+  <unit idName = "goblin">
+    <name>Goblin</name>
+    <sprite>gobin</sprite>
+    <deck>goblin_deck</deck>
+    <player_controlled>false</player_controlled>
+    <level>2</level>
+    <base_health>4</base_health>
+    <charms>
+      <charm>goblin_wep</charm>
+    </charms>
+  </unit>
+  <unit idName = "goblin_king">
+    <name>Goblin King</name>
+    <sprite>goblin_king</sprite>
+    <deck>goblin_king_deck</deck>
+    <player_controlled>false</player_controlled>
+    <level>3</level>
+    <base_health>8</base_health>
+    <hand_size>5</hand_size>
+    <charms>
+      <charm>goblin_king_wep</charm>
+    </charms>
+  </unit>
+</units>

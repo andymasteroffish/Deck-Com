@@ -1,0 +1,220 @@
+<cards>
+<card idName="loot">
+<name>Loot</name>
+<level>-1</level>
+<script>Card_Loot</script>
+<action_cost>100</action_cost>
+</card>
+<card idName="move1">
+<name>Move1</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<range>1</range>
+</card>
+<card idName="move2">
+<name>Move2</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<range>2</range>
+</card>
+<card idName="move3">
+<name>Move3</name>
+<level>0</level>
+<script>Card_Movement</script>
+<range>3</range>
+</card>
+<card idName="move4">
+<name>Move4</name>
+<level>0</level>
+<script>Card_Movement</script>
+<range>4</range>
+</card>
+<card idName="move5">
+<name>Move5</name>
+<level>1</level>
+<script>Card_Movement</script>
+<range>5</range>
+</card>
+<card idName="move6">
+<name>Move6</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<range>6</range>
+</card>
+<card idName="move5_free_test">
+<name>Move 6 Free</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<range>6</range>
+</card>
+<card idName="attack">
+<name>Attack</name>
+<level>0</level>
+<script>Card_Attack</script>
+<damage_mod>0</damage_mod>
+<range_mod>0</range_mod>
+</card>
+<card idName="attack_d1">
+<name>Attack</name>
+<level>1</level>
+<script>Card_Attack</script>
+<damage_mod>1</damage_mod>
+<range_mod>0</range_mod>
+</card>
+<card idName="attack_r1">
+<name>Attack</name>
+<level>1</level>
+<script>Card_Attack</script>
+<damage_mod>0</damage_mod>
+<range_mod>1</range_mod>
+</card>
+<card idName="attack_r2">
+<name>Attack</name>
+<level>1</level>
+<script>Card_Attack</script>
+<damage_mod>0</damage_mod>
+<range_mod>2</range_mod>
+</card>
+<card idName="attack_r1_d-1">
+<name>Attack</name>
+<level>0</level>
+<script>Card_Attack</script>
+<damage_mod>-1</damage_mod>
+<range_mod>1</range_mod>
+</card>
+<card idName="attack_r-1_d2">
+<name>Attack</name>
+<level>0</level>
+<script>Card_Attack</script>
+<damage_mod>2</damage_mod>
+<range_mod>-1</range_mod>
+</card>
+<card idName="aim">
+<name>Aim</name>
+<level>1</level>
+<script>Card_GiveCharm</script>
+<desc>This unit's next attack does +1 damage</desc>
+<any_unit>true</any_unit>
+<gift_id>aim_charm</gift_id>
+</card>
+<card idName="bite">
+<name>Bite</name>
+<level>-1</level>
+<script>Card_AttackIgnoreWeapon</script>
+<damage>2</damage>
+<range>1.5</range>
+</card>
+<card idName="blade_dash">
+<name>Blade Dash</name>
+<level>1</level>
+<script>Card_MoveAttackAOE</script>
+<damage>2</damage>
+<range>4</range>
+</card>
+<card idName="cover_attack">
+<name>Cover Attack</name>
+<level>1</level>
+<script>Card_CoverAttack</script>
+<damage_mod>-2</damage_mod>
+<range_mod>0</range_mod>
+</card>
+<card idName="draw_a_card">
+<name>Draw A Card</name>
+<level>0</level>
+<script>Card_BasicTargetBonus</script>
+<any_unit>true</any_unit>
+<cards_to_draw>1</cards_to_draw>
+<actions_to_gain>0</actions_to_gain>
+</card>
+<card idName="gain_an_action">
+<name>Gain An Action</name>
+<level>0</level>
+<script>Card_BasicTargetBonus</script>
+<any_unit>true</any_unit>
+<cards_to_draw>0</cards_to_draw>
+<actions_to_gain>1</actions_to_gain>
+</card>
+<card idName="village">
+<name>Village</name>
+<level>1</level>
+<script>Card_BasicTargetBonus</script>
+<any_unit>false</any_unit>
+<cards_to_draw>1</cards_to_draw>
+<actions_to_gain>2</actions_to_gain>
+</card>
+<card idName="focus">
+<name>Focus</name>
+<level>0</level>
+<script>Card_GiveCharm</script>
+<desc>Next attack this turn has +1 damage and +2 range</desc>
+<any_unit>false</any_unit>
+<gift_id>focus_charm</gift_id>
+</card>
+<card idName="grenade">
+<name>Grenade</name>
+<level>2</level>
+<script>Card_BasicAOEAttack</script>
+<damage>2</damage>
+<throw_range>4</throw_range>
+<damage_range>1.5</damage_range>
+<destroy_cover>true</destroy_cover>
+<harms_friendly>true</harms_friendly>
+</card>
+<card idName="heal">
+<name>Heal</name>
+<level>0</level>
+<script>Card_Heal</script>
+<heal>2</heal>
+<range>5</range>
+</card>
+<card idName="heal_light">
+<name>Heal Light</name>
+<level>-1</level>
+<script>Card_Heal</script>
+<heal>1</heal>
+<range>6</range>
+</card>
+<card idName="move_and_attack">
+<name>Move And Attack</name>
+<level>1</level>
+<script>Card_MoveAndAttack</script>
+<range>3</range>
+<damage_mod>-1</damage_mod>
+</card>
+<card idName="move2_cantrip">
+<name>Move Cantrip</name>
+<level>1</level>
+<script>Card_Movement</script>
+<range>2</range>
+<bonus_actions>1</bonus_actions>
+<bonus_cards>1</bonus_cards>
+</card>
+<card idName="shield">
+<name>Shield</name>
+<level>2</level>
+<script>Card_GiveCharm</script>
+<desc>Next time target unit takes damage, reduce it by 2</desc>
+<any_unit>true</any_unit>
+<gift_id>one_time_shield</gift_id>
+</card>
+<card idName="team_dash">
+<name>Team Dash</name>
+<level>2</level>
+<script>Card_TeamDash</script>
+<range>3</range>
+<gift_id>team_dash_gift</gift_id>
+</card>
+<card idName="team_dash_gift">
+<name>Team Dash</name>
+<level>-1</level>
+<script>Card_MovementSelfDestruct</script>
+<range>3</range>
+</card>
+<card idName="teleport">
+<name>Teleport</name>
+<level>1</level>
+<script>Card_Teleport</script>
+<target_range>5</target_range>
+<move_range>3</move_range>
+</card>
+</cards>

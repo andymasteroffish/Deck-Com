@@ -1,0 +1,72 @@
+<charms>
+  <charm idName="long_bow">
+    <name>Long Bow</name>
+    <script>Weapon_Basic</script>
+    <damage>2</damage>
+    <range>6</range>
+  </charm>
+  <charm idName="wizard_staff">
+    <name>Wizard Staff</name>
+    <script>Weapon_Basic</script>
+    <damage>1</damage>
+    <range>7</range>
+  </charm>
+  <charm idName="sniper_rifle">
+    <name>Sniper Rifle</name>
+    <script>Weapon_SniperRifle</script>
+    <desc>3 Damage, 7 Range, attack cards cost an additional action</desc>
+    <damage>3</damage>
+    <range>7</range>
+  </charm>
+  <charm idName="grunt_wep">
+    <name>Grunt Weapon</name>
+    <script>Weapon_Basic</script>
+    <damage>1</damage>
+    <range>5</range>
+  </charm>
+  <charm idName="goblin_wep">
+    <name>Goblin Weapon</name>
+    <script>Weapon_Basic</script>
+    <damage>2</damage>
+    <range>6</range>
+  </charm>
+  <charm idName="goblin_king_wep">
+    <name>King's Staff</name>
+    <script>Weapon_Basic</script>
+    <damage>3</damage>
+    <range>4</range>
+  </charm>
+  <charm idName="extra_card">
+    <name>Extra Card Pendant</name>
+    <script>Charm_ExtraCard</script>
+    <desc>Draw an extra card each turn</desc>
+    <extra_cards>1</extra_cards>
+  </charm>
+  <charm idName="heal_ring">
+    <name>Heal Ring</name>
+    <script>Charm_HealRing</script>
+    <desc>Draw a card when you play your first aid card each turn</desc>
+  </charm>
+  <charm idName="focus_charm">
+    <name>Focus</name>
+    <script>Charm_OneTimeWeaponBonus</script>
+    <desc>Next attack this turn has +1 damage and +2 range</desc>
+    <damageMod>1</damageMod>
+    <rangeMod>2</rangeMod>
+    <expires_at_turn_end>True</expires_at_turn_end>
+  </charm>
+  <charm idName="aim_charm">
+    <name>Aim</name>
+    <script>Charm_OneTimeWeaponBonus</script>
+    <desc>Next attack does +1 damage</desc>
+    <damageMod>1</damageMod>
+    <rangeMod>0</rangeMod>
+    <expires_at_turn_end>False</expires_at_turn_end>
+  </charm>
+  <charm idName="one_time_shield">
+    <name>Shield</name>
+    <script>Charm_OneTimeShield</script>
+    <desc>The next time you take damage, prevent 2 of it.</desc>
+    <damagePrevented>2</damagePrevented>
+  </charm>
+</charms>

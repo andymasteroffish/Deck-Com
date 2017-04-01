@@ -1,0 +1,31 @@
+MVP for Deck-Com
+
+[X] - Basic AI
+	[X] - Telegraph AI moves
+
+[X] - Collect Loot In Game
+
+[X] - Loot screen at the end of a match
+	[X] save money, unused cards, unused charms
+	[X] money loot
+	[X] booster pack loot (set of random cards)
+
+[X] - Being able to edit decks between matches
+	[X] - spend money to add cards
+	[X] - spend money to change charms
+	[X] - save decks/charms
+
+[ ] - 8 new charms
+[ ] - 5 new weapons
+[ ] - 3 new foes 
+
+[ ] - Removing decks from the player save if that unit dies
+
+[ ] - Generate simple levels
+	[ ] - slightly random map gen
+	[ ] - populating those maps with enemies that scale up with a difficulty value
+	[ ] - assigning loot to enemies
+
+
+- No overworld
+- No loot that involves a selection
