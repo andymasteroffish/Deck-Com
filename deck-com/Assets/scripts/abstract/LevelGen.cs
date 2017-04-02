@@ -36,7 +36,7 @@ public class LevelGen {
 				Tile[,] chunk = loadChunkFromText (thisFile, chunkX, chunkY);
 
 				//add or remove one or two cover objects randomly
-				//greeble(chunk, chunkSize, chunkSize);
+				greeble(chunk, chunkSize, chunkSize);
 
 				//possibly rotate it
 				int numRots = (int)Random.Range(0,4);
@@ -46,10 +46,10 @@ public class LevelGen {
 
 				//possibly flip it
 				if (Random.value < 0.5f) {
-					//flip vertical
+					chunk = flipHorz(chunk, chunkSize, chunkSize);
 				}
 				if (Random.value < 0.5f) {
-					//flip horizontal
+					chunk = flipVert(chunk, chunkSize, chunkSize);
 				}
 
 				//add it
@@ -112,7 +112,31 @@ public class LevelGen {
 				int sourceX = y;
 				int sourceY = gridW - x - 1;
 
-				Debug.Log ("x " + x + " becomes " + sourceX);
+				grid [x, y] = orig [sourceX, sourceY];
+			}
+		}
+		return grid;
+	}
+
+	public Tile[,] flipHorz(Tile[,] orig, int gridW, int gridH){
+		Tile[,] grid = new Tile[gridW, gridH];
+		for (int x = 0; x < gridW; x++) {
+			for (int y = 0; y < gridH; y++) {
+				int sourceX = gridW - x - 1;
+				int sourceY = y;
+
+				grid [x, y] = orig [sourceX, sourceY];
+			}
+		}
+		return grid;
+	}
+
+	public Tile[,] flipVert(Tile[,] orig, int gridW, int gridH){
+		Tile[,] grid = new Tile[gridW, gridH];
+		for (int x = 0; x < gridW; x++) {
+			for (int y = 0; y < gridH; y++) {
+				int sourceX = x;
+				int sourceY = gridH - y - 1;
 
 				grid [x, y] = orig [sourceX, sourceY];
 			}
