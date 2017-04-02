@@ -80,7 +80,8 @@ public class Board {
 
 	public void reset(){
 		//clear ();
-		grid = levelGen.getTestLevel ();// new Tile[cols, rows];
+		//grid = levelGen.getTestLevel ();// new Tile[cols, rows];
+		grid = levelGen.getLevel();
 
 		loot.Clear ();
 

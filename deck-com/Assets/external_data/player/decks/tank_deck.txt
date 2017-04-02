@@ -1,9 +1,9 @@
+move5
+move4
 grenade
 cover_attack
 aim
 aim
-move5
-move4
 move4
 move4
 move3

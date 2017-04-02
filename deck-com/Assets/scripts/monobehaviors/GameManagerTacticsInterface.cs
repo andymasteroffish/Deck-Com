@@ -21,6 +21,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public float lootDropPrc;
 
 	public string mapName;
+	public int mapChunkCols, mapChunkRows;
+	public TextAsset[] mapChunks;
+
 	public string[] spawnList;
 
 	public GameObject pickupLootButton;

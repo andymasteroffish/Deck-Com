@@ -33,15 +33,17 @@ public class Tile {
 
 	//public BoxCollider2D collider;
 
-	public Tile(int x, int y, Cover _cover, SpawnProperty _spawnProperty, bool _useGameObject, GameManager _gm){
+	public Tile(Cover _cover, SpawnProperty _spawnProperty, GameManager _gm){
 		gm = _gm;
 		spawnProperty = _spawnProperty;
 
-		useGameObject = _useGameObject;
-
-		pos = new TilePos (x,y);
+		useGameObject = true;//_useGameObject;
 
 		setCover (_cover);
+	}
+
+	public void finalizeSetup(int x, int y){
+		pos = new TilePos (x,y);
 
 		if (useGameObject) {
 			//GameObjectManager.instance.getTileGO ().activate (this);
