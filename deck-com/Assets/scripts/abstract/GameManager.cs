@@ -316,6 +316,10 @@ public class GameManager {
 			TurnInfo turn = new TurnInfo (move);
 			//generate a board with this move
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
+			if (GameManagerTacticsInterface.instance.debugPrintAIInfo) {
+				turn.debugResultingBoard = newBoard;
+			}
+
 			//find all of the moves the AI could make from there
 			TurnInfo followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth+1);
 
@@ -324,7 +328,7 @@ public class GameManager {
 				turn.addMoves (followingMoves);
 			} else {
 				//if there were no further moves, this is the end of this set and we should evaluate the board
-				newBoard.compareBoardSates (originalBoard, !curBoard.units [unitID].isPlayerControlled, ref turn);
+				newBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref turn, false);
 			}
 
 			potentialTurns.Add (turn);
@@ -353,6 +357,12 @@ public class GameManager {
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			returnVal.print (board);
 			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
+		
+			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
+			Debug.Log ("------TEST-------");
+			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
+			returnVal.debugResultingBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
+			temp.print (board);
 		}
 
 		return returnVal;

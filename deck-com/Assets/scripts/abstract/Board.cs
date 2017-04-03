@@ -80,8 +80,11 @@ public class Board {
 
 	public void reset(){
 		//clear ();
-		//grid = levelGen.getTestLevel ();// new Tile[cols, rows];
-		grid = levelGen.getLevel();
+		if (GameManagerTacticsInterface.instance.debugMapName != "") {
+			grid = levelGen.getTestLevel (GameManagerTacticsInterface.instance.debugMapName);
+		} else {
+			grid = levelGen.getLevel ();
+		}
 
 		loot.Clear ();
 
@@ -121,7 +124,6 @@ public class Board {
 
 		//if straight up nobody got loot, just select one
 		while(loot.Count == 0) {
-			Debug.Log ("come on man");
 			int randID = (int)Random.Range (0, units.Count);
 			if (!units [randID].isPlayerControlled) {
 				Loot thisLoot = new Loot (units [randID]);
@@ -859,12 +861,16 @@ public class Board {
 		return -1;
 	}
 
-	public void compareBoardSates(Board oldBoard, bool rootingForAI, ref TurnInfo info){
+	public void compareBoardSates(Board oldBoard, Unit curUnit, ref TurnInfo info, bool printInfo){
 		//create unit lists. These lists should line up exactly. it is bad if they don't
 		List<Unit> curAllies = new List<Unit>();
 		List<Unit> oldAllies = new List<Unit>();
 		List<Unit> curEnemies = new List<Unit> ();
 		List<Unit> oldEnemies = new List<Unit>();
+
+		bool rootingForAI = !curUnit.isPlayerControlled;
+
+		info.val = 0;
 
 		info.resetEvaluations ();
 		info.totalAllies = curAllies.Count;
@@ -872,10 +878,8 @@ public class Board {
 		//sepeare them into allies on enemies depending on which side we are trying to get a move for
 		foreach (Unit unit in units) {
 			if (unit.isPlayerControlled == rootingForAI) {
-				//Debug.Log ("I hate " + unit.unitName + " on " + unit.CurTile.Pos.x + "," + unit.CurTile.Pos.y);
 				curEnemies.Add (unit);
 			} else {
-				//Debug.Log ("I love " + unit.unitName + " on " + unit.CurTile.Pos.x + "," + unit.CurTile.Pos.y);
 				curAllies.Add (unit);
 			}
 		}
@@ -892,45 +896,71 @@ public class Board {
 			Debug.Log ("BAD BAD BAD BAD");
 		}
 
+		//going through enemies
+		int totalEnemyDamage = 0;
+		int numEnemiesKilled = 0;
+		int numEnemiesAided = 0;
 		for (int i = 0; i < oldEnemies.Count; i++) {
 			//will enemies be damaged?
 			if (curEnemies[i].health != oldEnemies[i].health){
 				info.numEnemiesDamaged++;
 				info.totalEnemyDamage += oldEnemies[i].health-curEnemies[i].health;
+
+				totalEnemyDamage += oldEnemies [i].health - curEnemies [i].health; 
+
 			}
 
 			//will enemies be killed?
 			if (curEnemies[i].isDead && !oldEnemies[i].isDead){
 				info.numEnemiesKilled ++;
+				numEnemiesKilled++;
 			}
 
 			//were enemies aided (bad!)
 			//this value gets reset at the start of each simulation, so the oldEnemy value will always be 0
 			info.numEnemiesAided += curEnemies[i].aiSimHasBeenAidedCount;
+			numEnemiesAided += curEnemies [i].aiSimHasBeenAidedCount;
 		}
 
+		//add it to the total
+		info.val += totalEnemyDamage * curUnit.aiProfile.totalEnemyDamage;
+		info.val += numEnemiesKilled * curUnit.aiProfile.numEnemiesKilled;
+		info.val += numEnemiesAided * curUnit.aiProfile.numEnemiesAided;
+
+		//going through allies
+		int totalAllyDamage = 0;
+		int numAlliesKilled = 0;
+		int numAlliesAided = 0;
 		for (int i = 0; i < oldAllies.Count; i++) {
 			//will allies be damaged?
 			if (curAllies[i].health != oldAllies[i].health){
 				info.numAlliesDamaged++;
 				info.totalAllyDamage += oldAllies[i].health-curAllies[i].health;
+				totalAllyDamage += oldAllies [i].health - curAllies [i].health;
 			}
 
 			//will allies be killed?
 			if (curAllies[i].isDead && !oldAllies[i].isDead){
 				info.numAlliesKilled ++;
+				numAlliesKilled++;
 			}
 
 			//were allies aided? (good!)
 			info.numAlliesAided += curAllies[i].aiSimHasBeenAidedCount;
+			numAlliesAided += curAllies[i].aiSimHasBeenAidedCount;
 		}
+
+		//add it to the total
+		info.val += totalAllyDamage * curUnit.aiProfile.totalAllyDamage;
+		info.val += numAlliesKilled * curUnit.aiProfile.numAlliesKilled;
+		info.val += numAlliesAided * curUnit.aiProfile.numAlliesAided;
 
 		//checking distance stuff
 		for (int i = 0; i < oldAllies.Count; i++) {
 
 			//this should be set in some kind of AI profile, but for now, let's say the goal is to be within weapons range minus a bit
-			float targetDistMin = curAllies[i].Weapon.baseRange;
-			float targetDistMax = curAllies [i].Weapon.baseRange - 3;
+			float targetDistMin = curAllies[i].aiProfile.targetDistMin;// .Weapon.baseRange;
+			float targetDistMax = curAllies [i].aiProfile.targetDistMin;// .Weapon.baseRange - 3;
 
 			//are allies further or closer to enemies (include dead enemies so that moving close and making a kill doesn't count as a negative)
 			float oldClosestDist = 9999;
@@ -962,6 +992,14 @@ public class Board {
 			float curCloseDif = targetDistMax - curClosestDist;
 			if (curCloseDif < 0)	curCloseDif = 0;
 
+			float totalDistChange = (oldFarDif - curFarDif) + (oldCloseDif - oldCloseDif);
+			float valToAdd = totalDistChange * curAllies [i].aiProfile.totalDistCloserToTargetDistances;
+			info.val += valToAdd;
+			if ( printInfo) {
+				Debug.Log (curAllies [i].unitName + " dist change " + totalDistChange + " for a value of " + valToAdd);
+			}
+				
+
 			info.totalDistCloserToTargetDistances += oldFarDif - curFarDif;
 			info.totalDistCloserToTargetDistances += oldCloseDif - oldCloseDif;
 
@@ -969,6 +1007,36 @@ public class Board {
 				info.numUnitsCloserToTargetDist++;
 			}	 
 		}
+
+		//how has ally cover changed
+		//USE THIS
+//		Tile.Cover[] oldAllyCover = new Tile.Cover[oldAllies.Count];
+//		Tile.Cover[] newAllyCover = new Tile.Cover[oldAllies.Count];
+//		for (int i = 0; i < oldAllies.Count; i++) {
+//			Tile.Cover oldLowestCover = Tile.Cover.Full;
+//			foreach (Unit enemy in oldEnemies) {
+//				if (!enemy.isDead) {
+//					Tile.Cover thisCover = getCover (enemy.CurTile, curAllies [i].CurTile);
+//					if ((int)thisCover < (int)oldLowestCover) {
+//						oldLowestCover = thisCover;
+//					}	
+//				}
+//			}
+//
+//			Tile.Cover newLowestCover = Tile.Cover.Full;
+//			foreach (Unit enemy in curEnemies) {
+//				if (!enemy.isDead) {
+//					Tile.Cover thisCover = getCover (enemy.CurTile, curAllies [i].CurTile);
+//					if ((int)thisCover < (int)newLowestCover) {
+//						newLowestCover = thisCover;
+//					}	
+//				}
+//			}
+//
+//			if (printInfo) {
+//				Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover);
+//			}
+//		}
 
 		//what is the average cover for allies? This ignores the previous board state and only cares about where we are now
 		foreach (Unit ally in curAllies) {
@@ -979,11 +1047,12 @@ public class Board {
 					lowestCover = thisCover;
 				}	
 			}
-
+			if (printInfo) {
+				Debug.Log ("ally on "+ally.CurTile.Pos.x+","+ally.CurTile.Pos.y+" cover "+lowestCover);
+			}
 			info.numAlliesCover [(int)lowestCover]++;
 		}
 
-		//are any allies flanked?
 
 		//what is the average cover for enemies?
 

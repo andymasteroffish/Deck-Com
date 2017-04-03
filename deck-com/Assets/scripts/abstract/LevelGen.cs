@@ -10,8 +10,8 @@ public class LevelGen {
 	public LevelGen(){
 	}
 
-	public Tile[,] getTestLevel(){
-		return loadLevelFromText ( Resources.Load<TextAsset>("maps/"+GameManagerTacticsInterface.instance.mapName) );
+	public Tile[,] getTestLevel(string mapName){
+		return loadLevelFromText ( Resources.Load<TextAsset>("maps/"+mapName) );
 	}
 
 	public Tile[,] getLevel(){

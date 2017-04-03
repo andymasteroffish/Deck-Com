@@ -6,11 +6,20 @@ public class TurnInfo {
 
 	public List<MoveInfo> moves;
 
-	public int totalValue;
+	public Board debugResultingBoard = null;	//this will be only be used when testing AI and should be left null most of the time
 
-	public int totalAllies;
+	//set when the board is evaluated
+	public float val;	
+
+
+
+
+	public int totalValue; //OLD. REMOVE
+
+	public int totalAllies;	//OLD. REMOVE
 
 	//values for evaluating AI moves
+	//REMOVE ALL OF THIS
 	public int numEnemiesDamaged;
 	public int totalEnemyDamage;
 	public int numEnemiesKilled;
@@ -34,6 +43,7 @@ public class TurnInfo {
 
 	public TurnInfo(MoveInfo move){
 		totalValue = 0;
+		val = 0;
 		moves = new List<MoveInfo> ();
 		moves.Add (move);
 	}
@@ -43,8 +53,12 @@ public class TurnInfo {
 			moves.Add (other.moves [i]);
 		}
 
+		debugResultingBoard = other.debugResultingBoard;
+
 		//we only care about the final board state so all evaluation should be transfered over
 		if (moves.Count > 0) {
+			val = other.val;
+
 			numEnemiesDamaged = other.numEnemiesDamaged;
 			totalEnemyDamage = other.totalEnemyDamage;
 			numEnemiesKilled = other.numEnemiesKilled;
@@ -70,7 +84,8 @@ public class TurnInfo {
 	public void print(Board board){
 		Unit unit = board.units [moves [0].unitID];
 		Debug.Log ("MY SEXY ASS TURN for "+unit.unitName);
-		Debug.Log ("value: " + totalValue);
+		Debug.Log ("old value: " + totalValue);
+		Debug.Log ("new value: " + val);
 		for (int i = 0; i < moves.Count; i++) {
 			if (moves [i].passMove) {
 				Debug.Log (i + ": PASS");

@@ -20,7 +20,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public float lootDropPrc;
 
-	public string mapName;
+	public string debugMapName;
+
 	public int mapChunkCols, mapChunkRows;
 	public TextAsset[] mapChunks;
 

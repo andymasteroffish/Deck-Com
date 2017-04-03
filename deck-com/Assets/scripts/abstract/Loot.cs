@@ -23,7 +23,7 @@ public class Loot {
 		curTile = null;
 		type = Random.value > 0.5f ? Loot.Type.booster : Loot.Type.money;
 		level = holder.ChallengeLevel;
-		Debug.Log ("loot level: " + level);
+		//Debug.Log ("loot level: " + level);
 		isDone = false;
 	}
 

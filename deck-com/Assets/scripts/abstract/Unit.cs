@@ -53,6 +53,7 @@ public class Unit {
 	public bool mouseIsOver;
 
 	//some stuff for AI work
+	public AIProfile aiProfile;
 	public bool isAISimUnit;
 	public bool isActingAIUnit;		//gets cards and deck when an AI board is made
 	public int  aiHandSize;
@@ -86,7 +87,6 @@ public class Unit {
 		if (node ["level"] != null) {
 			challengeLevel = int.Parse(node ["level"].InnerText);
 		}
-
 
 		charmIDs = new List<string> ();
 		XmlNodeList childNodes = node["charms"].ChildNodes;
@@ -127,6 +127,9 @@ public class Unit {
 
 		setHighlighted (false);
 
+		//aiProfile might reference the weapon, so we should make it after setting the charms
+		aiProfile = new AIProfile (this);	//this should load from XML
+
 		//create the game object shell
 		if (useGO) {
 			GameObjectManager.instance.getUnitGO ().activate (this);
@@ -144,6 +147,7 @@ public class Unit {
 		unitName = parent.unitName;
 
 		isActingAIUnit = parent.isActingAIUnit;
+		aiProfile = parent.aiProfile;
 		isAISimUnit = true;
 
 		isPlayerControlled = parent.isPlayerControlled;
