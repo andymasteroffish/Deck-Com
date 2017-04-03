@@ -110,6 +110,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.D)) {
 				gm.activePlayerUnit.deck.drawCard ();
 			}
+			//heal
+			if (Input.GetKeyDown (KeyCode.H)) {
+				gm.activePlayerUnit.heal (2);
+			}
 				
 		}
 

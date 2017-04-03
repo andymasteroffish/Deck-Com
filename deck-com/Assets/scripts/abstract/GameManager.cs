@@ -336,16 +336,16 @@ public class GameManager {
 
 		//find the best one
 		//int bestID = 0;
-		int bestValue = -9999;
+		float bestValue = -9999;
 		for (int i = 0; i < potentialTurns.Count; i++) {
-			if (potentialTurns [i].totalValue > bestValue) {
-				bestValue = potentialTurns [i].totalValue;
+			if (potentialTurns [i].val > bestValue) {
+				bestValue = potentialTurns [i].val;
 			}
 		}
 		//get a list of all moves with that value
 		List<TurnInfo> goodTurns = new List<TurnInfo>();
 		for (int i = 0; i < potentialTurns.Count; i++) {
-			if (potentialTurns [i].totalValue == bestValue) {
+			if (potentialTurns [i].val == bestValue) {
 				goodTurns.Add(potentialTurns [i]);
 			}
 		}
@@ -362,7 +362,7 @@ public class GameManager {
 			Debug.Log ("------TEST-------");
 			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
 			returnVal.debugResultingBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
-			temp.print (board);
+			//temp.print (board);
 		}
 
 		return returnVal;

@@ -872,9 +872,6 @@ public class Board {
 
 		info.val = 0;
 
-		info.resetEvaluations ();
-		info.totalAllies = curAllies.Count;
-
 		//sepeare them into allies on enemies depending on which side we are trying to get a move for
 		foreach (Unit unit in units) {
 			if (unit.isPlayerControlled == rootingForAI) {
@@ -903,22 +900,17 @@ public class Board {
 		for (int i = 0; i < oldEnemies.Count; i++) {
 			//will enemies be damaged?
 			if (curEnemies[i].health != oldEnemies[i].health){
-				info.numEnemiesDamaged++;
-				info.totalEnemyDamage += oldEnemies[i].health-curEnemies[i].health;
-
 				totalEnemyDamage += oldEnemies [i].health - curEnemies [i].health; 
 
 			}
 
 			//will enemies be killed?
 			if (curEnemies[i].isDead && !oldEnemies[i].isDead){
-				info.numEnemiesKilled ++;
 				numEnemiesKilled++;
 			}
 
 			//were enemies aided (bad!)
 			//this value gets reset at the start of each simulation, so the oldEnemy value will always be 0
-			info.numEnemiesAided += curEnemies[i].aiSimHasBeenAidedCount;
 			numEnemiesAided += curEnemies [i].aiSimHasBeenAidedCount;
 		}
 
@@ -934,19 +926,18 @@ public class Board {
 		for (int i = 0; i < oldAllies.Count; i++) {
 			//will allies be damaged?
 			if (curAllies[i].health != oldAllies[i].health){
-				info.numAlliesDamaged++;
-				info.totalAllyDamage += oldAllies[i].health-curAllies[i].health;
-				totalAllyDamage += oldAllies [i].health - curAllies [i].health;
+				//healing should not be counted here
+				if (oldAllies [i].health > curAllies [i].health) {
+					totalAllyDamage += oldAllies [i].health - curAllies [i].health;
+				}
 			}
 
 			//will allies be killed?
 			if (curAllies[i].isDead && !oldAllies[i].isDead){
-				info.numAlliesKilled ++;
 				numAlliesKilled++;
 			}
 
 			//were allies aided? (good!)
-			info.numAlliesAided += curAllies[i].aiSimHasBeenAidedCount;
 			numAlliesAided += curAllies[i].aiSimHasBeenAidedCount;
 		}
 
@@ -958,99 +949,88 @@ public class Board {
 		//checking distance stuff
 		for (int i = 0; i < oldAllies.Count; i++) {
 
-			//this should be set in some kind of AI profile, but for now, let's say the goal is to be within weapons range minus a bit
-			float targetDistMin = curAllies[i].aiProfile.targetDistMin;// .Weapon.baseRange;
-			float targetDistMax = curAllies [i].aiProfile.targetDistMin;// .Weapon.baseRange - 3;
+			float minDistFromClosest = curAllies [i].aiProfile.preferedDistToClosestEnemy - curAllies [i].aiProfile.acceptableDistanceRangeToClosestEnemy;
+			float maxDistFromClosest = curAllies [i].aiProfile.preferedDistToClosestEnemy + curAllies [i].aiProfile.acceptableDistanceRangeToClosestEnemy;
 
-			//are allies further or closer to enemies (include dead enemies so that moving close and making a kill doesn't count as a negative)
-			float oldClosestDist = 9999;
-			float oldFurtherstDist = 0;
+			float oldClosestDistToEnemy = 9999;
+			float newClosestDistToEnemy = 9999;
 
 			foreach (Unit enemy in oldEnemies) {
 				float dist = enemy.CurTile.Pos.getDist (oldAllies [i].CurTile.Pos);
-				if (dist < oldClosestDist)		oldClosestDist = dist;
-				if (dist > oldFurtherstDist)	oldFurtherstDist = dist;
+				if (dist < oldClosestDistToEnemy)		oldClosestDistToEnemy = dist;
 			}
-
-
-			float curClosestDist = 9999;
-			float curFurtherstDist = 0;
 			foreach (Unit enemy in curEnemies) {
 				float dist = enemy.CurTile.Pos.getDist (curAllies [i].CurTile.Pos);
-				if (dist < curClosestDist)		curClosestDist = dist;
-				if (dist > curFurtherstDist)	curFurtherstDist = dist;
+				if (dist < newClosestDistToEnemy)		newClosestDistToEnemy = dist;
 			}
 
-			//get the difference values
-			float oldFarDif = oldFurtherstDist - targetDistMin;
-			if (oldFarDif < 0)	oldFarDif = 0;
-			float curFarDif = curFurtherstDist - targetDistMin;
-			if (curFarDif < 0)	curFarDif = 0;
-
-			float oldCloseDif = targetDistMax- oldClosestDist;
-			if (oldCloseDif < 0)	oldCloseDif = 0;
-			float curCloseDif = targetDistMax - curClosestDist;
-			if (curCloseDif < 0)	curCloseDif = 0;
-
-			float totalDistChange = (oldFarDif - curFarDif) + (oldCloseDif - oldCloseDif);
-			float valToAdd = totalDistChange * curAllies [i].aiProfile.totalDistCloserToTargetDistances;
-			info.val += valToAdd;
-			if ( printInfo) {
-				Debug.Log (curAllies [i].unitName + " dist change " + totalDistChange + " for a value of " + valToAdd);
+			float oldVal = 0;
+			if (oldClosestDistToEnemy < minDistFromClosest) {
+				oldVal = oldClosestDistToEnemy - minDistFromClosest;
 			}
-				
+			if (oldClosestDistToEnemy > maxDistFromClosest) {
+				oldVal = maxDistFromClosest - oldClosestDistToEnemy;
+			}
 
-			info.totalDistCloserToTargetDistances += oldFarDif - curFarDif;
-			info.totalDistCloserToTargetDistances += oldCloseDif - oldCloseDif;
+			float newVal = 0;
+			if (newClosestDistToEnemy < minDistFromClosest) {
+				newVal = newClosestDistToEnemy - minDistFromClosest;
+			}
+			if (newClosestDistToEnemy > maxDistFromClosest) {
+				newVal = maxDistFromClosest - newClosestDistToEnemy;
+			}
 
-			if ( (curFarDif < oldFarDif && curCloseDif <= oldCloseDif) || (curCloseDif < oldCloseDif && curFarDif <= oldFarDif)) {
-				info.numUnitsCloserToTargetDist++;
-			}	 
+			float change = newVal - oldVal;
+			info.val += change * curAllies[i].aiProfile.distanceToEnemiesWeight;
+
+			if (printInfo) {
+//				Debug.Log ("min dist: " + minDistFromClosest);
+//				Debug.Log ("max dist: " + maxDistFromClosest);
+//				Debug.Log ("old closest: " + oldClosestDistToEnemy);
+//				Debug.Log ("new closest: " + newClosestDistToEnemy);
+//				Debug.Log ("old val: " + oldVal);
+//				Debug.Log ("new val: " + newVal);
+				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
+			}
+
 		}
 
-		//how has ally cover changed
-		//USE THIS
-//		Tile.Cover[] oldAllyCover = new Tile.Cover[oldAllies.Count];
-//		Tile.Cover[] newAllyCover = new Tile.Cover[oldAllies.Count];
-//		for (int i = 0; i < oldAllies.Count; i++) {
-//			Tile.Cover oldLowestCover = Tile.Cover.Full;
-//			foreach (Unit enemy in oldEnemies) {
-//				if (!enemy.isDead) {
-//					Tile.Cover thisCover = getCover (enemy.CurTile, curAllies [i].CurTile);
-//					if ((int)thisCover < (int)oldLowestCover) {
-//						oldLowestCover = thisCover;
-//					}	
-//				}
-//			}
-//
-//			Tile.Cover newLowestCover = Tile.Cover.Full;
-//			foreach (Unit enemy in curEnemies) {
-//				if (!enemy.isDead) {
-//					Tile.Cover thisCover = getCover (enemy.CurTile, curAllies [i].CurTile);
-//					if ((int)thisCover < (int)newLowestCover) {
-//						newLowestCover = thisCover;
-//					}	
-//				}
-//			}
-//
-//			if (printInfo) {
-//				Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover);
-//			}
-//		}
+		//how has ally cover changed?
+		for (int i = 0; i < oldAllies.Count; i++) {
+			Tile.Cover oldLowestCover = Tile.Cover.Full;
+			foreach (Unit enemy in oldEnemies) {
+				if (!enemy.isDead) {
+					Tile.Cover thisCover = getCover (enemy.CurTile, oldAllies [i].CurTile);
+					if ((int)thisCover < (int)oldLowestCover) {
+						oldLowestCover = thisCover;
+					}	
+				}
+			}
 
-		//what is the average cover for allies? This ignores the previous board state and only cares about where we are now
-		foreach (Unit ally in curAllies) {
-			Tile.Cover lowestCover = Tile.Cover.Full;
+			Tile.Cover newLowestCover = Tile.Cover.Full;
 			foreach (Unit enemy in curEnemies) {
-				Tile.Cover thisCover = getCover (enemy.CurTile, ally.CurTile);
-				if ((int)thisCover < (int)lowestCover) {
-					lowestCover = thisCover;
-				}	
+				if (!enemy.isDead) {
+					Tile.Cover thisCover = getCover (enemy.CurTile, curAllies [i].CurTile);
+					if ((int)thisCover < (int)newLowestCover) {
+						newLowestCover = thisCover;
+					}	
+				}
 			}
+
+			//neither cover can be considered higher than what is actually usable on that tile
+			if ((int)oldLowestCover > (int)oldAllies [i].CurTile.getHighestAdjacentCover ()) {
+				oldLowestCover = oldAllies [i].CurTile.getHighestAdjacentCover ();
+			}
+			if ((int)newLowestCover > (int)curAllies [i].CurTile.getHighestAdjacentCover ()) {
+				newLowestCover = curAllies [i].CurTile.getHighestAdjacentCover ();
+			}
+
+			float changeVal = curAllies [i].aiProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
+			info.val += changeVal;
+
 			if (printInfo) {
-				Debug.Log ("ally on "+ally.CurTile.Pos.x+","+ally.CurTile.Pos.y+" cover "+lowestCover);
+				Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
 			}
-			info.numAlliesCover [(int)lowestCover]++;
 		}
 
 
@@ -1061,7 +1041,7 @@ public class Board {
 		//have allies retreated or advanced?
 
 		//tally it all up
-		info.calculateTotalValue();
+		//info.calculateTotalValue();
 	}
 
 	//*************

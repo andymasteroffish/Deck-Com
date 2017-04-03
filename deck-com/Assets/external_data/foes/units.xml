@@ -8,7 +8,7 @@
     <base_health>1</base_health>
     <hand_size>4</hand_size>
     <charms>
-      <charm>goblin_wep</charm>
+      <charm>grunt_wep</charm>
     </charms>
   </unit>
   <unit idName = "grunt">

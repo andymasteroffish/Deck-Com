@@ -7,8 +7,8 @@ public class AIProfile {
 	private Unit owner;
 
 	//general info
-	public float targetDistMin;
-	public float targetDistMax;
+	public float preferedDistToClosestEnemy;
+	public float acceptableDistanceRangeToClosestEnemy;
 
 	//each of these are the value that the given stat will be multiplied by
 	public float totalEnemyDamage;
@@ -19,9 +19,11 @@ public class AIProfile {
 	public float numAlliesKilled;
 	public float numAlliesAided;
 
-	public float totalDistCloserToTargetDistances;
+	public float distanceToEnemiesWeight;
 
+	public float[,] coverChange;	//first value represents what it was, second what it is now
 
+	//need to factor in healing allies or enemies as their own stat
 
 
 	public AIProfile(Unit _owner){
@@ -39,10 +41,25 @@ public class AIProfile {
 		numAlliesKilled = -100;
 		numAlliesAided = 2;
 
-		targetDistMin = owner.Weapon.baseRange;
-		targetDistMax = owner.Weapon.baseRange - 3;
+		preferedDistToClosestEnemy = owner.Weapon.baseRange - 1;
+		acceptableDistanceRangeToClosestEnemy = 1.5f;
 
-		totalDistCloserToTargetDistances = 1;
+		distanceToEnemiesWeight = 1;
+
+		coverChange = new float[3, 3];
+		for (int i=0; i<3; i++){
+			for (int k=0; k<3; k++){
+				coverChange[i,k] = 0;
+			}
+		}
+		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Part] = 4;
+		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Full] = 50;
+
+		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.None] = -5;
+		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.Full] = 1;
+
+		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.None] = -7;
+		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.Part] = -1;
 	}
 
 

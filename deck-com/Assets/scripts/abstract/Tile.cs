@@ -71,6 +71,7 @@ public class Tile {
 		cover = parent.cover;
 		isHighlighted = parent.isHighlighted;
 		highlightCol = parent.highlightCol;
+
 	}
 
 	public void setInfo(Tile[] _adjacent){
@@ -100,6 +101,18 @@ public class Tile {
 	}
 	public void setHighlighted(bool val){
 		setHighlighted (val, Color.white);
+	}
+
+	public Cover getHighestAdjacentCover(){
+		Cover highCover = Cover.None;
+		foreach (Tile other in adjacent) {
+			if (other != null) {
+				if ((int)other.CoverVal > (int)highCover) {
+					highCover = other.CoverVal;
+				}
+			}
+		}
+		return highCover;
 	}
 
 	//setters and getters

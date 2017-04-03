@@ -101,6 +101,7 @@
 'Assets/charms/Charm_OneTimeWeaponBonus.cs'
 'Assets/charms/Weapon_Basic.cs'
 'Assets/charms/Weapon_SniperRifle.cs'
+'Assets/scripts/AI/AIProfile.cs'
 'Assets/scripts/AI/EnemyAI.cs'
 'Assets/scripts/AI/MoveInfo.cs'
 'Assets/scripts/AI/TurnInfo.cs'
