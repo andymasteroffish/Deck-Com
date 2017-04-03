@@ -3,12 +3,26 @@
     <name>Test Boy</name>
     <sprite>grunt</sprite>
     <deck>ai_test_deck</deck>
+    <ai_profile>test1</ai_profile>
     <player_controlled>false</player_controlled>
     <level>1</level>
     <base_health>1</base_health>
     <hand_size>4</hand_size>
     <charms>
       <charm>grunt_wep</charm>
+    </charms>
+  </unit>
+  <unit idName = "test_boy2">
+    <name>Test Boy 2</name>
+    <sprite>goblin</sprite>
+    <deck>ai_test_deck</deck>
+    <ai_profile>test2</ai_profile>
+    <player_controlled>false</player_controlled>
+    <level>1</level>
+    <base_health>2</base_health>
+    <hand_size>4</hand_size>
+    <charms>
+      <charm>test_melee</charm>
     </charms>
   </unit>
   <unit idName = "grunt">
@@ -25,7 +39,7 @@
   </unit>
   <unit idName = "goblin">
     <name>Goblin</name>
-    <sprite>gobin</sprite>
+    <sprite>goblin</sprite>
     <deck>goblin_deck</deck>
     <player_controlled>false</player_controlled>
     <level>2</level>

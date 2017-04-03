@@ -915,9 +915,9 @@ public class Board {
 		}
 
 		//add it to the total
-		info.val += totalEnemyDamage * curUnit.aiProfile.totalEnemyDamage;
-		info.val += numEnemiesKilled * curUnit.aiProfile.numEnemiesKilled;
-		info.val += numEnemiesAided * curUnit.aiProfile.numEnemiesAided;
+		info.val += totalEnemyDamage * curUnit.aiProfile.totalEnemyDamageWeight;
+		info.val += numEnemiesKilled * curUnit.aiProfile.numEnemiesKilledWeight;
+		info.val += numEnemiesAided * curUnit.aiProfile.numEnemiesAidedWeight;
 
 		//going through allies
 		int totalAllyDamage = 0;
@@ -942,9 +942,9 @@ public class Board {
 		}
 
 		//add it to the total
-		info.val += totalAllyDamage * curUnit.aiProfile.totalAllyDamage;
-		info.val += numAlliesKilled * curUnit.aiProfile.numAlliesKilled;
-		info.val += numAlliesAided * curUnit.aiProfile.numAlliesAided;
+		info.val += totalAllyDamage * curUnit.aiProfile.totalAllyDamageWeight;
+		info.val += numAlliesKilled * curUnit.aiProfile.numAlliesKilledWeight;
+		info.val += numAlliesAided * curUnit.aiProfile.numAlliesAidedWeight;
 
 		//checking distance stuff
 		for (int i = 0; i < oldAllies.Count; i++) {

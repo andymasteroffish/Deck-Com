@@ -53,7 +53,9 @@ public class Unit {
 	public bool mouseIsOver;
 
 	//some stuff for AI work
+	public string aiProfileName;
 	public AIProfile aiProfile;
+
 	public bool isAISimUnit;
 	public bool isActingAIUnit;		//gets cards and deck when an AI board is made
 	public int  aiHandSize;
@@ -86,6 +88,11 @@ public class Unit {
 		challengeLevel = 1;
 		if (node ["level"] != null) {
 			challengeLevel = int.Parse(node ["level"].InnerText);
+		}
+
+		aiProfileName = "none";
+		if (node ["ai_profile"] != null) {
+			aiProfileName = node ["ai_profile"].InnerText;
 		}
 
 		charmIDs = new List<string> ();
@@ -128,7 +135,7 @@ public class Unit {
 		setHighlighted (false);
 
 		//aiProfile might reference the weapon, so we should make it after setting the charms
-		aiProfile = new AIProfile (this);	//this should load from XML
+		aiProfile = new AIProfile (this, aiProfileName);	//this should load from XML
 
 		//create the game object shell
 		if (useGO) {
