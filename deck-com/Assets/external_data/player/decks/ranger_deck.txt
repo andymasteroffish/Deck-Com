@@ -1,3 +1,4 @@
+swap_spots
 move4
 move4
 attack

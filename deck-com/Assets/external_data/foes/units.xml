@@ -15,7 +15,7 @@
   <unit idName = "test_boy2">
     <name>Test Boy 2</name>
     <sprite>goblin</sprite>
-    <deck>ai_test_deck</deck>
+    <deck>ai_test_deck2</deck>
     <ai_profile>test2</ai_profile>
     <player_controlled>false</player_controlled>
     <level>1</level>

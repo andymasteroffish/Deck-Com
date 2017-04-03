@@ -92,12 +92,12 @@ public class LevelGen {
 	public void greeble(Tile[,] grid, int gridW, int gridH){
 		for (int x = 0; x < gridW; x++) {
 			for (int y = 0; y < gridH; y++) {
-				if (Random.value < 0.05f) {
-					grid [x, y].setCover (Tile.Cover.Full);
-				}
-				if (Random.value < 0.05f) {
-					grid [x, y].setCover (Tile.Cover.Part);
-				}
+//				if (Random.value < 0.05f) {
+//					grid [x, y].setCover (Tile.Cover.Full);
+//				}
+//				if (Random.value < 0.05f) {
+//					grid [x, y].setCover (Tile.Cover.Part);
+//				}
 				if (Random.value < 0.05f) {
 					grid [x, y].setCover (Tile.Cover.None);
 				}

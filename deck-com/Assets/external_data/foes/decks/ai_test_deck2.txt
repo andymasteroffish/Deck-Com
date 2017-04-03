@@ -1,0 +1,11 @@
+move4
+move4
+swap_spots
+attack
+attack
+move4
+move4
+swap_spots
+attack
+attack
+swap_spots

@@ -1,24 +1,20 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using System.Xml;
 
-public class Card_Heal : Card {
+public class Card_Trade_Places : Card {
 
-	public int healAmount;
 	public int range;
 
-	public Card_Heal(XmlNode _node){
+	public Card_Trade_Places(XmlNode _node){
 		node = _node;
 
-		healAmount = int.Parse (node ["heal"].InnerXml);
 		range = int.Parse (node ["range"].InnerXml);
 	}
 
 	public override void setupCustom(){
-		type = CardType.Aid;
-
-		description = "heals "+healAmount+" at range "+range;
+		type = CardType.Other;
 	}
 
 	public override void mouseEnterEffects(){
@@ -33,17 +29,11 @@ public class Card_Heal : Card {
 
 	public override void passInUnitCustom(Unit unit){
 
-		int healVal = healAmount;
+		Tile ownerStartPos = Owner.CurTile;
+		Tile otherStartPos = unit.CurTile;
+		unit.moveTo(ownerStartPos);
+		Owner.moveTo (otherStartPos);
 
-		for (int i=Owner.Charms.Count-1; i>=0; i--){
-			healVal += Owner.Charms[i].getHealMod (this, unit);
-		}
-
-		if (healVal < 0) {
-			healVal = 0;
-		}
-
-		unit.heal (healVal);
 		finish ();
 	}
 

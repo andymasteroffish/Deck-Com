@@ -217,4 +217,11 @@
 <script>Card_MovementSelfDestruct</script>
 <range>3</range>
 </card>
+<card idName="swap_spots">
+<name>Swap Spots</name>
+<level>2</level>
+<script>Card_Trade_Places</script>
+<desc>trade places with a unit within 7 tiles</desc>
+<range>10</range>
+</card>
 </cards>
