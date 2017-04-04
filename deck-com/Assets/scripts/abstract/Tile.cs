@@ -26,10 +26,12 @@ public class Tile {
 
 	private TilePos pos;
 
-	public TextMesh debugText;
-
 	private bool isHighlighted;
 	public Color highlightCol;
+
+	public string debugText = "";
+
+	public bool isVisibleToPlayer;
 
 	//public BoxCollider2D collider;
 
@@ -53,8 +55,9 @@ public class Tile {
 			GO = null;
 		}
 
-		mouseIsOver = false;
+		isVisibleToPlayer = false;
 
+		mouseIsOver = false;
 		highlightCol = Color.white;
 
 		setHighlighted (false);
@@ -71,6 +74,7 @@ public class Tile {
 		cover = parent.cover;
 		isHighlighted = parent.isHighlighted;
 		highlightCol = parent.highlightCol;
+		isVisibleToPlayer = parent.isVisibleToPlayer;
 
 	}
 

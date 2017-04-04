@@ -14,6 +14,8 @@ public class TileGO : MonoBehaviour {
 
 	private bool isActive;
 
+	public TextMesh debugtext;
+
 	public void activate(Tile _tile){
 		tile = _tile;
 		isActive = true;
@@ -42,6 +44,16 @@ public class TileGO : MonoBehaviour {
 		} else {
 			spriteRend.sprite = coverSprites [(int)tile.CoverVal];
 		}
+
+		if (!tile.isVisibleToPlayer) {
+			spriteRend.sprite = coverSprites [0];
+			spriteRend.color = new Color (1, 1, 1, 0.5f);
+		}
+
+		if (tile.debugText != debugtext.text) {
+			debugtext.text = tile.debugText;
+		}
+			
 	}
 
 //	public void refresh(){

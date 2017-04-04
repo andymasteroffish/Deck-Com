@@ -188,6 +188,7 @@ public class Board {
 		for (int i = 0; i < loot.Count; i++) {
 			loot [i].checkShouldDrop (deadUnit);
 		}
+		updateVisible ();
 	}
 
 	//some loot specific functions
@@ -209,6 +210,22 @@ public class Board {
 			}
 		}
 		unit.CanPickupLoot = false;
+	}
+
+	//telling the tiles if any player unit can see them
+	public void updateVisible(){
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				grid [x, y].isVisibleToPlayer = false;
+				foreach (Unit unit in units) {
+					if (unit.isPlayerControlled && !unit.isDead && !grid[x,y].isVisibleToPlayer) {
+						if (unit.visibleTiles.Contains (grid [x, y])) {
+							grid [x, y].isVisibleToPlayer = true;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	//**********************
@@ -320,7 +337,6 @@ public class Board {
 
 		//testing float raytrace
 		if (raytrace (a, b, Tile.Cover.Full) == null) {
-		//if (raytraceFloat(a.Pos.x, a.Pos.y, b.Pos.x, b.Pos.y, Tile.Cover.Full) == null){
 			return true;
 		} else {
 			return false;
@@ -692,6 +708,14 @@ public class Board {
 								canReturnThisTile = true;
 							}
 						}
+					}
+
+					//do not return either of the source tiles
+					if (x == tileA.Pos.x && y == tileA.Pos.y) {
+						canReturnThisTile = false;
+					}
+					if (x == tileB.Pos.x && y == tileB.Pos.y) {
+						canReturnThisTile = false;
 					}
 
 					if (canReturnThisTile) {

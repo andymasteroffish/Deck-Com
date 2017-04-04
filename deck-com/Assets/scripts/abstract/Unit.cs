@@ -45,6 +45,10 @@ public class Unit {
 	private Charm weapon;
 	private List<Charm> charms = new List<Charm>();
 
+	//line of sight
+	public float sightRange;
+	public List<Tile> visibleTiles;
+
 	//loot
 	private int challengeLevel;
 	private bool canPickUpLoot;
@@ -95,6 +99,8 @@ public class Unit {
 			aiProfileName = node ["ai_profile"].InnerText;
 		}
 
+		sightRange = 7;
+
 		charmIDs = new List<string> ();
 		XmlNodeList childNodes = node["charms"].ChildNodes;
 		foreach (XmlNode n in childNodes) {
@@ -131,6 +137,8 @@ public class Unit {
 
 		//set them up
 		deck.setup (this, deckListPath);
+
+		visibleTiles = new List<Tile> ();
 
 		setHighlighted (false);
 
@@ -219,6 +227,7 @@ public class Unit {
 			deck.drawCard ();
 		}
 		actionsLeft = 0;
+		getVisibleTiles ();
 	}
 
 	public void resetRound(){
@@ -253,6 +262,23 @@ public class Unit {
 			aiTurnInfo = gm.getAIMove(board.getUnitID(this), board, board, 0);
 			curAITurnStep = 0;	//flag to hlp the display interface
 		}
+	}
+
+	//line of sight
+	void getVisibleTiles(){
+//		if (isPlayerControlled) {
+//			foreach (Tile tile in visibleTiles) {
+//				tile.isVisibleToPlayer = false;
+//			}
+//		}
+		visibleTiles.Clear ();
+		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
+		board.updateVisible ();
+//		if (isPlayerControlled) {
+//			foreach (Tile tile in visibleTiles) {
+//				tile.isVisibleToPlayer = true;
+//			}
+//		}
 	}
 
 
@@ -338,6 +364,7 @@ public class Unit {
 	//movement
 	public void moveTo(Tile target){
 		curTile = target;
+		getVisibleTiles ();
 	}
 
 	//damage and health
@@ -385,7 +412,14 @@ public class Unit {
 
 	//other effects
 	public void gainActions(int num){
+		//give the action(s)
 		actionsLeft += num;
+		//throw in an action marker. If we don't need it it will be removed
+		GameObjectManager.instance.getActionMarkerGO ().activate (this, 1);
+		//check which cards can be played
+		deck.updateCardsDisabled();
+
+		Debug.Log ("actions: " + actionsLeft);
 	}
 
 	//highlighting
