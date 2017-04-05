@@ -1,3 +1,4 @@
+teleport
 move3
 move4
 move4

@@ -4,8 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 public class Card_Teleport : Card {
-
-	public int targetRange;
+	
 	public int moveRange;
 
 	private bool onTeleportStep = false;
@@ -15,26 +14,24 @@ public class Card_Teleport : Card {
 	public Card_Teleport(XmlNode _node){
 		node = _node;
 
-		targetRange = int.Parse (node ["target_range"].InnerXml);
 		moveRange = int.Parse (node ["move_range"].InnerXml);
 	}
 
 	public override void setupCustom(){
-		type = CardType.Other;
+		type = CardType.Magic;
 
 		description = "teleport a visible unit up to "+moveRange+" spaces";
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, targetRange, baseHighlightColor);
+		Owner.board.highlightTilesVisibleToUnit(Owner, baseHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		onTeleportStep = false;
 
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, targetRange, true, true, baseHighlightColor);
-
+		Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
 	}
 
 	//selecting the unit to teleport

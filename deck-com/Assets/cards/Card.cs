@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Card {
 
-	public enum CardType{Attack, AttackSpecial, Movement, Aid, Loot, Other};
+	public enum CardType{Loot, Attack, AttackSpecial, Movement, Aid, Magic, Other};
 
 	public string name, idName;
 	public string description;
@@ -74,7 +74,8 @@ public class Card {
 		highlightColors.Add(CardType.Movement, new Color(0.5f, 0.5f, 1f));
 		highlightColors.Add(CardType.Aid, new Color(0.5f, 1f, 0.5f));
 		highlightColors.Add(CardType.Loot, new Color(0.5f, 0.5f, 0.5f));
-		highlightColors.Add(CardType.Other, new Color(1f, 0.5f, 1f));
+		highlightColors.Add(CardType.Other, new Color(0.5f, 1f, 1f));
+		highlightColors.Add(CardType.Magic, new Color(1f, 0.5f, 1f));
 
 		//custom setup
 		setupCustom ();

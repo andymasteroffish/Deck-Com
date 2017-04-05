@@ -311,12 +311,14 @@ public class Board {
 			}
 		}
 
-		//bleed once, adding any tiles adjacent to a currently visible tiles
+		//bleed once for any tile that is not full cover, adding any tiles adjacent to a currently visible tiles
 		List<Tile> bleedTiles = new List<Tile>();
 		foreach (Tile curTile in returnTiles) {
-			List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Part);//  getAdjacentTiles (source, false, Tile.Cover.Part);
-			foreach (Tile t in adjacentTiles) {
-				bleedTiles.Add (t);
+			if (curTile.CoverVal != Tile.Cover.Full) {
+				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Part);//  getAdjacentTiles (source, false, Tile.Cover.Part);
+				foreach (Tile t in adjacentTiles) {
+					bleedTiles.Add (t);
+				}
 			}
 		}
 
@@ -340,6 +342,28 @@ public class Board {
 			return true;
 		} else {
 			return false;
+		}
+	}
+
+
+
+	//Units should have alist of tiles visible to them
+	public void highlightUnitsVisibleToUnit(Unit source, bool includeAllies, bool includeFoes, Color col){
+		clearHighlights ();
+		foreach (Unit unit in units) {
+			bool sameSide = source.isPlayerControlled == unit.isPlayerControlled;
+			if ((sameSide && includeAllies) || (!sameSide && includeFoes)) {
+				if (source.visibleTiles.Contains (unit.CurTile)) {
+					unit.setHighlighted (true, col);
+				}
+			}
+		}
+	}
+
+	public void highlightTilesVisibleToUnit(Unit source, Color col){
+		clearHighlights ();
+		foreach (Tile tile in source.visibleTiles) {
+			tile.setHighlighted (true, col);
 		}
 	}
 

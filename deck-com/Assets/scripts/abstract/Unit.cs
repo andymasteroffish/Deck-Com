@@ -99,7 +99,7 @@ public class Unit {
 			aiProfileName = node ["ai_profile"].InnerText;
 		}
 
-		sightRange = 7;
+		sightRange = 8;
 
 		charmIDs = new List<string> ();
 		XmlNodeList childNodes = node["charms"].ChildNodes;
@@ -266,19 +266,9 @@ public class Unit {
 
 	//line of sight
 	void getVisibleTiles(){
-//		if (isPlayerControlled) {
-//			foreach (Tile tile in visibleTiles) {
-//				tile.isVisibleToPlayer = false;
-//			}
-//		}
 		visibleTiles.Clear ();
 		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
 		board.updateVisible ();
-//		if (isPlayerControlled) {
-//			foreach (Tile tile in visibleTiles) {
-//				tile.isVisibleToPlayer = true;
-//			}
-//		}
 	}
 
 

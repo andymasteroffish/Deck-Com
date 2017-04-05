@@ -4,27 +4,25 @@ using UnityEngine;
 using System.Xml;
 
 public class Card_Trade_Places : Card {
-
-	public int range;
-
+	
 	public Card_Trade_Places(XmlNode _node){
 		node = _node;
 
-		range = int.Parse (node ["range"].InnerXml);
 	}
 
 	public override void setupCustom(){
-		type = CardType.Other;
+		type = CardType.Magic;
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInVisibleRange(Owner.CurTile, range, baseHighlightColor);
+		Owner.board.highlightTilesVisibleToUnit(Owner, baseHighlightColor);
 	}
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 
-		Owner.board.highlightUnitsInVisibleRange(Owner.CurTile, range, true, true, baseHighlightColor);
+		Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
+		Owner.setHighlighted (false);
 	}
 
 	public override void passInUnitCustom(Unit unit){

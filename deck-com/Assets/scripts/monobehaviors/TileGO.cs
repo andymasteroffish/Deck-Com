@@ -6,6 +6,7 @@ public class TileGO : MonoBehaviour {
 
 	public BoxCollider2D collider;
 	public SpriteRenderer spriteRend;
+	public SpriteRenderer fogSprite;
 
 	public Sprite[] coverSprites;
 	public Sprite goalSprite;
@@ -45,10 +46,11 @@ public class TileGO : MonoBehaviour {
 			spriteRend.sprite = coverSprites [(int)tile.CoverVal];
 		}
 
-		if (!tile.isVisibleToPlayer) {
-			spriteRend.sprite = coverSprites [0];
-			spriteRend.color = new Color (1, 1, 1, 0.5f);
-		}
+		fogSprite.enabled = !tile.isVisibleToPlayer;
+//		if (!tile.isVisibleToPlayer) {
+//			spriteRend.sprite = coverSprites [0];
+//			spriteRend.color = new Color (1, 1, 1, 0.5f);
+//		}
 
 		if (tile.debugText != debugtext.text) {
 			debugtext.text = tile.debugText;
