@@ -218,7 +218,7 @@ public class Board {
 			for (int y = 0; y < rows; y++) {
 				grid [x, y].isVisibleToPlayer = false;
 				foreach (Unit unit in units) {
-					if (unit.isPlayerControlled && !unit.isDead && !grid[x,y].isVisibleToPlayer) {
+					if (unit.isPlayerControlled && !unit.isDead && !grid[x,y].isVisibleToPlayer && unit.visibleTiles != null) {
 						if (unit.visibleTiles.Contains (grid [x, y])) {
 							grid [x, y].isVisibleToPlayer = true;
 						}

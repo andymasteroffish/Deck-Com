@@ -150,6 +150,14 @@ public class Deck {
 			hand [i].updateIsDisabled ();
 		}
 	}
+	public bool isWholeHandDisabled(){
+		for (int i=0; i<hand.Count; i++){
+			if (!hand [i].IsDisabled) {
+				return false;
+			}
+		}
+		return true;
+	}
 
 	//interacting with the hand
 	public void checkClick(){

@@ -47,7 +47,7 @@ public class UnitGO : MonoBehaviour {
 		if (!doingAnimation) {
 			//bounce the sprite when it is active
 			float spriteScale = 1;
-			if (owner.IsActive && !owner.TurnIsDone) {
+			if (owner.IsActive && !owner.isExausted) {
 				spriteScale = 1.0f + Mathf.Abs (Mathf.Sin (Time.time * 2) * 0.2f);
 			}
 			spriteRend.gameObject.transform.localScale = new Vector3 (spriteScale, spriteScale, spriteScale);

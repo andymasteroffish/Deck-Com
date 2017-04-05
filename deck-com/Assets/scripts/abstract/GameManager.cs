@@ -246,7 +246,7 @@ public class GameManager {
 		//find the next unit who's turn is not over
 		int count = 0;
 		idNum = (idNum  + dir + unitsAI.Count) % unitsAI.Count;
-		while (unitsAI [idNum].TurnIsDone && count < unitsAI.Count + 1) {
+		while (unitsAI [idNum].isExausted && count < unitsAI.Count + 1) {
 			idNum = (idNum + 1) % unitsAI.Count;
 			count++;
 		}

@@ -16,7 +16,7 @@ public class Unit {
 
 	private Tile curTile;
 	private bool isActive;
-	private bool turnIsDone;
+	public bool isExausted;	//meaning 0 actions left & no cards that can be played
 
 	public bool useGO;
 
@@ -47,7 +47,7 @@ public class Unit {
 
 	//line of sight
 	public float sightRange;
-	public List<Tile> visibleTiles;
+	public List<Tile> visibleTiles = null;
 
 	//loot
 	private int challengeLevel;
@@ -138,8 +138,6 @@ public class Unit {
 		//set them up
 		deck.setup (this, deckListPath);
 
-		visibleTiles = new List<Tile> ();
-
 		setHighlighted (false);
 
 		//aiProfile might reference the weapon, so we should make it after setting the charms
@@ -190,6 +188,12 @@ public class Unit {
 		baseActions = parent.baseActions;
 		actionsLeft = parent.actionsLeft;
 
+//		visibleTiles = new List<Tile> ();
+//		for (int i = 0; i < parent.visibleTiles.Count; i++) {
+//			Tile tile = board.Grid [parent.visibleTiles [i].Pos.x, parent.visibleTiles [i].Pos.y];
+//			visibleTiles.Add (tile);
+//		}
+
 		//this is ugly
 		charms = new List<Charm> ();
 		for (int i = 0; i < parent.charms.Count; i++) {
@@ -222,6 +226,7 @@ public class Unit {
 	}
 
 	public void reset(){
+		Debug.Log ("go daddy pls");
 		//draw first hand
 		for (int i = 0; i < baseHandSize; i++) {
 			deck.drawCard ();
@@ -233,7 +238,7 @@ public class Unit {
 	public void resetRound(){
 		actionsLeft = baseActions;
 		setActive (false);
-		turnIsDone = false;
+		isExausted = false;
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].resetRound ();
 		}
@@ -266,6 +271,9 @@ public class Unit {
 
 	//line of sight
 	void getVisibleTiles(){
+		if (visibleTiles == null) {
+			visibleTiles = new List<Tile> ();
+		}
 		visibleTiles.Clear ();
 		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
 		board.updateVisible ();
@@ -274,8 +282,6 @@ public class Unit {
 
 	//ending the turn
 	public void endTurn(){
-		turnIsDone = true;
-
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].turnEndPreDiscard ();
 		}
@@ -323,16 +329,21 @@ public class Unit {
 
 		//check which cards can still be played
 		deck.updateCardsDisabled();
+		checkExausted ();
 
 		//if this is the player, maybe there is delicious loot!
 		if (isPlayerControlled){
 			canPickUpLoot = board.checkIfUnitIsCloseToLoot (this);
 		}
+	}
 
-		//if there's no loot to pick up and we're out of actions try to mvoe on
-//		if (isPlayerControlled && !isAISimUnit && actionsLeft == 0 && !canPickUpLoot) {
-//			gm.tabActivePlayerUnitSkippingExausted (1);
-//		}
+	//a unit is exausted if they have no acitons and no cards they can play
+	public void checkExausted(){
+		isExausted = false;
+
+		if (actionsLeft <= 0 && deck.isWholeHandDisabled()){
+			isExausted = true;
+		}
 	}
 
 	//input
@@ -408,6 +419,7 @@ public class Unit {
 		GameObjectManager.instance.getActionMarkerGO ().activate (this, 1);
 		//check which cards can be played
 		deck.updateCardsDisabled();
+		checkExausted ();
 
 		Debug.Log ("actions: " + actionsLeft);
 	}
@@ -465,12 +477,6 @@ public class Unit {
 	public bool IsActive{
 		get{
 			return this.isActive;
-		}
-	}
-
-	public bool TurnIsDone{
-		get{
-			return this.turnIsDone;
 		}
 	}
 
