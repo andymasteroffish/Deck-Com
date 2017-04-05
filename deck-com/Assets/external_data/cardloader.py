@@ -46,6 +46,8 @@ def get_credentials():
     return credentials
 
 def main():
+
+
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -55,7 +57,7 @@ def main():
 
     #id part of my spreadhseet url
     spreadsheetId = '1X2tsHz0IEwAQ4X9_Z7RRYn7qM3_m8j6yDkQu3e-c7WE'
-    rangeName = 'Sheet1!A2:P'
+    rangeName = 'cards!A2:P'
     result = service.spreadsheets().values().get(
         spreadsheetId=spreadsheetId, range=rangeName).execute()
     values = result.get('values', [])
@@ -64,7 +66,9 @@ def main():
         print('No data found.')
     else:
         #we found stuff!
-        file = open('cards.xml', 'w')
+        pathname = os.path.dirname(os.path.realpath(__file__))
+
+        file = open(pathname+'/cards.xml', 'w')
         file.write('<cards>\n')
         for row in values:
             #get all of the info

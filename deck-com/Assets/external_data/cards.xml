@@ -139,7 +139,6 @@
 <name>Teleport</name>
 <level>1</level>
 <script>Card_Teleport</script>
-<target_range>5</target_range>
 <move_range>3</move_range>
 </card>
 <card idName="grenade">
@@ -221,7 +220,6 @@
 <name>Swap Spots</name>
 <level>2</level>
 <script>Card_Trade_Places</script>
-<desc>trade places with a unit within 7 tiles</desc>
-<range>10</range>
+<desc>trade places with any unit you can see</desc>
 </card>
 </cards>
