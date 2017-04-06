@@ -222,4 +222,34 @@
 <script>Card_Trade_Places</script>
 <desc>trade places with any unit you can see</desc>
 </card>
+<card idName="dumbfound">
+<name>Dumbfound</name>
+<level>3</level>
+<script>Card_Weaken</script>
+<desc>Target unit discards a card at random and draws one less card for the rest of the match</desc>
+</card>
+<card idName="adjust_sights">
+<name>Adjust sights</name>
+<level>3</level>
+<script>Card_GiveCharm</script>
+<desc>Your weapon's range increases by 1 for the rest of the match</desc>
+<any_unit>true</any_unit>
+<gift_id>range_up_charm</gift_id>
+</card>
+<card idName="psychic_poke">
+<name>Psychic poke</name>
+<level>2</level>
+<script>Card_DirectDamage</script>
+<desc></desc>
+<damage> 2</damage>
+</card>
+<card idName="vampire_knife">
+<name>Vampire Knife</name>
+<level>2</level>
+<script>Card_AttackIgnoreWeapon</script>
+<desc>Deal 3 damage at range 1 and heal 3</desc>
+<range>1</range>
+<damage>3</damage>
+<heal>3</heal>
+</card>
 </cards>
