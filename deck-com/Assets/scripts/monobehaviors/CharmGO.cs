@@ -19,6 +19,7 @@ public class CharmGO : MonoBehaviour {
 
 	//sliding in and out
 	private Vector3 startPos, endPos;
+	private Vector3 startAnchor, endAnchor;
 	private Vector3 startPosPlayer, endPosPlayer;
 	private Vector3 startPosAI, endPosAI;
 	private bool needsPositions = true;
@@ -43,8 +44,8 @@ public class CharmGO : MonoBehaviour {
 			endPosAI = GameObject.Find ("charm_ai_endPos").transform.position;
 		}
 
-		startPos = charm.Owner.isPlayerControlled ? startPosPlayer : startPosAI;
-		endPos = charm.Owner.isPlayerControlled ? endPosPlayer : endPosAI;
+		startAnchor = charm.Owner.isPlayerControlled ? startPosPlayer : startPosAI;
+		endAnchor = charm.Owner.isPlayerControlled ? endPosPlayer : endPosAI;
 
 		gameObject.name = "charm "+charm.Owner.unitName+" "+charm.name;
 
@@ -64,11 +65,20 @@ public class CharmGO : MonoBehaviour {
 		nameField.text = charm.name;
 		descField.text = charm.description;
 
+		if (charm.hasChangedPos) {
+			charm.hasChangedPos = false;
+			Debug.Log (charm.idName +" my new order: " + charm.offsetID);
+			Debug.Log ("end pos was " + endPos);
+			setAnimationPositions ();
+			StartCoroutine (doMoveAnimation (transform.position, endPos, moveTime, false));
+			Debug.Log("end pos is "+endPos);
+		}
+
 		if ( (!charm.Owner.IsActive || charm.isDead || charm.Owner.isDead) && !doingAnimation) {
 			StartCoroutine (doMoveAnimation (endPos, startPos, moveTime, true));
 		}
 
-		//sett he sprite color
+		//set the sprite color
 		Color col = new Color (1, 1, 1, 1);
 		if (charm.Owner.isPlayerControlled && !charm.Owner.GM.IsPlayerTurn) {
 			col = new Color (1, 1, 1, 0.4f);
@@ -79,10 +89,11 @@ public class CharmGO : MonoBehaviour {
 	private void setAnimationPositions(){
 		float thisYSpacing = ySpacing;
 		if (!charm.Owner.isPlayerControlled) {
+			Debug.Log ("no player controlled");
 			thisYSpacing *= -1;
 		}
-		startPos = new Vector3 (startPos.x, startPos.y + charm.offsetID * thisYSpacing, startPos.z);
-		endPos = new Vector3 (endPos.x, endPos.y + charm.offsetID * thisYSpacing, endPos.z);
+		startPos = new Vector3 (startAnchor.x, startAnchor.y + charm.offsetID * thisYSpacing, startAnchor.z);
+		endPos = new Vector3 (endAnchor.x, endAnchor.y + charm.offsetID * thisYSpacing, endAnchor.z);
 	}
 
 

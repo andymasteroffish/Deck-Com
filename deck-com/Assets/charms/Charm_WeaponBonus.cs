@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 
-public class Charm_OneTimeWeaponBonus : Charm {
+public class Charm_WeaponBonus : Charm {
 
 	public int damageMod;
 	public int rangeMod;
 
-	public bool expiresAtEndOfTurn;
 
-	public Charm_OneTimeWeaponBonus(XmlNode _node){
+	public Charm_WeaponBonus(XmlNode _node){
 		node = _node;
+
 		damageMod = 0;
-		expiresAtEndOfTurn = false;
+		rangeMod = 0;
 
 		if (node ["damage_mod"] != null) {
 			damageMod = int.Parse (node ["damage_mod"].InnerXml);
@@ -21,30 +21,20 @@ public class Charm_OneTimeWeaponBonus : Charm {
 		if (node ["range_mod"] != null) {
 			rangeMod = int.Parse (node ["range_mod"].InnerXml);
 		}
-		if (node ["expires_at_turn_end"] != null) {
-			expiresAtEndOfTurn = bool.Parse (node ["expires_at_turn_end"].InnerXml);
+
+		description = "";
+		if (rangeMod != 0) {
+			description += "Weapon range increase: " + rangeMod;
+		}
+		if (damageMod != 0) {
+			description += "Damage increase: " + damageMod;
 		}
 	}
-
-
 
 	public override int getWeaponDamageMod(Card card, Unit target){
 		return damageMod;
 	}
-
 	public override int getWeaponRangeMod(Card card){
 		return rangeMod;
-	}
-
-	public override void cardPlayed(Card card){
-		if (card.type == Card.CardType.Attack) {
-			Owner.removeCharm (this);
-		}
-	}
-
-	public override void turnEndPreDiscard(){
-		if (expiresAtEndOfTurn) {
-			Owner.removeCharm (this);
-		}
 	}
 }

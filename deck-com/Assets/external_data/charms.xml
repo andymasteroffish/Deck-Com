@@ -57,16 +57,16 @@
     <name>Focus</name>
     <script>Charm_OneTimeWeaponBonus</script>
     <desc>Next attack this turn has +1 damage and +2 range</desc>
-    <damageMod>1</damageMod>
-    <rangeMod>2</rangeMod>
+    <damage_mod>1</damage_mod>
+    <range_mod>2</range_mod>
     <expires_at_turn_end>True</expires_at_turn_end>
   </charm>
   <charm idName="aim_charm">
     <name>Aim</name>
     <script>Charm_OneTimeWeaponBonus</script>
     <desc>Next attack does +1 damage</desc>
-    <damageMod>1</damageMod>
-    <rangeMod>0</rangeMod>
+    <damage_mod>1</damage_mod>
+    <range_mod>0</range_mod>
     <expires_at_turn_end>False</expires_at_turn_end>
   </charm>
   <charm idName="one_time_shield">
@@ -74,5 +74,10 @@
     <script>Charm_OneTimeShield</script>
     <desc>The next time you take damage, prevent 2 of it.</desc>
     <damagePrevented>2</damagePrevented>
+  </charm>
+  <charm idName="range_up_charm">
+    <name>Adjusted Sights</name>
+    <script>Charm_WeaponBonus</script>
+    <range_mod>1</range_mod>
   </charm>
 </charms>

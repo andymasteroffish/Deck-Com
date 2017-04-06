@@ -3,6 +3,8 @@ using System.Collections;
 
 public class CameraControl : MonoBehaviour {
 
+	private Camera cam;
+
 	private bool freeControl;
 	public float freeControlSpeed;
 
@@ -12,6 +14,17 @@ public class CameraControl : MonoBehaviour {
 	private bool usingTargetTile = false;
 
 	public float targetLerp;
+
+	public float zoomSpeed;
+	public float minSize, maxSize;
+	private float startSize;
+	private float targetSize;
+
+	void Start(){
+		cam = GetComponent<Camera> ();
+		startSize = cam.orthographicSize;
+		targetSize = startSize;
+	}
 
 
 	public void setTarget(Unit target){
@@ -28,6 +41,7 @@ public class CameraControl : MonoBehaviour {
 	}
 
 	void Update () {
+
 
 		if (!freeControl && targetUnit != null) {
 			Vector3 targetPos = targetUnit.transform.position;
@@ -48,6 +62,11 @@ public class CameraControl : MonoBehaviour {
 		if (freeControl) {
 			transform.position += new Vector3 (input.x, input.y, 0) * freeControlSpeed * Time.deltaTime;
 		}
+
+		//zooming
+		targetSize += Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
+		targetSize = Mathf.Clamp (targetSize, minSize, maxSize);
+		cam.orthographicSize = Mathf.Lerp (cam.orthographicSize, targetSize, targetLerp);
 	
 	}
 }

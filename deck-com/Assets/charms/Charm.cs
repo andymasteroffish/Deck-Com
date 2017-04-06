@@ -24,6 +24,9 @@ public class Charm  {
 	public XmlNode node;
 	public string idName;
 
+	//info for game display
+	public bool hasChangedPos;
+
 	//this should never be used as only the derived classes should be used in game
 	public Charm(){}
 
@@ -38,6 +41,7 @@ public class Charm  {
 		}
 
 		isDead = false;
+		hasChangedPos = false;
 
 		costToAddToDeck = 3;
 

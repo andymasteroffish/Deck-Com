@@ -54,6 +54,9 @@ public class CharmManager : MonoBehaviour {
 		else if (scriptName == "Charm_OneTimeWeaponBonus") {
 			thisCharm = new Charm_OneTimeWeaponBonus (node);
 		}
+		else if (scriptName == "Charm_WeaponBonus") {
+			thisCharm = new Charm_WeaponBonus (node);
+		}
 		else if (scriptName == "Charm_OneTimeShield") {
 			thisCharm = new Charm_OneTimeShield (node);
 		}

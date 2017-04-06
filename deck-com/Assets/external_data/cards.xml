@@ -243,12 +243,12 @@
 <desc></desc>
 <damage> 2</damage>
 </card>
-<card idName="vampire_knife">
-<name>Vampire Knife</name>
+<card idName="vampire_stab">
+<name>Vampire Stab</name>
 <level>2</level>
 <script>Card_AttackIgnoreWeapon</script>
 <desc>Deal 3 damage at range 1 and heal 3</desc>
-<range>1</range>
+<range>1.5</range>
 <damage>3</damage>
 <bonus_heal>3</bonus_heal>
 </card>

@@ -216,12 +216,14 @@ public class Unit {
 	}
 
 	public void removeCharm(Charm charmToRemove){
+		Debug.Log ("tim to remov");
 		charmToRemove.isDead = true;
 		charms.Remove (charmToRemove);
 
 		//space out the others
 		for (int i = 0; i < charms.Count; i++) {
 			charms [i].offsetID = i;
+			charms [i].hasChangedPos = true;
 		}
 	}
 

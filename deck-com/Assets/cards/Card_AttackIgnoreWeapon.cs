@@ -16,7 +16,7 @@ public class Card_AttackIgnoreWeapon : Card {
 	}
 
 	public override void setupCustom(){
-		type = Card.CardType.Other;
+		type = Card.CardType.Attack;
 
 		string damageText = "Damage: " + damage;
 		string rangeText = "Range: " + Mathf.Floor(range);
