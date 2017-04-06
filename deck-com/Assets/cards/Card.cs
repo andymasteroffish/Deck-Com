@@ -26,6 +26,11 @@ public class Card {
 	private Unit owner;
 	private Deck deck;
 
+	//bonus things the card might give to the unit that plays it
+	public int bonusActions;
+	public int bonusCards;
+	public int bonusHeal;
+
 	//adding the card to a deck
 	private int costToAddToDeck;
 
@@ -61,6 +66,19 @@ public class Card {
 			costToAddToDeck = int.Parse(node ["add_to_deck_cost"].InnerText);
 		}
 
+		//any bonuses?
+		bonusActions = 0;
+		bonusCards = 0;
+		if (node ["bonus_actions"] != null) {
+			bonusActions = int.Parse (node ["bonus_actions"].InnerText);
+		}
+		if (node ["bonus_cards"] != null) {
+			bonusCards = int.Parse (node ["bonus_cards"].InnerText);
+		}
+		if (node ["bonus_heal"] != null) {
+			bonusHeal = int.Parse (node ["bonus_heal"].InnerText);
+		}
+
 		//default values
 		baseActionCost = 1;
 		type = CardType.Other;
@@ -79,6 +97,17 @@ public class Card {
 
 		//custom setup
 		setupCustom ();
+
+		//add bonus stuff to the description
+		if (bonusActions > 0) {
+			description += "\n+" + bonusActions + " action(s)";
+		}
+		if (bonusCards > 0) {
+			description += "\n+" + bonusCards + " card(s)";
+		}
+		if (bonusHeal > 0) {
+			description += "\n+heal" + bonusHeal;
+		}
 
 		baseHighlightColor = highlightColors [type];
 
@@ -158,6 +187,17 @@ public class Card {
 	public void finish(bool destroyCard = false){
 		owner.GM.targetInfoText.turnOff ();
 		revealAICardFlag = false;
+
+		//check if this card grants any bonus
+		if (bonusActions > 0) {
+			owner.gainActions (bonusActions);
+		}
+		if (bonusCards > 0) {
+			owner.deck.drawCards (bonusCards);
+		}
+		if (bonusHeal > 0) {
+			owner.heal (bonusHeal);
+		}
 
 		owner.markCardPlayed (this);
 

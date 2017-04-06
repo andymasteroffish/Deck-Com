@@ -226,7 +226,6 @@ public class Unit {
 	}
 
 	public void reset(){
-		Debug.Log ("go daddy pls");
 		//draw first hand
 		for (int i = 0; i < baseHandSize; i++) {
 			deck.drawCard ();

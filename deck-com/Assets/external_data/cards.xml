@@ -250,6 +250,6 @@
 <desc>Deal 3 damage at range 1 and heal 3</desc>
 <range>1</range>
 <damage>3</damage>
-<heal>3</heal>
+<bonus_heal>3</bonus_heal>
 </card>
 </cards>

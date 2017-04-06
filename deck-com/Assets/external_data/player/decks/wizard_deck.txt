@@ -1,4 +1,5 @@
 teleport
+move2_cantrip
 move3
 move4
 move4
