@@ -148,6 +148,7 @@ public class Deck {
 	public void discardACardAtRandom(){
 		if (hand.Count > 0) {
 			int cardID = (int)Random.Range (0, hand.Count);
+			Debug.Log ("random discard: " + hand [cardID].idName);
 			hand [cardID].discard ();
 		}
 	}

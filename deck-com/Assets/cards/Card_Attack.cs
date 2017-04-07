@@ -11,8 +11,8 @@ public class Card_Attack : Card {
 	public Card_Attack(XmlNode _node){
 		node = _node;
 
-		rangeMod = int.Parse (node ["range_mod"].InnerXml);
-		damageMod = int.Parse (node ["damage_mod"].InnerXml);
+		rangeMod = int.Parse (node ["range_mod"].InnerText);
+		damageMod = int.Parse (node ["damage_mod"].InnerText);
 	}
 
 	public override void setupCustom(){
@@ -38,7 +38,12 @@ public class Card_Attack : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageMod) );
+		int damageVal = getWeaponDamageToUnit (unit, damageMod);
+		doDamageToUnit( unit, damageVal );
+
+		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+			Owner.Charms [i].dealWeaponDamage (unit, damageVal);
+		}
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}

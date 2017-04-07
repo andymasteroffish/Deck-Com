@@ -27,8 +27,21 @@ public class Charm  {
 	//info for game display
 	public bool hasChangedPos;
 
-	//this should never be used as only the derived classes should be used in game
+	//bonus values that can be used ot make simple tweaks to charms
+	public bool selfDestructsAfterTurns;
+	public int turnsLeftBeforeSelfDestruct;
+
+	public int handSizeMod;
+	public int generalTakeDamageMod;
+
+
+	//this should never be
 	public Charm(){}
+
+	//this should be used
+	public Charm(XmlNode _node){
+		node = _node;
+	}
 
 	public void setup(Unit _owner, bool _useGameObject, string _idName){
 
@@ -49,6 +62,27 @@ public class Charm  {
 
 		type = CharmType.Charm;	//default to char, so wepaons should change this in setupCustom
 
+		//check general values
+
+		handSizeMod = 0;
+		if (node ["hand_size_mod"] != null) {
+			handSizeMod = int.Parse (node ["hand_size_mod"].InnerText);
+		}
+
+		generalTakeDamageMod = 0;
+		if (node["general_take_damage_mod"] != null){
+			generalTakeDamageMod = int.Parse(node["general_take_damage_mod"].InnerText);
+		}
+				
+
+		selfDestructsAfterTurns = false;
+		turnsLeftBeforeSelfDestruct = -1;
+		if (node ["turns_to_self_destruct"] != null) {
+			selfDestructsAfterTurns = true;
+			turnsLeftBeforeSelfDestruct = int.Parse (node ["turns_to_self_destruct"].InnerText);
+		}
+
+		//do the charm's own setup
 		setupCustom ();
 
 		//if a description was specified, overwrite whatever was going on
@@ -73,20 +107,30 @@ public class Charm  {
 	public virtual void resetRoundCustom(){}
 
 	//general play
-	public virtual void turnEndPreDiscard(){}
+	public void turnEndPreDiscard(){
+		turnEndPreDiscardCustom ();
+		if (selfDestructsAfterTurns) {
+			turnsLeftBeforeSelfDestruct--;
+			if (turnsLeftBeforeSelfDestruct <= 0) {
+				Owner.removeCharm (this);
+			}
+		}
+	}
+	public virtual void turnEndPreDiscardCustom(){}
 	public virtual void turnEndPostDiscard(){}
 
 	public virtual void cardPlayed(Card card){}
 	public virtual void takeDamage (Card card, Unit source){}
+	public virtual void dealWeaponDamage(Unit target, int damage){}
 
 	//modifiers
 	public virtual int getCardActionCostMod(Card card){return 0;}
 	public virtual int getGeneralDamageMod(Card card, Unit target){return 0;}
 	public virtual int getWeaponDamageMod(Card card, Unit target){return 0;}
 	public virtual int getWeaponRangeMod(Card card){return 0;}
-	public virtual int getDamageTakenMod(Card card, Unit source){return 0;}
+	public virtual int getDamageTakenMod(Card card, Unit source){return generalTakeDamageMod;}
 	public virtual int getHealMod(Card card, Unit target){return 0;}
-	public virtual int getHandSizeMod(){return 0;}
+	public virtual int getHandSizeMod(){return handSizeMod;}
 
 	//writing modifiers in the info box
 	public string getWeaponDamageModifierText(Card card, Unit target){

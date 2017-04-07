@@ -39,7 +39,10 @@ public class CharmManager : MonoBehaviour {
 
 		string scriptName = node ["script"].InnerText;// node.Attributes ["script"].Value;
 
-		if (scriptName == "Weapon_Basic") {
+		if (scriptName == "Charm") {
+			thisCharm = new Charm (node);
+		}
+		else if (scriptName == "Weapon_Basic") {
 			thisCharm = new Weapon_Basic (node);
 		}
 		else if (scriptName == "Weapon_SniperRifle") {
@@ -59,9 +62,6 @@ public class CharmManager : MonoBehaviour {
 		}
 		else if (scriptName == "Charm_OneTimeShield") {
 			thisCharm = new Charm_OneTimeShield (node);
-		}
-		else if (scriptName == "Charm_HandSize") {
-			thisCharm = new Charm_HandSize (node);
 		}
 		else{
 			Debug.Log ("SCRIPT NAME FOR CHARM NOT FOUND: "+scriptName);

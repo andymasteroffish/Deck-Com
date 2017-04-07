@@ -6,10 +6,11 @@
     <ai_profile>test1</ai_profile>
     <player_controlled>false</player_controlled>
     <level>1</level>
-    <base_health>1</base_health>
+    <base_health>5</base_health>
     <hand_size>4</hand_size>
     <charms>
       <charm>grunt_wep</charm>
+      <charm>acid_burn</charm>
     </charms>
   </unit>
   <unit idName = "test_boy2">

@@ -83,7 +83,7 @@ public class Unit {
 			baseHealth = int.Parse(node ["base_health"].InnerText);
 		}
 		if (node ["hand_size"] != null) {
-			baseHandSize = int.Parse(node ["hand_size"].InnerText);
+			Debug.Log ("set it " + baseHandSize);
 		}
 		if (node ["actions"] != null) {
 			baseActions = int.Parse(node ["actions"].InnerText);

@@ -8,12 +8,12 @@ public class Charm_OneTimeWeaponBonus : Charm {
 	public int damageMod;
 	public int rangeMod;
 
-	public bool expiresAtEndOfTurn;
+	//public bool expiresAtEndOfTurn;
 
 	public Charm_OneTimeWeaponBonus(XmlNode _node){
 		node = _node;
 		damageMod = 0;
-		expiresAtEndOfTurn = false;
+		//expiresAtEndOfTurn = false;
 
 		if (node ["damage_mod"] != null) {
 			damageMod = int.Parse (node ["damage_mod"].InnerXml);
@@ -21,9 +21,9 @@ public class Charm_OneTimeWeaponBonus : Charm {
 		if (node ["range_mod"] != null) {
 			rangeMod = int.Parse (node ["range_mod"].InnerXml);
 		}
-		if (node ["expires_at_turn_end"] != null) {
-			expiresAtEndOfTurn = bool.Parse (node ["expires_at_turn_end"].InnerXml);
-		}
+//		if (node ["expires_at_turn_end"] != null) {
+//			expiresAtEndOfTurn = bool.Parse (node ["expires_at_turn_end"].InnerXml);
+//		}
 	}
 
 
@@ -42,9 +42,9 @@ public class Charm_OneTimeWeaponBonus : Charm {
 		}
 	}
 
-	public override void turnEndPreDiscard(){
-		if (expiresAtEndOfTurn) {
-			Owner.removeCharm (this);
-		}
-	}
+//	public override void turnEndPreDiscardCustom(){
+//		if (expiresAtEndOfTurn) {
+//			Owner.removeCharm (this);
+//		}
+//	}
 }

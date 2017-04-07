@@ -14,7 +14,7 @@ public class Card_Teleport : Card {
 	public Card_Teleport(XmlNode _node){
 		node = _node;
 
-		moveRange = int.Parse (node ["move_range"].InnerXml);
+		moveRange = int.Parse (node ["move_range"].InnerText);
 	}
 
 	public override void setupCustom(){

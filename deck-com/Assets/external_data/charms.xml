@@ -42,6 +42,14 @@
     <damage>3</damage>
     <range>4</range>
   </charm>
+  <charm idName="acid_knife">
+    <name>Acid Knife</name>
+    <script>Weapon_Basic</script>
+    <desc>Deal 2 damage at range 2 and causes units to take 1 additional damage from all other sources.</desc>
+    <damage>2</damage>
+    <range>2</range>
+    <charm_to_give>acid_burn</charm_to_give>
+  </charm>
   <charm idName="extra_card">
     <name>Extra Card Pendant</name>
     <script>Charm_ExtraCard</script>
@@ -59,7 +67,7 @@
     <desc>Next attack this turn has +1 damage and +2 range</desc>
     <damage_mod>1</damage_mod>
     <range_mod>2</range_mod>
-    <expires_at_turn_end>True</expires_at_turn_end>
+    <turns_to_self_destruct>1</turns_to_self_destruct>
   </charm>
   <charm idName="aim_charm">
     <name>Aim</name>
@@ -67,7 +75,6 @@
     <desc>Next attack does +1 damage</desc>
     <damage_mod>1</damage_mod>
     <range_mod>0</range_mod>
-    <expires_at_turn_end>False</expires_at_turn_end>
   </charm>
   <charm idName="one_time_shield">
     <name>Shield</name>
@@ -82,8 +89,14 @@
   </charm>
   <charm idName="dumbfounded">
     <name>Dumbfounded</name>
-    <script>Charm_HandSize</script>
+    <script>Charm</script>
      <desc>Hand size reduced by 1 for the match.</desc>
     <hand_size_mod>-1</hand_size_mod>
+  </charm>
+  <charm idName="acid_burn">
+    <name>Acid Burn</name>
+    <script>Charm</script>
+     <desc>All damage taken is increased by 1.</desc>
+    <general_take_damage_mod>1</general_take_damage_mod>
   </charm>
 </charms>

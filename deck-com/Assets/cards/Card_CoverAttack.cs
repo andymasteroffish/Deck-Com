@@ -48,7 +48,12 @@ public class Card_CoverAttack : Card {
 		}
 
 		//do the damage
-		doDamageToUnit( unit, getWeaponDamageToUnit(unit, damageMod) );
+		int damageVal =  getWeaponDamageToUnit(unit, damageMod); 
+		doDamageToUnit( unit, damageVal );
+
+		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+			Owner.Charms [i].dealWeaponDamage (unit, damageVal);
+		}
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();
 	}
