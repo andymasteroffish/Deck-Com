@@ -231,19 +231,19 @@ public class Board {
 	//**********************
 	//Hihglighting tiles and units
 	//**********************
-	public void highlightUnitsInRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
-		clearHighlights ();
-		List<Tile> selectable = getTilesInMoveRange (source, range, true, true);
-		foreach (Tile tile in selectable) {
-			foreach (Unit unit in units) {
-				if (unit.CurTile == tile) {
-					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
-						unit.setHighlighted (true, col);
-					}
-				}
-			}
-		}
-	}
+//	public void highlightUnitsInRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
+//		clearHighlights ();
+//		List<Tile> selectable = getTilesInMoveRange (source, range, true, true);
+//		foreach (Tile tile in selectable) {
+//			foreach (Unit unit in units) {
+//				if (unit.CurTile == tile) {
+//					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
+//						unit.setHighlighted (true, col);
+//					}
+//				}
+//			}
+//		}
+//	}
 
 	public void highlightUnitsInVisibleRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
 		clearHighlights ();
@@ -347,14 +347,16 @@ public class Board {
 
 
 
-	//Units should have alist of tiles visible to them
+	//Units should have a list of tiles visible to them
 	public void highlightUnitsVisibleToUnit(Unit source, bool includeAllies, bool includeFoes, Color col){
 		clearHighlights ();
 		foreach (Unit unit in units) {
-			bool sameSide = source.isPlayerControlled == unit.isPlayerControlled;
-			if ((sameSide && includeAllies) || (!sameSide && includeFoes)) {
-				if (source.visibleTiles.Contains (unit.CurTile)) {
-					unit.setHighlighted (true, col);
+			if (!unit.isDead) {
+				bool sameSide = source.isPlayerControlled == unit.isPlayerControlled;
+				if ((sameSide && includeAllies) || (!sameSide && includeFoes)) {
+					if (source.visibleTiles.Contains (unit.CurTile)) {
+						unit.setHighlighted (true, col);
+					}
 				}
 			}
 		}

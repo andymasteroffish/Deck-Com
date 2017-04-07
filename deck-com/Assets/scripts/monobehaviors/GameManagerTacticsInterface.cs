@@ -116,7 +116,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			}
 				
 		}
-
+			
 
 		//is the game over
 		if (gm.GameIsOver && !areAnimationsHappening()) {
@@ -127,7 +127,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		aiTurnText.SetActive(!gm.IsPlayerTurn);
 
 		//testing
-		//gm.board.getTilesInVisibleRange(gm.activePlayerUnit.CurTile, gm.activePlayerUnit.Weapon.baseRange);
+		if (Input.GetKeyDown (KeyCode.T)) {
+			gm.activePlayerUnit.deck.discardACardAtRandom ();
+		}
 
 	}
 

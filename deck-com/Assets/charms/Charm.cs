@@ -86,6 +86,7 @@ public class Charm  {
 	public virtual int getWeaponRangeMod(Card card){return 0;}
 	public virtual int getDamageTakenMod(Card card, Unit source){return 0;}
 	public virtual int getHealMod(Card card, Unit target){return 0;}
+	public virtual int getHandSizeMod(){return 0;}
 
 	//writing modifiers in the info box
 	public string getWeaponDamageModifierText(Card card, Unit target){

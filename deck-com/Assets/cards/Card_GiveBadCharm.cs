@@ -3,15 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 
-public class Card_GiveCharm : Card {
+public class Card_GiveBadCharm : Card {
 
 	public string idNameOfGift;
 	public bool anyUnit;
 
 	public string infoText;
 
+	public int bonusRandomDiscards;	//affects the target
 
-	public Card_GiveCharm(XmlNode _node){
+	public Card_GiveBadCharm(XmlNode _node){
 		node = _node;
 
 		idNameOfGift = node ["gift_id"].InnerXml;
@@ -19,6 +20,12 @@ public class Card_GiveCharm : Card {
 		anyUnit = true;
 		if (node ["any_unit"] != null) {
 			anyUnit = bool.Parse (node ["any_unit"].InnerXml);
+		}
+
+		//some cards may give negative charms and come with discard effects
+		bonusRandomDiscards = 0;
+		if (node["bonus_discard"] != null){
+			bonusRandomDiscards = int.Parse(node["bonus_discard"].InnerXml);
 		}
 	}
 
@@ -38,7 +45,13 @@ public class Card_GiveCharm : Card {
 
 	public override void passInUnitCustom(Unit unit){
 		unit.addCharm (idNameOfGift);
-		unit.aiSimHasBeenAidedCount++;
+
+		if (bonusRandomDiscards > 0) {
+			for (int i = 0; i < bonusRandomDiscards; i++) {
+				unit.deck.discardACardAtRandom ();
+			}
+		}
+
 		finish ();
 	}
 

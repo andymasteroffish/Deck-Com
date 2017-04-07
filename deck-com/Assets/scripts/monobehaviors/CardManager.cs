@@ -85,6 +85,9 @@ public class CardManager : MonoBehaviour {
 		else if (scriptName == "Card_GiveCharm") {
 			thisCard = new Card_GiveCharm (node);
 		}
+		else if (scriptName == "Card_GiveBadCharm"){
+			thisCard = new Card_GiveBadCharm(node);
+		}
 		else if (scriptName == "Card_Heal") {
 			thisCard = new Card_Heal (node);
 		}

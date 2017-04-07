@@ -229,6 +229,10 @@ public class Unit {
 
 	public void reset(){
 		//draw first hand
+		int drawSize = baseHandSize;
+		for (int i = 0; i < charms.Count; i++) {
+			drawSize += charms [i].getHandSizeMod ();
+		}
 		for (int i = 0; i < baseHandSize; i++) {
 			deck.drawCard ();
 		}
@@ -293,7 +297,11 @@ public class Unit {
 		deck.discardHand();
 
 		//draw to hand size
-		for (int i = 0; i < baseHandSize; i++) {
+		int drawSize = baseHandSize;
+		for (int i = 0; i < charms.Count; i++) {
+			drawSize += charms [i].getHandSizeMod ();
+		}
+		for (int i = 0; i < drawSize; i++) {
 			deck.drawCard ();
 		}
 

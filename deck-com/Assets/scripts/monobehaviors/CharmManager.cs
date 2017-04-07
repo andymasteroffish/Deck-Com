@@ -60,6 +60,9 @@ public class CharmManager : MonoBehaviour {
 		else if (scriptName == "Charm_OneTimeShield") {
 			thisCharm = new Charm_OneTimeShield (node);
 		}
+		else if (scriptName == "Charm_HandSize") {
+			thisCharm = new Charm_HandSize (node);
+		}
 		else{
 			Debug.Log ("SCRIPT NAME FOR CHARM NOT FOUND: "+scriptName);
 		}

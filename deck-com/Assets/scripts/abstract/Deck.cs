@@ -145,6 +145,13 @@ public class Deck {
 		}
 	}
 
+	public void discardACardAtRandom(){
+		if (hand.Count > 0) {
+			int cardID = (int)Random.Range (0, hand.Count);
+			hand [cardID].discard ();
+		}
+	}
+
 	public void updateCardsDisabled(){
 		for (int i=0; i<hand.Count; i++){
 			hand [i].updateIsDisabled ();

@@ -225,8 +225,10 @@
 <card idName="dumbfound">
 <name>Dumbfound</name>
 <level>3</level>
-<script>Card_Weaken</script>
+<script>Card_GiveBadCharm</script>
 <desc>Target unit discards a card at random and draws one less card for the rest of the match</desc>
+<gift_id>dumbfounded</gift_id>
+<bonus_discard>1</bonus_discard>
 </card>
 <card idName="adjust_sights">
 <name>Adjust sights</name>

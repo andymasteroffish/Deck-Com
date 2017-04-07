@@ -80,4 +80,10 @@
     <script>Charm_WeaponBonus</script>
     <range_mod>1</range_mod>
   </charm>
+  <charm idName="dumbfounded">
+    <name>Dumbfounded</name>
+    <script>Charm_HandSize</script>
+     <desc>Hand size reduced by 1 for the match.</desc>
+    <hand_size_mod>-1</hand_size_mod>
+  </charm>
 </charms>

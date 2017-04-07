@@ -1,8 +1,9 @@
-psychic_poke
+dumbfound
 focus
 aim
 attack
 move4
+dumbfound
 move4
 attack
 attack
