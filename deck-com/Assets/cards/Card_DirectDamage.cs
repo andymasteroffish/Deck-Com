@@ -1,31 +1,47 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using System.Xml;
 
-public class Card_AttackIgnoreWeapon : Card {
+public class Card_DirectDamage : Card {
 
 	public int damage;
 	public float range;
+	public bool useLineOfSight;
 
-	public Card_AttackIgnoreWeapon(XmlNode _node){
+	public Card_DirectDamage(XmlNode _node){
 		node = _node;
 
+
 		damage = int.Parse (node ["damage"].InnerXml);
-		range = float.Parse (node ["range"].InnerXml);
+
+		useLineOfSight = true;
+
+		if (node ["range"] != null) {
+			useLineOfSight = false;
+			range = float.Parse (node ["range"].InnerXml);
+		}
 	}
 
 	public override void setupCustom(){
-		type = Card.CardType.Attack;
+		type = Card.CardType.Magic;
 
-		string damageText = "Damage: " + damage;
-		string rangeText = "Range: " + Mathf.Floor(range);
-
-		description = damageText + "\n" + rangeText + "\nDoes not use weapon.";
+		description = "deal " + damage + " damage to";// target unit";
+		if (useLineOfSight) {
+			description += " target visible unit.";
+		} else {
+			description += " a unit in range " + range+".";
+		}
+			
+		description += "\nIgnores cover";
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
+		if (useLineOfSight) {
+			Owner.board.highlightTilesVisibleToUnit (Owner, baseHighlightColor);
+		} else {
+			Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
+		}
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
@@ -44,10 +60,6 @@ public class Card_AttackIgnoreWeapon : Card {
 			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
 		}
 
-		//calculate cover
-		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		text += "\n"+getInfoStringForCover (coverVal)+"\n";
-
 		//print the total
 		text += "\nDAMAGE: "+(damage+totalPrevention);
 
@@ -57,7 +69,12 @@ public class Card_AttackIgnoreWeapon : Card {
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, baseHighlightColor);
+
+		if (useLineOfSight) {
+			Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
+		} else {
+			Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, baseHighlightColor);
+		}
 	}
 
 	public override void passInUnitCustom(Unit unit){
@@ -67,13 +84,9 @@ public class Card_AttackIgnoreWeapon : Card {
 			damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
 		}
 
-		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
-
 		if (damageVal < 0) {
 			damageVal = 0;
 		}
-
 
 		doDamageToUnit( unit, damage );
 		finish ();

@@ -81,15 +81,27 @@ public class Charm  {
 
 	//modifiers
 	public virtual int getCardActionCostMod(Card card){return 0;}
+	public virtual int getGeneralDamageMod(Card card, Unit target){return 0;}
 	public virtual int getWeaponDamageMod(Card card, Unit target){return 0;}
 	public virtual int getWeaponRangeMod(Card card){return 0;}
 	public virtual int getDamageTakenMod(Card card, Unit source){return 0;}
 	public virtual int getHealMod(Card card, Unit target){return 0;}
 
 	//writing modifiers in the info box
-	public string getDamageModifierText(Card card, Unit target){
+	public string getWeaponDamageModifierText(Card card, Unit target){
 		string returnVal = "";
-		int damageMod = getWeaponDamageMod (card, target);
+		int damageMod = getWeaponDamageMod (card, target) + getGeneralDamageMod(card, target);
+		if (damageMod != 0) {
+			string symbol = damageMod >= 0 ? " +" : " ";
+			returnVal += name +symbol + damageMod + "\n";
+		}
+
+		return returnVal;
+	}
+
+	public string getGeneralDamageModifierText(Card card, Unit target){
+		string returnVal = "";
+		int damageMod = getGeneralDamageMod (card, target);
 		if (damageMod != 0) {
 			string symbol = damageMod >= 0 ? " +" : " ";
 			returnVal += name +symbol + damageMod + "\n";

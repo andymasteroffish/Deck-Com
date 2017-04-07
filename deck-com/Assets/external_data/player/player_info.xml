@@ -18,7 +18,7 @@
     <deck>ranger_deck</deck>
     <player_controlled>true</player_controlled>
     <charms>
-      <charm>test_melee</charm>
+      <charm>long_bow</charm>
     </charms>
   </unit>
   <unit idName = "tank">

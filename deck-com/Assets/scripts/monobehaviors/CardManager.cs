@@ -106,6 +106,9 @@ public class CardManager : MonoBehaviour {
 		else if (scriptName == "Card_Trade_Places") {
 			thisCard = new Card_Trade_Places (node);
 		}
+		else if (scriptName == "Card_DirectDamage") {
+			thisCard = new Card_DirectDamage (node);
+		}
 
 		else{
 			Debug.Log ("SCRIPT NAME FOR CARD NOT FOUND: "+scriptName);

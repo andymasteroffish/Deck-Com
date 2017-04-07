@@ -1,4 +1,4 @@
-adjust_sights
+psychic_poke
 focus
 aim
 attack
@@ -6,7 +6,6 @@ move4
 move4
 attack
 attack
-adjust_sights
 attack
 move4
 move_and_attack

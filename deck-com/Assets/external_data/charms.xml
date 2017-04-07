@@ -1,6 +1,6 @@
 <charms>
   <charm idName="test_melee">
-    <name>Long Bow</name>
+    <name>Short Test</name>
     <script>Weapon_Basic</script>
     <damage>2</damage>
     <range>2</range>

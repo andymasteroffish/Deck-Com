@@ -313,7 +313,7 @@ public class Card {
 
 		//check my charms
 		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
-			text += owner.Charms [i].getDamageModifierText (this, unit);
+			text += owner.Charms [i].getWeaponDamageModifierText (this, unit);
 		}
 
 		//check if the unit has any charms that would alter damage values
