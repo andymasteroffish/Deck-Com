@@ -26,6 +26,7 @@ public class Weapon_Basic : Charm {
 
 	public override void dealWeaponDamage(Unit target, int damage){
 		if (charmToGive != "none") {
+			target.aiSimHasBeenCursedCount++;
 			target.addCharm (charmToGive);
 		}
 	}

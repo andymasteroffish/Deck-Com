@@ -1,0 +1,10 @@
+swap_spots
+vampire_stab
+attack
+attack
+attack
+bite
+move5
+move5
+move4
+move3

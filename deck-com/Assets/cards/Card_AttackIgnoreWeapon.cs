@@ -49,7 +49,7 @@ public class Card_AttackIgnoreWeapon : Card {
 		text += "\n"+getInfoStringForCover (coverVal)+"\n";
 
 		//print the total
-		text += "\nDAMAGE: "+(damage+totalPrevention);
+		text += "\nDAMAGE: "+(getDamageToUnit(unit)+totalPrevention);
 
 		//set the target info text
 		Owner.GM.targetInfoText.turnOn(text, unit);
@@ -61,6 +61,11 @@ public class Card_AttackIgnoreWeapon : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
+		doDamageToUnit( unit, getDamageToUnit(unit) );
+		finish ();
+	}
+
+	public int getDamageToUnit(Unit unit){
 		int damageVal = damage;
 
 		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
@@ -74,9 +79,9 @@ public class Card_AttackIgnoreWeapon : Card {
 			damageVal = 0;
 		}
 
+		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
 
-		doDamageToUnit( unit, damage );
-		finish ();
+		return damageVal;
 	}
 
 	public override void resolveFromMove(MoveInfo move){

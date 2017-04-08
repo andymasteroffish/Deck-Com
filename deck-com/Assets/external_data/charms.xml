@@ -45,8 +45,8 @@
   <charm idName="acid_knife">
     <name>Acid Knife</name>
     <script>Weapon_Basic</script>
-    <desc>Deal 2 damage at range 2 and causes units to take 1 additional damage from all other sources.</desc>
-    <damage>2</damage>
+    <desc>Deal 1 damage at range 2 and causes units to take 1 additional damage from all other sources.</desc>
+    <damage>1</damage>
     <range>2</range>
     <charm_to_give>acid_burn</charm_to_give>
   </charm>

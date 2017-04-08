@@ -166,7 +166,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				//if the target is a unit and the card is an attack, let's get some info about the hit
 				Unit thisUnit = gm.board.getUnitOnTile(targetPos);
 				if (thisUnit != null) {
-					Debug.Log ("do it");
 					thisCard.setPotentialTargetInfo (thisUnit);
 				}
 

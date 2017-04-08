@@ -21,6 +21,8 @@ public class Card_Trade_Places : Card {
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 
+		Debug.Log ("select me");
+
 		Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
 		Owner.setHighlighted (false);
 	}

@@ -2,6 +2,8 @@
 <preferedDistToClosestEnemy>1</preferedDistToClosestEnemy>
 <acceptableDistanceRangeToClosestEnemy>0.5</acceptableDistanceRangeToClosestEnemy>
 <distanceToEnemiesWeight>2</distanceToEnemiesWeight>
+<numEnemiesCursedWeight>10</numEnemiesCursedWeight>
+<totalAllyHealWeight>3</totalAllyHealWeight>
 <coverNoneToPart>1</coverNoneToPart>
 <coverNoneToFull>1</coverNoneToFull>
 <coverPartToNone>0</coverPartToNone>

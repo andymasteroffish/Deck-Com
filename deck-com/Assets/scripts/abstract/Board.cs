@@ -350,10 +350,14 @@ public class Board {
 	//Units should have a list of tiles visible to them
 	public void highlightUnitsVisibleToUnit(Unit source, bool includeAllies, bool includeFoes, Color col){
 		clearHighlights ();
+		if (source.visibleTiles == null) {
+			source.getVisibleTiles ();
+		}
 		foreach (Unit unit in units) {
 			if (!unit.isDead) {
 				bool sameSide = source.isPlayerControlled == unit.isPlayerControlled;
 				if ((sameSide && includeAllies) || (!sameSide && includeFoes)) {
+					Debug.Log (source.visibleTiles);
 					if (source.visibleTiles.Contains (unit.CurTile)) {
 						unit.setHighlighted (true, col);
 					}
@@ -364,6 +368,9 @@ public class Board {
 
 	public void highlightTilesVisibleToUnit(Unit source, Color col){
 		clearHighlights ();
+		if (source.visibleTiles == null) {
+			source.getVisibleTiles ();
+		}
 		foreach (Tile tile in source.visibleTiles) {
 			tile.setHighlighted (true, col);
 		}
@@ -945,13 +952,18 @@ public class Board {
 
 		//going through enemies
 		int totalEnemyDamage = 0;
+		int totalEnemyHeal = 0;
 		int numEnemiesKilled = 0;
 		int numEnemiesAided = 0;
+		int numEnemiesCursed = 0;
 		for (int i = 0; i < oldEnemies.Count; i++) {
 			//will enemies be damaged?
-			if (curEnemies[i].health != oldEnemies[i].health){
+			if (curEnemies[i].health < oldEnemies[i].health){
 				totalEnemyDamage += oldEnemies [i].health - curEnemies [i].health; 
-
+			}
+			//will they be healed?
+			if (curEnemies [i].health > oldEnemies [i].health) {
+				totalEnemyHeal +=  curEnemies [i].health - oldEnemies [i].health; 
 			}
 
 			//will enemies be killed?
@@ -962,24 +974,31 @@ public class Board {
 			//were enemies aided (bad!)
 			//this value gets reset at the start of each simulation, so the oldEnemy value will always be 0
 			numEnemiesAided += curEnemies [i].aiSimHasBeenAidedCount;
+			//what about cursed?
+			numEnemiesCursed += curEnemies[i].aiSimHasBeenCursedCount;
 		}
 
 		//add it to the total
 		info.val += totalEnemyDamage * curUnit.aiProfile.totalEnemyDamageWeight;
+		info.val += totalEnemyHeal * curUnit.aiProfile.totalEnemyHealWeight;
 		info.val += numEnemiesKilled * curUnit.aiProfile.numEnemiesKilledWeight;
 		info.val += numEnemiesAided * curUnit.aiProfile.numEnemiesAidedWeight;
+		info.val += numEnemiesCursed * curUnit.aiProfile.numEnemiesCursedWeight;
 
 		//going through allies
 		int totalAllyDamage = 0;
+		int totalAllyHeal = 0;
 		int numAlliesKilled = 0;
 		int numAlliesAided = 0;
+		int numAlliesCursed = 0;
 		for (int i = 0; i < oldAllies.Count; i++) {
 			//will allies be damaged?
-			if (curAllies[i].health != oldAllies[i].health){
-				//healing should not be counted here
-				if (oldAllies [i].health > curAllies [i].health) {
-					totalAllyDamage += oldAllies [i].health - curAllies [i].health;
-				}
+			if (curAllies [i].health < oldAllies [i].health) {
+				totalAllyDamage += oldAllies [i].health - curAllies [i].health;
+			}
+			//will they be healed?
+			if (curAllies [i].health > oldAllies [i].health) {
+				totalAllyHeal += curAllies [i].health - oldAllies [i].health;
 			}
 
 			//will allies be killed?
@@ -989,12 +1008,16 @@ public class Board {
 
 			//were allies aided? (good!)
 			numAlliesAided += curAllies[i].aiSimHasBeenAidedCount;
+			//what about cursed?
+			numAlliesCursed += curAllies[i].aiSimHasBeenCursedCount;
 		}
 
 		//add it to the total
 		info.val += totalAllyDamage * curUnit.aiProfile.totalAllyDamageWeight;
+		info.val += totalAllyHeal * curUnit.aiProfile.totalAllyHealWeight;
 		info.val += numAlliesKilled * curUnit.aiProfile.numAlliesKilledWeight;
 		info.val += numAlliesAided * curUnit.aiProfile.numAlliesAidedWeight;
+		info.val += numAlliesCursed * curUnit.aiProfile.numAlliesCursedWeight;
 
 		//checking distance stuff
 		for (int i = 0; i < oldAllies.Count; i++) {
@@ -1041,6 +1064,10 @@ public class Board {
 //				Debug.Log ("old val: " + oldVal);
 //				Debug.Log ("new val: " + newVal);
 				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
+				Debug.Log ("foes cursed " + numEnemiesCursed);
+				Debug.Log ("allies cursed " + numAlliesCursed);
+				Debug.Log ("foe heal " + totalEnemyHeal);
+				Debug.Log ("ally heal " + totalAllyHeal);
 			}
 
 		}

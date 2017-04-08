@@ -11,36 +11,6 @@ public class TurnInfo {
 	//set when the board is evaluated
 	public float val;	
 
-
-
-
-//	public int totalValue; //OLD. REMOVE
-//
-//	public int totalAllies;	//OLD. REMOVE
-//
-//	//values for evaluating AI moves
-//	//REMOVE ALL OF THIS
-//	public int numEnemiesDamaged;
-//	public int totalEnemyDamage;
-//	public int numEnemiesKilled;
-//
-//	public int numAlliesDamaged;
-//	public int totalAllyDamage;
-//	public int numAlliesKilled;
-//
-//	//enemies/allies aided (allies aided multipe times will count twice)
-//	public int numAlliesAided;
-//	public int numEnemiesAided;
-//
-//	//being in cover (each unit is evaluated by the lowest cover value to any player unit)
-//	public int[] numAlliesCover = new int[3];
-//
-//	//moving to or from player units (these values can be negative if the move would make them further away)
-//	public int numUnitsCloserToTargetDist;
-//	public float totalDistCloserToTargetDistances;
-
-	//should like getting new charms too if they'll last more than the one turn
-
 	public TurnInfo(MoveInfo move){
 		//totalValue = 0;
 		val = 0;

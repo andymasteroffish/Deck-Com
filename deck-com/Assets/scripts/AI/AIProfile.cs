@@ -13,12 +13,16 @@ public class AIProfile {
 
 	//each of these are the value that the given stat will be multiplied by
 	public float totalEnemyDamageWeight;
+	public float totalEnemyHealWeight;
 	public float numEnemiesKilledWeight;
 	public float numEnemiesAidedWeight;
+	public float numEnemiesCursedWeight;
 
 	public float totalAllyDamageWeight;
+	public float totalAllyHealWeight;
 	public float numAlliesKilledWeight;
 	public float numAlliesAidedWeight;
+	public float numAlliesCursedWeight;
 
 	public float distanceToEnemiesWeight;
 
@@ -42,12 +46,16 @@ public class AIProfile {
 
 	private void setDefaultValues(){
 		totalEnemyDamageWeight = 2;
+		totalEnemyHealWeight = -2;
 		numEnemiesKilledWeight = 10;
 		numEnemiesAidedWeight = -10;
+		numEnemiesCursedWeight = 5;
 
 		totalAllyDamageWeight = -6;
+		totalAllyHealWeight = 1;
 		numAlliesKilledWeight = -100;
 		numAlliesAidedWeight = 2;
+		numAlliesCursedWeight = -6;
 
 		preferedDistToClosestEnemy = owner.Weapon.baseRange - 1;
 		acceptableDistanceRangeToClosestEnemy = 1.5f;
@@ -85,16 +93,24 @@ public class AIProfile {
 				distanceToEnemiesWeight = value;
 			} else if (nodeName == "totalEnemyDamageWeight") {
 				totalEnemyDamageWeight = value;
+			} else if (nodeName == "totalEnemyHealWeight") {
+				totalEnemyHealWeight = value;
 			} else if (nodeName == "numEnemiesKilledWeight") {
 				numEnemiesKilledWeight = value;
 			} else if (nodeName == "numEnemiesAidedWeight") {
 				numEnemiesAidedWeight = value;
+			} else if (nodeName == "numEnemiesCursedWeight") {
+				numEnemiesCursedWeight = value;
 			} else if (nodeName == "totalAllyDamageWeight") {
 				totalAllyDamageWeight = value;
+			} else if (nodeName == "totalAllyHealWeight") {
+				totalAllyHealWeight = value;
 			} else if (nodeName == "numAlliesKilledWeight") {
 				numAlliesKilledWeight = value;
 			} else if (nodeName == "numAlliesAidedWeight") {
 				numAlliesAidedWeight = value;
+			} else if (nodeName == "numAlliesCursedWeight") {
+				numAlliesCursedWeight = value;
 			} else if (nodeName == "coverNoneToPart") {
 				coverChange [(int)Tile.Cover.None, (int)Tile.Cover.Part] = value;
 			} else if (nodeName == "coverNoneToFull") {

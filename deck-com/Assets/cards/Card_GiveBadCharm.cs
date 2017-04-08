@@ -51,7 +51,8 @@ public class Card_GiveBadCharm : Card {
 				unit.deck.discardACardAtRandom ();
 			}
 		}
-
+		unit.aiSimHasBeenCursedCount++;
+		Debug.Log ("increase to " + unit.aiSimHasBeenCursedCount);
 		finish ();
 	}
 

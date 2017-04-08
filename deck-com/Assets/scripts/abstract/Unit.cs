@@ -63,7 +63,9 @@ public class Unit {
 	public bool isAISimUnit;
 	public bool isActingAIUnit;		//gets cards and deck when an AI board is made
 	public int  aiHandSize;
+
 	public int aiSimHasBeenAidedCount;
+	public int aiSimHasBeenCursedCount;
 
 	public TurnInfo aiTurnInfo;
 	public int curAITurnStep;
@@ -76,6 +78,7 @@ public class Unit {
 		deckListPath += isPlayerControlled ? "player/" : "foes/";
 		deckListPath += "decks/";
 		deckListPath += node ["deck"].InnerXml + ".txt";
+
 
 		sprite = Resources.Load<Sprite> (node ["sprite"].InnerXml);
 
@@ -99,7 +102,7 @@ public class Unit {
 			aiProfileName = node ["ai_profile"].InnerText;
 		}
 
-		sightRange = 8;
+		sightRange = 9;
 
 		charmIDs = new List<string> ();
 		XmlNodeList childNodes = node["charms"].ChildNodes;
@@ -251,6 +254,7 @@ public class Unit {
 
 	public void resetAISimFlags(){
 		aiSimHasBeenAidedCount = 0;
+		aiSimHasBeenCursedCount = 0;
 	}
 
 	public void setActive(bool _isActive){
@@ -275,7 +279,7 @@ public class Unit {
 	}
 
 	//line of sight
-	void getVisibleTiles(){
+	public void getVisibleTiles(){
 		if (visibleTiles == null) {
 			visibleTiles = new List<Tile> ();
 		}

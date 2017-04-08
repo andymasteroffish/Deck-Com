@@ -2,6 +2,15 @@
   <info>
     <money>15</money>
   </info>
+  <unit idName = "test_player">
+    <name>Ranger</name>
+    <sprite>unit_ranger</sprite>
+    <deck>test_deck</deck>
+    <player_controlled>true</player_controlled>
+    <charms>
+      <charm>acid_knife</charm>
+    </charms>
+  </unit>
   <unit idName = "wizard">
     <name>Wizard</name>
     <sprite>unit_wizard</sprite>
@@ -18,7 +27,7 @@
     <deck>ranger_deck</deck>
     <player_controlled>true</player_controlled>
     <charms>
-      <charm>acid_knife</charm>
+      <charm>long_bow</charm>
     </charms>
   </unit>
   <unit idName = "tank">
