@@ -4,7 +4,7 @@
   </info>
   <unit idName = "test_player">
     <name>Ranger</name>
-    <sprite>unit_ranger</sprite>
+    <sprite>unit_test</sprite>
     <deck>test_deck</deck>
     <player_controlled>true</player_controlled>
     <charms>
