@@ -25,26 +25,34 @@ public class PodPlacement {
 	private Board board;
 	private GameManager gm;
 
-	public PodPlacement(XmlNodeList node){
+	public PodPlacement(XmlNodeList foeNodes){
 
-		//tetsing
-		foeInfo.Add( new FoeInfo(1, "test_boy"));
+		//populate the foe list
+		foreach (XmlNode node in foeNodes) {
+			int level = int.Parse (node ["level"].InnerText);
+			string idName = node.Attributes ["idName"].Value;
+			if (level >= 0) {
+				foeInfo.Add (new FoeInfo (level, idName));
+			}
+		}
+
 	}
 
-	public List<Unit> placeFoes(GameManager _gm, Board _board, int numPods, int podCL){
+	public void placeFoes(GameManager _gm, Board _board, int numPods, int podCL){
 		gm = _gm;
 		board = _board;
 
-		List<Unit> foes = new List<Unit> ();
+		//List<Unit> foes = new List<Unit> ();
 
 		for (int i = 0; i < numPods; i++) {
-			foes.AddRange( makePod (podCL) );
+			makePod (podCL);
+			//foes.AddRange( makePod (podCL) );
 		}
 
-		return foes;
+		//return foes;
 	}
 
-	public List<Unit> makePod(int podCL){
+	public void makePod(int podCL){
 		int curCL = 0;
 		int targetCL = podCL + Random.Range (-podClRange, podClRange);
 
@@ -101,7 +109,7 @@ public class PodPlacement {
 			}
 		}
 
-		return newFoes;
+		board.units.AddRange (newFoes);
 	}
 
 

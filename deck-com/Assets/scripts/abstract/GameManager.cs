@@ -35,7 +35,7 @@ public class GameManager {
 		board.reset ();
 
 		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
-			board.units.AddRange (podPlacement.placeFoes (this, board, 4, 4));
+			podPlacement.placeFoes (this, board, 4, 4);
 		}
 
 
