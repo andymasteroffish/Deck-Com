@@ -214,6 +214,7 @@ public class Board {
 
 	//telling the tiles if any player unit can see them
 	public void updateVisible(){
+		//mark all tiles that are visible to player units
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
 				grid [x, y].isVisibleToPlayer = false;
@@ -223,6 +224,15 @@ public class Board {
 							grid [x, y].isVisibleToPlayer = true;
 						}
 					}
+				}
+			}
+		}
+
+		//check if this would wake up any AI units
+		foreach (Unit unit in units) {
+			if (!unit.isPlayerControlled) {
+				if (grid [unit.CurTile.Pos.x, unit.CurTile.Pos.y].isVisibleToPlayer && !unit.isAwake) {
+					unit.wakeUp ();
 				}
 			}
 		}
@@ -351,7 +361,7 @@ public class Board {
 	public void highlightUnitsVisibleToUnit(Unit source, bool includeAllies, bool includeFoes, Color col){
 		clearHighlights ();
 		if (source.visibleTiles == null) {
-			source.getVisibleTiles ();
+			source.setVisibleTiles ();
 		}
 		foreach (Unit unit in units) {
 			if (!unit.isDead) {
@@ -369,7 +379,7 @@ public class Board {
 	public void highlightTilesVisibleToUnit(Unit source, Color col){
 		clearHighlights ();
 		if (source.visibleTiles == null) {
-			source.getVisibleTiles ();
+			source.setVisibleTiles ();
 		}
 		foreach (Tile tile in source.visibleTiles) {
 			tile.setHighlighted (true, col);

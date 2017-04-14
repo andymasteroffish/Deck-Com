@@ -9,6 +9,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public float debugAnimationTimeMod;
 	public bool debugDoNotShuffle;
 	public bool debugPrintAIInfo;
+	public bool debugRevealFOW;
+	public bool debugIgnoreStandardSpawns;
 
 	public static GameManagerTacticsInterface instance;
 

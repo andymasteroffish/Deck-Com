@@ -6,7 +6,6 @@ public class LevelGen {
 
 	private const int chunkSize = 5;
 
-
 	public LevelGen(){
 	}
 

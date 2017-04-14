@@ -12,7 +12,8 @@ public class UnitManager : MonoBehaviour {
 	//public TextAsset xmlText;
 	//private XmlDocument fullXML;
 
-	private XmlNodeList playerNodes, foeNodes;
+	[System.NonSerialized]
+	public XmlNodeList playerNodes, foeNodes;
 
 	void Awake(){
 		if (instance == null) {

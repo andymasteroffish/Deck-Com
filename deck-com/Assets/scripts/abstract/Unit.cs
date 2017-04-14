@@ -13,10 +13,12 @@ public class Unit {
 	public Board board;
 
 	public bool isPlayerControlled;
+	public bool isAwake;
+	public List<Unit> podmates;
 
 	private Tile curTile;
 	private bool isActive;
-	public bool isExausted;	//meaning 0 actions left & no cards that can be played
+	public bool isExausted;	//meaning 0 actions left & no cards that can be played or the unit is not awake
 
 	public bool useGO;
 
@@ -86,7 +88,8 @@ public class Unit {
 			baseHealth = int.Parse(node ["base_health"].InnerText);
 		}
 		if (node ["hand_size"] != null) {
-			Debug.Log ("set it " + baseHandSize);
+			//Debug.Log ("set it " + baseHandSize);
+			baseHandSize = int.Parse(node ["hand_size"].InnerText);
 		}
 		if (node ["actions"] != null) {
 			baseActions = int.Parse(node ["actions"].InnerText);
@@ -116,6 +119,8 @@ public class Unit {
 
 		isActingAIUnit = false;
 		isAISimUnit = false;
+
+		podmates = new List<Unit>();
 	}
 
 	public void setup(GameManager _gm, Board _board, Tile startTile){
@@ -127,6 +132,8 @@ public class Unit {
 		isDead = false;
 
 		canPickUpLoot = false;
+
+		isAwake = isPlayerControlled;
 
 		//spawn deck
 		deck = new Deck();
@@ -167,6 +174,10 @@ public class Unit {
 		isAISimUnit = true;
 
 		isPlayerControlled = parent.isPlayerControlled;
+		isAwake = parent.isAwake;
+		//PODMATES ARE IGNORED FOR NOW
+		podmates = new List<Unit>();
+
 		sprite = null;
 
 		baseHealth = parent.baseHealth;
@@ -240,13 +251,13 @@ public class Unit {
 			deck.drawCard ();
 		}
 		actionsLeft = 0;
-		getVisibleTiles ();
+		setVisibleTiles ();
 	}
 
 	public void resetRound(){
 		actionsLeft = baseActions;
 		setActive (false);
-		isExausted = false;
+		checkExausted ();
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].resetRound ();
 		}
@@ -272,20 +283,34 @@ public class Unit {
 		}
 
 		if (!isPlayerControlled && isActive){
-			gm.resetAllAIFlags ();
-			aiTurnInfo = gm.getAIMove(board.getUnitID(this), board, board, 0);
-			curAITurnStep = 0;	//flag to hlp the display interface
+			if (isAwake) {
+				gm.resetAllAIFlags ();
+				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
+				curAITurnStep = 0;	//flag to hlp the display interface
+			} else {
+
+			}
 		}
 	}
 
 	//line of sight
-	public void getVisibleTiles(){
+	public void setVisibleTiles(){
 		if (visibleTiles == null) {
 			visibleTiles = new List<Tile> ();
 		}
 		visibleTiles.Clear ();
 		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
 		board.updateVisible ();
+	}
+
+	public void wakeUp(){
+		isAwake = true;
+		foreach (Unit mate in podmates) {
+			if (!mate.isAwake) {
+				mate.wakeUp ();
+			}
+		}
+		Debug.Log ("I'm awakw on " + curTile.Pos.x + " , " + curTile.Pos.y);
 	}
 
 
@@ -357,6 +382,10 @@ public class Unit {
 		if (actionsLeft <= 0 && deck.isWholeHandDisabled()){
 			isExausted = true;
 		}
+
+		if (!isAwake) {
+			isExausted = true;
+		}
 	}
 
 	//input
@@ -378,7 +407,7 @@ public class Unit {
 	//movement
 	public void moveTo(Tile target){
 		curTile = target;
-		getVisibleTiles ();
+		setVisibleTiles ();
 	}
 
 	//damage and health

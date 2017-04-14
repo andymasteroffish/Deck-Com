@@ -5,7 +5,10 @@ using System.Collections.Generic;
 public class GameManager {
 	
 	private CameraControl cam;	//THIS SHOULD NOT BE HERE. MOVE THIS TO AN INTERFACE CLASS
+
 	public Board board;
+	private PodPlacement podPlacement;
+
 
 	public Unit activePlayerUnit;
 	public Unit activeAIUnit;
@@ -23,6 +26,7 @@ public class GameManager {
 	private bool playerWins;
 
 	public GameManager(){
+		podPlacement = new PodPlacement ( UnitManager.instance.foeNodes );
 	}
 
 	public void setup (string[] spawnList) {
@@ -30,13 +34,18 @@ public class GameManager {
 		board = new Board ();
 		board.reset ();
 
+		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
+			board.units.AddRange (podPlacement.placeFoes (this, board, 4, 4));
+		}
+
+
 		roundNum = 0;
 		gameIsOver = false;
 		playerWins = false;
 			
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 
-		//place the units
+		//if there are debug units, place 'em
 		for (int i = 0; i < spawnList.Length; i++) {
 			Unit unit = UnitManager.instance.getUnitFromIdName (spawnList [i]);
 			Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
@@ -83,6 +92,7 @@ public class GameManager {
 				unit.resetRound ();
 			}
 			setActiveAIUnit (unitsAI [(int)Random.Range(0,unitsAI.Count)]);
+			tabActiveAIUnit (1);
 		}
 
 		clearActiveCard ();

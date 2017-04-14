@@ -47,6 +47,9 @@ public class TileGO : MonoBehaviour {
 		}
 
 		fogSprite.enabled = !tile.isVisibleToPlayer;
+		if (GameManagerTacticsInterface.instance.debugRevealFOW) {
+			fogSprite.color = new Color (1, 1, 1, 0.2f);
+		}
 //		if (!tile.isVisibleToPlayer) {
 //			spriteRend.sprite = coverSprites [0];
 //			spriteRend.color = new Color (1, 1, 1, 0.5f);
