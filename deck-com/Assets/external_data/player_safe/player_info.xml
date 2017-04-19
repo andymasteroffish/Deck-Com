@@ -1,12 +1,14 @@
 <player>
   <info>
     <money>15</money>
+    <cur_level>1</cur_level>
   </info>
   <unit idName = "test_player">
     <name>Ranger</name>
-    <sprite>unit_ranger</sprite>
+    <sprite>unit_test</sprite>
     <deck>test_deck</deck>
     <player_controlled>true</player_controlled>
+    <currently_active>false</currently_active>
     <charms>
       <charm>long_bow</charm>
     </charms>
@@ -16,6 +18,7 @@
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
     <player_controlled>true</player_controlled>
+    <currently_active>true</currently_active>
     <charms>
       <charm>wizard_staff</charm>
       <charm>heal_ring</charm>
@@ -26,6 +29,7 @@
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
     <player_controlled>true</player_controlled>
+    <currently_active>true</currently_active>
     <charms>
       <charm>long_bow</charm>
     </charms>
@@ -35,6 +39,7 @@
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
     <player_controlled>true</player_controlled>
+    <currently_active>true</currently_active>
     <charms>
       <charm>sniper_rifle</charm>
     </charms>

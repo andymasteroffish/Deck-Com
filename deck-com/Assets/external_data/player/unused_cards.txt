@@ -4,3 +4,8 @@ move4
 grenade
 blade_dash
 shield
+move4
+attack_r1_d-1
+focus
+psychic_poke
+grenade

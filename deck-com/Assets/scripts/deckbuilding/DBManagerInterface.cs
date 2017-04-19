@@ -26,7 +26,7 @@ public class DBManagerInterface : MonoBehaviour {
 
 	public GameObject unusedCardSelectionBG;
 
-	public TextMesh moneyText;
+	public TextMesh moneyText, levelText;
 
 	void Awake(){
 		if (instance == null) {
@@ -39,6 +39,8 @@ public class DBManagerInterface : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		manager = new DBManager ();
+
+		levelText.text = "Next Level: " + manager.curLevel;
 	}
 	
 	// Update is called once per frame
@@ -67,8 +69,10 @@ public class DBManagerInterface : MonoBehaviour {
 		//turn the card selector backgorund on if that is active
 		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen || manager.unusedCharmsOpen);
 			
-		//update the money
+		//update the text
 		moneyText.text = "$"+manager.money;
+
+		levelText.gameObject.SetActive (manager.activeDeck == null);
 
 		//some keyboard stuff
 		if (Input.GetKeyDown (KeyCode.Escape)) {
@@ -95,6 +99,7 @@ public class DBManagerInterface : MonoBehaviour {
 //	}
 
 	public void startGame(){
+		Debug.Log ("did we get here?");
 		UnityEngine.SceneManagement.SceneManager.LoadScene ("tactics_game");
 	}
 

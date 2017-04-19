@@ -52,4 +52,14 @@ public class UnitManager : MonoBehaviour {
 
 		return unit;
 	}
+
+	public List<Unit> getActivePlayerUnits(){
+		List<Unit> playerUnits = new List<Unit> ();
+		foreach (XmlNode node in playerNodes) {
+			if (bool.Parse(node["currently_active"].InnerText) == true) {
+				playerUnits.Add( new Unit(node) );
+			}
+		}
+		return playerUnits;
+	}
 }

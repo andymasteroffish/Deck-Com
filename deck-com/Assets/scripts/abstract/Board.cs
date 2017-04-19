@@ -8,7 +8,7 @@ public class Board {
 	
 	private LevelGen levelGen;
 
-	private int cols, rows;
+	public int cols, rows;
 
 	public float diagonalVal = 1.41f;
 
@@ -325,7 +325,7 @@ public class Board {
 		List<Tile> bleedTiles = new List<Tile>();
 		foreach (Tile curTile in returnTiles) {
 			if (curTile.CoverVal != Tile.Cover.Full) {
-				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Part);//  getAdjacentTiles (source, false, Tile.Cover.Part);
+				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Full);
 				foreach (Tile t in adjacentTiles) {
 					bleedTiles.Add (t);
 				}
@@ -346,9 +346,8 @@ public class Board {
 
 	//draws a ray between two tiles and returns true if no full cover blocked it
 	public bool checkIfTilesAreVisibleToEachother(Tile a, Tile b){
-
-		//testing float raytrace
-		if (raytrace (a, b, Tile.Cover.Full) == null) {
+		
+		if (raytraceFloat (a, b, Tile.Cover.Full) == null) {
 			return true;
 		} else {
 			return false;
@@ -635,7 +634,6 @@ public class Board {
 
 	//checking cover
 	public Tile.Cover getCover(Unit sourceUnit, Unit targetUnit){
-
 		//just get the line from the source to the target
 		return getCover (sourceUnit.CurTile, targetUnit.CurTile);
 	}
@@ -647,12 +645,15 @@ public class Board {
 		Vector2 dir = new Vector2(dir3.x, dir3.y);
 
 		//debug line
-		//Debug.DrawLine(sourceTile.transform.position, sourceTile.transform.position+new Vector3(dir.x, dir.y, 0), Color.red);
+		//Debug.DrawLine(sourceTile.Pos.getV3(), sourceTile.Pos.getV3()+new Vector3(dir.x, dir.y, 0), Color.green);
 
 		//check for full cover
-		if (raytrace (sourceTile, targetTile, Tile.Cover.Full) != null) {
+		if (raytraceFloat (sourceTile, targetTile, Tile.Cover.Full) != null) {
 			return Tile.Cover.Full;
 		}
+//		if (raytrace (sourceTile, targetTile, Tile.Cover.Full) != null) {
+//			return Tile.Cover.Full;
+//		}
 
 		//and for partial cover
 		//only tiles directly adjacent to a unit should provide partial cover
@@ -785,6 +786,21 @@ public class Board {
 	}
 
 	//also from http://playtechs.blogspot.ca/2007/03/raytracing-on-grid.html
+	Tile raytraceFloat(Tile tileA, Tile tileB, Tile.Cover coverLevelToCheck){
+		Tile lastEncounteredTile = null;
+		float padding = 0.2f;
+		Vector2[] offsets = {new Vector2(0,0), new Vector2(padding, 0), new Vector2(-padding, 0), new Vector2(0, padding), new Vector2(0, -padding)};
+
+		for (int i = 0; i < offsets.Length; i++) {
+			Tile result = raytraceFloat (tileA.Pos.x+offsets[i].x, tileA.Pos.y+offsets[i].y, tileB.Pos.x, tileB.Pos.y, coverLevelToCheck);
+			if (result == null) {
+				return null;
+			} else {
+				lastEncounteredTile = result;
+			}
+		}
+		return lastEncounteredTile;
+	}
 	Tile raytraceFloat(float x0, float y0, float x1, float y1, Tile.Cover coverLevelToCheck)
 	{
 		float offset = 0.5f;
@@ -792,6 +808,8 @@ public class Board {
 		x1 += offset;
 		y0 += offset;
 		y1 += offset;
+
+		//Debug.DrawLine (new Vector3 (x0, y0, 1), new Vector3 (x1, y1, 1), Color.green);
 
 		float dx = Mathf.Abs(x1 - x0);
 		float dy = Mathf.Abs(y1 - y0);

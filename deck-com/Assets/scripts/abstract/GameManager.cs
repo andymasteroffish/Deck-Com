@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml;
 
 public class GameManager {
 	
@@ -25,17 +26,39 @@ public class GameManager {
 	private bool gameIsOver;
 	private bool playerWins;
 
+	//getting and setting info about player progress
+	string playerDocPath;
+	XmlDocument playerDoc;
+	private int curLevelNum;
+
 	public GameManager(){
 		podPlacement = new PodPlacement ( UnitManager.instance.foeNodes );
 	}
 
-	public void setup (string[] spawnList) {
+	public void setup (string[] debugSpawnList) {
 
+		//get the player doc
+		playerDocPath = Application.dataPath + "/external_data/player/player_info.xml";
+		playerDoc = new XmlDocument();
+		playerDoc.Load(playerDocPath);
+
+		XmlNode infoNode = playerDoc.GetElementsByTagName("info")[0];
+		curLevelNum = int.Parse(infoNode["cur_level"].InnerXml);
+
+		Debug.Log ("level: " + curLevelNum);
+
+		//setup the board
 		board = new Board ();
 		board.reset ();
 
 		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
-			podPlacement.placeFoes (this, board, 4, 4);
+			podPlacement.placeFoes (this, board, curLevelNum);
+			List<Unit> activePlayerUnits = UnitManager.instance.getActivePlayerUnits ();
+			for (int i = 0; i < activePlayerUnits.Count; i++) {
+				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( Tile.SpawnProperty.Player );
+				activePlayerUnits[i].setup (this, board, spawnTile);
+				board.units.Add (activePlayerUnits[i]);
+			}
 		}
 
 
@@ -46,8 +69,8 @@ public class GameManager {
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 
 		//if there are debug units, place 'em
-		for (int i = 0; i < spawnList.Length; i++) {
-			Unit unit = UnitManager.instance.getUnitFromIdName (spawnList [i]);
+		for (int i = 0; i < debugSpawnList.Length; i++) {
+			Unit unit = UnitManager.instance.getUnitFromIdName (debugSpawnList [i]);
 			Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
 			unit.setup (this, board, spawnTile);
 			board.units.Add (unit);
@@ -300,12 +323,20 @@ public class GameManager {
 			playerUnits [i].saveDeckFile ();
 		}
 
+		//increase the level and save
+		curLevelNum++;
+		XmlNode infoNode = playerDoc.GetElementsByTagName("info")[0];
+		int curMoney = int.Parse(infoNode["cur_level"].InnerXml);
+		infoNode ["cur_level"].InnerXml = curLevelNum.ToString ();
+		playerDoc.Save(playerDocPath);
+
 		//save whatever info needs to be passed to the next scene
 		EndGameInfoHolder.instance.lootList = loot;
 	}
 
 	//AI shit
 	public TurnInfo getAIMove(int unitID, Board curBoard, Board originalBoard, int curDepth){
+		if(curDepth == 0)	UnityEngine.Profiling.Profiler.BeginSample("in it");
 		float startTime = Time.realtimeSinceStartup;
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			Board.debugCounter = 0;	
@@ -366,7 +397,7 @@ public class GameManager {
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			returnVal.print (board);
-			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move on frame "+Time.frameCount);
 		
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
 			Debug.Log ("------TEST-------");
@@ -375,6 +406,7 @@ public class GameManager {
 			//temp.print (board);
 		}
 
+		if(curDepth == 0)	UnityEngine.Profiling.Profiler.EndSample();
 		return returnVal;
 	}
 

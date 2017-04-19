@@ -284,9 +284,11 @@ public class Unit {
 
 		if (!isPlayerControlled && isActive){
 			if (isAwake) {
+				UnityEngine.Profiling.Profiler.BeginSample("AI Decision");
 				gm.resetAllAIFlags ();
 				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
 				curAITurnStep = 0;	//flag to hlp the display interface
+				UnityEngine.Profiling.Profiler.EndSample ();
 			} else {
 
 			}

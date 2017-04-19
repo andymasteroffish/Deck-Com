@@ -58,7 +58,7 @@ public class LevelGen {
 							chunk[x,y].spawnProperty = Tile.SpawnProperty.Player;
 						}
 
-						if (chunkY ==  chunkRows-1 && chunk [x, y].CoverVal == Tile.Cover.None) {
+						if (chunkY >  0 && chunk [x, y].CoverVal == Tile.Cover.None) {
 							chunk[x,y].spawnProperty = Tile.SpawnProperty.Foe;
 						}
 
@@ -94,7 +94,7 @@ public class LevelGen {
 //				if (Random.value < 0.05f) {
 //					grid [x, y].setCover (Tile.Cover.Full);
 //				}
-//				if (Random.value < 0.05f) {
+//				if (Random.value < 0.03f) {
 //					grid [x, y].setCover (Tile.Cover.Part);
 //				}
 				if (Random.value < 0.05f) {

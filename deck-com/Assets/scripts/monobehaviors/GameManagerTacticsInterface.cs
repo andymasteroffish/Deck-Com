@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManagerTacticsInterface : MonoBehaviour {
 
+
 	private CameraControl cam;
 
 	public float debugAnimationTimeMod;
@@ -27,7 +28,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public int mapChunkCols, mapChunkRows;
 	public TextAsset[] mapChunks;
 
-	public string[] spawnList;
+	public string[] debugSpawnList;
 
 	public GameObject pickupLootButton;
 
@@ -36,6 +37,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	private int aiTurnPhase;
 
 	void Awake () {
+		Debug.Log ("Hi");
 		if (instance == null) {
 			instance = this;
 			gm = new GameManager ();
@@ -47,7 +49,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	void Start(){
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 		gm.targetInfoText = targetInfoText;
-		gm.setup (spawnList);
+		gm.setup (debugSpawnList);
 		doingAnimation = false;
 	}
 
@@ -129,9 +131,18 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		aiTurnText.SetActive(!gm.IsPlayerTurn);
 
 		//testing
-		if (Input.GetKeyDown (KeyCode.T)) {
-			gm.activePlayerUnit.deck.discardACardAtRandom ();
-		}
+//		for (int i = 0; i < 4; i++) {
+//			if (gm.board.units [i] != gm.activePlayerUnit) {
+//				gm.board.getCover (gm.activePlayerUnit, gm.board.units [i]);
+//			}
+//		}
+//
+//		for (int x = 0; x <= gm.board.cols; x++) {
+//			Debug.DrawLine (new Vector3 (x, 0, 1), new Vector3 (x, gm.board.rows, 1), Color.red);
+//		}
+//		for (int y = 0; y <= gm.board.rows; y++) {
+//			Debug.DrawLine (new Vector3 (0, y, 1), new Vector3 (gm.board.cols, y, 1), Color.red);
+//		}
 
 	}
 

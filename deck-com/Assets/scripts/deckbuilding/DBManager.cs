@@ -17,6 +17,7 @@ public class DBManager {
 	public bool unusedCardsOpen;
 
 	public int money;
+	public int curLevel;
 
 	private string xmlPath;
 	private string unusedCharmListPath;
@@ -40,14 +41,18 @@ public class DBManager {
 		XmlNode infoNode = xmlDoc.GetElementsByTagName("info")[0];
 		money = int.Parse(infoNode["money"].InnerXml);
 
+		curLevel = int.Parse (infoNode ["cur_level"].InnerXml);
+
 		//go through each unit and make a deck if it is player controlled
 		XmlNodeList unitNodes = xmlDoc.GetElementsByTagName ("unit");
 		foreach (XmlNode node in unitNodes) {
-			DBDeck deck = new DBDeck (node, decks.Count);
-			decks.Add (deck);
+			if (bool.Parse (node ["currently_active"].InnerXml)) {
+				DBDeck deck = new DBDeck (node, decks.Count);
+				decks.Add (deck);
 
-			//and make a button for it
-			DBManagerInterface.instance.getDeckButtonGO().activate(deck);
+				//and make a button for it
+				DBManagerInterface.instance.getDeckButtonGO ().activate (deck);
+			}
 		}
 
 		//make a special deck of unused cards

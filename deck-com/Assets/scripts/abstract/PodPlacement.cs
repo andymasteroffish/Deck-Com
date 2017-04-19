@@ -38,7 +38,19 @@ public class PodPlacement {
 
 	}
 
+	//these are wack nymuber for now
+	public void placeFoes(GameManager _gm, Board _board, int levelNum){
+		int totalCL = levelNum * 6;
+		int numPods = 1 + levelNum/3;
+		if (numPods > 6) {
+			numPods = 6;
+		}
+		int podCL = (int)Mathf.Ceil((float)totalCL / (float)numPods);
+		placeFoes(_gm, _board, numPods, podCL);
+	}
+
 	public void placeFoes(GameManager _gm, Board _board, int numPods, int podCL){
+		Debug.Log ("Placing " + numPods + " with a CL of " + podCL);
 		gm = _gm;
 		board = _board;
 

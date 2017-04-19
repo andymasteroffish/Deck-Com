@@ -1,6 +1,4 @@
-move4
-bite
-bite
+dumbfound
 focus
 aim
 attack
