@@ -37,7 +37,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	private int aiTurnPhase;
 
 	void Awake () {
-		Debug.Log ("Hi");
 		if (instance == null) {
 			instance = this;
 			gm = new GameManager ();

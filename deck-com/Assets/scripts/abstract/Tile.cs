@@ -74,7 +74,7 @@ public class Tile {
 		setFromParent (parent);
 	}
 	public void setFromParent(Tile parent){
-		Profiler.BeginSample ("setting tile form parent");
+		Profiler.BeginSample ("setting tile from parent");
 		pos = parent.pos;	//tile pos never changes so it can be a direct reference
 		spawnProperty = parent.spawnProperty;
 
@@ -129,11 +129,6 @@ public class Tile {
 		return highCover;
 	}
 
-	//clean up
-
-	public void returnToPool(){
-		ObjectPooler.instance.retireTile (this);
-	}
 
 	//setters and getters
 

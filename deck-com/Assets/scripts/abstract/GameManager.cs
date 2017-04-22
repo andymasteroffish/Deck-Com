@@ -54,6 +54,7 @@ public class GameManager {
 
 		//setup the board
 		board = new Board ();
+		board.mainBoardSetup ();
 		board.reset ();
 
 		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
@@ -132,7 +133,7 @@ public class GameManager {
 	}
 
 	public void resetAllAIFlags(){
-		Debug.Log ("reset all AI flags");
+		//Debug.Log ("reset all AI flags");
 		foreach (Unit unit in board.units) {
 			unit.resetAISimFlags ();
 		}
@@ -413,11 +414,12 @@ public class GameManager {
 
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
+			Debug.Log ("------");
 			returnVal.print (board);
 			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
 			Debug.Log ("on frame " + Time.frameCount);
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
-			Debug.Log ("------TEST-------");
+			//Debug.Log ("------TEST-------");
 			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
 			returnVal.debugResultingBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
 			//temp.print (board);

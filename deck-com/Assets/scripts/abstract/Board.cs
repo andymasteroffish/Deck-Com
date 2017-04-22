@@ -24,15 +24,22 @@ public class Board {
 	public bool isAISim;
 
 	public Board(){
-		isAISim = false;
 		debugCounter = 0;
-		units = new List<Unit> ();
-		loot = new List<Loot> ();
-		levelGen = new LevelGen ();
 	}
 
+	public void mainBoardSetup(){
+		isAISim = false;
+		levelGen = new LevelGen ();
+		units = new List<Unit> ();
+		loot = new List<Loot> ();
+	}
+
+
 	//creating a board for AI stuff
-	public Board(Board parent){
+//	public Board(Board parent){
+//		setFromParent (parent);
+//	}
+	public void setFromParent(Board parent){
 		Profiler.BeginSample ("board setup");
 		isAISim = true;
 
@@ -48,25 +55,41 @@ public class Board {
 		diagonalVal = parent.diagonalVal;
 
 		//tiles
-		Profiler.BeginSample("making tiles");
-		grid = new Tile[cols,rows];
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				grid [x, y] = ObjectPooler.instance.getTile (parent.grid [x, y]);// new Tile (parent.grid [x, y]);
-			}
-		}
 
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				Tile[] adjacent = new Tile[] {null, null, null, null};
-				if (x < cols-1)	adjacent [(int)Tile.Direction.Right]= grid [x+1, y];
-				if (x > 0)		adjacent [(int)Tile.Direction.Left] = grid [x-1, y];
-				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
-				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
-				grid [x, y].setInfo (adjacent);
+		if (grid == null) {
+			Profiler.BeginSample ("making new tiles");
+		
+			grid = new Tile[cols, rows];
+			for (int x = 0; x < cols; x++) {
+				for (int y = 0; y < rows; y++) {
+					grid [x, y] = new Tile (parent.grid [x, y]);//ObjectPooler.instance.getTile (parent.grid [x, y]);
+				}
 			}
+
+			for (int x = 0; x < cols; x++) {
+				for (int y = 0; y < rows; y++) {
+					Tile[] adjacent = new Tile[] { null, null, null, null };
+					if (x < cols - 1)
+						adjacent [(int)Tile.Direction.Right] = grid [x + 1, y];
+					if (x > 0)
+						adjacent [(int)Tile.Direction.Left] = grid [x - 1, y];
+					if (y < rows - 1)
+						adjacent [(int)Tile.Direction.Up] = grid [x, y + 1];
+					if (y > 0)
+						adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
+					grid [x, y].setInfo (adjacent);
+				}
+			}
+			Profiler.EndSample ();
+		} else {
+			Profiler.BeginSample ("set existing tiles");
+			for (int x = 0; x < cols; x++) {
+				for (int y = 0; y < rows; y++) {
+					grid [x, y].setFromParent(parent.grid [x, y]);
+				}
+			}
+			Profiler.EndSample ();
 		}
-		Profiler.EndSample ();
 
 		//units
 		Profiler.BeginSample("make units");
@@ -163,7 +186,8 @@ public class Board {
 		//Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
 		units [move.unitID].isActingAIUnit = true;
 		Profiler.BeginSample ("creating board");
-		Board newBoard = new Board(this);
+		Board newBoard = ObjectPooler.instance.getBoard();//new Board(this);
+		newBoard.setFromParent(this);
 		Profiler.EndSample ();
 
 		newBoard.resolveMove (move);
@@ -1222,11 +1246,10 @@ public class Board {
 	//clean up
 
 	public void returnToPool(){
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				grid [x, y].returnToPool();
-			}
+		for (int i = 0; i < units.Count; i++) {
+			units [i].returnToPool ();
 		}
+		ObjectPooler.instance.retireBoard (this);
 	}
 
 	//setters and getters

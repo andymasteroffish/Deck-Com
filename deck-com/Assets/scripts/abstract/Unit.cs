@@ -320,7 +320,7 @@ public class Unit {
 				mate.wakeUp ();
 			}
 		}
-		Debug.Log ("I'm awakw on " + curTile.Pos.x + " , " + curTile.Pos.y);
+		//Debug.Log ("I'm awakw on " + curTile.Pos.x + " , " + curTile.Pos.y);
 	}
 
 
@@ -501,6 +501,10 @@ public class Unit {
 		deck.saveDrawPile (deckListPath);
 	}
 
+	//clean up
+	public void returnToPool(){
+		//ObjectPooler.instance.retireTile (this);
+	}
 
 	//stters getters
 

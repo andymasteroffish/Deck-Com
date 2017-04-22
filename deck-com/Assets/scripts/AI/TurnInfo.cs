@@ -53,16 +53,16 @@ public class TurnInfo {
 
 	public void print(Board board){
 		Unit unit = board.units [moves [0].unitID];
-		Debug.Log ("MY SEXY ASS TURN for "+unit.unitName);
-		//Debug.Log ("old value: " + totalValue);
-		Debug.Log ("value: " + val);
-		for (int i = 0; i < moves.Count; i++) {
-			if (moves [i].passMove) {
-				Debug.Log (i + ": PASS");
-			} else {
-				Debug.Log (i + ": " + moves [i].cardIDName + " targetting " + moves [i].targetTilePos.x + "," + moves [i].targetTilePos.y);
-			}
-		}
+//		Debug.Log ("MY SEXY ASS TURN for "+unit.unitName);
+//		//Debug.Log ("old value: " + totalValue);
+//		Debug.Log ("value: " + val);
+//		for (int i = 0; i < moves.Count; i++) {
+//			if (moves [i].passMove) {
+//				Debug.Log (i + ": PASS");
+//			} else {
+//				Debug.Log (i + ": " + moves [i].cardIDName + " targetting " + moves [i].targetTilePos.x + "," + moves [i].targetTilePos.y);
+//			}
+//		}
 
 //		if (true) {
 //			Debug.Log ("stats:");
