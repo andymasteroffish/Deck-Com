@@ -14,10 +14,6 @@ public class Tile {
 
 	public bool useGameObject;
 
-	//REMOVE THIS ONCE YOUR BOARD DOES NOT USE RAYCASTING!!!!
-	//if this tile does not need any visual representaiton, the GameObject will be null
-	public TileGO GO;
-
 	private Cover cover;
 	public SpawnProperty spawnProperty;
 	private Tile[] adjacent = new Tile[4];
@@ -55,10 +51,7 @@ public class Tile {
 
 		if (useGameObject) {
 			//GameObjectManager.instance.getTileGO ().activate (this);
-			GO = GameObjectManager.instance.getTileGO ();
-			GO.activate(this);
-		} else {
-			GO = null;
+			GameObjectManager.instance.getTileGO ().activate (this);
 		}
 
 		isVisibleToPlayer = false;
@@ -79,7 +72,6 @@ public class Tile {
 		spawnProperty = parent.spawnProperty;
 
 		useGameObject = false;
-		GO = null;
 
 		cover = parent.cover;
 		isHighlighted = parent.isHighlighted;

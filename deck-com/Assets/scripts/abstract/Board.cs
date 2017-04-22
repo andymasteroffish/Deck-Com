@@ -709,34 +709,34 @@ public class Board {
 		return Tile.Cover.None;
 	}
 
-	void turnOffAllTileColliders(){
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				grid [x, y].GO.collider.enabled = false;
-			}
-		}
-	}
-	void turnOffAllTileCollidersExcept(Tile.Cover coverLevelToKeepOn){
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				grid [x, y].GO.collider.enabled = grid [x, y].CoverVal == coverLevelToKeepOn;
-			}
-		}
-	}
-	void turnOffAllTileCollidersBelow(Tile.Cover coverLevelToKeepOn){
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				grid [x, y].GO.collider.enabled = (int)grid [x, y].CoverVal >= (int)coverLevelToKeepOn;
-			}
-		}
-	}
-	void turnOnAllTileColliders(){
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				grid [x, y].GO.collider.enabled = true;
-			}
-		}
-	}
+//	void turnOffAllTileColliders(){
+//		for (int x = 0; x < cols; x++) {
+//			for (int y = 0; y < rows; y++) {
+//				grid [x, y].GO.collider.enabled = false;
+//			}
+//		}
+//	}
+//	void turnOffAllTileCollidersExcept(Tile.Cover coverLevelToKeepOn){
+//		for (int x = 0; x < cols; x++) {
+//			for (int y = 0; y < rows; y++) {
+//				grid [x, y].GO.collider.enabled = grid [x, y].CoverVal == coverLevelToKeepOn;
+//			}
+//		}
+//	}
+//	void turnOffAllTileCollidersBelow(Tile.Cover coverLevelToKeepOn){
+//		for (int x = 0; x < cols; x++) {
+//			for (int y = 0; y < rows; y++) {
+//				grid [x, y].GO.collider.enabled = (int)grid [x, y].CoverVal >= (int)coverLevelToKeepOn;
+//			}
+//		}
+//	}
+//	void turnOnAllTileColliders(){
+//		for (int x = 0; x < cols; x++) {
+//			for (int y = 0; y < rows; y++) {
+//				grid [x, y].GO.collider.enabled = true;
+//			}
+//		}
+//	}
 
 	public int getNewDamageValFromCover(int origDamage, Tile.Cover cover){
 		int newDamage = origDamage;
