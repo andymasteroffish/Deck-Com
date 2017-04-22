@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using UnityEngine.Profiling;
 
 public class Tile {
 
@@ -35,7 +35,13 @@ public class Tile {
 
 	//public BoxCollider2D collider;
 
+	public Tile(){
+	}
 	public Tile(Cover _cover, SpawnProperty _spawnProperty, GameManager _gm){
+		setup (_cover, _spawnProperty, _gm);
+	}
+
+	public void setup(Cover _cover, SpawnProperty _spawnProperty, GameManager _gm){
 		gm = _gm;
 		spawnProperty = _spawnProperty;
 
@@ -65,6 +71,10 @@ public class Tile {
 
 	//creating new tiles for AI
 	public Tile(Tile parent){
+		setFromParent (parent);
+	}
+	public void setFromParent(Tile parent){
+		Profiler.BeginSample ("setting tile form parent");
 		pos = parent.pos;	//tile pos never changes so it can be a direct reference
 		spawnProperty = parent.spawnProperty;
 
@@ -75,7 +85,7 @@ public class Tile {
 		isHighlighted = parent.isHighlighted;
 		highlightCol = parent.highlightCol;
 		isVisibleToPlayer = parent.isVisibleToPlayer;
-
+		Profiler.EndSample ();
 	}
 
 	public void setInfo(Tile[] _adjacent){
@@ -117,6 +127,12 @@ public class Tile {
 			}
 		}
 		return highCover;
+	}
+
+	//clean up
+
+	public void returnToPool(){
+		ObjectPooler.instance.retireTile (this);
 	}
 
 	//setters and getters

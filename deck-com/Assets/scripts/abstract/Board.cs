@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Profiling;
 
 public class Board {
 
@@ -32,6 +33,7 @@ public class Board {
 
 	//creating a board for AI stuff
 	public Board(Board parent){
+		Profiler.BeginSample ("making board");
 		isAISim = true;
 
 		debugCounter++;
@@ -46,10 +48,11 @@ public class Board {
 		diagonalVal = parent.diagonalVal;
 
 		//tiles
+		Profiler.BeginSample("making tiles");
 		grid = new Tile[cols,rows];
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
-				grid [x, y] = new Tile (parent.grid [x, y]);
+				grid [x, y] = ObjectPooler.instance.getTile (parent.grid [x, y]);// new Tile (parent.grid [x, y]);
 			}
 		}
 
@@ -63,24 +66,27 @@ public class Board {
 				grid [x, y].setInfo (adjacent);
 			}
 		}
+		Profiler.EndSample ();
 
 		//units
+		Profiler.BeginSample("make units");
 		units = new List<Unit>();
 		for (int i = 0; i < parent.units.Count; i++) {
 			Tile startTile = grid [parent.units [i].CurTile.Pos.x, parent.units [i].CurTile.Pos.y];
 			Unit thisUnit = new Unit (parent.units [i], this, startTile);
 			units.Add (thisUnit);
 		}
+		Profiler.EndSample ();
 
 		//loot is not represented and can stay empty
 		loot = new List<Loot>();
-
+		Profiler.EndSample ();
 	}
 
 
 	public void reset(){
 		//clear ();
-		if (GameManagerTacticsInterface.instance.debugMapName != "") {
+		if (GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
 			grid = levelGen.getTestLevel (GameManagerTacticsInterface.instance.debugMapName);
 		} else {
 			grid = levelGen.getLevel ();
@@ -1091,11 +1097,11 @@ public class Board {
 //				Debug.Log ("new closest: " + newClosestDistToEnemy);
 //				Debug.Log ("old val: " + oldVal);
 //				Debug.Log ("new val: " + newVal);
-				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
-				Debug.Log ("foes cursed " + numEnemiesCursed);
-				Debug.Log ("allies cursed " + numAlliesCursed);
-				Debug.Log ("foe heal " + totalEnemyHeal);
-				Debug.Log ("ally heal " + totalAllyHeal);
+//				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
+//				Debug.Log ("foes cursed " + numEnemiesCursed);
+//				Debug.Log ("allies cursed " + numAlliesCursed);
+//				Debug.Log ("foe heal " + totalEnemyHeal);
+//				Debug.Log ("ally heal " + totalAllyHeal);
 			}
 
 		}
@@ -1134,7 +1140,7 @@ public class Board {
 			info.val += changeVal;
 
 			if (printInfo) {
-				Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
+				//Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
 			}
 		}
 
@@ -1206,6 +1212,16 @@ public class Board {
 		}
 
 		Debug.Log (output);
+	}
+
+	//clean up
+
+	public void returnToPool(){
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				grid [x, y].returnToPool();
+			}
+		}
 	}
 
 	//setters and getters

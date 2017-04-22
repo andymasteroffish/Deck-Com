@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using UnityEngine.Profiling;
 
 public class GameManager {
 	
@@ -31,8 +32,12 @@ public class GameManager {
 	XmlDocument playerDoc;
 	private int curLevelNum;
 
+	//pooling objects
+	ObjectPooler objectPool;
+
 	public GameManager(){
 		podPlacement = new PodPlacement ( UnitManager.instance.foeNodes );
+		objectPool = new ObjectPooler ();
 	}
 
 	public void setup (string[] debugSpawnList) {
@@ -55,9 +60,17 @@ public class GameManager {
 			podPlacement.placeFoes (this, board, curLevelNum);
 			List<Unit> activePlayerUnits = UnitManager.instance.getActivePlayerUnits ();
 			for (int i = 0; i < activePlayerUnits.Count; i++) {
-				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( Tile.SpawnProperty.Player );
-				activePlayerUnits[i].setup (this, board, spawnTile);
-				board.units.Add (activePlayerUnits[i]);
+				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.Player);
+				activePlayerUnits [i].setup (this, board, spawnTile);
+				board.units.Add (activePlayerUnits [i]);
+			}
+		} else {
+
+			for (int i = 0; i < debugSpawnList.Length; i++) {
+				Unit unit = UnitManager.instance.getUnitFromIdName (debugSpawnList [i]);
+				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty (unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
+				unit.setup (this, board, spawnTile);
+				board.units.Add (unit);
 			}
 		}
 
@@ -68,13 +81,6 @@ public class GameManager {
 			
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 
-		//if there are debug units, place 'em
-		for (int i = 0; i < debugSpawnList.Length; i++) {
-			Unit unit = UnitManager.instance.getUnitFromIdName (debugSpawnList [i]);
-			Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty( unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
-			unit.setup (this, board, spawnTile);
-			board.units.Add (unit);
-		}
 
 		board.resetUnitsAndLoot ();
 
@@ -114,7 +120,11 @@ public class GameManager {
 			foreach (Unit unit in unitsAI) {
 				unit.resetRound ();
 			}
-			setActiveAIUnit (unitsAI [(int)Random.Range(0,unitsAI.Count)]);
+			int startID = (int)Random.Range (0, unitsAI.Count);
+			if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
+				startID = 0;
+			}
+			setActiveAIUnit (unitsAI [startID]);
 			tabActiveAIUnit (1);
 		}
 
@@ -336,10 +346,11 @@ public class GameManager {
 
 	//AI shit
 	public TurnInfo getAIMove(int unitID, Board curBoard, Board originalBoard, int curDepth){
-		if(curDepth == 0)	UnityEngine.Profiling.Profiler.BeginSample("in it");
+		if(curDepth == 0)	Profiler.BeginSample("AI Thinking");
 		float startTime = Time.realtimeSinceStartup;
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			Board.debugCounter = 0;	
+			//ObjectPooler.instance.debugNewTileCount = 0;
 		}
 
 		//Debug.Log ("get move at depth " + curDepth);
@@ -356,7 +367,9 @@ public class GameManager {
 		foreach (MoveInfo move in allMoves) {
 			TurnInfo turn = new TurnInfo (move);
 			//generate a board with this move
+			Profiler.BeginSample("resolve and return board");
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
+			Profiler.EndSample ();
 			if (GameManagerTacticsInterface.instance.debugPrintAIInfo) {
 				turn.debugResultingBoard = newBoard;
 			}
@@ -369,8 +382,12 @@ public class GameManager {
 				turn.addMoves (followingMoves);
 			} else {
 				//if there were no further moves, this is the end of this set and we should evaluate the board
+				Profiler.BeginSample("compare boards");
 				newBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref turn, false);
+				Profiler.EndSample ();
 			}
+
+			newBoard.returnToPool ();
 
 			potentialTurns.Add (turn);
 		}
@@ -397,8 +414,8 @@ public class GameManager {
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			returnVal.print (board);
-			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move on frame "+Time.frameCount);
-		
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
+			Debug.Log ("on frame " + Time.frameCount);
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
 			Debug.Log ("------TEST-------");
 			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
@@ -406,7 +423,7 @@ public class GameManager {
 			//temp.print (board);
 		}
 
-		if(curDepth == 0)	UnityEngine.Profiling.Profiler.EndSample();
+		if(curDepth == 0)	Profiler.EndSample();
 		return returnVal;
 	}
 

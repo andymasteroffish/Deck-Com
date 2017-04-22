@@ -89,7 +89,6 @@ public class CharmGO : MonoBehaviour {
 	private void setAnimationPositions(){
 		float thisYSpacing = ySpacing;
 		if (!charm.Owner.isPlayerControlled) {
-			Debug.Log ("no player controlled");
 			thisYSpacing *= -1;
 		}
 		startPos = new Vector3 (startAnchor.x, startAnchor.y + charm.offsetID * thisYSpacing, startAnchor.z);

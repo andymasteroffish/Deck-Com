@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Xml;
+using UnityEngine.Profiling;
 
 public class Unit {
 
@@ -161,6 +162,7 @@ public class Unit {
 
 	//creating a duplicate unit for AI
 	public Unit(Unit parent, Board _board, Tile _curTile){
+		Profiler.BeginSample("Unit Creation");
 		gm = parent.gm;
 		board = _board;
 		curTile = _curTile;
@@ -176,7 +178,9 @@ public class Unit {
 		isPlayerControlled = parent.isPlayerControlled;
 		isAwake = parent.isAwake;
 		//PODMATES ARE IGNORED FOR NOW
+		Profiler.BeginSample("making empty pod list");
 		podmates = new List<Unit>();
+		Profiler.EndSample ();
 
 		sprite = null;
 
@@ -209,15 +213,18 @@ public class Unit {
 //		}
 
 		//this is ugly
+		Profiler.BeginSample("Set charms");
 		charms = new List<Charm> ();
 		for (int i = 0; i < parent.charms.Count; i++) {
 			addCharm (parent.charms [i].idName);
 		}
 		weapon = charms[0];
+		Profiler.EndSample ();
 
 		isHighlighted = parent.isHighlighted;
 		highlightCol = parent.highlightCol;
 
+		Profiler.EndSample ();
 	}
 
 	public void addCharm(string idName){
@@ -284,11 +291,10 @@ public class Unit {
 
 		if (!isPlayerControlled && isActive){
 			if (isAwake) {
-				UnityEngine.Profiling.Profiler.BeginSample("AI Decision");
 				gm.resetAllAIFlags ();
 				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
+				ObjectPooler.instance.printInfo ();
 				curAITurnStep = 0;	//flag to hlp the display interface
-				UnityEngine.Profiling.Profiler.EndSample ();
 			} else {
 
 			}
@@ -297,12 +303,14 @@ public class Unit {
 
 	//line of sight
 	public void setVisibleTiles(){
+		Profiler.BeginSample ("get visible tiles");
 		if (visibleTiles == null) {
 			visibleTiles = new List<Tile> ();
 		}
 		visibleTiles.Clear ();
 		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
 		board.updateVisible ();
+		Profiler.EndSample ();
 	}
 
 	public void wakeUp(){
