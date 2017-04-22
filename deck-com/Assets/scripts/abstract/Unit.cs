@@ -313,7 +313,7 @@ public class Unit {
 			if (isAwake) {
 				gm.markAIStart ();
 				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
-				//ObjectPooler.instance.printInfo ();
+				ObjectPooler.instance.printInfo ();
 				curAITurnStep = 0;	//flag to hlp the display interface
 				gm.markAIEnd();
 			} else {

@@ -400,7 +400,13 @@ public class GameManager {
 				Profiler.EndSample ();
 			}
 
-			//newBoard.returnToPool ();	//OUUT THIS BACK IN A WAY THAT DOES NOT BREAK debugResultingBoard
+			//if we're not storing the board to print debug info, we can just return it to the pool
+			if (newBoard != turn.debugResultingBoard) {
+				if (ObjectPooler.instance.checkIfBoardHasBeenRetired (newBoard)) {
+					Debug.Log ("huh oh fuck");
+				}
+				newBoard.returnToPool ();	//PUT THIS BACK IN A WAY THAT DOES NOT BREAK debugResultingBoard
+			}
 
 			potentialTurns.Add (turn);
 		}
@@ -435,6 +441,15 @@ public class GameManager {
 			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
 			returnVal.debugResultingBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
 			//temp.print (board);
+		}
+
+		//if were storing debug boards, they should be returned to the pool
+		for (int i = 0; i < potentialTurns.Count; i++) {
+			if (potentialTurns [i].debugResultingBoard != null) {
+				if (!ObjectPooler.instance.checkIfBoardHasBeenRetired (potentialTurns [i].debugResultingBoard)) {
+					potentialTurns [i].debugResultingBoard.returnToPool ();
+				}
+			}
 		}
 
 		//if(curDepth == 0)	Profiler.EndSample();

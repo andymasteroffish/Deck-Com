@@ -37,6 +37,9 @@ public class ObjectPooler {
 	public void retireBoard(Board board){
 		freeBoards.Add (board);
 	}
+	public bool checkIfBoardHasBeenRetired(Board board){
+		return freeBoards.Contains (board);
+	}
 
 	public Unit getUnit(){
 		Unit unit;
