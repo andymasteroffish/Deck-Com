@@ -33,7 +33,7 @@ public class Board {
 
 	//creating a board for AI stuff
 	public Board(Board parent){
-		Profiler.BeginSample ("making board");
+		Profiler.BeginSample ("board setup");
 		isAISim = true;
 
 		debugCounter++;
@@ -149,18 +149,23 @@ public class Board {
 
 	//resolving moves
 	public void resolveMove(MoveInfo move){
+		Profiler.BeginSample ("resolving move");
 		if (move.passMove == false) {
 			units [move.unitID].deck.getCardInHandFromID (move.cardIDName).resolveFromMove (move);
 		} else {
 			//if a unit passes, they lose all actions
 			units [move.unitID].ActionsLeft = 0;
 		}
+		Profiler.EndSample ();
 	}
 
 	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
 		//Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
 		units [move.unitID].isActingAIUnit = true;
+		Profiler.BeginSample ("creating board");
 		Board newBoard = new Board(this);
+		Profiler.EndSample ();
+
 		newBoard.resolveMove (move);
 		return newBoard;
 	}

@@ -33,7 +33,7 @@ public class ObjectPooler {
 	}
 
 	public Tile getTile(){
-		
+		//return new Tile ();
 
 		Tile tile;
 		if (freeTiles.Count > 0) {
