@@ -111,6 +111,7 @@ public class GameManager {
 	}
 
 	void startAITurn(){
+		Debug.Log ("start ai turn");
 		isPlayerTurn = false;
 
 		if (checkGameOver()) {
@@ -125,7 +126,8 @@ public class GameManager {
 			if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
 				startID = 0;
 			}
-			setActiveAIUnit (unitsAI [startID]);
+			activeAIUnit = unitsAI [startID];
+			//setActiveAIUnit (unitsAI [startID]);
 			tabActiveAIUnit (1);
 		}
 
@@ -235,6 +237,9 @@ public class GameManager {
 		activeAIUnit = newActive;
 		List<Unit> playerUnits = getAIUnits ();
 		foreach (Unit unit in playerUnits){
+			if (unit == activeAIUnit) {
+				Debug.Log ("we got a spicy boy");
+			}
 			unit.setActive ( unit==activeAIUnit);
 		}
 		cam.setTarget (newActive);
@@ -347,7 +352,7 @@ public class GameManager {
 
 	//AI shit
 	public TurnInfo getAIMove(int unitID, Board curBoard, Board originalBoard, int curDepth){
-		if(curDepth == 0)	Profiler.BeginSample("AI Thinking");
+		//if(curDepth == 0)	Profiler.BeginSample("AI Thinking");
 		float startTime = Time.realtimeSinceStartup;
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			Board.debugCounter = 0;	
@@ -368,9 +373,9 @@ public class GameManager {
 		foreach (MoveInfo move in allMoves) {
 			TurnInfo turn = new TurnInfo (move);
 			//generate a board with this move
-			Profiler.BeginSample("resolve and return board");
+			//Profiler.BeginSample("resolve and return board");
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
-			Profiler.EndSample ();
+			//Profiler.EndSample ();
 			if (GameManagerTacticsInterface.instance.debugPrintAIInfo) {
 				turn.debugResultingBoard = newBoard;
 			}
@@ -425,7 +430,7 @@ public class GameManager {
 			//temp.print (board);
 		}
 
-		if(curDepth == 0)	Profiler.EndSample();
+		//if(curDepth == 0)	Profiler.EndSample();
 		return returnVal;
 	}
 

@@ -73,6 +73,8 @@ public class Unit {
 	public TurnInfo aiTurnInfo;
 	public int curAITurnStep;
 
+	public Unit(){
+	}
 	public Unit(XmlNode node){
 		unitName = node ["name"].InnerXml;
 		isPlayerControlled = bool.Parse(node["player_controlled"].InnerXml);
@@ -162,6 +164,9 @@ public class Unit {
 
 	//creating a duplicate unit for AI
 	public Unit(Unit parent, Board _board, Tile _curTile){
+		setAISimUnitFromParent(parent, _board, _curTile);
+	}
+	public void setAISimUnitFromParent(Unit parent, Board _board, Tile _curTile){
 		Profiler.BeginSample("Unit Creation");
 		gm = parent.gm;
 		board = _board;
@@ -206,11 +211,12 @@ public class Unit {
 		baseActions = parent.baseActions;
 		actionsLeft = parent.actionsLeft;
 
-//		visibleTiles = new List<Tile> ();
-//		for (int i = 0; i < parent.visibleTiles.Count; i++) {
-//			Tile tile = board.Grid [parent.visibleTiles [i].Pos.x, parent.visibleTiles [i].Pos.y];
-//			visibleTiles.Add (tile);
-//		}
+		sightRange = 0;//THIS IS BAD. SET THIS TO BE PARENT'S RANGE!
+		//		visibleTiles = new List<Tile> ();
+		//		for (int i = 0; i < parent.visibleTiles.Count; i++) {
+		//			Tile tile = board.Grid [parent.visibleTiles [i].Pos.x, parent.visibleTiles [i].Pos.y];
+		//			visibleTiles.Add (tile);
+		//		}
 
 		//this is ugly
 		Profiler.BeginSample("Set charms");
@@ -303,13 +309,15 @@ public class Unit {
 
 	//line of sight
 	public void setVisibleTiles(){
-		Profiler.BeginSample ("get visible tiles");
+		Profiler.BeginSample ("set visible tiles");
 		if (visibleTiles == null) {
 			visibleTiles = new List<Tile> ();
 		}
 		visibleTiles.Clear ();
 		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
-		board.updateVisible ();
+		if (isPlayerControlled && !isAISimUnit) {
+			board.updateVisible ();
+		}
 		Profiler.EndSample ();
 	}
 
@@ -348,11 +356,11 @@ public class Unit {
 			charms[i].turnEndPostDiscard ();
 		}
 
-//		if (isPlayerControlled) {
-//			gm.tabActivePlayerUnit (1);
-//		} else {
-//			gm.tabActiveAIUnit (1);
-//		}
+		//		if (isPlayerControlled) {
+		//			gm.tabActivePlayerUnit (1);
+		//		} else {
+		//			gm.tabActiveAIUnit (1);
+		//		}
 	}
 
 	public void turnEndCleanUp(){
@@ -412,7 +420,7 @@ public class Unit {
 	public void pickUpLoot(){
 		board.collectLootNearUnit (this);
 	}
-		
+
 
 	//movement
 	public void moveTo(Tile target){
@@ -503,7 +511,7 @@ public class Unit {
 
 	//clean up
 	public void returnToPool(){
-		//ObjectPooler.instance.retireTile (this);
+		ObjectPooler.instance.retireUnit (this);
 	}
 
 	//stters getters

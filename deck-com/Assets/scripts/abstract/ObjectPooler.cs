@@ -6,18 +6,21 @@ public class ObjectPooler {
 
 	public static ObjectPooler instance;
 
-	public int debugNewTileCount, debugNewBoardCount;
+	public int debugNewBoardCount, debugNewUnitCount;
 
 	//private List<Tile> freeTiles;		//IF THE BOARD HANDLES ITS OWN TILES, YOU DON'T NEED TO POOL TILES AND CAN REMOVE THIS
 
 	private List<Board> freeBoards;
+	private List<Unit> freeUnits;
 
 	public ObjectPooler(){
 		instance = this;
-		debugNewTileCount = 0;
+		debugNewBoardCount = 0;
+		debugNewUnitCount = 0;
 
 		//freeTiles = new List<Tile> ();
 		freeBoards = new List<Board> ();
+		freeUnits = new List<Unit> ();
 	}
 
 	public Board getBoard(){
@@ -33,6 +36,21 @@ public class ObjectPooler {
 	}
 	public void retireBoard(Board board){
 		freeBoards.Add (board);
+	}
+
+	public Unit getUnit(){
+		Unit unit;
+		if (freeUnits.Count > 0) {
+			unit = freeUnits [0];
+			freeUnits.RemoveAt (0);
+		} else {
+			debugNewUnitCount++;
+			unit = new Unit ();
+		}
+		return unit;
+	}
+	public void retireUnit(Unit unit){
+		freeUnits.Add (unit);
 	}
 
 //	//ALL TILE FUNCTION CAN BE RMEOVED IF THE POOLED BOARDS MANAGE THEIR OWN TILES
@@ -65,8 +83,8 @@ public class ObjectPooler {
 
 
 	public void printInfo(){
-//		Debug.Log ("new  tiles: " + debugNewTileCount);
-//		Debug.Log ("free tiles: " + freeTiles.Count);
+		Debug.Log ("new  units: " + debugNewUnitCount);
+		Debug.Log ("free units: " + freeUnits.Count);
 
 		Debug.Log ("new  boards: " + debugNewBoardCount);
 		Debug.Log ("free boards: " + freeBoards.Count);

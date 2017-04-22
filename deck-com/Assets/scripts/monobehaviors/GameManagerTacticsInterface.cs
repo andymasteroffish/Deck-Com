@@ -157,6 +157,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//are we done?
 		if (aiTurnPhase == 1 && gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {
+			Debug.Log ("end turn");
 			gm.endAITurn ();
 			return;
 		}

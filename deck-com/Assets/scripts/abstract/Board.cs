@@ -96,7 +96,8 @@ public class Board {
 		units = new List<Unit>();
 		for (int i = 0; i < parent.units.Count; i++) {
 			Tile startTile = grid [parent.units [i].CurTile.Pos.x, parent.units [i].CurTile.Pos.y];
-			Unit thisUnit = new Unit (parent.units [i], this, startTile);
+			Unit thisUnit = ObjectPooler.instance.getUnit();// new Unit (parent.units [i], this, startTile);
+			thisUnit.setAISimUnitFromParent(parent.units [i], this, startTile);
 			units.Add (thisUnit);
 		}
 		Profiler.EndSample ();
@@ -185,10 +186,10 @@ public class Board {
 	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
 		//Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
 		units [move.unitID].isActingAIUnit = true;
-		Profiler.BeginSample ("creating board");
+		//Profiler.BeginSample ("creating board");
 		Board newBoard = ObjectPooler.instance.getBoard();//new Board(this);
 		newBoard.setFromParent(this);
-		Profiler.EndSample ();
+		//Profiler.EndSample ();
 
 		newBoard.resolveMove (move);
 		return newBoard;
