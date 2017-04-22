@@ -230,6 +230,9 @@ public class Unit {
 		isHighlighted = parent.isHighlighted;
 		highlightCol = parent.highlightCol;
 
+		aiSimHasBeenAidedCount = parent.aiSimHasBeenAidedCount;
+		aiSimHasBeenCursedCount = parent.aiSimHasBeenCursedCount;
+
 		Profiler.EndSample ();
 	}
 
@@ -276,9 +279,20 @@ public class Unit {
 		}
 	}
 
-	public void resetAISimFlags(){
+	public void markAIStart(){
+		//Debug.Log ("AI START");
+		//reset all sim flags
 		aiSimHasBeenAidedCount = 0;
 		aiSimHasBeenCursedCount = 0;
+		//tell charms they are in AI
+		foreach (Charm charm in charms) {
+			charm.inAISIm = true;
+		}
+	}
+	public void markAIEnd(){
+		foreach (Charm charm in charms) {
+			charm.inAISIm = false;
+		}
 	}
 
 	public void setActive(bool _isActive){
@@ -297,10 +311,11 @@ public class Unit {
 
 		if (!isPlayerControlled && isActive){
 			if (isAwake) {
-				gm.resetAllAIFlags ();
+				gm.markAIStart ();
 				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
-				ObjectPooler.instance.printInfo ();
+				//ObjectPooler.instance.printInfo ();
 				curAITurnStep = 0;	//flag to hlp the display interface
+				gm.markAIEnd();
 			} else {
 
 			}
@@ -379,7 +394,10 @@ public class Unit {
 		}
 
 		//reduce the actions
+		//Debug.Log(card.idName+" has action cost "+card.getNumActionsNeededToPlay());
+		//Debug.Log ("and I start with " + actionsLeft + " actions");
 		actionsLeft -= card.getNumActionsNeededToPlay();
+		//Debug.Log ("Now I have " + actionsLeft + " actions");
 
 		//Debug.Log ("I just played " + card.name + " and have " + actionsLeft + " actions left");
 

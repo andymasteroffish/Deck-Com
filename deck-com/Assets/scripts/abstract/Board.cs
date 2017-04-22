@@ -186,10 +186,10 @@ public class Board {
 	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
 		//Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
 		units [move.unitID].isActingAIUnit = true;
-		//Profiler.BeginSample ("creating board");
+		Profiler.BeginSample ("creating board");
 		Board newBoard = ObjectPooler.instance.getBoard();//new Board(this);
 		newBoard.setFromParent(this);
-		//Profiler.EndSample ();
+		Profiler.EndSample ();
 
 		newBoard.resolveMove (move);
 		return newBoard;
@@ -1041,7 +1041,7 @@ public class Board {
 			//what about cursed?
 			numEnemiesCursed += curEnemies[i].aiSimHasBeenCursedCount;
 		}
-
+			
 		//add it to the total
 		info.val += totalEnemyDamage * curUnit.aiProfile.totalEnemyDamageWeight;
 		info.val += totalEnemyHeal * curUnit.aiProfile.totalEnemyHealWeight;
@@ -1076,12 +1076,26 @@ public class Board {
 			numAlliesCursed += curAllies[i].aiSimHasBeenCursedCount;
 		}
 
+
+//		if (numAlliesAided > 0) {
+//			Debug.Log (numAlliesAided + " aided and " + curUnit.ActionsLeft + " actions left");
+//		}
+
 		//add it to the total
 		info.val += totalAllyDamage * curUnit.aiProfile.totalAllyDamageWeight;
 		info.val += totalAllyHeal * curUnit.aiProfile.totalAllyHealWeight;
 		info.val += numAlliesKilled * curUnit.aiProfile.numAlliesKilledWeight;
 		info.val += numAlliesAided * curUnit.aiProfile.numAlliesAidedWeight;
 		info.val += numAlliesCursed * curUnit.aiProfile.numAlliesCursedWeight;
+
+		if (printInfo) {
+			Debug.Log ("foes aided " + numEnemiesAided);
+			Debug.Log ("allies aided " + numAlliesAided+ "  weight " + curUnit.aiProfile.numAlliesAidedWeight);
+			Debug.Log ("foes cursed " + numEnemiesCursed);
+			Debug.Log ("allies cursed " + numAlliesCursed);
+			Debug.Log ("foe heal " + totalEnemyHeal);
+			Debug.Log ("ally heal " + totalAllyHeal);
+		}
 
 		//checking distance stuff
 		for (int i = 0; i < oldAllies.Count; i++) {
@@ -1121,17 +1135,13 @@ public class Board {
 			info.val += change * curAllies[i].aiProfile.distanceToEnemiesWeight;
 
 			if (printInfo) {
-//				Debug.Log ("min dist: " + minDistFromClosest);
-//				Debug.Log ("max dist: " + maxDistFromClosest);
-//				Debug.Log ("old closest: " + oldClosestDistToEnemy);
-//				Debug.Log ("new closest: " + newClosestDistToEnemy);
-//				Debug.Log ("old val: " + oldVal);
-//				Debug.Log ("new val: " + newVal);
-//				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
-//				Debug.Log ("foes cursed " + numEnemiesCursed);
-//				Debug.Log ("allies cursed " + numAlliesCursed);
-//				Debug.Log ("foe heal " + totalEnemyHeal);
-//				Debug.Log ("ally heal " + totalAllyHeal);
+				Debug.Log ("min dist: " + minDistFromClosest);
+				Debug.Log ("max dist: " + maxDistFromClosest);
+				Debug.Log ("old closest: " + oldClosestDistToEnemy);
+				Debug.Log ("new closest: " + newClosestDistToEnemy);
+				Debug.Log ("old val: " + oldVal);
+				Debug.Log ("new val: " + newVal);
+				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
 			}
 
 		}
@@ -1181,8 +1191,9 @@ public class Board {
 
 		//have allies retreated or advanced?
 
-		//tally it all up
-		//info.calculateTotalValue();
+		if (printInfo) {
+			Debug.Log ("TOTAL: " + info.val);
+		}
 	}
 
 	//*************

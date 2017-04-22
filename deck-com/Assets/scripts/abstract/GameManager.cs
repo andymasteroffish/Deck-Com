@@ -134,10 +134,15 @@ public class GameManager {
 		clearActiveCard ();
 	}
 
-	public void resetAllAIFlags(){
+	public void markAIStart(){
 		//Debug.Log ("reset all AI flags");
 		foreach (Unit unit in board.units) {
-			unit.resetAISimFlags ();
+			unit.markAIStart ();
+		}
+	}
+	public void markAIEnd(){
+		foreach (Unit unit in board.units) {
+			unit.markAIEnd ();
 		}
 	}
 
@@ -367,6 +372,8 @@ public class GameManager {
 			return null;
 		}
 
+		//Debug.Log ("actions " + curBoard.units [unitID].ActionsLeft + "  depth " + curDepth);
+
 		//find all possible moves that could follow
 		List<TurnInfo> potentialTurns = new List<TurnInfo>();
 
@@ -389,11 +396,11 @@ public class GameManager {
 			} else {
 				//if there were no further moves, this is the end of this set and we should evaluate the board
 				Profiler.BeginSample("compare boards");
-				newBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref turn, false);
+				newBoard.compareBoardSates (originalBoard, newBoard.units [unitID], ref turn, false);
 				Profiler.EndSample ();
 			}
 
-			newBoard.returnToPool ();
+			//newBoard.returnToPool ();	//OUUT THIS BACK IN A WAY THAT DOES NOT BREAK debugResultingBoard
 
 			potentialTurns.Add (turn);
 		}
@@ -424,7 +431,7 @@ public class GameManager {
 			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
 			Debug.Log ("on frame " + Time.frameCount);
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
-			//Debug.Log ("------TEST-------");
+			Debug.Log ("------TEST-------");
 			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
 			returnVal.debugResultingBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
 			//temp.print (board);

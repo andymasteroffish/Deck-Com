@@ -1,4 +1,12 @@
 <ai>
 <totalEnemyDamageWeight>3</totalEnemyDamageWeight>
 <numEnemiesKilledWeight>8</numEnemiesKilledWeight>
+<numAlliesAidedWeight>40</numAlliesAidedWeight>
+<distanceToEnemiesWeight>0</distanceToEnemiesWeight>
+<coverNoneToPart>0</coverNoneToPart>
+<coverNoneToFull>0</coverNoneToFull>
+<coverPartToNone>0</coverPartToNone>
+<coverPartToFull>0</coverPartToFull>
+<coverFullToNone>0</coverFullToNone>
+<coverFullToPart>0</coverFullToPart>
 </ai>

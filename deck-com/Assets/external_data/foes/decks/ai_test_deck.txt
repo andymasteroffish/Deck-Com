@@ -1,6 +1,12 @@
 move4
 move4
+move4
+shield
+shield
+shield
 attack
+shield
+move4
 attack
 move4
 move4

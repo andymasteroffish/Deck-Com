@@ -28,107 +28,19 @@ public class TurnInfo {
 		//we only care about the final board state so all evaluation should be transfered over
 		if (moves.Count > 0) {
 			val = other.val;
-
-//			numEnemiesDamaged = other.numEnemiesDamaged;
-//			totalEnemyDamage = other.totalEnemyDamage;
-//			numEnemiesKilled = other.numEnemiesKilled;
-//
-//			numAlliesDamaged = other.numAlliesDamaged;
-//			totalAllyDamage = other.totalAllyDamage;
-//			numAlliesKilled = other.numAlliesKilled;
-//
-//			numAlliesAided = other.numAlliesAided;
-//			numEnemiesAided = other.numEnemiesAided;
-//
-//			for (int i = 0; i < 3; i++) {
-//				numAlliesCover [i] = other.numAlliesCover [i];
-//			}
-//
-//			numUnitsCloserToTargetDist = other.numUnitsCloserToTargetDist;
-//			totalDistCloserToTargetDistances = other.totalDistCloserToTargetDistances;
-//
-//			calculateTotalValue ();
 		}
 	}
 
 	public void print(Board board){
 		Unit unit = board.units [moves [0].unitID];
-//		Debug.Log ("MY SEXY ASS TURN for "+unit.unitName);
-//		//Debug.Log ("old value: " + totalValue);
-//		Debug.Log ("value: " + val);
-//		for (int i = 0; i < moves.Count; i++) {
-//			if (moves [i].passMove) {
-//				Debug.Log (i + ": PASS");
-//			} else {
-//				Debug.Log (i + ": " + moves [i].cardIDName + " targetting " + moves [i].targetTilePos.x + "," + moves [i].targetTilePos.y);
-//			}
-//		}
-
-//		if (true) {
-//			Debug.Log ("stats:");
-//			Debug.Log ("enemies damaged: " + numEnemiesDamaged);
-//			Debug.Log ("total enemy damage: " + totalEnemyDamage);
-//			Debug.Log ("enemies killed: " + numEnemiesKilled);
-//			Debug.Log ("allies damaged: " + numAlliesDamaged);
-//			Debug.Log ("total ally damage: " + totalAllyDamage);
-//			Debug.Log ("allies killed: " + numAlliesKilled);
-//
-//			Debug.Log("num allies aided: "+numAlliesAided);
-//			Debug.Log("num enemies aided: "+numEnemiesAided);
-//
-//			Debug.Log ("units closer to target: " + numUnitsCloserToTargetDist);
-//			Debug.Log ("total dist closer: " + totalDistCloserToTargetDistances);
-//
-//			Debug.Log ("allies in full cover " + numAlliesCover[(int)Tile.Cover.Full]);
-//			Debug.Log ("allies in part cover " + numAlliesCover[(int)Tile.Cover.Part]);
-//			Debug.Log ("allies in no cover " + numAlliesCover[(int)Tile.Cover.None]);
-//		}
+		Debug.Log ("MY SEXY ASS TURN for "+unit.unitName);
+		Debug.Log ("value: " + val);
+		for (int i = 0; i < moves.Count; i++) {
+			if (moves [i].passMove) {
+				Debug.Log (i + ": PASS");
+			} else {
+				Debug.Log (i + ": " + moves [i].cardIDName + " targetting " + moves [i].targetTilePos.x + "," + moves [i].targetTilePos.y);
+			}
+		}
 	}
-
-//	public void resetEvaluations(){
-//		totalValue = 0;
-//		totalAllies = 0;
-//
-//		numEnemiesDamaged = 0;
-//		totalEnemyDamage = 0;
-//		numEnemiesKilled = 0;
-//		numAlliesDamaged = 0;
-//		totalAllyDamage = 0;
-//		numAlliesKilled = 0;
-//
-//		numAlliesAided = 0;
-//		numEnemiesAided = 0;
-//
-//		numUnitsCloserToTargetDist = 0;
-//		totalDistCloserToTargetDistances = 0;
-//
-//		for (int i = 0; i < 3; i++) {
-//			numAlliesCover [i] = 0;
-//		}
-//	}
-
-	//YOU NEED TO FEED IN WEIGHTED DESIRES
-	//THIS IS JUST A GENERIC TEST
-//	public void calculateTotalValue(){
-//		float total = 0;
-//
-//		total += totalEnemyDamage * 2;
-//		total += numEnemiesKilled * 10;
-//		total -= totalAllyDamage * 10;
-//		total -= numAlliesKilled * 100;
-//
-//		total += numAlliesAided * 1;
-//		total -= numEnemiesAided * 10;
-//
-//		total += (float)numUnitsCloserToTargetDist * 1;
-//		total += totalDistCloserToTargetDistances * 1;
-//
-//		total += numAlliesCover [(int)Tile.Cover.Full] * 2;
-//		total += numAlliesCover [(int)Tile.Cover.Part] * 0;
-//		total += numAlliesCover [(int)Tile.Cover.None] * -5;
-//
-//		totalValue = (int)total;	//rounding to into to make other math easier
-//
-//		//Debug.Log ("tot val " + totalValue);
-//	}
 }

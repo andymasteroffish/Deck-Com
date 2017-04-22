@@ -34,6 +34,8 @@ public class Charm  {
 	public int handSizeMod;
 	public int generalTakeDamageMod;
 
+	public bool inAISIm;
+
 
 	//this should never be
 	public Charm(){}
@@ -55,6 +57,8 @@ public class Charm  {
 
 		isDead = false;
 		hasChangedPos = false;
+
+		inAISIm = false;
 
 		costToAddToDeck = 3;
 
