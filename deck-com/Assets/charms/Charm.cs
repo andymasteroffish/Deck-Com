@@ -5,9 +5,11 @@ using System.Xml;
 
 public class Charm  {
 
+	public enum CharmClass{ Charm, ExtraCard, HealRing, OneTimeShield, OneTimeWeaponBonus, WeaponBonus, BasicWeapon, SniperRifle };
 	public enum CharmType {Weapon, Charm};
 
 	public string name, description;
+	public CharmClass className;
 	public CharmType type;
 
 	public int costToAddToDeck;
@@ -34,7 +36,7 @@ public class Charm  {
 	public int handSizeMod;
 	public int generalTakeDamageMod;
 
-	public bool inAISIm;
+	public bool protectDuringAISim;	//KILL THIS
 
 
 	//this should never be
@@ -44,9 +46,11 @@ public class Charm  {
 	public Charm(XmlNode _node){
 		node = _node;
 	}
+	public Charm(Charm parent){
+		setFromParent (parent);
+	}
 
 	public void setup(Unit _owner, bool _useGameObject, string _idName){
-
 		owner = _owner;
 		useGameObject = _useGameObject;
 		idName = _idName;
@@ -58,13 +62,14 @@ public class Charm  {
 		isDead = false;
 		hasChangedPos = false;
 
-		inAISIm = false;
+		protectDuringAISim = false;
 
 		costToAddToDeck = 3;
 
 		name = node ["name"].InnerText;
 
-		type = CharmType.Charm;	//default to char, so wepaons should change this in setupCustom
+		className = CharmClass.Charm;
+		type = CharmType.Charm;	//default to char,, so wepaons should change this in setupCustom
 
 		//check general values
 
@@ -93,9 +98,46 @@ public class Charm  {
 		if (node ["desc"] != null) {
 			description = node ["desc"].InnerText;
 		}
-
 	}
 	public virtual void setupCustom(){}
+
+	public void setFromParent(Charm parent){
+		owner = parent.owner;
+		useGameObject = false;
+		idName = parent.idName;
+
+		if (owner != null) {
+			offsetID = owner.Charms.Count;
+		}
+
+		isDead = parent.isDead;
+		hasChangedPos = parent.hasChangedPos;
+
+		//protectDuringAISim = false;
+
+		costToAddToDeck = parent.costToAddToDeck;
+
+		name = parent.name;
+
+		className = parent.className;
+		type = parent.type;
+
+		handSizeMod = parent.handSizeMod;
+
+		generalTakeDamageMod = parent.generalTakeDamageMod;
+
+
+		selfDestructsAfterTurns = parent.selfDestructsAfterTurns;
+		turnsLeftBeforeSelfDestruct = parent.turnsLeftBeforeSelfDestruct;
+
+		//do the charm's own setup
+		setFromParentCustom (parent);
+
+		//if a description was specified, overwrite whatever was going on
+		description = parent.description;
+	}
+	public virtual void setFromParentCustom(Charm parent){
+	}
 
 	public void setActive(bool isActive){
 		//when we first activate, get a new shell game object to display the charm

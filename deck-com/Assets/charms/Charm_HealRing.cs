@@ -12,6 +12,19 @@ public class Charm_HealRing : Charm {
 	public Charm_HealRing(XmlNode _node){
 		node = _node;
 	}
+	public Charm_HealRing(Charm parent){
+		setFromParent (parent);
+	}
+
+	public override void setupCustom(){
+		className = CharmClass.HealRing;
+	}
+
+	public override void setFromParentCustom(Charm parent){
+		usedThisRound = ((Charm_HealRing)parent).usedThisRound;
+		healIncrease = ((Charm_HealRing)parent).healIncrease;
+	}
+
 	public override void resetRoundCustom(){
 		usedThisRound = false;
 	}

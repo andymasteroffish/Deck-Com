@@ -30,6 +30,18 @@ public class Charm_WeaponBonus : Charm {
 			description += "Damage increase: " + damageMod;
 		}
 	}
+	public Charm_WeaponBonus(Charm parent){
+		setFromParent (parent);
+	}
+
+	public override void setupCustom(){
+		className = CharmClass.WeaponBonus;
+	}
+
+	public override void setFromParentCustom(Charm parent){
+		damageMod = ((Charm_WeaponBonus)parent).damageMod;
+		rangeMod = ((Charm_WeaponBonus)parent).rangeMod;
+	}
 
 	public override int getWeaponDamageMod(Card card, Unit target){
 		return damageMod;

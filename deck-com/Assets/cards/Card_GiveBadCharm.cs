@@ -44,6 +44,7 @@ public class Card_GiveBadCharm : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
+		Debug.Log ("give a bad charm");
 		unit.addCharm (idNameOfGift);
 
 		if (bonusRandomDiscards > 0) {

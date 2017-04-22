@@ -1,6 +1,6 @@
 move4
 move4
-move4
+attack
 shield
 shield
 shield

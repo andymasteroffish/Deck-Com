@@ -25,8 +25,18 @@ public class Charm_OneTimeWeaponBonus : Charm {
 //			expiresAtEndOfTurn = bool.Parse (node ["expires_at_turn_end"].InnerXml);
 //		}
 	}
+	public Charm_OneTimeWeaponBonus(Charm parent){
+		setFromParent (parent);
+	}
 
+	public override void setupCustom(){
+		className = CharmClass.OneTimeWeaponBonus;
+	}
 
+	public override void setFromParentCustom(Charm parent){
+		damageMod = ((Charm_OneTimeWeaponBonus)parent).damageMod;
+		rangeMod = ((Charm_OneTimeWeaponBonus)parent).rangeMod;
+	}
 
 	public override int getWeaponDamageMod(Card card, Unit target){
 		return damageMod;

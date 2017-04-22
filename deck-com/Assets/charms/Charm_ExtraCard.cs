@@ -11,6 +11,17 @@ public class Charm_ExtraCard : Charm {
 		node = _node;
 		numExtraCards = int.Parse (node ["extra_cards"].InnerXml);
 	}
+	public Charm_ExtraCard(Charm parent){
+		setFromParent (parent);
+	}
+
+	public override void setupCustom(){
+		className = CharmClass.ExtraCard;
+	}
+
+	public override void setFromParentCustom(Charm parent){
+		numExtraCards = ((Charm_ExtraCard)parent).numExtraCards;
+	}
 
 	public override void resetRoundCustom(){
 		for (int i = 0; i < numExtraCards; i++) {

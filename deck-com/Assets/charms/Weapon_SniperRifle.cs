@@ -11,9 +11,17 @@ public class Weapon_SniperRifle : Charm {
 		baseDamage = int.Parse(node ["damage"].InnerText);
 		baseRange = int.Parse(node ["range"].InnerText);
 	}
+	public Weapon_SniperRifle(Charm parent){
+		setFromParent (parent);
+	}
 
 	public override void setupCustom(){
 		type = CharmType.Weapon;
+		className = CharmClass.SniperRifle;
+	}
+
+	public override void setFromParentCustom(Charm parent){
+		
 	}
 
 	public override int getCardActionCostMod(Card card){

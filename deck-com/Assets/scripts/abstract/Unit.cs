@@ -222,7 +222,8 @@ public class Unit {
 		Profiler.BeginSample("Set charms");
 		charms = new List<Charm> ();
 		for (int i = 0; i < parent.charms.Count; i++) {
-			addCharm (parent.charms [i].idName);
+			charms.Add(CharmManager.instance.getCharmFromParent (parent.charms[i]));
+			//Debug.Log ("test add: " + charms [i].idName + " to " + unitName);
 		}
 		weapon = charms[0];
 		Profiler.EndSample ();
@@ -246,7 +247,7 @@ public class Unit {
 	}
 
 	public void removeCharm(Charm charmToRemove){
-		Debug.Log ("tim to remov");
+		//Debug.Log ("tim to remov "+charmToRemove.idName);
 		charmToRemove.isDead = true;
 		charms.Remove (charmToRemove);
 
@@ -284,14 +285,14 @@ public class Unit {
 		//reset all sim flags
 		aiSimHasBeenAidedCount = 0;
 		aiSimHasBeenCursedCount = 0;
-		//tell charms they are in AI
+		//tell all existing charms they are in AI Sim so they don't get removed or affected
 		foreach (Charm charm in charms) {
-			charm.inAISIm = true;
+			charm.protectDuringAISim = true;
 		}
 	}
 	public void markAIEnd(){
 		foreach (Charm charm in charms) {
-			charm.inAISIm = false;
+			charm.protectDuringAISim = false;
 		}
 	}
 

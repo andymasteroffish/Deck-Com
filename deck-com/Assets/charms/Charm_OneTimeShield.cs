@@ -11,6 +11,17 @@ public class Charm_OneTimeShield : Charm {
 		node = _node;
 		damagePrevented = int.Parse (node ["damagePrevented"].InnerXml);
 	}
+	public Charm_OneTimeShield(Charm parent){
+		setFromParent (parent);
+	}
+
+	public override void setupCustom(){
+		className = CharmClass.OneTimeShield;
+	}
+
+	public override void setFromParentCustom(Charm parent){
+		damagePrevented = ((Charm_OneTimeShield)parent).damagePrevented;
+	}
 
 	public override int getDamageTakenMod(Card card, Unit source){
 

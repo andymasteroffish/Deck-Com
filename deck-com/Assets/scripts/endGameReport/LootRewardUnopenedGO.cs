@@ -89,7 +89,7 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 
 			float prc = (curPhaseTime / shakePhaseTime) * 2 - 1;
 			if (curPhase % 2 == 0) {
-				prc = prc *= -1;
+				prc *= -1;
 			}
 
 			float angle = 30 * prc;

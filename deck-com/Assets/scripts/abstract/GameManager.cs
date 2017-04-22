@@ -242,9 +242,6 @@ public class GameManager {
 		activeAIUnit = newActive;
 		List<Unit> playerUnits = getAIUnits ();
 		foreach (Unit unit in playerUnits){
-			if (unit == activeAIUnit) {
-				Debug.Log ("we got a spicy boy");
-			}
 			unit.setActive ( unit==activeAIUnit);
 		}
 		cam.setTarget (newActive);
@@ -430,12 +427,15 @@ public class GameManager {
 		//get the turn to return
 		TurnInfo returnVal = goodTurns[ (int)Random.Range(0,goodTurns.Count) ];
 
+		if (curDepth == 0) {
+			Debug.Log ("---AI THINKING---");
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
+			Debug.Log ("on frame " + (Time.frameCount-1));
+		}
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
-			Debug.Log ("------");
+
 			returnVal.print (board);
-			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
-			Debug.Log ("on frame " + Time.frameCount);
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
 			Debug.Log ("------TEST-------");
 			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));

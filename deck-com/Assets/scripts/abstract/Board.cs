@@ -40,7 +40,7 @@ public class Board {
 //		setFromParent (parent);
 //	}
 	public void setFromParent(Board parent){
-		Profiler.BeginSample ("board setup");
+		//Profiler.BeginSample ("board setup");
 		isAISim = true;
 
 		debugCounter++;
@@ -92,7 +92,7 @@ public class Board {
 		}
 
 		//units
-		Profiler.BeginSample("make units");
+		//Profiler.BeginSample("make units");
 		units = new List<Unit>();
 		for (int i = 0; i < parent.units.Count; i++) {
 			Tile startTile = grid [parent.units [i].CurTile.Pos.x, parent.units [i].CurTile.Pos.y];
@@ -100,11 +100,11 @@ public class Board {
 			thisUnit.setAISimUnitFromParent(parent.units [i], this, startTile);
 			units.Add (thisUnit);
 		}
-		Profiler.EndSample ();
+		//Profiler.EndSample ();
 
 		//loot is not represented and can stay empty
 		loot = new List<Loot>();
-		Profiler.EndSample ();
+		//Profiler.EndSample ();
 	}
 
 
@@ -186,10 +186,10 @@ public class Board {
 	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
 		//Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
 		units [move.unitID].isActingAIUnit = true;
-		Profiler.BeginSample ("creating board");
+		//Profiler.BeginSample ("creating board");
 		Board newBoard = ObjectPooler.instance.getBoard();//new Board(this);
 		newBoard.setFromParent(this);
-		Profiler.EndSample ();
+		//Profiler.EndSample ();
 
 		newBoard.resolveMove (move);
 		return newBoard;
