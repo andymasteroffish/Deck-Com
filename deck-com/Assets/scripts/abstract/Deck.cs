@@ -172,7 +172,7 @@ public class Deck {
 		//if nothing is selected, see if they clicked a card
 		if (!isCardWaitingForInput ()) {
 			foreach (Card card in hand) {
-				if (card.MouseIsOver && !card.IsDisabled) {
+				if (card.mouseIsOver && !card.IsDisabled) {
 					card.selectCard ();
 					return;
 				}

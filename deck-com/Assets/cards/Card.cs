@@ -222,21 +222,22 @@ public class Card {
 	//utility
 	//**********************************
 
-	void OnMouseEnter(){
-		mouseIsOver = true;
-		if (Owner.GM.activeCard == null) {
-			mouseEnterEffects ();
-		}
-	}
+//	void OnMouseEnter(){
+//		Debug.Log ("ever at all???");
+//		mouseIsOver = true;
+//		if (Owner.GM.activeCard == null) {
+//			mouseEnterEffects ();
+//		}
+//	}
 	public virtual void mouseEnterEffects(){}
 
-	void OnMouseExit(){
-		mouseIsOver = false;
-		if (!isActive && Owner.GM.activeCard == null) {
-			Owner.board.clearHighlights ();
-		}
-		mouseExitEffects ();
-	}
+//	void OnMouseExit(){
+//		mouseIsOver = false;
+//		if (!isActive && Owner.GM.activeCard == null) {
+//			Owner.board.clearHighlights ();
+//		}
+//		mouseExitEffects ();
+//	}
 	public virtual void mouseExitEffects(){}
 
 	public string getInfoStringForCover(Tile.Cover coverVal){
@@ -357,14 +358,7 @@ public class Card {
 	//**********************************
 	//ssetters and getters
 	//**********************************
-	public bool MouseIsOver{
-		get{
-			return this.mouseIsOver;
-		}
-		set{
-			mouseIsOver = value;
-		}
-	}
+
 
 	public bool IsDisabled{
 		get{

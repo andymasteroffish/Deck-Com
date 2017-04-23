@@ -148,7 +148,7 @@ public class CardGO : MonoBehaviour {
 
 	void OnMouseEnter(){
 		if (card.Owner.isPlayerControlled) {
-			card.MouseIsOver = true;
+			card.mouseIsOver = true;
 			if (card.Owner.GM.activeCard == null) {
 				card.mouseEnterEffects ();
 			}
@@ -156,7 +156,7 @@ public class CardGO : MonoBehaviour {
 	}
 	void OnMouseExit(){
 		if (card.Owner.isPlayerControlled) {
-			card.MouseIsOver = false;
+			card.mouseIsOver = false;
 			if (!card.IsActive && card.Owner.GM.activeCard == null) {
 				card.Owner.board.clearHighlights ();
 			}

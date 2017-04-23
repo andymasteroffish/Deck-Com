@@ -17,6 +17,9 @@ public class ActionMarkerGO : MonoBehaviour {
 
 	public float growTime;
 
+	public float smallScale;
+	private bool isDemoingActionCost;
+
 	private ActionMarkerGO child;
 
 	public void activate(Unit unit, int _idNum){
@@ -50,6 +53,8 @@ public class ActionMarkerGO : MonoBehaviour {
 
 		transform.position = startPos.position + new Vector3 (xSpacing * (idNum-1), 0, 0);
 
+		isDemoingActionCost = false;
+
 		StartCoroutine (doScaleAnim (1, growTime, false));
 	}
 
@@ -73,6 +78,24 @@ public class ActionMarkerGO : MonoBehaviour {
 		if (owner.ActionsLeft > idNum && child == null) {
 			child = GameObjectManager.instance.getActionMarkerGO ();
 			child.activate (owner, idNum + 1);
+		}
+
+		//should we be demoing action cost for a card?
+		if (!doingAnimation) {
+			int curCost = 0;
+			foreach (Card card in owner.deck.Hand) {
+				if (card.mouseIsOver) {
+					curCost = card.getNumActionsNeededToPlay ();
+				}
+			}
+			int totalActions = owner.ActionsLeft;
+
+			bool shouldDemoCost = curCost > (totalActions-idNum);
+			if (shouldDemoCost != isDemoingActionCost) {
+				isDemoingActionCost = shouldDemoCost;
+				float newScale = isDemoingActionCost ? smallScale : 1;
+				StartCoroutine( doScaleAnim(newScale, growTime, false));
+			}
 		}
 
 		//and if the action go used, clear the child
