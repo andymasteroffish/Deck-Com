@@ -218,7 +218,6 @@ public class Unit {
 		//			visibleTiles.Add (tile);
 		//		}
 
-		//this is ugly
 		Profiler.BeginSample("Set charms");
 		charms = new List<Charm> ();
 		for (int i = 0; i < parent.charms.Count; i++) {

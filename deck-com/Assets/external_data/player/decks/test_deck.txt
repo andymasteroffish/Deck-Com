@@ -1,4 +1,6 @@
-dumbfound
+team_dash
+draw_a_card
+heal
 focus
 aim
 attack

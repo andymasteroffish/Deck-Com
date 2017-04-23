@@ -7,6 +7,8 @@ public class Weapon_Basic : Charm {
 
 	public string charmToGive;
 
+	public int attackCardActionCostMod;
+
 	public Weapon_Basic(XmlNode _node){
 		
 		node = _node;
@@ -16,6 +18,11 @@ public class Weapon_Basic : Charm {
 		charmToGive = "none";
 		if (node ["charm_to_give"] != null) {
 			charmToGive = node ["charm_to_give"].InnerText;
+		}
+
+		attackCardActionCostMod = 0;
+		if (node ["attack_card_cost_mod"] != null) {
+			attackCardActionCostMod = int.Parse(node ["attack_card_cost_mod"].InnerText);
 		}
 	}
 	public Weapon_Basic(Charm parent){
@@ -34,10 +41,16 @@ public class Weapon_Basic : Charm {
 
 	public override void dealWeaponDamage(Unit target, int damage){
 		if (charmToGive != "none") {
-			Debug.Log ("add charm from weapon "+idName);
 			target.aiSimHasBeenCursedCount++;
 			target.addCharm (charmToGive);
 		}
+	}
+
+	public override int getCardActionCostMod(Card card){
+		if (card.type == Card.CardType.Attack) {
+			return attackCardActionCostMod;
+		}
+		return 0;
 	}
 
 }

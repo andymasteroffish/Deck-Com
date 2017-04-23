@@ -41,7 +41,8 @@ public class Card_TeamDash : Card {
 		WaitingForUnit = true;
 
 		Owner.board.clearHighlights ();
-		Owner.board.highlightAllUnits (true, true, baseHighlightColor);
+		Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
+		//Owner.board.highlightAllUnits (true, true, baseHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){

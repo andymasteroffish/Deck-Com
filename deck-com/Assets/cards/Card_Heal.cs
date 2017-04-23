@@ -23,6 +23,7 @@ public class Card_Heal : Card {
 
 	public override void mouseEnterEffects(){
 		Owner.board.highlightTilesInVisibleRange(Owner.CurTile, range, baseHighlightColor);
+
 	}
 
 	public override void selectCardCustom(){

@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Charm  {
 
-	public enum CharmClass{ Charm, ExtraCard, HealRing, OneTimeShield, OneTimeWeaponBonus, WeaponBonus, BasicWeapon, SniperRifle };
+	public enum CharmClass{ Charm, ExtraCard, HealRing, OneTimeShield, OneTimeWeaponBonus, WeaponBonus, BasicWeapon };
 	public enum CharmType {Weapon, Charm};
 
 	public string name, description;

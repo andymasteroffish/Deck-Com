@@ -277,20 +277,19 @@ public class Board {
 	//**********************
 	//Hihglighting tiles and units
 	//**********************
-//	public void highlightUnitsInRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
-//		clearHighlights ();
-//		List<Tile> selectable = getTilesInMoveRange (source, range, true, true);
-//		foreach (Tile tile in selectable) {
-//			foreach (Unit unit in units) {
-//				if (unit.CurTile == tile) {
-//					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
-//						unit.setHighlighted (true, col);
-//					}
-//				}
-//			}
-//		}
-//	}
 
+
+	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
+		foreach (Unit unit in units) {
+			if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
+				unit.setHighlighted (true, col);
+			}
+		}
+	}
+
+	//**********************
+	//VISIBLE RANGE IS AS THE CROW FLIES, BUT NOT OBSCURED
+	//**********************
 	public void highlightUnitsInVisibleRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
 		clearHighlights ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
@@ -305,17 +304,6 @@ public class Board {
 		}
 	}
 
-	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
-		foreach (Unit unit in units) {
-			if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
-				unit.setHighlighted (true, col);
-			}
-		}
-	}
-
-	//**********************
-	//VISIBLE RANGE IS AS THE CROW FLIES, BUT NOT OBSCURED
-	//**********************
 	public void highlightTilesInVisibleRange(Tile source, float range, Color col){
 		clearHighlights ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
@@ -325,6 +313,7 @@ public class Board {
 	}
 
 	public List<Tile> getTilesInVisibleRange(Tile source, float range){
+		Profiler.BeginSample ("get visible in range");
 		List<Tile> returnTiles = new List<Tile> ();
 
 		//figure out what range could work in a square
@@ -334,6 +323,7 @@ public class Board {
 		int endY = (int)Mathf.Min(source.Pos.y + range, rows-1);
 
 		//go through each one
+		Profiler.BeginSample("Scan tiles");
 		for (int x = startX; x <= endX; x++) {
 			for (int y = startY; y <= endY; y++) {
 				//check if it is in range
@@ -356,8 +346,10 @@ public class Board {
 				}
 			}
 		}
+		Profiler.EndSample ();
 
 		//bleed once for any tile that is not full cover, adding any tiles adjacent to a currently visible tiles
+		Profiler.BeginSample("get bleed");
 		List<Tile> bleedTiles = new List<Tile>();
 		foreach (Tile curTile in returnTiles) {
 			if (curTile.CoverVal != Tile.Cover.Full) {
@@ -367,16 +359,20 @@ public class Board {
 				}
 			}
 		}
+		Profiler.EndSample ();
 
 		//add 'em
+		Profiler.BeginSample("add bleed");
 		foreach (Tile t in bleedTiles) {
-			if (returnTiles.Contains (t) == false) {
+			//if (returnTiles.Contains (t) == false) {	//using Contains() was the slowest part of this function and it may not be an issue to have duplicates in the list
 				if (source.Pos.getDist (t.Pos) <= range) {
 					returnTiles.Add (t);
 				}
-			}
+			//}
 		}
+		Profiler.EndSample ();
 
+		Profiler.EndSample ();
 		return returnTiles;
 	}
 
@@ -402,7 +398,6 @@ public class Board {
 			if (!unit.isDead) {
 				bool sameSide = source.isPlayerControlled == unit.isPlayerControlled;
 				if ((sameSide && includeAllies) || (!sameSide && includeFoes)) {
-					Debug.Log (source.visibleTiles);
 					if (source.visibleTiles.Contains (unit.CurTile)) {
 						unit.setHighlighted (true, col);
 					}

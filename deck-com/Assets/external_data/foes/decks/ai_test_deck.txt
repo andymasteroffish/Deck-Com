@@ -1,5 +1,5 @@
 move4
-move4
+heal
 attack
 shield
 shield

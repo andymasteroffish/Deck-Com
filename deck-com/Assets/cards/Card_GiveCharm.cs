@@ -26,11 +26,16 @@ public class Card_GiveCharm : Card {
 	public override void setupCustom(){
 		type = CardType.Other;
 	}
-	
+
+	public override void mouseEnterEffects(){
+		Owner.board.highlightTilesVisibleToUnit(Owner, baseHighlightColor);
+	}
+		
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		if (anyUnit) {
-			Owner.board.highlightAllUnits (true, true, baseHighlightColor);
+			Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
+			//Owner.board.highlightAllUnits (true, true, baseHighlightColor);
 		} else {
 			Owner.setHighlighted (true, baseHighlightColor);
 		}
