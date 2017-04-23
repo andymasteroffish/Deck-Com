@@ -67,11 +67,8 @@ public class CharmGO : MonoBehaviour {
 
 		if (charm.hasChangedPos) {
 			charm.hasChangedPos = false;
-			Debug.Log (charm.idName +" my new order: " + charm.offsetID);
-			Debug.Log ("end pos was " + endPos);
 			setAnimationPositions ();
 			StartCoroutine (doMoveAnimation (transform.position, endPos, moveTime, false));
-			Debug.Log("end pos is "+endPos);
 		}
 
 		if ( (!charm.Owner.IsActive || charm.isDead || charm.Owner.isDead) && !doingAnimation) {

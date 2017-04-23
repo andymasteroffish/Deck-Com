@@ -50,9 +50,6 @@ public class CharmManager : MonoBehaviour {
 		else if (scriptName == "Charm_HealRing") {
 			thisCharm = new Charm_HealRing (node);
 		}
-		else if (scriptName == "Charm_OneTimeWeaponBonus") {
-			thisCharm = new Charm_OneTimeWeaponBonus (node);
-		}
 		else if (scriptName == "Charm_WeaponBonus") {
 			thisCharm = new Charm_WeaponBonus (node);
 		}
@@ -79,9 +76,6 @@ public class CharmManager : MonoBehaviour {
 		}
 		else if (parent.className == Charm.CharmClass.HealRing) {
 			thisCharm = new Charm_HealRing (parent);
-		}
-		else if (parent.className == Charm.CharmClass.OneTimeWeaponBonus) {
-			thisCharm = new Charm_OneTimeWeaponBonus (parent);
 		}
 		else if (parent.className == Charm.CharmClass.WeaponBonus) {
 			thisCharm = new Charm_WeaponBonus (parent);

@@ -498,8 +498,6 @@ public class Unit {
 		//check which cards can be played
 		deck.updateCardsDisabled();
 		checkExausted ();
-
-		Debug.Log ("actions: " + actionsLeft);
 	}
 
 	//highlighting

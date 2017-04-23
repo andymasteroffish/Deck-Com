@@ -1,8 +1,7 @@
-team_dash
-draw_a_card
-heal
+adjust_sights
 focus
 aim
+attack
 attack
 move4
 dumbfound

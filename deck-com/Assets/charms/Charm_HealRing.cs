@@ -29,7 +29,7 @@ public class Charm_HealRing : Charm {
 		usedThisRound = false;
 	}
 
-	public override void cardPlayed(Card card){
+	public override void cardPlayedCustom(Card card){
 		if (!usedThisRound && card.type == Card.CardType.Aid) {
 			usedThisRound = true;
 			Owner.deck.drawCard ();

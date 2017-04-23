@@ -37,6 +37,7 @@ public class Card_GiveCharm : Card {
 			Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
 			//Owner.board.highlightAllUnits (true, true, baseHighlightColor);
 		} else {
+			Owner.board.clearHighlights ();
 			Owner.setHighlighted (true, baseHighlightColor);
 		}
 	}

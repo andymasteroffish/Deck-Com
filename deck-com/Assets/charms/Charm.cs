@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Charm  {
 
-	public enum CharmClass{ Charm, ExtraCard, HealRing, OneTimeShield, OneTimeWeaponBonus, WeaponBonus, BasicWeapon };
+	public enum CharmClass{ Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon };
 	public enum CharmType {Weapon, Charm};
 
 	public string name, description;
@@ -32,6 +32,8 @@ public class Charm  {
 	//bonus values that can be used ot make simple tweaks to charms
 	public bool selfDestructsAfterTurns;
 	public int turnsLeftBeforeSelfDestruct;
+
+	public bool expiresAfterAttack;
 
 	public int handSizeMod;
 	public int generalTakeDamageMod;
@@ -91,6 +93,11 @@ public class Charm  {
 			turnsLeftBeforeSelfDestruct = int.Parse (node ["turns_to_self_destruct"].InnerText);
 		}
 
+		expiresAfterAttack = false;
+		if (node ["expires_after_attack"] != null) {
+			expiresAfterAttack = bool.Parse (node ["expires_after_attack"].InnerXml);
+		}
+
 		//do the charm's own setup
 		setupCustom ();
 
@@ -130,6 +137,8 @@ public class Charm  {
 		selfDestructsAfterTurns = parent.selfDestructsAfterTurns;
 		turnsLeftBeforeSelfDestruct = parent.turnsLeftBeforeSelfDestruct;
 
+		expiresAfterAttack = parent.expiresAfterAttack;
+
 		//do the charm's own setup
 		setFromParentCustom (parent);
 
@@ -165,7 +174,15 @@ public class Charm  {
 	public virtual void turnEndPreDiscardCustom(){}
 	public virtual void turnEndPostDiscard(){}
 
-	public virtual void cardPlayed(Card card){}
+	public void cardPlayed(Card card){
+		cardPlayedCustom (card);
+		if (expiresAfterAttack && card.type == Card.CardType.Attack) {
+			Owner.removeCharm (this);
+		}
+	}
+	public virtual void cardPlayedCustom(Card card){
+	}
+
 	public virtual void takeDamage (Card card, Unit source){}
 	public virtual void dealWeaponDamage(Unit target, int damage){}
 

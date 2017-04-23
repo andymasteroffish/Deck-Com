@@ -14,6 +14,7 @@ public class Charm_WeaponBonus : Charm {
 
 		damageMod = 0;
 		rangeMod = 0;
+		expiresAfterAttack = false;
 
 		if (node ["damage_mod"] != null) {
 			damageMod = int.Parse (node ["damage_mod"].InnerXml);
@@ -21,6 +22,8 @@ public class Charm_WeaponBonus : Charm {
 		if (node ["range_mod"] != null) {
 			rangeMod = int.Parse (node ["range_mod"].InnerXml);
 		}
+
+
 
 		description = "";
 		if (rangeMod != 0) {
