@@ -1,3 +1,7 @@
+attack
+attack
+aim
+attack
 move4
 heal
 attack

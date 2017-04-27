@@ -130,6 +130,7 @@ public class Board {
 				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
 				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
 				grid [x, y].setInfo (adjacent);
+				grid [x, y].createVisibilityGrid (cols, rows);
 			}
 		}
 
@@ -248,6 +249,34 @@ public class Board {
 		unit.CanPickupLoot = false;
 	}
 
+	public void changeCover(Tile target, Tile.Cover newCoverVal){
+		//check if any change is needed
+		if (target.CoverVal == newCoverVal) {
+			return;
+		}
+
+		//change this tile
+		target.setCover (newCoverVal);
+
+		//update visibility grids if this is the real board
+		if (!isAISim) {
+			foreach (Tile tile in grid) {
+				tile.clearVisibilityGridCrossingTile (target.Pos.x, target.Pos.y);
+			}
+		}
+		//otherwise just mark that we should no longer us
+		else {
+			foreach (Tile tile in grid) {
+				tile.ignoreStoredRanges = true;
+			}
+		}
+
+		//have each unit check their new visibility
+		foreach (Unit unit in units) {
+			unit.setVisibleTiles ();
+		}
+	}
+
 	//telling the tiles if any player unit can see them
 	public void updateVisible(){
 		//mark all tiles that are visible to player units
@@ -314,7 +343,10 @@ public class Board {
 
 	public List<Tile> getTilesInVisibleRange(Tile source, float range){
 		Profiler.BeginSample ("get visible in range");
+
 		List<Tile> returnTiles = new List<Tile> ();
+
+		//List<Tile> bleedTiles = new List<Tile>();
 
 		//figure out what range could work in a square
 		int startX = (int)Mathf.Max(source.Pos.x - range, 0);
@@ -326,20 +358,49 @@ public class Board {
 		Profiler.BeginSample("Scan tiles");
 		for (int x = startX; x <= endX; x++) {
 			for (int y = startY; y <= endY; y++) {
-				//check if it is in range
-				if (source.Pos.getDist (grid [x, y].Pos) <= range) {
+				//check if we already have values for this one
+				if (source.visibleRangeDists [x, y] > -1 && !source.ignoreStoredRanges) {
+					if (source.visibleRangeDists [x, y] <= range) {
+						returnTiles.Add (grid [x, y]);
+					}
+				}
+				//otherwise do the calculations
+				else {
+					//check if it is in range
+					float dist = source.Pos.getDist (grid [x, y].Pos);
+					if (dist <= range) {
 
-					//if it is, check if a line can be drawn between it and any adjacent, unnocupied tiles
-					List<Tile> tiles = new List<Tile>();
-					//List<Tile> tiles =  getAdjacentTiles (source, false, Tile.Cover.Part);
-					tiles.Add (source);	//get adjacent does not include the source by default
-					bool doneChecking = false;
+						//if it is, check if a line can be drawn between it and any adjacent, unnocupied tiles
+						List<Tile> tiles = new List<Tile> ();
+						//List<Tile> tiles =  getAdjacentTiles (source, false, Tile.Cover.Part);
+						tiles.Add (source);	//get adjacent does not include the source by default
+						bool doneChecking = false;
 
-					foreach (Tile tile in tiles) {
-						if (!doneChecking) {
-							if (checkIfTilesAreVisibleToEachother (tile, grid [x, y])) {
-								returnTiles.Add (grid [x, y]);
-								doneChecking = true;
+						//assume it will not work
+						source.setVisibleRangeDist (grid [x, y], 999);
+
+						//check if it will work
+						foreach (Tile tile in tiles) {
+							if (!doneChecking) {
+								if (checkIfTilesAreVisibleToEachother (tile, grid [x, y])) {
+									//add this tile
+									source.setVisibleRangeDist (grid [x, y], dist);
+									returnTiles.Add (grid [x, y]);
+									doneChecking = true;
+
+									//bleed once for any tile that is not full cover, adding any tiles adjacent to a currently visible tiles
+									if (grid [x, y].CoverVal != Tile.Cover.Full) {
+										List<Tile> adjacentTiles = getAdjacentTiles (grid [x, y], true, Tile.Cover.Full);
+										foreach (Tile t in adjacentTiles) {
+											float bleedTileDist = source.Pos.getDist (t.Pos);
+											if (dist <= range) {
+												source.setVisibleRangeDist (t, dist);
+												returnTiles.Add (t);
+											}
+											//bleedTiles.Add (t);
+										}
+									}
+								}
 							}
 						}
 					}
@@ -349,28 +410,27 @@ public class Board {
 		Profiler.EndSample ();
 
 		//bleed once for any tile that is not full cover, adding any tiles adjacent to a currently visible tiles
-		Profiler.BeginSample("get bleed");
-		List<Tile> bleedTiles = new List<Tile>();
-		foreach (Tile curTile in returnTiles) {
-			if (curTile.CoverVal != Tile.Cover.Full) {
-				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Full);
-				foreach (Tile t in adjacentTiles) {
-					bleedTiles.Add (t);
-				}
-			}
-		}
-		Profiler.EndSample ();
+//		Profiler.BeginSample("get bleed");
+//		foreach (Tile curTile in returnTiles) {
+//			if (curTile.CoverVal != Tile.Cover.Full) {
+//				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Full);
+//				foreach (Tile t in adjacentTiles) {
+//					bleedTiles.Add (t);
+//				}
+//			}
+//		}
+//		Profiler.EndSample ();
 
 		//add 'em
-		Profiler.BeginSample("add bleed");
-		foreach (Tile t in bleedTiles) {
-			//if (returnTiles.Contains (t) == false) {	//using Contains() was the slowest part of this function and it may not be an issue to have duplicates in the list
-				if (source.Pos.getDist (t.Pos) <= range) {
-					returnTiles.Add (t);
-				}
-			//}
-		}
-		Profiler.EndSample ();
+//		Profiler.BeginSample("add bleed");
+//		foreach (Tile t in bleedTiles) {
+//			float dist = source.Pos.getDist (t.Pos);
+//			if (dist <= range) {
+//				source.setVisibleRangeDist (t, dist);
+//				returnTiles.Add (t);
+//			}
+//		}
+//		Profiler.EndSample ();
 
 		Profiler.EndSample ();
 		return returnTiles;
@@ -432,6 +492,7 @@ public class Board {
 	}
 
 	public List<Tile> getTilesInMoveRange(int sourceX, int sourceY, float range, bool includeWalls, bool includeOccupied){
+		Profiler.BeginSample ("get tiles in move range");
 		List<TileSearchInfo> active = new List<TileSearchInfo>();
 		List<TileSearchInfo> searched = new List<TileSearchInfo>();
 
@@ -532,7 +593,7 @@ public class Board {
 			//testing
 			//info.tile.debugText.text = info.distFromStart.ToString();
 		}
-
+		Profiler.EndSample ();
 		return returnTiles;
 	}
 
@@ -548,6 +609,7 @@ public class Board {
 	}
 
 	public List<Tile> getTilesInRange(Tile source, float range, Tile.Cover maxCoverVal, bool includeOccupied){
+		Profiler.BeginSample("get tiles in range");
 		List<Tile> returnTiles = new List<Tile> ();
 
 		//figure out what range could work in a square
@@ -581,7 +643,7 @@ public class Board {
 				}
 			}
 		}
-
+		Profiler.EndSample ();
 		return returnTiles;
 	}
 
@@ -591,13 +653,14 @@ public class Board {
 
 	public void highlightAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover, Color col){
 		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, maxCover);
-		Debug.Log("tile coutn "+tiles.Count);
+		Debug.Log("tile count "+tiles.Count);
 		for (int i = 0; i < tiles.Count; i++) {
 			tiles [i].setHighlighted (true, col);
 		}
 	}
 
 	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
+		Profiler.BeginSample ("get adjacent tiles");
 		List<Tile> tiles = new List<Tile> ();
 
 		for (int xOffset = - 1; xOffset <= 1; xOffset++) {
@@ -613,6 +676,7 @@ public class Board {
 				}
 			}
 		}
+		Profiler.EndSample ();
 
 		return tiles;
 	}
@@ -703,35 +767,6 @@ public class Board {
 		//if nothing hit, then there is no cover
 		return Tile.Cover.None;
 	}
-
-//	void turnOffAllTileColliders(){
-//		for (int x = 0; x < cols; x++) {
-//			for (int y = 0; y < rows; y++) {
-//				grid [x, y].GO.collider.enabled = false;
-//			}
-//		}
-//	}
-//	void turnOffAllTileCollidersExcept(Tile.Cover coverLevelToKeepOn){
-//		for (int x = 0; x < cols; x++) {
-//			for (int y = 0; y < rows; y++) {
-//				grid [x, y].GO.collider.enabled = grid [x, y].CoverVal == coverLevelToKeepOn;
-//			}
-//		}
-//	}
-//	void turnOffAllTileCollidersBelow(Tile.Cover coverLevelToKeepOn){
-//		for (int x = 0; x < cols; x++) {
-//			for (int y = 0; y < rows; y++) {
-//				grid [x, y].GO.collider.enabled = (int)grid [x, y].CoverVal >= (int)coverLevelToKeepOn;
-//			}
-//		}
-//	}
-//	void turnOnAllTileColliders(){
-//		for (int x = 0; x < cols; x++) {
-//			for (int y = 0; y < rows; y++) {
-//				grid [x, y].GO.collider.enabled = true;
-//			}
-//		}
-//	}
 
 	public int getNewDamageValFromCover(int origDamage, Tile.Cover cover){
 		int newDamage = origDamage;
@@ -1186,9 +1221,6 @@ public class Board {
 
 		//have allies retreated or advanced?
 
-		if (printInfo) {
-			Debug.Log ("TOTAL: " + info.val);
-		}
 	}
 
 	//*************

@@ -50,6 +50,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		gm.targetInfoText = targetInfoText;
 		gm.setup (debugSpawnList);
 		doingAnimation = false;
+
 	}
 
 	void Update () {

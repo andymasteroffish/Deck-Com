@@ -1,6 +1,6 @@
-adjust_sights
-focus
-aim
+move4
+move4
+grenade
 attack
 attack
 move4

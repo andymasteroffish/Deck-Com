@@ -80,6 +80,12 @@ public class TileGO : MonoBehaviour {
 
 	void OnMouseEnter(){
 		tile.MouseIsOver = true;
+		//testing
+		for (int x=0; x<GameManagerTacticsInterface.instance.gm.board.cols; x++){
+			for (int y=0; y<GameManagerTacticsInterface.instance.gm.board.rows; y++){
+				GameManagerTacticsInterface.instance.gm.board.Grid [x, y].debugText = tile.visibleRangeDists [x, y].ToString ("N1");
+			}
+		}
 	}
 	void OnMouseExit(){
 		tile.MouseIsOver = false;

@@ -29,6 +29,11 @@ public class Tile {
 
 	public bool isVisibleToPlayer;
 
+	//keeping track of visibilty
+	private int cols, rows;
+	public float [,] visibleRangeDists;
+	public bool ignoreStoredRanges;	//flag to always check values for if cover gets destroyed during an AI turn
+
 	//public BoxCollider2D collider;
 
 	public Tile(){
@@ -62,6 +67,7 @@ public class Tile {
 		setHighlighted (false);
 	}
 
+
 	//creating new tiles for AI
 	public Tile(Tile parent){
 		setFromParent (parent);
@@ -77,6 +83,10 @@ public class Tile {
 		isHighlighted = parent.isHighlighted;
 		highlightCol = parent.highlightCol;
 		isVisibleToPlayer = parent.isVisibleToPlayer;
+
+		ignoreStoredRanges = parent.ignoreStoredRanges;
+		visibleRangeDists = parent.visibleRangeDists;	//this is a pointer so AI tiles should not change this value if the boardstate changes at all (ex: cover is destroyed)
+
 		Profiler.EndSample ();
 	}
 
@@ -85,10 +95,7 @@ public class Tile {
 			adjacent [i] = _adjacent [i];
 		}
 	}
-
-	// Update is called once per frame
-	void Update () {
-	}
+		
 
 
 	public void checkClick(){
@@ -121,6 +128,54 @@ public class Tile {
 		return highCover;
 	}
 
+
+	//storing rnage and distance to other tiles
+	public void createVisibilityGrid(int _cols, int _rows){
+		cols = _cols;
+		rows = _rows;
+		ignoreStoredRanges = false;
+		visibleRangeDists = new float [cols, rows];
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				visibleRangeDists [x, y] = -1;
+			}
+		}
+		visibleRangeDists [pos.x, pos.y] = 0;
+	}
+
+	public void setVisibleRangeDist(Tile other, float dist){
+		if (!ignoreStoredRanges) {
+			visibleRangeDists [other.pos.x, other.pos.y] = dist;
+			other.visibleRangeDists [pos.x, pos.y] = dist;
+		}
+	}
+
+	public void clearVisibilityGridCrossingTile(int changedX, int changedY){
+		int startX = 0;
+		int startY = 0;
+		int endX = cols - 1;
+		int endY = rows - 1;
+
+		if (pos.x < changedX) {
+			startX = changedX;
+		}
+		if (pos.x > changedX) {
+			endX = changedX;
+		}
+		if (pos.y < changedY) {
+			startY = changedY;
+		}
+		if (pos.y > changedY) {
+			endY = changedY;
+		}
+
+		for (int x = startX; x <= endX; x++) {
+			for (int y = startY; y <= endY; y++) {
+				Debug.Log ("tile " + pos.x + "," + pos.y + " resetting dist to " + x + "," + y);
+				visibleRangeDists [x, y] = -1;
+			}
+		}
+	}
 
 	//setters and getters
 
