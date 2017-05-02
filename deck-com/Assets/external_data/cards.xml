@@ -1,16 +1,4 @@
 <cards>
-<card idName="move3">
-<name>Move3</name>
-<level>0</level>
-<script>Card_Movement</script>
-<range>3</range>
-</card>
-<card idName="move4">
-<name>Move4</name>
-<level>0</level>
-<script>Card_Movement</script>
-<range>4</range>
-</card>
 <card idName="attack">
 <name>Attack</name>
 <level>0</level>
@@ -31,43 +19,6 @@
 <script>Card_Attack</script>
 <damage_mod>2</damage_mod>
 <range_mod>-1</range_mod>
-</card>
-<card idName="draw_a_card">
-<name>Draw A Card</name>
-<level>0</level>
-<script>Card_BasicTargetBonus</script>
-<any_unit>true</any_unit>
-<cards_to_draw>1</cards_to_draw>
-<actions_to_gain>0</actions_to_gain>
-</card>
-<card idName="gain_an_action">
-<name>Gain An Action</name>
-<level>0</level>
-<script>Card_BasicTargetBonus</script>
-<any_unit>true</any_unit>
-<cards_to_draw>0</cards_to_draw>
-<actions_to_gain>1</actions_to_gain>
-</card>
-<card idName="focus">
-<name>Focus</name>
-<level>0</level>
-<script>Card_GiveCharm</script>
-<desc>Next attack this turn has +1 damage and +2 range</desc>
-<any_unit>false</any_unit>
-<gift_id>focus_charm</gift_id>
-</card>
-<card idName="heal">
-<name>Heal</name>
-<level>0</level>
-<script>Card_Heal</script>
-<heal>2</heal>
-<range>5</range>
-</card>
-<card idName="move5">
-<name>Move5</name>
-<level>1</level>
-<script>Card_Movement</script>
-<range>5</range>
 </card>
 <card idName="attack_d1">
 <name>Attack</name>
@@ -90,56 +41,21 @@
 <damage_mod>0</damage_mod>
 <range_mod>2</range_mod>
 </card>
-<card idName="aim">
-<name>Aim</name>
-<level>1</level>
-<script>Card_GiveCharm</script>
-<desc>This unit's next attack does +1 damage</desc>
-<any_unit>true</any_unit>
-<gift_id>aim_charm</gift_id>
-</card>
-<card idName="blade_dash">
-<name>Blade Dash</name>
-<level>1</level>
-<script>Card_MoveAttackAOE</script>
+<card idName="bite">
+<name>Bite</name>
+<level>-1</level>
+<script>Card_AttackIgnoreWeapon</script>
 <damage>2</damage>
-<range>4</range>
+<range>1.5</range>
 </card>
-<card idName="cover_attack">
-<name>Cover Attack</name>
-<level>1</level>
-<script>Card_CoverAttack</script>
-<damage_mod>-2</damage_mod>
-<range_mod>0</range_mod>
-</card>
-<card idName="village">
-<name>Village</name>
-<level>1</level>
-<script>Card_BasicTargetBonus</script>
-<any_unit>false</any_unit>
-<cards_to_draw>1</cards_to_draw>
-<actions_to_gain>2</actions_to_gain>
-</card>
-<card idName="move_and_attack">
-<name>Move And Attack</name>
-<level>1</level>
-<script>Card_MoveAndAttack</script>
-<range>3</range>
-<damage_mod>-1</damage_mod>
-</card>
-<card idName="move2_cantrip">
-<name>Move Cantrip</name>
-<level>1</level>
-<script>Card_Movement</script>
-<range>2</range>
-<bonus_actions>1</bonus_actions>
-<bonus_cards>1</bonus_cards>
-</card>
-<card idName="teleport">
-<name>Teleport</name>
-<level>1</level>
-<script>Card_Teleport</script>
-<move_range>3</move_range>
+<card idName="vampire_stab">
+<name>Vampire Stab</name>
+<level>2</level>
+<script>Card_AttackIgnoreWeapon</script>
+<desc>Deal 3 damage at range 1 and heal 2</desc>
+<range>1.5</range>
+<damage>3</damage>
+<bonus_heal>2</bonus_heal>
 </card>
 <card idName="grenade">
 <name>Grenade</name>
@@ -151,6 +67,68 @@
 <destroy_cover>true</destroy_cover>
 <harms_friendly>true</harms_friendly>
 </card>
+<card idName="draw_a_card">
+<name>Draw A Card</name>
+<level>0</level>
+<script>Card_BasicTargetBonus</script>
+<any_unit>true</any_unit>
+<cards_to_draw>1</cards_to_draw>
+<actions_to_gain>0</actions_to_gain>
+</card>
+<card idName="gain_an_action">
+<name>Gain An Action</name>
+<level>0</level>
+<script>Card_BasicTargetBonus</script>
+<any_unit>true</any_unit>
+<cards_to_draw>0</cards_to_draw>
+<actions_to_gain>1</actions_to_gain>
+</card>
+<card idName="village">
+<name>Village</name>
+<level>1</level>
+<script>Card_BasicTargetBonus</script>
+<any_unit>false</any_unit>
+<cards_to_draw>1</cards_to_draw>
+<actions_to_gain>2</actions_to_gain>
+</card>
+<card idName="cover_attack">
+<name>Cover Attack</name>
+<level>1</level>
+<script>Card_CoverAttack</script>
+<damage_mod>-2</damage_mod>
+<range_mod>0</range_mod>
+</card>
+<card idName="psychic_poke">
+<name>Psychic poke</name>
+<level>2</level>
+<script>Card_DirectDamage</script>
+<desc>Do 2 damage, ignoring cover</desc>
+<damage> 2</damage>
+</card>
+<card idName="dumbfound">
+<name>Dumbfound</name>
+<level>3</level>
+<script>Card_GiveBadCharm</script>
+<desc>Target unit discards a card at random and draws one less card for the rest of the match</desc>
+<bonus_discard>1</bonus_discard>
+<gift_id>rdumbfounded</gift_id>
+</card>
+<card idName="focus">
+<name>Focus</name>
+<level>0</level>
+<script>Card_GiveCharm</script>
+<desc>Next weapon attack this turn has +1 damage and +2 range</desc>
+<any_unit>false</any_unit>
+<gift_id>focus_charm</gift_id>
+</card>
+<card idName="aim">
+<name>Aim</name>
+<level>1</level>
+<script>Card_GiveCharm</script>
+<desc>This unit's next weapon attack does +1 damage</desc>
+<any_unit>true</any_unit>
+<gift_id>aim_charm</gift_id>
+</card>
 <card idName="shield">
 <name>Shield</name>
 <level>2</level>
@@ -159,18 +137,73 @@
 <any_unit>true</any_unit>
 <gift_id>one_time_shield</gift_id>
 </card>
-<card idName="team_dash">
-<name>Team Dash</name>
-<level>2</level>
-<script>Card_TeamDash</script>
-<range>3</range>
-<gift_id>team_dash_gift</gift_id>
+<card idName="adjust_sights">
+<name>Adjust sights</name>
+<level>3</level>
+<script>Card_GiveCharm</script>
+<desc>Your weapon's range increases by 1 for the rest of the match</desc>
+<any_unit>true</any_unit>
+<gift_id>range_up_charm</gift_id>
+</card>
+<card idName="heal">
+<name>Heal</name>
+<level>0</level>
+<script>Card_Heal</script>
+<heal>2</heal>
+<range>5</range>
+</card>
+<card idName="heal_light">
+<name>Heal Light</name>
+<level>-1</level>
+<script>Card_Heal</script>
+<heal>1</heal>
+<range>6</range>
 </card>
 <card idName="loot">
 <name>Loot</name>
 <level>-1</level>
 <script>Card_Loot</script>
 <action_cost>100</action_cost>
+</card>
+<card idName="move_and_attack">
+<name>Move And Attack</name>
+<level>1</level>
+<script>Card_MoveAndAttack</script>
+<range>3</range>
+<damage_mod>-1</damage_mod>
+</card>
+<card idName="blade_dash">
+<name>Blade Dash</name>
+<level>1</level>
+<script>Card_MoveAttackAOE</script>
+<damage>2</damage>
+<range>4</range>
+</card>
+<card idName="move3">
+<name>Move3</name>
+<level>0</level>
+<script>Card_Movement</script>
+<range>3</range>
+</card>
+<card idName="move4">
+<name>Move4</name>
+<level>0</level>
+<script>Card_Movement</script>
+<range>4</range>
+</card>
+<card idName="move5">
+<name>Move5</name>
+<level>1</level>
+<script>Card_Movement</script>
+<range>5</range>
+</card>
+<card idName="move2_cantrip">
+<name>Move Cantrip</name>
+<level>1</level>
+<script>Card_Movement</script>
+<range>2</range>
+<bonus_actions>1</bonus_actions>
+<bonus_cards>1</bonus_cards>
 </card>
 <card idName="move1">
 <name>Move1</name>
@@ -196,62 +229,29 @@
 <script>Card_Movement</script>
 <range>6</range>
 </card>
-<card idName="bite">
-<name>Bite</name>
-<level>-1</level>
-<script>Card_AttackIgnoreWeapon</script>
-<damage>2</damage>
-<range>1.5</range>
-</card>
-<card idName="heal_light">
-<name>Heal Light</name>
-<level>-1</level>
-<script>Card_Heal</script>
-<heal>1</heal>
-<range>6</range>
-</card>
 <card idName="team_dash_gift">
 <name>Team Dash</name>
 <level>-1</level>
 <script>Card_MovementSelfDestruct</script>
 <range>3</range>
 </card>
+<card idName="team_dash">
+<name>Team Dash</name>
+<level>2</level>
+<script>Card_TeamDash</script>
+<range>3</range>
+<gift_id>team_dash_gift</gift_id>
+</card>
+<card idName="teleport">
+<name>Teleport</name>
+<level>1</level>
+<script>Card_Teleport</script>
+<move_range>3</move_range>
+</card>
 <card idName="swap_spots">
 <name>Swap Spots</name>
 <level>2</level>
 <script>Card_Trade_Places</script>
 <desc>trade places with any unit you can see</desc>
-</card>
-<card idName="dumbfound">
-<name>Dumbfound</name>
-<level>3</level>
-<script>Card_GiveBadCharm</script>
-<desc>Target unit discards a card at random and draws one less card for the rest of the match</desc>
-<gift_id>dumbfounded</gift_id>
-<bonus_discard>1</bonus_discard>
-</card>
-<card idName="adjust_sights">
-<name>Adjust sights</name>
-<level>3</level>
-<script>Card_GiveCharm</script>
-<desc>Your weapon's range increases by 1 for the rest of the match</desc>
-<any_unit>true</any_unit>
-<gift_id>range_up_charm</gift_id>
-</card>
-<card idName="psychic_poke">
-<name>Psychic poke</name>
-<level>2</level>
-<script>Card_DirectDamage</script>
-<desc></desc>
-<damage> 2</damage>
-</card>
-<card idName="vampire_stab">
-<name>Vampire Stab</name>
-<level>2</level>
-<script>Card_AttackIgnoreWeapon</script>
-<desc>Deal 3 damage at range 1 and heal 3</desc>
-<range>1.5</range>
-<damage>3</damage>
-<bonus_heal>3</bonus_heal>
 </card>
 </cards>

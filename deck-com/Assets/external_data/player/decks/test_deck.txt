@@ -1,7 +1,8 @@
+vampire_stab
 move4
-move4
-grenade
-attack
+dumbfound
+focus
+aim
 attack
 move4
 dumbfound

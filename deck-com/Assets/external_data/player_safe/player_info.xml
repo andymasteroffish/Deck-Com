@@ -4,7 +4,7 @@
     <cur_level>1</cur_level>
   </info>
   <unit idName = "test_player">
-    <name>Ranger</name>
+    <name>Test Player</name>
     <sprite>unit_test</sprite>
     <deck>test_deck</deck>
     <player_controlled>true</player_controlled>

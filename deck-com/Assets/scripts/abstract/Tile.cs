@@ -147,6 +147,9 @@ public class Tile {
 		if (!ignoreStoredRanges) {
 			visibleRangeDists [other.pos.x, other.pos.y] = dist;
 			other.visibleRangeDists [pos.x, pos.y] = dist;
+			if (dist < 900) {
+				Debug.Log ("set    " + Pos.x + "," + Pos.y + " <-> " + other.Pos.x + "," + other.Pos.y + " to " + dist); 
+			}
 		}
 	}
 
@@ -171,7 +174,7 @@ public class Tile {
 
 		for (int x = startX; x <= endX; x++) {
 			for (int y = startY; y <= endY; y++) {
-				Debug.Log ("tile " + pos.x + "," + pos.y + " resetting dist to " + x + "," + y);
+				//Debug.Log ("tile " + pos.x + "," + pos.y + " resetting dist to " + x + "," + y);
 				visibleRangeDists [x, y] = -1;
 			}
 		}

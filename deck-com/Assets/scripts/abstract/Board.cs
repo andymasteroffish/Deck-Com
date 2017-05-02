@@ -342,6 +342,7 @@ public class Board {
 	}
 
 	public List<Tile> getTilesInVisibleRange(Tile source, float range){
+		Debug.Log ("checking tiles from " + source.Pos.x + "," + source.Pos.y + " in range " + range);
 		Profiler.BeginSample ("get visible in range");
 
 		List<Tile> returnTiles = new List<Tile> ();
@@ -384,6 +385,7 @@ public class Board {
 							if (!doneChecking) {
 								if (checkIfTilesAreVisibleToEachother (tile, grid [x, y])) {
 									//add this tile
+									Debug.Log ("setting " + source.Pos.x + "," + source.Pos.y + " <-> " + x + "," + y + " to " + dist); 
 									source.setVisibleRangeDist (grid [x, y], dist);
 									returnTiles.Add (grid [x, y]);
 									doneChecking = true;
@@ -393,8 +395,9 @@ public class Board {
 										List<Tile> adjacentTiles = getAdjacentTiles (grid [x, y], true, Tile.Cover.Full);
 										foreach (Tile t in adjacentTiles) {
 											float bleedTileDist = source.Pos.getDist (t.Pos);
-											if (dist <= range) {
-												source.setVisibleRangeDist (t, dist);
+											if (bleedTileDist <= range) {
+												Debug.Log ("bleed set " + bleedTileDist);
+												source.setVisibleRangeDist (t, bleedTileDist);
 												returnTiles.Add (t);
 											}
 											//bleedTiles.Add (t);
@@ -712,7 +715,11 @@ public class Board {
 			for (int y = 0; y < rows; y++) {
 				if (grid [x, y].spawnProperty == property) {
 					if (getUnitOnTile (grid [x, y]) == null) {
-						matches.Add (grid [x, y]);
+						if (GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
+							return grid [x, y];
+						} else {
+							matches.Add (grid [x, y]);
+						}
 					}
 				}
 			}
@@ -1089,6 +1096,7 @@ public class Board {
 			//will allies be damaged?
 			if (curAllies [i].health < oldAllies [i].health) {
 				totalAllyDamage += oldAllies [i].health - curAllies [i].health;
+				//Debug.Log ("i feel it for " + (oldAllies [i].health - curAllies [i].health));
 			}
 			//will they be healed?
 			if (curAllies [i].health > oldAllies [i].health) {
@@ -1119,12 +1127,19 @@ public class Board {
 		info.val += numAlliesCursed * curUnit.aiProfile.numAlliesCursedWeight;
 
 		if (printInfo) {
-			Debug.Log ("foes aided " + numEnemiesAided);
-			Debug.Log ("allies aided " + numAlliesAided+ "  weight " + curUnit.aiProfile.numAlliesAidedWeight);
-			Debug.Log ("foes cursed " + numEnemiesCursed);
-			Debug.Log ("allies cursed " + numAlliesCursed);
+			Debug.Log ("AI turn info for " + curUnit.unitName);
+			Debug.Log ("foe damaged " + totalEnemyDamage);
+			Debug.Log ("num foes killed " + numEnemiesKilled);
 			Debug.Log ("foe heal " + totalEnemyHeal);
+			Debug.Log ("foes aided " + numEnemiesAided);
+			Debug.Log ("foes cursed " + numEnemiesCursed);
+		
+			Debug.Log ("ally damaged " + totalAllyDamage);
+			Debug.Log ("num allies killed " + numAlliesKilled);
 			Debug.Log ("ally heal " + totalAllyHeal);
+			Debug.Log ("allies aided " + numAlliesAided+ "  weight " + curUnit.aiProfile.numAlliesAidedWeight);
+			Debug.Log ("allies cursed " + numAlliesCursed);
+
 		}
 
 		//checking distance stuff
@@ -1165,13 +1180,13 @@ public class Board {
 			info.val += change * curAllies[i].aiProfile.distanceToEnemiesWeight;
 
 			if (printInfo) {
-				Debug.Log ("min dist: " + minDistFromClosest);
-				Debug.Log ("max dist: " + maxDistFromClosest);
-				Debug.Log ("old closest: " + oldClosestDistToEnemy);
-				Debug.Log ("new closest: " + newClosestDistToEnemy);
-				Debug.Log ("old val: " + oldVal);
-				Debug.Log ("new val: " + newVal);
-				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
+//				Debug.Log ("min dist: " + minDistFromClosest);
+//				Debug.Log ("max dist: " + maxDistFromClosest);
+//				Debug.Log ("old closest: " + oldClosestDistToEnemy);
+//				Debug.Log ("new closest: " + newClosestDistToEnemy);
+//				Debug.Log ("old val: " + oldVal);
+//				Debug.Log ("new val: " + newVal);
+//				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
 			}
 
 		}

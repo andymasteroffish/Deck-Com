@@ -70,7 +70,10 @@ public class PodPlacement {
 
 		List<FoeInfo> foesToSpawn = new List<FoeInfo> ();
 
-		while (curCL < targetCL) {
+		int count = 0;
+		while (curCL < targetCL && count < 1000) {
+			count++;
+			Debug.Log ("do it " + count);
 			//find a foe
 			FoeInfo thisFoe = foeInfo[(int)Random.Range(0,foeInfo.Count)];
 
@@ -90,14 +93,17 @@ public class PodPlacement {
 		bool goodSpot = false;
 		Tile originTile = null;
 		List<Tile> spawnTiles = null;
-		while (!goodSpot) {
+		count = 0;
+		while (!goodSpot && count < 1000) {
+			count++;
+			Debug.Log ("do now " + count);
 			goodSpot = true;
 			//give us a starting spot
 			originTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.Foe);
 			//and get tiles within walking distance
 			spawnTiles = board.getTilesInMoveRange (originTile, maxMoveDistAwayToSpawn, false, false);
 			//make sure that there are enough tiles to nicely support the pod
-			if (spawnTiles.Count < foesToSpawn.Count * 3) {
+			if (spawnTiles.Count < foesToSpawn.Count){// * 3) {
 				goodSpot = false;
 			}
 		}

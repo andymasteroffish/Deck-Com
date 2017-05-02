@@ -1,5 +1,7 @@
 attack
 attack
+grenade
+attack
 aim
 attack
 move4

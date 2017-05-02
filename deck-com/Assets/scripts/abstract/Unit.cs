@@ -191,6 +191,9 @@ public class Unit {
 
 		baseHealth = parent.baseHealth;
 		health = parent.health;
+		if (isPlayerControlled && baseHealth != health) {
+			Debug.Log ("my health " + health);
+		}
 		isDead = parent.isDead;
 
 		challengeLevel = parent.ChallengeLevel;
@@ -297,6 +300,7 @@ public class Unit {
 
 	public void setActive(bool _isActive){
 		isActive = _isActive;
+
 		deck.setActive (isActive);
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].setActive (isActive);
@@ -313,11 +317,11 @@ public class Unit {
 			if (isAwake) {
 				gm.markAIStart ();
 				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
-				ObjectPooler.instance.printInfo ();
+				//ObjectPooler.instance.printInfo ();
 				curAITurnStep = 0;	//flag to hlp the display interface
 				gm.markAIEnd();
 			} else {
-
+				Debug.Log ("not awake");
 			}
 		}
 	}
@@ -355,6 +359,8 @@ public class Unit {
 
 		//clear remaining actions
 		actionsLeft = 0;
+		deck.updateCardsDisabled ();
+		checkExausted ();
 		//discard the hand
 		deck.discardHand();
 
@@ -457,6 +463,8 @@ public class Unit {
 	public void takeDamage(int amount, Card card, Unit source){
 		int totalDamage = amount;
 
+		//Debug.Log ("starting damage " + amount);
+
 		//check if any charms will do anything
 		for (int i = charms.Count - 1; i >= 0; i--) {
 			totalDamage += charms [i].getDamageTakenMod (card, source);
@@ -481,6 +489,8 @@ public class Unit {
 		if (health <= 0) {
 			killUnit ();
 		}
+
+		//Debug.Log (unitName+ " got hit for " + amount);
 
 	}
 

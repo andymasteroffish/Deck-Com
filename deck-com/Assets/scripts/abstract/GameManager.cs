@@ -178,8 +178,10 @@ public class GameManager {
 //	}
 
 	public void advanceAITurn(){
+		Debug.Log ("do ai tirn step " + activeAIUnit.curAITurnStep);
 		board.resolveMove (activeAIUnit.aiTurnInfo.moves [activeAIUnit.curAITurnStep]);
 		activeAIUnit.curAITurnStep++;
+		Debug.Log ("advance");
 	}
 	public void endAITurn(){
 		activeAIUnit.endTurn ();
@@ -236,9 +238,9 @@ public class GameManager {
 	}
 
 	void setActiveAIUnit(Unit newActive){
-		if (newActive == activeAIUnit) {
-			return;
-		}
+//		if (newActive == activeAIUnit) {
+//			return;
+//		}
 		activeAIUnit = newActive;
 		List<Unit> playerUnits = getAIUnits ();
 		foreach (Unit unit in playerUnits){
@@ -426,6 +428,9 @@ public class GameManager {
 
 		//get the turn to return
 		TurnInfo returnVal = goodTurns[ (int)Random.Range(0,goodTurns.Count) ];
+		if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
+			returnVal = goodTurns [0];
+		}
 
 		if (curDepth == 0) {
 			Debug.Log ("---AI THINKING---");

@@ -12,6 +12,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public bool debugPrintAIInfo;
 	public bool debugRevealFOW;
 	public bool debugIgnoreStandardSpawns;
+	public bool debugShowTileDist;
 
 	public static GameManagerTacticsInterface instance;
 
@@ -158,7 +159,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//are we done?
 		if (aiTurnPhase == 1 && gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {
-			Debug.Log ("end turn");
 			gm.endAITurn ();
 			return;
 		}

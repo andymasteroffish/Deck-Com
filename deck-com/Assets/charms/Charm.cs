@@ -129,6 +129,9 @@ public class Charm  {
 		className = parent.className;
 		type = parent.type;
 
+		baseDamage = parent.baseDamage;
+		baseRange = parent.baseRange;
+
 		handSizeMod = parent.handSizeMod;
 
 		generalTakeDamageMod = parent.generalTakeDamageMod;
