@@ -193,9 +193,6 @@ public class Unit {
 
 		baseHealth = parent.baseHealth;
 		health = parent.health;
-		if (isPlayerControlled && baseHealth != health) {
-			Debug.Log ("my health " + health);
-		}
 		isDead = parent.isDead;
 
 		challengeLevel = parent.ChallengeLevel;

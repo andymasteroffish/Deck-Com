@@ -49,7 +49,6 @@ public class Card_Attack : Card {
 	}
 
 	public override void resolveFromMove(MoveInfo move){
-		Debug.Log ("resolving attack");
 		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
 		passInUnitCustom (targetUnit);
 	}

@@ -975,10 +975,15 @@ public class Board {
 	public List<MoveInfo> getAllMovesForUnit(int unitID){
 		List<MoveInfo> moves = new List<MoveInfo> ();
 		int actionsLeft = units [unitID].ActionsLeft;
+		List<string> cardIDsUsed = new List<string> ();
 		for (int i = 0; i < units [unitID].deck.Hand.Count; i++) {
+			string idName = units [unitID].deck.Hand [i].idName;
 			if (actionsLeft >= units [unitID].deck.Hand [i].getNumActionsNeededToPlay ()) {
-				//UNION WOULD REMOVE DUPLICATES
-				moves.AddRange(getAllMovesForCard(unitID, i));
+				//make sure we have not gotten moves for the same card alread
+				if (cardIDsUsed.Contains (idName) == false) {
+					moves.AddRange (getAllMovesForCard (unitID, i));
+					cardIDsUsed.Add (idName);
+				}
 			}
 		}
 

@@ -4,8 +4,8 @@
 <numAlliesAidedWeight>0</numAlliesAidedWeight>
 <totalAllyDamageWeight>-100</totalAllyDamageWeight>
 <distanceToEnemiesWeight>0</distanceToEnemiesWeight>
-<coverNoneToPart>0</coverNoneToPart>
-<coverNoneToFull>0</coverNoneToFull>
+<coverNoneToPart>4</coverNoneToPart>
+<coverNoneToFull>10</coverNoneToFull>
 <coverPartToNone>0</coverPartToNone>
 <coverPartToFull>0</coverPartToFull>
 <coverFullToNone>0</coverFullToNone>
