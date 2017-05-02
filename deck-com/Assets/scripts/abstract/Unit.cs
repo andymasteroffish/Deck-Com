@@ -37,6 +37,7 @@ public class Unit {
 	private bool isHighlighted;
 	public Color highlightCol;
 	public Sprite sprite;
+	public bool mouseColliderIsActive;
 
 	//decks and cards
 	public Deck deck;
@@ -119,6 +120,7 @@ public class Unit {
 		}
 
 		useGO = true;
+		mouseColliderIsActive = true;
 
 		isActingAIUnit = false;
 		isAISimUnit = false;
@@ -521,6 +523,10 @@ public class Unit {
 	}
 	public void setHighlighted(bool val){
 		setHighlighted (val, Color.white);
+	}
+
+	public void setMouseColliderActive(bool newVal){
+		mouseColliderIsActive = newVal;
 	}
 
 	//saving and cleaning up at the end of the game

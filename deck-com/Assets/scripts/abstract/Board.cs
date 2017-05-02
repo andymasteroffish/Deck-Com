@@ -205,6 +205,13 @@ public class Board {
 		}
 		foreach (Unit unit in units) {
 			unit.setHighlighted (false);
+			unit.setMouseColliderActive (true);	//make sure units can be clicked again
+		}
+	}
+
+	public void turnOffUnitMouseColliders(){
+		foreach (Unit unit in units) {
+			unit.setMouseColliderActive (false);	
 		}
 	}
 
@@ -309,6 +316,7 @@ public class Board {
 
 
 	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
+		clearHighlights ();
 		foreach (Unit unit in units) {
 			if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 				unit.setHighlighted (true, col);
@@ -335,6 +343,7 @@ public class Board {
 
 	public void highlightTilesInVisibleRange(Tile source, float range, Color col){
 		clearHighlights ();
+		turnOffUnitMouseColliders ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
 		foreach (Tile tile in selectable) {
 			tile.setHighlighted (true, col);
@@ -342,7 +351,7 @@ public class Board {
 	}
 
 	public List<Tile> getTilesInVisibleRange(Tile source, float range){
-		Debug.Log ("checking tiles from " + source.Pos.x + "," + source.Pos.y + " in range " + range);
+		//Debug.Log ("checking tiles from " + source.Pos.x + "," + source.Pos.y + " in range " + range);
 		Profiler.BeginSample ("get visible in range");
 
 		List<Tile> returnTiles = new List<Tile> ();
@@ -471,6 +480,7 @@ public class Board {
 
 	public void highlightTilesVisibleToUnit(Unit source, Color col){
 		clearHighlights ();
+		turnOffUnitMouseColliders ();
 		if (source.visibleTiles == null) {
 			source.setVisibleTiles ();
 		}
@@ -484,6 +494,7 @@ public class Board {
 	//**********************
 	public void highlightTilesInMoveRange(Tile source, float range, bool includeWalls, bool includeOccupied, Color col){
 		clearHighlights ();
+		turnOffUnitMouseColliders ();
 		List<Tile> selectable = getTilesInMoveRange (source, range, includeWalls, includeOccupied);
 		foreach (Tile tile in selectable) {
 			tile.setHighlighted (true, col);
@@ -605,6 +616,7 @@ public class Board {
 	//**********************
 	public void highlightTilesInRange(Tile source, float range, Tile.Cover maxCoverVal, bool includeOccupied, Color col){
 		clearHighlights ();
+		turnOffUnitMouseColliders ();
 		List<Tile> selectable = getTilesInRange (source, range, maxCoverVal, includeOccupied);
 		foreach (Tile tile in selectable) {
 			tile.setHighlighted (true, col);
@@ -655,6 +667,7 @@ public class Board {
 	//********************
 
 	public void highlightAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover, Color col){
+		turnOffUnitMouseColliders ();
 		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, maxCover);
 		Debug.Log("tile count "+tiles.Count);
 		for (int i = 0; i < tiles.Count; i++) {

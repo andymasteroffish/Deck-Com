@@ -1,7 +1,7 @@
-vampire_stab
-village
-move2_cantrip
+attack
+grenade
 move4
+draw_a_card
 dumbfound
 focus
 aim

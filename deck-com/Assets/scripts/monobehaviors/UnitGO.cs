@@ -19,6 +19,8 @@ public class UnitGO : MonoBehaviour {
 	public SpriteOutline outline;
 	public Text healthText;
 
+	public BoxCollider2D boxCol;
+
 	public void activate(Unit unit){
 		owner = unit;
 
@@ -87,7 +89,7 @@ public class UnitGO : MonoBehaviour {
 			StartCoroutine (doMoveAnimation (owner.CurTile.Pos.getV3 (), moveTime));
 		}
 
-
+		boxCol.enabled = owner.mouseColliderIsActive;
 
 	}
 
