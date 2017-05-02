@@ -5,6 +5,12 @@
     <damage>2</damage>
     <range>2</range>
   </charm>
+  <charm idName="test_wep">
+    <name>Test Weapon</name>
+    <script>Weapon_Basic</script>
+    <damage>1</damage>
+    <range>5</range>
+  </charm>
   <charm idName="long_bow">
     <name>Long Bow</name>
     <script>Weapon_Basic</script>

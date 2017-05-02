@@ -1,10 +1,4 @@
-vampire_stab
-vampire_stab
-vampire_stab
-vampire_stab
-vampire_stab
-vampire_stab
-vampire_stab
-vampire_stab
-vampire_stab
+heal_light
+heal_light
+heal_light
 move6

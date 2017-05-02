@@ -124,11 +124,11 @@ public class GameManager {
 			}
 			int startID = (int)Random.Range (0, unitsAI.Count);
 			if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
-				startID = 0;
+				startID = 0;//unitsAI.Count-1;
 			}
 			activeAIUnit = unitsAI [startID];
 			//setActiveAIUnit (unitsAI [startID]);
-			tabActiveAIUnit (1);
+			tabActiveAIUnit (0);
 		}
 
 		clearActiveCard ();
