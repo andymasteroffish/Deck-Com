@@ -1,5 +1,6 @@
 attack
 grenade
+move2_cantrip
 move4
 draw_a_card
 dumbfound

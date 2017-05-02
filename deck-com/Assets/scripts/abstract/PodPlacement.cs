@@ -38,10 +38,10 @@ public class PodPlacement {
 
 	}
 
-	//these are wack nymuber for now
+	//these are wack numbers for now
 	public void placeFoes(GameManager _gm, Board _board, int levelNum){
 		int totalCL = levelNum * 6;
-		int numPods = 1 + levelNum/3;
+		int numPods = 3 + levelNum/3;
 		if (numPods > 6) {
 			numPods = 6;
 		}
@@ -50,7 +50,7 @@ public class PodPlacement {
 	}
 
 	public void placeFoes(GameManager _gm, Board _board, int numPods, int podCL){
-		Debug.Log ("Placing " + numPods + " with a CL of " + podCL);
+		//Debug.Log ("Placing " + numPods + " with a CL of " + podCL);
 		gm = _gm;
 		board = _board;
 
@@ -65,28 +65,39 @@ public class PodPlacement {
 	}
 
 	public void makePod(int podCL){
+		
 		int curCL = 0;
 		int targetCL = podCL + Random.Range (-podClRange, podClRange);
+		if (targetCL < 2) {
+			targetCL = 2;
+		}
+		//Debug.Log ("making a pod with CL " + targetCL);
 
 		List<FoeInfo> foesToSpawn = new List<FoeInfo> ();
 
 		int count = 0;
 		while (curCL < targetCL && count < 1000) {
 			count++;
-			Debug.Log ("do it " + count);
 			//find a foe
 			FoeInfo thisFoe = foeInfo[(int)Random.Range(0,foeInfo.Count)];
 
 			//make sure it would not push us over
 			if (curCL + thisFoe.challengeLevel <= targetCL + podCLPadding) {
+				//and that this would not be a pod of 1
+				if ( !(foesToSpawn.Count == 0 && curCL + thisFoe.challengeLevel >= targetCL) ) {
 
-				//add it to the list
-				foesToSpawn.Add(thisFoe);
+					//add it to the list
+					foesToSpawn.Add (thisFoe);
+					//Debug.Log ("say hi to " + thisFoe.idName + ", CL " + thisFoe.challengeLevel);
 
-				//mark down the challenge level
-				curCL += thisFoe.challengeLevel;
+					//mark down the challenge level
+					curCL += thisFoe.challengeLevel;
+				}
 			}
 
+		}
+		if (count >= 1000) {
+			Debug.Log ("fucked up making a foe list");
 		}
 
 		//find a place for them to start
@@ -96,17 +107,21 @@ public class PodPlacement {
 		count = 0;
 		while (!goodSpot && count < 1000) {
 			count++;
-			Debug.Log ("do now " + count);
 			goodSpot = true;
 			//give us a starting spot
 			originTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.Foe);
 			//and get tiles within walking distance
 			spawnTiles = board.getTilesInMoveRange (originTile, maxMoveDistAwayToSpawn, false, false);
 			//make sure that there are enough tiles to nicely support the pod
-			if (spawnTiles.Count < foesToSpawn.Count){// * 3) {
+			if (spawnTiles.Count < foesToSpawn.Count * 3) {
 				goodSpot = false;
 			}
 		}
+		if (count >= 1000) {
+			Debug.Log ("fucked up finding starting place");
+		}
+
+		//Debug.Log ("starting 'em at " + originTile.Pos.x + "," + originTile.Pos.y + " with a list of " + spawnTiles.Count);
 
 		//add the foes
 		List <Unit> newFoes = new List<Unit>();
@@ -117,6 +132,7 @@ public class PodPlacement {
 			spawnTiles.RemoveAt (spawnTileID);
 			unit.setup (gm, board, spawnTile);
 			newFoes.Add (unit);
+			//Debug.Log ("Added unit " + unit.unitName + " on tile " + spawnTile.Pos.x + "," + spawnTile.Pos.y);
 		}
 
 
