@@ -1,4 +1,6 @@
 vampire_stab
+village
+move2_cantrip
 move4
 dumbfound
 focus

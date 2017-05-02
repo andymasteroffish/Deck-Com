@@ -385,7 +385,7 @@ public class Board {
 							if (!doneChecking) {
 								if (checkIfTilesAreVisibleToEachother (tile, grid [x, y])) {
 									//add this tile
-									Debug.Log ("setting " + source.Pos.x + "," + source.Pos.y + " <-> " + x + "," + y + " to " + dist); 
+									//Debug.Log ("setting " + source.Pos.x + "," + source.Pos.y + " <-> " + x + "," + y + " to " + dist); 
 									source.setVisibleRangeDist (grid [x, y], dist);
 									returnTiles.Add (grid [x, y]);
 									doneChecking = true;
@@ -396,7 +396,7 @@ public class Board {
 										foreach (Tile t in adjacentTiles) {
 											float bleedTileDist = source.Pos.getDist (t.Pos);
 											if (bleedTileDist <= range) {
-												Debug.Log ("bleed set " + bleedTileDist);
+												//Debug.Log ("bleed set " + bleedTileDist);
 												source.setVisibleRangeDist (t, bleedTileDist);
 												returnTiles.Add (t);
 											}

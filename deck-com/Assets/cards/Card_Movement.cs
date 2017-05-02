@@ -32,12 +32,6 @@ public class Card_Movement : Card {
 
 	public override void passInTileCustom(Tile tile){
 		Owner.moveTo (tile);
-		if (bonusActions > 0) {
-			Owner.gainActions (bonusActions);
-		}
-		if (bonusCards > 0) {
-			Owner.deck.drawCards (bonusCards);
-		}
 		finish ();
 	}
 

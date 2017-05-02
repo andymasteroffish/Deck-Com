@@ -34,15 +34,19 @@ public class Card_BasicTargetBonus : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesVisibleToUnit(Owner, baseHighlightColor);
+		if (anyUnit) {
+			Owner.board.highlightTilesVisibleToUnit (Owner, baseHighlightColor);
+		} else {
+			Owner.CurTile.setHighlighted (true, baseHighlightColor);
+		}
 	}
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
 		if (anyUnit) {
-			//Owner.board.highlightAllUnits (true, true, baseHighlightColor);
 			Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
 		} else {
+			Owner.board.clearHighlights ();
 			Owner.setHighlighted (true, baseHighlightColor);
 		}
 	}
