@@ -222,7 +222,7 @@ public class GameManager {
 
 	//switching units
 
-	void setActivePlayerUnit(Unit newActive){
+	public void setActivePlayerUnit(Unit newActive){
 //		if (newActive == activePlayerUnit) {
 //			return;
 //		}

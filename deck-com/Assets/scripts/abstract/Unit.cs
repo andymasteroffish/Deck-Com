@@ -434,6 +434,10 @@ public class Unit {
 	public void checkGeneralClick(){
 		if (mouseIsOver && isHighlighted) {
 			gm.unitClicked (this);
+			return;
+		}
+		if (isPlayerControlled && gm.activePlayerUnit != this && mouseIsOver && gm.activeCard == null) {
+			gm.setActivePlayerUnit (this);
 		}
 	}
 
