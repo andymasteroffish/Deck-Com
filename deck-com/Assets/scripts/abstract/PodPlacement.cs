@@ -18,7 +18,7 @@ public class PodPlacement {
 
 	private List<FoeInfo> foeInfo = new List<FoeInfo>();
 
-	private int podClRange = 2;
+	private float podClRangePrc = 0.4f;
 	private int podCLPadding = 1; //how much it can be over by and still be OK
 	private int maxMoveDistAwayToSpawn = 2;
 
@@ -67,11 +67,16 @@ public class PodPlacement {
 	public void makePod(int podCL){
 		
 		int curCL = 0;
-		int targetCL = podCL + Random.Range (-podClRange, podClRange);
+		int rangeMod = (int) Mathf.Ceil( (float)podCL * podClRangePrc);
+		if (rangeMod < 1) {
+			rangeMod = 1;
+		}
+		int targetCL = podCL + Random.Range (-rangeMod, rangeMod);
 		if (targetCL < 2) {
 			targetCL = 2;
 		}
-		//Debug.Log ("making a pod with CL " + targetCL);
+		Debug.Log (rangeMod);
+		Debug.Log ("making a pod with CL " + targetCL);
 
 		List<FoeInfo> foesToSpawn = new List<FoeInfo> ();
 
