@@ -120,7 +120,6 @@ public class GameManager {
 	}
 
 	void startAITurn(){
-		Debug.Log ("start ai turn");
 		isPlayerTurn = false;
 
 		if (checkGameOver()) {

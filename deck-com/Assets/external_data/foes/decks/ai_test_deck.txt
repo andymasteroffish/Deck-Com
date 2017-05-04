@@ -1,3 +1,5 @@
+move3
+swap_spots
 attack
 move4
 attack

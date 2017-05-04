@@ -4,3 +4,6 @@ move4
 grenade
 blade_dash
 shield
+attack
+attack_r-1_d2
+heal

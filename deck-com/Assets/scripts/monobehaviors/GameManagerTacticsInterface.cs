@@ -13,6 +13,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public bool debugRevealFOW;
 	public bool debugIgnoreStandardSpawns;
 	public bool debugShowTileDist;
+	public bool debugWakeAllFoes;
 
 	public static GameManagerTacticsInterface instance;
 
@@ -56,6 +57,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		gm.setup (debugSpawnList);
 		doingAnimation = false;
 
+		if (debugWakeAllFoes) {
+			foreach (Unit foe in gm.getAIUnits()) {
+				foe.wakeUp ();
+			}
+		}
 	}
 
 	void Update () {

@@ -50,7 +50,7 @@ public class PodPlacement {
 	}
 
 	public void placeFoes(GameManager _gm, Board _board, int numPods, int podCL){
-		//Debug.Log ("Placing " + numPods + " with a CL of " + podCL);
+		Debug.Log ("Placing " + numPods + " with a CL of " + podCL);
 		gm = _gm;
 		board = _board;
 
@@ -75,7 +75,7 @@ public class PodPlacement {
 		if (targetCL < 2) {
 			targetCL = 2;
 		}
-		Debug.Log (rangeMod);
+		//Debug.Log (rangeMod);
 		Debug.Log ("making a pod with CL " + targetCL);
 
 		List<FoeInfo> foesToSpawn = new List<FoeInfo> ();

@@ -464,7 +464,9 @@ public class Board {
 	//Units should have a list of tiles visible to them
 	public void highlightUnitsVisibleToUnit(Unit source, bool includeAllies, bool includeFoes, Color col){
 		clearHighlights ();
+		Debug.Log ("vision " + source.sightRange);
 		if (source.visibleTiles == null) {
+			Debug.Log ("set visible tiles for " + source.unitName + " with vision " + source.sightRange);
 			source.setVisibleTiles ();
 		}
 		foreach (Unit unit in units) {

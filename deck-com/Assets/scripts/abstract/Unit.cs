@@ -213,7 +213,7 @@ public class Unit {
 		baseActions = parent.baseActions;
 		actionsLeft = parent.actionsLeft;
 
-		sightRange = 0;//THIS IS BAD. SET THIS TO BE PARENT'S RANGE!
+		sightRange = parent.sightRange;
 
 		Profiler.BeginSample("Set charms");
 		charms = new List<Charm> ();
