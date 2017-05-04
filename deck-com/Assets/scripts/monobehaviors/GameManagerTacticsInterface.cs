@@ -33,6 +33,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public GameObject pickupLootButton;
 
+	public GameObject playerButtonsGroup;
+	public GameObject cancelButton;
+
 	private bool doingAnimation;
 
 	private int aiTurnPhase;
@@ -77,17 +80,14 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 			//ending the turn for a unit
 			if (Input.GetKeyDown (KeyCode.Space)) {
-				gm.endPlayerTurn ();
-				autoPlayAITurn = false;
+				endPlayerTurn ();
 			}
 
 			//pressing escape to cancel a move
 			if (Input.GetKeyDown (KeyCode.Escape)) {
-				gm.cancel ();
+				cancel ();
 			}
 
-			//showing the loot button if applicable
-			pickupLootButton.SetActive (gm.activePlayerUnit.CanPickupLoot);
 
 		}
 		//input for AI turn
@@ -133,6 +133,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		//showing AI turn text
 		aiTurnText.SetActive(!gm.IsPlayerTurn);
 
+		//buttons
+		pickupLootButton.SetActive (gm.IsPlayerTurn && gm.activePlayerUnit.CanPickupLoot);
+		playerButtonsGroup.SetActive (gm.IsPlayerTurn);
+		cancelButton.SetActive (gm.activeCard != null);
+
 		//testing
 //		for (int i = 0; i < 4; i++) {
 //			if (gm.board.units [i] != gm.activePlayerUnit) {
@@ -149,10 +154,25 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	}
 
+	//button listeners
 	public void pickUpLoot(){
 		gm.activePlayerUnit.pickUpLoot ();
 	}
 
+	public void endPlayerTurn(){
+		gm.endPlayerTurn ();
+		autoPlayAITurn = false;
+	}
+
+	public void tabPlayer(){
+		gm.tab (1);
+	}
+
+	public void cancel(){
+		gm.cancel ();
+	}
+
+	//deailng with AI
 	public void startNewAIUnitTurn(){
 		aiTurnPhase = 0;
 	}
