@@ -8,6 +8,8 @@ public class ActionMarkerGO : MonoBehaviour {
 	private Unit owner;
 	private int idNum;
 
+	private SpriteRenderer spriteRend = null;
+
 	private bool needsStartPos = true;
 	private Transform startPosPlayer, startPosAI;
 	private Transform startPos;
@@ -35,6 +37,10 @@ public class ActionMarkerGO : MonoBehaviour {
 		if (owner.ActionsLeft < idNum) {
 			deactivate ();
 			return;
+		}
+
+		if (spriteRend == null) {
+			spriteRend = GetComponent<SpriteRenderer> ();
 		}
 
 		gameObject.SetActive(true);
@@ -104,6 +110,8 @@ public class ActionMarkerGO : MonoBehaviour {
 				child = null;
 			}
 		}
+
+		spriteRend.enabled = owner.getIsVisibleToPlayer ();
 	}
 
 	IEnumerator doScaleAnim(float targetScale, float time, bool deactivateWhenDone){

@@ -140,6 +140,7 @@ public class CardGO : MonoBehaviour {
 			StartCoroutine (doMoveAnimation (aiRevealPos, moveTime, false));
 		}
 			
+		spriteRend.gameObject.SetActive (card.Owner.getIsVisibleToPlayer ());
 	}
 
 	Vector3 getPos(){

@@ -36,6 +36,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	private bool doingAnimation;
 
 	private int aiTurnPhase;
+	private bool autoPlayAITurn;	//for when ai units are not visible
 
 	void Awake () {
 		if (instance == null) {
@@ -77,6 +78,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			//ending the turn for a unit
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				gm.endPlayerTurn ();
+				autoPlayAITurn = false;
 			}
 
 			//pressing escape to cancel a move
@@ -90,7 +92,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 		//input for AI turn
 		else {
-			if (Input.GetKeyDown(KeyCode.Space)) {
+			if (Input.GetKeyDown(KeyCode.Space) || autoPlayAITurn) {
 				advanceAITurn ();
 			}
 		}
@@ -170,17 +172,27 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				string cardIDName = gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].cardIDName;
 				Card thisCard = gm.activeAIUnit.deck.getCardInHandFromID (cardIDName);
 				TilePos targetPos = gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].targetTilePos;
-				thisCard.revealAICardFlag = true; 
-				//spawn one or more targets
-				TargetGO target = GameObjectManager.instance.getTargetGO ();
-				target.activate (targetPos, thisCard.baseHighlightColor);
-				//focus camera on the target
-				cam.setTarget(targetPos);
 
-				//if the target is a unit and the card is an attack, let's get some info about the hit
-				Unit thisUnit = gm.board.getUnitOnTile(targetPos);
-				if (thisUnit != null) {
-					thisCard.setPotentialTargetInfo (thisUnit);
+				//if the unit or the target is visible, demo it
+				if (gm.board.Grid [targetPos.x, targetPos.y].isVisibleToPlayer || gm.activeAIUnit.getIsVisibleToPlayer ()) {
+					autoPlayAITurn = false;
+
+					thisCard.revealAICardFlag = true; 
+					//spawn one or more targets
+					TargetGO target = GameObjectManager.instance.getTargetGO ();
+					target.activate (targetPos, thisCard.baseHighlightColor);
+					//focus camera on the target
+					cam.setTarget (targetPos);
+
+					//if the target is a unit and the card is an attack, let's get some info about the hit
+					Unit thisUnit = gm.board.getUnitOnTile (targetPos);
+					if (thisUnit != null) {
+						thisCard.setPotentialTargetInfo (thisUnit);
+					}
+				}
+				//otherwise, just move on
+				else {
+					autoPlayAITurn = true;;
 				}
 
 				//testing
@@ -197,6 +209,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		if (aiTurnPhase == 2) {
 			gm.advanceAITurn ();
 			aiTurnPhase = 0;
+			autoPlayAITurn = !gm.activeAIUnit.getIsVisibleToPlayer ();
 			//remove targets
 			GameObjectManager.instance.turnOffAllTargets();
 		}

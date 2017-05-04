@@ -7,6 +7,8 @@ public class CharmGO : MonoBehaviour {
 
 	private Charm charm;
 
+	private Canvas canvas = null;
+
 	public Text nameField;
 	public Text descField;
 	public SpriteRenderer spriteRend;
@@ -32,6 +34,10 @@ public class CharmGO : MonoBehaviour {
 		if (GameObjectManager.instance.checkForDuplicateCharmGO (this) == true) {
 			deactivate ();
 			return;
+		}
+
+		if (canvas == null) {
+			canvas = GetComponentInChildren<Canvas> ();
 		}
 
 		gameObject.SetActive (true);
@@ -81,6 +87,9 @@ public class CharmGO : MonoBehaviour {
 			col = new Color (1, 1, 1, 0.4f);
 		}
 		spriteRend.color = col;
+
+		canvas.enabled = charm.Owner.getIsVisibleToPlayer ();
+		spriteRend.enabled = charm.Owner.getIsVisibleToPlayer ();
 	}
 
 	private void setAnimationPositions(){
