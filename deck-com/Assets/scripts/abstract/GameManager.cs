@@ -73,6 +73,15 @@ public class GameManager {
 				unit.setup (this, board, spawnTile);
 				board.units.Add (unit);
 			}
+
+			List<Unit> foes = getAIUnits ();
+			for (int i = 0; i < foes.Count; i++) {
+				for (int k = 0; k < foes.Count; k++) {
+					if (i != k) {
+						foes [i].podmates.Add (foes [k]);
+					}
+				}
+			}
 		}
 
 
@@ -246,7 +255,9 @@ public class GameManager {
 		foreach (Unit unit in playerUnits){
 			unit.setActive ( unit==activeAIUnit);
 		}
-		cam.setTarget (newActive);
+		if (newActive.getIsVisibleToPlayer ()) {
+			cam.setTarget (newActive);
+		}
 		GameManagerTacticsInterface.instance.startNewAIUnitTurn ();
 	}
 

@@ -300,8 +300,9 @@ public class Board {
 			}
 		}
 
-		//check if this would wake up any AI units
+
 		foreach (Unit unit in units) {
+			//check if this would wake up any AI units
 			if (!unit.isPlayerControlled) {
 				if (grid [unit.CurTile.Pos.x, unit.CurTile.Pos.y].isVisibleToPlayer && !unit.isAwake) {
 					unit.wakeUp ();

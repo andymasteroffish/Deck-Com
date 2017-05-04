@@ -214,11 +214,6 @@ public class Unit {
 		actionsLeft = parent.actionsLeft;
 
 		sightRange = 0;//THIS IS BAD. SET THIS TO BE PARENT'S RANGE!
-		//		visibleTiles = new List<Tile> ();
-		//		for (int i = 0; i < parent.visibleTiles.Count; i++) {
-		//			Tile tile = board.Grid [parent.visibleTiles [i].Pos.x, parent.visibleTiles [i].Pos.y];
-		//			visibleTiles.Add (tile);
-		//		}
 
 		Profiler.BeginSample("Set charms");
 		charms = new List<Charm> ();
@@ -340,6 +335,7 @@ public class Unit {
 	}
 
 	public void wakeUp(){
+		Debug.Log ("wake up " + unitName);
 		isAwake = true;
 		foreach (Unit mate in podmates) {
 			if (!mate.isAwake) {
@@ -349,6 +345,9 @@ public class Unit {
 		//Debug.Log ("I'm awakw on " + curTile.Pos.x + " , " + curTile.Pos.y);
 	}
 
+	public bool getIsVisibleToPlayer(){
+		return curTile.isVisibleToPlayer;
+	}
 
 	//ending the turn
 	public void endTurn(){

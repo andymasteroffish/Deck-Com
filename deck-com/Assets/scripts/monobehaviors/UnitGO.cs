@@ -66,7 +66,11 @@ public class UnitGO : MonoBehaviour {
 		}
 
 		//show health
-		healthText.text = "HP: " + owner.health+"/"+owner.baseHealth;
+		if (owner.getIsVisibleToPlayer ()) {
+			healthText.text = "HP: " + owner.health + "/" + owner.baseHealth;
+		} else {
+			healthText.text = "";
+		}
 
 		//keeping them raised up for clicking
 		transform.position = new Vector3(transform.position.x, transform.position.y, -1f);

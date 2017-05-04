@@ -183,6 +183,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 					thisCard.setPotentialTargetInfo (thisUnit);
 				}
 
+				//testing
+//				advanceAITurn();
+//				return;
+
 			} else {
 				gm.endAITurn ();
 				return;
