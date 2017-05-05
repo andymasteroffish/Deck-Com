@@ -11,6 +11,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public bool debugDoNotShuffle;
 	public bool debugPrintAIInfo;
 	public bool debugRevealFOW;
+	public bool debugRemoveFOW;
 	public bool debugIgnoreStandardSpawns;
 	public bool debugShowTileDist;
 	public bool debugWakeAllFoes;

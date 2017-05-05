@@ -436,10 +436,18 @@ public class GameManager {
 			}
 		}
 
-		//get the turn to return
+		//select one at random to return
 		TurnInfo returnVal = goodTurns[ (int)Random.Range(0,goodTurns.Count) ];
 		if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
 			returnVal = goodTurns [0];
+		}
+
+
+		//if just passing the turn is in the list, do that (otherwise they sometimes just attack and then heal themselves or heal a player unit at full health. Dumb stuff)
+		foreach (TurnInfo turn in goodTurns) {
+			if (turn.moves [turn.moves.Count-1].passMove == true){
+				returnVal = turn;
+			}
 		}
 
 		if (curDepth == 0) {

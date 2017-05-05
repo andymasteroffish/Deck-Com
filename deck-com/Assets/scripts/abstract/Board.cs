@@ -297,6 +297,9 @@ public class Board {
 						}
 					}
 				}
+				if (GameManagerTacticsInterface.instance.debugRemoveFOW) {
+					grid [x, y].isVisibleToPlayer = true;
+				}
 			}
 		}
 

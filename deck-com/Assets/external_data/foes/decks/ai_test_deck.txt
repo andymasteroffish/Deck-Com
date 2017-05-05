@@ -1,6 +1,5 @@
-move3
-swap_spots
 attack
+heal
 move4
 attack
 attack
