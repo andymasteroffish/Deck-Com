@@ -177,13 +177,6 @@ public class GameManager {
 		}
 		startAITurn ();
 	}
-//	public void endUnitTurn(){
-//		clearActiveCard ();
-//		for (int i = board.units.Count-1; i >= 0; i--) {
-//			board.units [i].turnEndCleanUp ();
-//		}
-//		activePlayerUnit.endTurn ();
-//	}
 
 	public void advanceAITurn(){
 		Debug.Log ("do ai tirn step " + activeAIUnit.curAITurnStep);

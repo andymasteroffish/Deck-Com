@@ -26,6 +26,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public float lootDropPrc;
 
+	public float minTimeOnPlayerTurn;
+	private float playerTurnTimer;
+
 	public string debugMapName;
 
 	public int mapChunkCols, mapChunkRows;
@@ -63,6 +66,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				foe.wakeUp ();
 			}
 		}
+
+		playerTurnTimer = 0;
 	}
 
 	void Update () {
@@ -80,6 +85,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//input for player turn
 		if (gm.IsPlayerTurn) {
+			playerTurnTimer += Time.deltaTime;
 			//clicks
 			if (Input.GetMouseButtonDown (0) && !areAnimationsHappening()) {
 				gm.checkClick ();
@@ -99,6 +105,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 		//input for AI turn
 		else {
+			playerTurnTimer = 0; 
 			if (Input.GetKeyDown(KeyCode.Space) || autoPlayAITurn) {
 				advanceAITurn ();
 			}
@@ -167,8 +174,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	}
 
 	public void endPlayerTurn(){
-		gm.endPlayerTurn ();
-		autoPlayAITurn = false;
+		if (playerTurnTimer > minTimeOnPlayerTurn) {
+			gm.endPlayerTurn ();
+			autoPlayAITurn = false;
+		}
 	}
 
 	public void tabPlayer(){
