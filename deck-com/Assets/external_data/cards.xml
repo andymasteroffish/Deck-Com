@@ -126,7 +126,7 @@
 <level>1</level>
 <script>Card_GiveCharm</script>
 <desc>This unit's next weapon attack does +1 damage</desc>
-<any_unit>true</any_unit>
+<any_unit>false</any_unit>
 <gift_id>aim_charm</gift_id>
 </card>
 <card idName="shield">

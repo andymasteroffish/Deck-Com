@@ -23,6 +23,8 @@ public class Board {
 
 	public bool isAISim;
 
+	public DistanceManager dm;
+
 	public Board(){
 		debugCounter = 0;
 	}
@@ -32,13 +34,77 @@ public class Board {
 		levelGen = new LevelGen ();
 		units = new List<Unit> ();
 		loot = new List<Loot> ();
+
 	}
 
 
+
+
+	public void reset(){
+		//clear ();
+		if (GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
+			grid = levelGen.getTestLevel (GameManagerTacticsInterface.instance.debugMapName);
+		} else {
+			grid = levelGen.getLevel ();
+		}
+
+		loot.Clear ();
+
+		cols = grid.GetLength (0);
+		rows = grid.GetLength (1);
+
+		dm = new DistanceManager (cols, rows);
+
+		//give them some relevant info
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				Tile[] adjacent = new Tile[] {null, null, null, null};
+				if (x < cols-1)	adjacent [(int)Tile.Direction.Right]= grid [x+1, y];
+				if (x > 0)		adjacent [(int)Tile.Direction.Left] = grid [x-1, y];
+				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
+				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
+				grid [x, y].setInfo (adjacent);
+				grid [x, y].createVisibilityGrid (cols, rows);
+			}
+		}
+
+		clearHighlights ();
+
+		//testing
+//		for (int x = 0; x < cols; x++) {
+//			for (int y = 0; y < rows; y++) {
+//				grid [x, y].debugText = dm.dists [x, y].ToString("N1");
+//			}
+//		}
+	}
+
+	public void resetUnitsAndLoot(){
+		foreach(Unit unit in units){
+			unit.reset ();
+		}
+
+		//add some loot to some of them
+		for (int i = 0; i < units.Count; i++) {
+			if (!units [i].isPlayerControlled) {
+				if (Random.value < GameManagerTacticsInterface.instance.lootDropPrc) {
+					Debug.Log (units [i].unitName + " got loot");
+					Loot thisLoot = new Loot (units [i]);
+					loot.Add (thisLoot);
+				}
+			}
+		}
+
+		//if straight up nobody got loot, just select one
+		while(loot.Count == 0) {
+			int randID = (int)Random.Range (0, units.Count);
+			if (!units [randID].isPlayerControlled) {
+				Loot thisLoot = new Loot (units [randID]);
+				loot.Add (thisLoot);
+			}
+		}
+	}
+
 	//creating a board for AI stuff
-//	public Board(Board parent){
-//		setFromParent (parent);
-//	}
 	public void setFromParent(Board parent){
 		//Profiler.BeginSample ("board setup");
 		isAISim = true;
@@ -53,6 +119,8 @@ public class Board {
 		partialCoverDamageReduction = parent.partialCoverDamageReduction;
 		fullCoverDamagePrc = parent.fullCoverDamagePrc;
 		diagonalVal = parent.diagonalVal;
+
+		dm = parent.dm;
 
 		//tiles
 
@@ -105,62 +173,8 @@ public class Board {
 		//loot is not represented and can stay empty
 		loot = new List<Loot>();
 		//Profiler.EndSample ();
-	}
 
 
-	public void reset(){
-		//clear ();
-		if (GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
-			grid = levelGen.getTestLevel (GameManagerTacticsInterface.instance.debugMapName);
-		} else {
-			grid = levelGen.getLevel ();
-		}
-
-		loot.Clear ();
-
-		cols = grid.GetLength (0);
-		rows = grid.GetLength (1);
-
-		//give them some relevant info
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				Tile[] adjacent = new Tile[] {null, null, null, null};
-				if (x < cols-1)	adjacent [(int)Tile.Direction.Right]= grid [x+1, y];
-				if (x > 0)		adjacent [(int)Tile.Direction.Left] = grid [x-1, y];
-				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
-				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
-				grid [x, y].setInfo (adjacent);
-				grid [x, y].createVisibilityGrid (cols, rows);
-			}
-		}
-
-		clearHighlights ();
-	}
-
-	public void resetUnitsAndLoot(){
-		foreach(Unit unit in units){
-			unit.reset ();
-		}
-
-		//add some loot to some of them
-		for (int i = 0; i < units.Count; i++) {
-			if (!units [i].isPlayerControlled) {
-				if (Random.value < GameManagerTacticsInterface.instance.lootDropPrc) {
-					Debug.Log (units [i].unitName + " got loot");
-					Loot thisLoot = new Loot (units [i]);
-					loot.Add (thisLoot);
-				}
-			}
-		}
-
-		//if straight up nobody got loot, just select one
-		while(loot.Count == 0) {
-			int randID = (int)Random.Range (0, units.Count);
-			if (!units [randID].isPlayerControlled) {
-				Loot thisLoot = new Loot (units [randID]);
-				loot.Add (thisLoot);
-			}
-		}
 	}
 
 	//**************************
@@ -381,7 +395,7 @@ public class Board {
 				//otherwise do the calculations
 				else {
 					//check if it is in range
-					float dist = source.Pos.getDist (grid [x, y].Pos);
+					float dist = dm.getDist(source, grid[x,y]);// source.Pos.getDist (grid [x, y].Pos);
 					if (dist <= range) {
 
 						//if it is, check if a line can be drawn between it and any adjacent, unnocupied tiles
@@ -407,7 +421,7 @@ public class Board {
 									if (grid [x, y].CoverVal != Tile.Cover.Full) {
 										List<Tile> adjacentTiles = getAdjacentTiles (grid [x, y], true, Tile.Cover.Full);
 										foreach (Tile t in adjacentTiles) {
-											float bleedTileDist = source.Pos.getDist (t.Pos);
+											float bleedTileDist = dm.getDist (source, t);// source.Pos.getDist (t.Pos);
 											if (bleedTileDist <= range) {
 												//Debug.Log ("bleed set " + bleedTileDist);
 												source.setVisibleRangeDist (t, bleedTileDist);
@@ -645,8 +659,7 @@ public class Board {
 				//check if the cover is OK
 				if ((int)grid [x, y].CoverVal <= (int)maxCoverVal) {
 					//check if it is in range
-					if (source.Pos.getDist (grid [x, y].Pos) <= range) {
-
+					if (dm.getDist(source, grid [x, y]) <= range){			//if (source.Pos.getDist (grid [x, y].Pos) <= range) {
 						//is it unoccupied (or are we allowing occupied tiles)?
 						bool unfilled = true;
 						if (!includeOccupied) {
@@ -761,8 +774,8 @@ public class Board {
 
 	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
 		//get the direction
-		float dist = sourceTile.Pos.getDist(targetTile.Pos);// Vector3.Distance (sourceTile.transform.position, targetTile.transform.position);
-		Vector3 dir3 = targetTile.Pos.getV3() - sourceTile.Pos.getV3();	// targetTile.transform.position - sourceTile.transform.position;
+		float dist = dm.getDist(sourceTile, targetTile); // sourceTile.Pos.getDist(targetTile.Pos);
+		Vector3 dir3 = targetTile.Pos.getV3() - sourceTile.Pos.getV3();	
 		Vector2 dir = new Vector2(dir3.x, dir3.y);
 
 		//debug line
@@ -1176,11 +1189,11 @@ public class Board {
 			float newClosestDistToEnemy = 9999;
 
 			foreach (Unit enemy in oldEnemies) {
-				float dist = enemy.CurTile.Pos.getDist (oldAllies [i].CurTile.Pos);
+				float dist = dm.getDist (enemy.CurTile, oldAllies [i].CurTile);		// enemy.CurTile.Pos.getDist (oldAllies [i].CurTile.Pos);
 				if (dist < oldClosestDistToEnemy)		oldClosestDistToEnemy = dist;
 			}
 			foreach (Unit enemy in curEnemies) {
-				float dist = enemy.CurTile.Pos.getDist (curAllies [i].CurTile.Pos);
+				float dist = dm.getDist (enemy.CurTile, curAllies [i].CurTile);		// enemy.CurTile.Pos.getDist (curAllies [i].CurTile.Pos);
 				if (dist < newClosestDistToEnemy)		newClosestDistToEnemy = dist;
 			}
 

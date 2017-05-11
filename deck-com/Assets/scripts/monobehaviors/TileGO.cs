@@ -85,6 +85,8 @@ public class TileGO : MonoBehaviour {
 			for (int x = 0; x < GameManagerTacticsInterface.instance.gm.board.cols; x++) {
 				for (int y = 0; y < GameManagerTacticsInterface.instance.gm.board.rows; y++) {
 					GameManagerTacticsInterface.instance.gm.board.Grid [x, y].debugText = tile.visibleRangeDists [x, y].ToString ("N1");
+					//Tile otherTile = GameManagerTacticsInterface.instance.gm.board.Grid [x, y];
+					//otherTile.debugText = GameManagerTacticsInterface.instance.gm.board.dm.getDist(tile, otherTile) .ToString ("N1");
 				}
 			}
 		}

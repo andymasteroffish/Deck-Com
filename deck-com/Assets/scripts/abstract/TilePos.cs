@@ -66,12 +66,12 @@ public class TilePos {
 
 	}
 
-	public float getDist(TilePos other){
-		return Mathf.Sqrt( Mathf.Pow(Mathf.Abs(x-other.x),2) + Mathf.Pow(Mathf.Abs(y-other.y),2) );
-	}
-	public float getDistSq(TilePos other){
-		return Mathf.Pow(Mathf.Abs(x-other.x),2) + Mathf.Pow(Mathf.Abs(y-other.y),2) ;
-	}
+//	public float getDist(TilePos other){
+//		return Mathf.Sqrt( Mathf.Pow(Mathf.Abs(x-other.x),2) + Mathf.Pow(Mathf.Abs(y-other.y),2) );
+//	}
+//	public float getDistSq(TilePos other){
+//		return Mathf.Pow(Mathf.Abs(x-other.x),2) + Mathf.Pow(Mathf.Abs(y-other.y),2) ;
+//	}
 
 
 	public Vector2 getV2(){
