@@ -103,6 +103,14 @@ public class UnitGO : MonoBehaviour {
 		if (owner.IsHighlighted) {
 			owner.GM.activeCard.potentialTargetMouseOver (owner);
 		}
+
+		if (GameManagerTacticsInterface.instance.debugShowTileDist) {
+			for (int x = 0; x < GameManagerTacticsInterface.instance.gm.board.cols; x++) {
+				for (int y = 0; y < GameManagerTacticsInterface.instance.gm.board.rows; y++) {
+					GameManagerTacticsInterface.instance.gm.board.Grid [x, y].debugText = owner.CurTile.visibleRangeDists [x, y].ToString ("N1");
+				}
+			}
+		}
 	}
 	void OnMouseExit(){
 		owner.mouseIsOver = false;

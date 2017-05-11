@@ -374,7 +374,7 @@ public class Board {
 
 		List<Tile> returnTiles = new List<Tile> ();
 
-		//List<Tile> bleedTiles = new List<Tile>();
+		List<Tile> bleedTiles = new List<Tile>();
 
 		//figure out what range could work in a square
 		int startX = (int)Mathf.Max(source.Pos.x - range, 0);
@@ -405,7 +405,7 @@ public class Board {
 						bool doneChecking = false;
 
 						//assume it will not work
-						source.setVisibleRangeDist (grid [x, y], 999);
+						//source.setVisibleRangeDist (grid [x, y], 999);
 
 						//check if it will work
 						foreach (Tile tile in tiles) {
@@ -417,19 +417,6 @@ public class Board {
 									returnTiles.Add (grid [x, y]);
 									doneChecking = true;
 
-									//bleed once for any tile that is not full cover, adding any tiles adjacent to a currently visible tiles
-									if (grid [x, y].CoverVal != Tile.Cover.Full) {
-										List<Tile> adjacentTiles = getAdjacentTiles (grid [x, y], true, Tile.Cover.Full);
-										foreach (Tile t in adjacentTiles) {
-											float bleedTileDist = dm.getDist (source, t);// source.Pos.getDist (t.Pos);
-											if (bleedTileDist <= range) {
-												//Debug.Log ("bleed set " + bleedTileDist);
-												source.setVisibleRangeDist (t, bleedTileDist);
-												returnTiles.Add (t);
-											}
-											//bleedTiles.Add (t);
-										}
-									}
 								}
 							}
 						}
@@ -439,28 +426,30 @@ public class Board {
 		}
 		Profiler.EndSample ();
 
+
+
 		//bleed once for any tile that is not full cover, adding any tiles adjacent to a currently visible tiles
-//		Profiler.BeginSample("get bleed");
-//		foreach (Tile curTile in returnTiles) {
-//			if (curTile.CoverVal != Tile.Cover.Full) {
-//				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Full);
-//				foreach (Tile t in adjacentTiles) {
-//					bleedTiles.Add (t);
-//				}
-//			}
-//		}
-//		Profiler.EndSample ();
+		Profiler.BeginSample("get bleed");
+		foreach (Tile curTile in returnTiles) {
+			if (curTile.CoverVal != Tile.Cover.Full) {
+				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Full);
+				foreach (Tile t in adjacentTiles) {
+					bleedTiles.Add (t);
+				}
+			}
+		}
+		Profiler.EndSample ();
 
 		//add 'em
-//		Profiler.BeginSample("add bleed");
-//		foreach (Tile t in bleedTiles) {
-//			float dist = source.Pos.getDist (t.Pos);
-//			if (dist <= range) {
-//				source.setVisibleRangeDist (t, dist);
-//				returnTiles.Add (t);
-//			}
-//		}
-//		Profiler.EndSample ();
+		Profiler.BeginSample("add bleed");
+		foreach (Tile t in bleedTiles) {
+			float dist = dm.getDist (source, t);// source.Pos.getDist (t.Pos);
+			if (dist <= range) {
+				//source.setVisibleRangeDist (t, dist);
+				returnTiles.Add (t);
+			}
+		}
+		Profiler.EndSample ();
 
 		Profiler.EndSample ();
 		return returnTiles;
