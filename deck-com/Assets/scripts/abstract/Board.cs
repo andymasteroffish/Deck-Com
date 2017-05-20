@@ -221,6 +221,13 @@ public class Board {
 			unit.setHighlighted (false);
 			unit.setMouseColliderActive (true);	//make sure units can be clicked again
 		}
+		clearVisibilityIcons ();
+	}
+
+	public void clearVisibilityIcons(){
+		foreach (Unit unit in units) {
+			unit.showVisibilityIcon = false;
+		}
 	}
 
 	public void turnOffUnitMouseColliders(){
@@ -323,6 +330,24 @@ public class Board {
 			if (!unit.isPlayerControlled) {
 				if (grid [unit.CurTile.Pos.x, unit.CurTile.Pos.y].isVisibleToPlayer && !unit.isAwake) {
 					unit.wakeUp ();
+				}
+			}
+		}
+	}
+
+	//showing which units will be visible from a given tile
+	public void updateUnitVisibilityIconsFromTile(Tile sourceTile, Unit sourceUnit){
+		List<Tile> tiles = getTilesInVisibleRange (sourceTile, sourceUnit.sightRange);
+
+		//go through all units and see if they are on any of those tiles
+		foreach (Unit unit in units) {
+			unit.showVisibilityIcon = false;
+			if (unit != sourceUnit && unit.getIsVisibleToPlayer()) {
+				foreach (Tile tile in tiles) {
+					if (unit.CurTile == tile) {
+						unit.showVisibilityIcon = true;
+						break;
+					}
 				}
 			}
 		}

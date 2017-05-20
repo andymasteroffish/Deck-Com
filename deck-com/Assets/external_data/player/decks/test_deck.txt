@@ -1,3 +1,10 @@
+move6
+swap_spots
+teleport
+team_dash
+move_and_attack
+move6
+move6
 equipment_heal_ring
 heal
 attack

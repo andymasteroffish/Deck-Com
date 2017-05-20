@@ -80,6 +80,8 @@ public class TileGO : MonoBehaviour {
 
 	void OnMouseEnter(){
 		tile.MouseIsOver = true;
+		GameManagerTacticsInterface.instance.curMouseOverTile = tile;
+
 		//testing
 		if (GameManagerTacticsInterface.instance.debugShowTileDist) {
 			for (int x = 0; x < GameManagerTacticsInterface.instance.gm.board.cols; x++) {
@@ -90,9 +92,14 @@ public class TileGO : MonoBehaviour {
 				}
 			}
 		}
+
+		//GameManagerTacticsInterface.instance.gm.board.updateUnitVisibilityIconsFromTile (tile, GameManagerTacticsInterface.instance.gm.activePlayerUnit);
 	}
 	void OnMouseExit(){
 		tile.MouseIsOver = false;
+		if (GameManagerTacticsInterface.instance.curMouseOverTile == tile) {
+			GameManagerTacticsInterface.instance.curMouseOverTile = null;
+		}
 	}
 
 

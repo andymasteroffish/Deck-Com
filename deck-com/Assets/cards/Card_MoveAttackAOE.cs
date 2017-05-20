@@ -18,7 +18,7 @@ public class Card_MoveAttackAOE : Card {
 
 	public override void setupCustom(){
 		type = CardType.Movement;
-
+		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + range + " spaces and deal "+damage+" to ALL adjacent units";
 	}
 

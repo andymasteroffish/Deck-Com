@@ -20,7 +20,7 @@ public class Card_TeamDash : Card {
 
 	public override void setupCustom(){
 		type = Card.CardType.Movement;
-
+		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + range + " spaces and give an a free "+range+" space move";
 	}
 
@@ -42,7 +42,7 @@ public class Card_TeamDash : Card {
 
 		Owner.board.clearHighlights ();
 		Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
-		//Owner.board.highlightAllUnits (true, true, baseHighlightColor);
+		Owner.setHighlighted (false);	//can't select itself
 	}
 
 	public override void passInUnitCustom(Unit unit){

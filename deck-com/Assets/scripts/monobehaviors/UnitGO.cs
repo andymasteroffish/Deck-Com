@@ -8,6 +8,7 @@ public class UnitGO : MonoBehaviour {
 	private Unit owner;
 
 	public SpriteRenderer spriteRend;
+	public SpriteRenderer visibilityIconSprite;
 
 	private bool doingAnimation;
 
@@ -81,6 +82,9 @@ public class UnitGO : MonoBehaviour {
 		} else {
 			outline.turnOff ();
 		}
+
+		//icons
+		visibilityIconSprite.enabled = owner.showVisibilityIcon;
 
 		//are we dead?
 		if (owner.isDead && !doingAnimation) {

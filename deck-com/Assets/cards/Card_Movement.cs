@@ -10,8 +10,6 @@ public class Card_Movement : Card {
 	public Card_Movement(XmlNode _node){
 		node = _node;
 		range = int.Parse (node ["range"].InnerText);
-
-
 	}
 
 	public override void setupCustom(){
@@ -19,6 +17,7 @@ public class Card_Movement : Card {
 
 		description = "move up to " + range + " spaces";
 
+		showVisibilityIconsWhenHighlighting = true;
 	}
 
 	public override void mouseEnterEffects(){

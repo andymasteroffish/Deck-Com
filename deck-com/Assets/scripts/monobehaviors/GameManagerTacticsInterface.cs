@@ -47,6 +47,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	private int aiTurnPhase;
 	private bool autoPlayAITurn;	//for when ai units are not visible
 
+	[System.NonSerialized]
+	public Tile curMouseOverTile;	//for roll over effects
+	private Tile prevMouseOverTile;
+
 	void Awake () {
 		if (instance == null) {
 			instance = this;
@@ -140,7 +144,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 			
 
-		//is the game over
+		//is the game over?
 		if (gm.GameIsOver && !areAnimationsHappening()) {
 			StartCoroutine (doEndGame());
 		}
@@ -162,6 +166,21 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				}
 			}
 		}
+
+		//roll over effects for tiles
+		if (curMouseOverTile != prevMouseOverTile) {
+			if (curMouseOverTile != null) {
+
+				//visibility icons for movement
+				if (curMouseOverTile.IsHighlighted && gm.activeCard != null && gm.activeCard.showVisibilityIconsWhenHighlighting) {
+					gm.board.updateUnitVisibilityIconsFromTile (curMouseOverTile, gm.activePlayerUnit);	
+					//THIS WILL BE WRONG IF TE UNIT MOVING IS NOT THE ACTIVE UNIT AND THEY HAVE A DIFFERENT SIGHT RANGE
+				} else {
+					gm.board.clearVisibilityIcons ();
+				}
+			}
+		}
+		prevMouseOverTile = curMouseOverTile;
 
 		//testing
 //		for (int i = 0; i < 4; i++) {

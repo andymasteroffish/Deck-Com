@@ -17,8 +17,8 @@ public class Card_MovementSelfDestruct : Card {
 		type = Card.CardType.Movement;
 
 		baseActionCost = 0;
-
-		description = "move up to " + range + " spaces. Costs 0 acitons. One Time Use.";
+		showVisibilityIconsWhenHighlighting = true;
+		description = "move up to " + range + " spaces.\nCosts 0 actions. One Time Use.";
 	}
 
 	public override void mouseEnterEffects(){

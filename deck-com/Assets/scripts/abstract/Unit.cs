@@ -39,6 +39,8 @@ public class Unit {
 	public Sprite sprite;
 	public bool mouseColliderIsActive;
 
+	public bool showVisibilityIcon;
+
 	//decks and cards
 	public Deck deck;
 

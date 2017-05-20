@@ -41,6 +41,8 @@ public class Card {
 	public Dictionary<CardType, Color> highlightColors = new Dictionary<CardType, Color>();
 	public Color baseHighlightColor;
 
+	public bool showVisibilityIconsWhenHighlighting;
+
 	//this constructor should not be used. The derived cards are the only thing that should be used
 	public Card(){}
 
@@ -95,6 +97,8 @@ public class Card {
 		highlightColors.Add(CardType.Equipment, new Color(0.8f, 0.8f, 0.8f));
 		highlightColors.Add(CardType.Other, new Color(0.5f, 1f, 1f));
 		highlightColors.Add(CardType.Magic, new Color(1f, 0.5f, 1f));
+
+		showVisibilityIconsWhenHighlighting = false;
 
 		//custom setup
 		setupCustom ();
