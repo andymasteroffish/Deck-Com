@@ -26,9 +26,9 @@
   <charm idName="sniper_rifle">
     <name>Sniper Rifle</name>
     <script>Weapon_Basic</script>
-    <desc>3 Damage, 7 Range, attack cards cost an additional action</desc>
+    <desc>3 Damage, 8 Range, attack cards cost an additional action</desc>
     <damage>3</damage>
-    <range>7</range>
+    <range>8</range>
     <attack_card_cost_mod>1</attack_card_cost_mod>
   </charm>
   <charm idName="grunt_wep">

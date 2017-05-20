@@ -35,7 +35,11 @@ public class Card_GiveBadCharm : Card {
 	}
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesVisibleToUnit(Owner, baseHighlightColor);
+		if (anyUnit) {
+			Owner.board.highlightTilesVisibleToUnit (Owner, baseHighlightColor);
+		} else {
+			Owner.CurTile.setHighlighted (true, baseHighlightColor);
+		}
 	}
 	
 	public override void selectCardCustom(){

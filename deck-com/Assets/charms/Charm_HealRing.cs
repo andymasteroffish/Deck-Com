@@ -17,6 +17,7 @@ public class Charm_HealRing : Charm {
 	}
 
 	public override void setupCustom(){
+		type = Charm.CharmType.Equipment;
 		className = CharmClass.HealRing;
 	}
 

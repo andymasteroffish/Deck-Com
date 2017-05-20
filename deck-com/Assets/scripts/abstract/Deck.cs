@@ -195,6 +195,7 @@ public class Deck {
 	}
 	//this moves a card to the discard. It must have alreayd been rmeoved from the source
 	public void discardCard(Card card){
+		Debug.Log ("discard " + card.idName);
 		addCardToDiscard(card);
 		owner.GM.clearActiveCard ();
 	}
@@ -245,6 +246,30 @@ public class Deck {
 	//sorting
 	public void sortDrawPileAlphabetically(){
 		//FILL THIS IN
+	}
+
+	//info
+	public void printDeck(){
+		Debug.Log ("-- Deck for " + owner.unitName + " --");
+
+		Debug.Log ("Hand "+hand.Count);
+
+		for (int i = 0; i < hand.Count; i++) {
+			Debug.Log ("-" + hand [i].idName);
+		}
+
+		Debug.Log ("Draw Pile "+drawPile.Count);
+
+		for (int i = 0; i < drawPile.Count; i++) {
+			Debug.Log ("-" + drawPile [i].idName);
+		}
+
+		Debug.Log ("Discard Pile "+discardPile.Count);
+
+		for (int i = 0; i < discardPile.Count; i++) {
+			Debug.Log ("-" + discardPile [i].idName);
+		}
+
 	}
 
 	//setters and getters

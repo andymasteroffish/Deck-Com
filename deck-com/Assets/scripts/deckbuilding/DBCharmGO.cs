@@ -77,7 +77,7 @@ public class DBCharmGO : MonoBehaviour {
 				nameString = deck.curWeapon.name;
 			}
 		} 
-		if (type == Charm.CharmType.Charm){
+		if (type == Charm.CharmType.Equipment){
 			if (deck.charmToAdd != null) {
 				nameString = deck.charmToAdd.name;
 				isNew = true;

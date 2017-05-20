@@ -6,7 +6,7 @@ using System.Xml;
 public class Charm  {
 
 	public enum CharmClass{ Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon };
-	public enum CharmType {Weapon, Charm};
+	public enum CharmType {Weapon, Equipment, StatusEffect};
 
 	public string name, description;
 	public CharmClass className;
@@ -40,6 +40,9 @@ public class Charm  {
 
 	public bool protectDuringAISim;	//KILL THIS
 
+	//if a charm came from a card (most likely equipment) that card should be stored in limbo until the charm is destroyed
+	public Card storedCard;
+
 
 	//this should never be
 	public Charm(){}
@@ -66,12 +69,14 @@ public class Charm  {
 
 		protectDuringAISim = false;
 
+		storedCard = null;
+
 		costToAddToDeck = 3;
 
 		name = node ["name"].InnerText;
 
 		className = CharmClass.Charm;
-		type = CharmType.Charm;	//default to char,, so wepaons should change this in setupCustom
+		type = CharmType.Equipment;	//default to equipment for no solid reason
 
 		//check general values
 
@@ -120,6 +125,8 @@ public class Charm  {
 		isDead = parent.isDead;
 		hasChangedPos = parent.hasChangedPos;
 
+		storedCard = null;
+
 		//protectDuringAISim = false;
 
 		costToAddToDeck = parent.costToAddToDeck;
@@ -163,6 +170,10 @@ public class Charm  {
 		resetRoundCustom ();
 	}
 	public virtual void resetRoundCustom(){}
+
+	public void storeCard(Card card){
+		storedCard = card;
+	}
 
 	//general play
 	public void turnEndPreDiscard(){

@@ -28,7 +28,7 @@ public class Unit {
 	public int health;
 	public bool isDead;
 
-	public int baseHandSize = 4;
+	public int baseHandSize = 5;
 
 	public int baseActions = 2;
 	private int actionsLeft;
@@ -233,18 +233,27 @@ public class Unit {
 		Profiler.EndSample ();
 	}
 
-	public void addCharm(string idName){
+	public Charm addCharm(string idName){
 		Charm thisCharm = CharmManager.instance.getCharmFromIdName (idName);
 		thisCharm.setup (this, useGO, idName);
 		if (isActive) {
 			thisCharm.setActive (true);
 		}
 		charms.Add (thisCharm);
+		return thisCharm;
 	}
 
 	public void removeCharm(Charm charmToRemove){
 		//Debug.Log ("tim to remov "+charmToRemove.idName);
 		charmToRemove.isDead = true;
+
+		//if there is a card, discard it
+		if (charmToRemove.storedCard != null) {
+			Debug.Log ("ad charm dies, discard " + charmToRemove.storedCard);
+			charmToRemove.storedCard.discard ();
+		}
+
+		//get it out
 		charms.Remove (charmToRemove);
 
 		//space out the others

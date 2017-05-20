@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Card {
 
-	public enum CardType{Loot, Attack, AttackSpecial, Movement, Aid, Magic, Other};
+	public enum CardType{Loot, Attack, AttackSpecial, Movement, Aid, Magic, Equipment, Other};
 
 	public string name, idName;
 	public string description;
@@ -92,6 +92,7 @@ public class Card {
 		highlightColors.Add(CardType.Movement, new Color(0.5f, 0.5f, 1f));
 		highlightColors.Add(CardType.Aid, new Color(0.5f, 1f, 0.5f));
 		highlightColors.Add(CardType.Loot, new Color(0.5f, 0.5f, 0.5f));
+		highlightColors.Add(CardType.Equipment, new Color(0.8f, 0.8f, 0.8f));
 		highlightColors.Add(CardType.Other, new Color(0.5f, 1f, 1f));
 		highlightColors.Add(CardType.Magic, new Color(1f, 0.5f, 1f));
 
@@ -184,7 +185,7 @@ public class Card {
 	public virtual void passInUnitCustom(Unit unit){}
 
 
-	public void finish(bool destroyCard = false){
+	public void finish(bool destroyCard = false, bool removeFromPlay = false){
 		owner.GM.targetInfoText.turnOff ();
 		revealAICardFlag = false;
 
@@ -203,10 +204,12 @@ public class Card {
 
 		deck.removeCardFromHand (this);
 
-		if (!destroyCard) {
+		if (!destroyCard && !removeFromPlay) {
 			deck.discardCard (this);
-		} else {
+		} else if (destroyCard) {
 			deck.destroyCard (this);
+		} else if (removeFromPlay) {
+			//do nothing
 		}
 	}
 	public void discard(){

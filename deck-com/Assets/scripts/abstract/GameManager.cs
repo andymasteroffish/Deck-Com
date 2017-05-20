@@ -170,11 +170,14 @@ public class GameManager {
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		for(int i=unitsPlayer.Count-1; i>=0; i--){
 			unitsPlayer[i].endTurn ();
+			//testing
+			unitsPlayer[i].deck.printDeck();
 		}
 		//check if anything (including foes) has clean up effects
 		for (int i = board.units.Count-1; i >= 0; i--) {
 			board.units [i].turnEndCleanUp ();
 		}
+
 		startAITurn ();
 	}
 

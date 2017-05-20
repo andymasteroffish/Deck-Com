@@ -16,6 +16,7 @@ public class Charm_OneTimeShield : Charm {
 	}
 
 	public override void setupCustom(){
+		type = Charm.CharmType.StatusEffect;
 		className = CharmClass.OneTimeShield;
 	}
 

@@ -33,7 +33,6 @@
     <player_controlled>false</player_controlled>
     <level>3</level>
     <base_health>5</base_health>
-    <hand_size>4</hand_size>
     <charms>
       <charm>acid_knife</charm>
     </charms>
@@ -45,7 +44,7 @@
     <player_controlled>false</player_controlled>
     <level>1</level>
     <base_health>2</base_health>
-    <hand_size>3</hand_size>
+    <hand_size>4</hand_size>
     <charms>
       <charm>grunt_wep</charm>
     </charms>
@@ -65,10 +64,10 @@
     <name>Goblin King</name>
     <sprite>goblin_king</sprite>
     <deck>goblin_king_deck</deck>
+    <ai_profile>goblin_king</ai_profile>
     <player_controlled>false</player_controlled>
     <level>3</level>
     <base_health>8</base_health>
-    <hand_size>5</hand_size>
     <charms>
       <charm>goblin_king_wep</charm>
     </charms>

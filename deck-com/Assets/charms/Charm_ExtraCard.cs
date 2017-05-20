@@ -10,12 +10,14 @@ public class Charm_ExtraCard : Charm {
 	public Charm_ExtraCard(XmlNode _node){
 		node = _node;
 		numExtraCards = int.Parse (node ["extra_cards"].InnerXml);
+
 	}
 	public Charm_ExtraCard(Charm parent){
 		setFromParent (parent);
 	}
 
 	public override void setupCustom(){
+		type = Charm.CharmType.Equipment;
 		className = CharmClass.ExtraCard;
 	}
 

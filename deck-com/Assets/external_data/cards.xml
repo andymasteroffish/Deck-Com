@@ -254,4 +254,18 @@
 <script>Card_Trade_Places</script>
 <desc>trade places with any unit you can see</desc>
 </card>
+<card idName="equipment_heal_ring">
+<name>Heal Ring</name>
+<level>1</level>
+<script>Card_Equipment</script>
+<desc></desc>
+<equipment_id>heal_ring</equipment_id>
+</card>
+<card idName="destroy_equipment">
+<name>Destory Equipment</name>
+<level>1</level>
+<script>Card_RemoveCharm</script>
+<desc>Destroy equipment</desc>
+<hits_equipment>true</hits_equipment>
+</card>
 </cards>

@@ -14,6 +14,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public bool debugRemoveFOW;
 	public bool debugIgnoreStandardSpawns;
 	public bool debugShowTileDist;
+	public bool debugClearTileDists;
 	public bool debugWakeAllFoes;
 
 	public static GameManagerTacticsInterface instance;
@@ -151,6 +152,16 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		pickupLootButton.SetActive (gm.IsPlayerTurn && gm.activePlayerUnit.CanPickupLoot);
 		playerButtonsGroup.SetActive (gm.IsPlayerTurn);
 		cancelButton.SetActive (gm.activeCard != null);
+
+		//did I just toggle the debug switch to show tile distances?
+		if (debugClearTileDists){
+			debugClearTileDists = false;
+			for (int x = 0; x < GameManagerTacticsInterface.instance.gm.board.cols; x++) {
+				for (int y = 0; y < GameManagerTacticsInterface.instance.gm.board.rows; y++) {
+					GameManagerTacticsInterface.instance.gm.board.Grid [x, y].debugText = "";
+				}
+			}
+		}
 
 		//testing
 //		for (int i = 0; i < 4; i++) {

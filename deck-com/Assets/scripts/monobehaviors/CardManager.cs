@@ -63,54 +63,42 @@ public class CardManager : MonoBehaviour {
 
 		if (scriptName == "Card_Loot") {
 			thisCard = new Card_Loot (node);
-		}
-		else if (scriptName == "Card_Movement") {
+		} else if (scriptName == "Card_Movement") {
 			thisCard = new Card_Movement (node);
-		}
-		else if (scriptName == "Card_Attack") {
+		} else if (scriptName == "Card_Attack") {
 			thisCard = new Card_Attack (node);
-		}
-		else if (scriptName == "Card_AttackIgnoreWeapon") {
-			thisCard = new  Card_AttackIgnoreWeapon(node);
-		}
-		else if (scriptName == "Card_BasicAOEAttack") {
+		} else if (scriptName == "Card_AttackIgnoreWeapon") {
+			thisCard = new  Card_AttackIgnoreWeapon (node);
+		} else if (scriptName == "Card_BasicAOEAttack") {
 			thisCard = new Card_BasicAOEAttack (node);
-		}
-		else if (scriptName == "Card_BasicTargetBonus") {
+		} else if (scriptName == "Card_BasicTargetBonus") {
 			thisCard = new Card_BasicTargetBonus (node);
-		}
-		else if (scriptName == "Card_CoverAttack") {
+		} else if (scriptName == "Card_CoverAttack") {
 			thisCard = new Card_CoverAttack (node);
-		}
-		else if (scriptName == "Card_GiveCharm") {
+		} else if (scriptName == "Card_GiveCharm") {
 			thisCard = new Card_GiveCharm (node);
-		}
-		else if (scriptName == "Card_GiveBadCharm"){
-			thisCard = new Card_GiveBadCharm(node);
-		}
-		else if (scriptName == "Card_Heal") {
+		} else if (scriptName == "Card_GiveBadCharm") {
+			thisCard = new Card_GiveBadCharm (node);
+		} else if (scriptName == "Card_Heal") {
 			thisCard = new Card_Heal (node);
-		}
-		else if (scriptName == "Card_MoveAndAttack") {
+		} else if (scriptName == "Card_MoveAndAttack") {
 			thisCard = new Card_MoveAndAttack (node);
-		}
-		else if (scriptName == "Card_MoveAttackAOE") {
+		} else if (scriptName == "Card_MoveAttackAOE") {
 			thisCard = new Card_MoveAttackAOE (node);
-		}
-		else if (scriptName == "Card_MovementSelfDestruct") {
+		} else if (scriptName == "Card_MovementSelfDestruct") {
 			thisCard = new Card_MovementSelfDestruct (node);
-		}
-		else if (scriptName == "Card_TeamDash") {
+		} else if (scriptName == "Card_TeamDash") {
 			thisCard = new Card_TeamDash (node);
-		}
-		else if (scriptName == "Card_Teleport") {
+		} else if (scriptName == "Card_Teleport") {
 			thisCard = new Card_Teleport (node);
-		}
-		else if (scriptName == "Card_Trade_Places") {
+		} else if (scriptName == "Card_Trade_Places") {
 			thisCard = new Card_Trade_Places (node);
-		}
-		else if (scriptName == "Card_DirectDamage") {
+		} else if (scriptName == "Card_DirectDamage") {
 			thisCard = new Card_DirectDamage (node);
+		} else if (scriptName == "Card_Equipment") {
+			thisCard = new Card_Equipment (node);
+		} else if (scriptName == "Card_RemoveCharm") {
+			thisCard = new Card_RemoveCharm (node);
 		}
 
 		else{
