@@ -213,7 +213,7 @@ public class Card {
 		} else if (destroyCard) {
 			deck.destroyCard (this);
 		} else if (removeFromPlay) {
-			//do nothing
+			owner.GM.clearActiveCard ();
 		}
 	}
 	public void discard(){

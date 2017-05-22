@@ -9,7 +9,9 @@ public class CardGO : MonoBehaviour {
 
 	public Text nameField;
 	public Text descField;
+	public Text typeField;
 	public SpriteRenderer spriteRend;
+	public SpriteRenderer colorSprite;
 
 	private bool doingAnimation;
 
@@ -32,6 +34,8 @@ public class CardGO : MonoBehaviour {
 	private bool inAiRevealSpot;
 
 	private bool playerControlled;
+
+	private Dictionary<Card.CardType, string> typeNames = null;
 
 	public void activate(Card _card){
 		card = _card;
@@ -65,6 +69,22 @@ public class CardGO : MonoBehaviour {
 		endPos = playerControlled ? endPosPlayer : endPosAI;
 
 		gameObject.name = "card "+card.Owner.unitName+" "+card.name;
+
+		if (typeNames == null) {
+			typeNames = new Dictionary<Card.CardType, string> ();
+			typeNames.Add (Card.CardType.Loot, "");
+			typeNames.Add (Card.CardType.Attack, "Attack");
+			typeNames.Add (Card.CardType.AttackSpecial, "Special Attack");
+			typeNames.Add (Card.CardType.Movement, "Movement");
+			typeNames.Add (Card.CardType.Aid, "Action - Aid");
+			typeNames.Add (Card.CardType.Magic, "Action - Spell");
+			typeNames.Add (Card.CardType.Equipment, "Equipment");
+			typeNames.Add (Card.CardType.Other, "Action - Other");
+		}
+
+		typeField.text = typeNames [card.type];
+
+		colorSprite.color = new Color(card.baseHighlightColor.r, card.baseHighlightColor.g, card.baseHighlightColor.b, 0.3f);
 
 		transform.position = startPos;
 		spriteRend.transform.localPosition = Vector3.zero;
