@@ -230,7 +230,7 @@
 <range>6</range>
 </card>
 <card idName="team_dash_gift">
-<name>Team Dash</name>
+<name>Free Dash</name>
 <level>-1</level>
 <script>Card_MovementSelfDestruct</script>
 <range>3</range>
@@ -254,18 +254,25 @@
 <script>Card_Trade_Places</script>
 <desc>trade places with any unit you can see</desc>
 </card>
-<card idName="equipment_heal_ring">
-<name>Heal Ring</name>
-<level>1</level>
-<script>Card_Equipment</script>
-<desc></desc>
-<equipment_id>heal_ring</equipment_id>
-</card>
 <card idName="destroy_equipment">
 <name>Destory Equipment</name>
 <level>1</level>
 <script>Card_RemoveCharm</script>
 <desc>Destroy equipment</desc>
 <hits_equipment>true</hits_equipment>
+</card>
+<card idName="equipment_extra_card">
+<name>Extra Card Pendant</name>
+<level>4</level>
+<script>Card_Equipment</script>
+<desc>Draw an extra card each turn</desc>
+<equipment_id>extra_card</equipment_id>
+</card>
+<card idName="equipment_heal_ring">
+<name>Heal Ring</name>
+<level>1</level>
+<script>Card_Equipment</script>
+<desc>Draw a card when you play your first aid card each turn</desc>
+<equipment_id>heal_ring</equipment_id>
 </card>
 </cards>

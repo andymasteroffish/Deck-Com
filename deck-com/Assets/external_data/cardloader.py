@@ -24,6 +24,12 @@ SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'
 CLIENT_SECRET_FILE = 'client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
+#equipment needs to store some info so we can make cards
+equipmentNames = []
+equipmentIDs = []
+equipmentLevels = []
+equipmentDescs = []
+
 #google's code for grabbing the credentials
 def get_credentials():
     home_dir = os.path.expanduser('~')
@@ -45,9 +51,74 @@ def get_credentials():
         print('Storing credentials to ' + credential_path)
     return credentials
 
-def main():
+def getCharms():
+    credentials = get_credentials()
+    http = credentials.authorize(httplib2.Http())
+    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
+                    'version=v4')
+    service = discovery.build('sheets', 'v4', http=http,
+                              discoveryServiceUrl=discoveryUrl)
+
+    #id part of my spreadhseet url
+    spreadsheetId = '1X2tsHz0IEwAQ4X9_Z7RRYn7qM3_m8j6yDkQu3e-c7WE'
+    rangeName = 'charms!A2:P'
+    result = service.spreadsheets().values().get(
+        spreadsheetId=spreadsheetId, range=rangeName).execute()
+    values = result.get('values', [])
+
+    if not values:
+        print('No card data found.')
+    else:
+        #we found stuff!
+        pathname = os.path.dirname(os.path.realpath(__file__))
+
+        file = open(pathname+'/charms.xml', 'w')
+        file.write('<charms>\n')
+        for row in values:
+            #get all of the info
+            displayName = row[0]
+            idName = row[1]
+            typeName = row[2]
+            scriptName = row[3]
+            level = row[4]
+            if level == 'n/a':
+                level = -1
+            
+            description = row[5]
+
+            #remaining elements are additional values that the card might need
+            otherVals = row[6:len(row)]
+            
+            file.write('<charm idName="'+idName+'">\n')
+            file.write('<name>'+displayName+'</name>\n')
+            file.write('<type>'+typeName+'</type>\n')
+            file.write('<level>'+str(level)+'</level>\n')
+            file.write('<script>'+scriptName+'</script>\n')
+            if description != ".":
+                file.write('<desc>'+description+'</desc>\n')
+
+            for val in otherVals:
+                #print(val)
+                thisVal = val.split(':')
+                file.write('<'+thisVal[0]+'>'+thisVal[1]+'</'+thisVal[0]+'>\n')
+
+            file.write('</charm>\n')
+
+            #We need to store some info for equpment so we can make cards for 'em
+            if typeName == "Equipment":
+                print("store "+idName)
+                equipmentNames.append(displayName)
+                equipmentIDs.append(idName)
+                equipmentLevels.append(level)
+                equipmentDescs.append(description)
+            
+
+        file.write('</charms>')
+        file.close()
 
 
+
+def getCards():
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
@@ -63,7 +134,7 @@ def main():
     values = result.get('values', [])
 
     if not values:
-        print('No data found.')
+        print('No card data found.')
     else:
         #we found stuff!
         pathname = os.path.dirname(os.path.realpath(__file__))
@@ -98,12 +169,21 @@ def main():
 
             file.write('</card>\n')
 
-            # Print columns A and E, which correspond to indices 0 and 4.
-            #print('%s, %s' % (row[0], row[4]))
+        #now add equipment
+        for i in range(0, len(equipmentNames)):
+            print("add "+equipmentNames[i]) 
+            file.write('<card idName="equipment_'+equipmentIDs[i]+'">\n')
+            file.write('<name>'+equipmentNames[i]+'</name>\n')
+            file.write('<level>'+str(equipmentLevels[i])+'</level>\n')
+            file.write('<script>Card_Equipment</script>\n')
+            file.write('<desc>'+equipmentDescs[i]+'</desc>\n')
+            file.write('<equipment_id>'+equipmentIDs[i]+'</equipment_id>\n')
+            file.write('</card>\n')
 
         file.write('</cards>')
         file.close()
 
 
 if __name__ == '__main__':
-    main()
+    getCharms()
+    getCards()
