@@ -123,7 +123,6 @@ public class Charm  {
 		}
 		if (node ["ai_bad_points"] != null) {
 			aiBadCharmPoints = float.Parse(node ["ai_bad_points"].InnerText);
-			Debug.Log ("I'm alla bout " + aiBadCharmPoints);
 		}
 	}
 	public virtual void setupCustom(){}

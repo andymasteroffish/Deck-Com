@@ -6,7 +6,7 @@ public class TurnInfo {
 
 	public List<MoveInfo> moves;
 
-	public Board debugResultingBoard = null;	//this will be only be used when testing AI and should be left null most of the time
+	//public Board debugResultingBoard = null;	//this will be only be used when testing AI and should be left null most of the time
 
 	//set when the board is evaluated
 	public float val;	
@@ -23,7 +23,7 @@ public class TurnInfo {
 			moves.Add (other.moves [i]);
 		}
 
-		debugResultingBoard = other.debugResultingBoard;
+		//debugResultingBoard = other.debugResultingBoard;
 
 		//we only care about the final board state so all evaluation should be transfered over
 		if (moves.Count > 0) {

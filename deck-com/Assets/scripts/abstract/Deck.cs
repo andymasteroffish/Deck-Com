@@ -195,7 +195,7 @@ public class Deck {
 	}
 	//this moves a card to the discard. It must have alreayd been rmeoved from the source
 	public void discardCard(Card card){
-		Debug.Log ("discard " + card.idName);
+		//Debug.Log ("discard " + card.idName);
 		addCardToDiscard(card);
 		owner.GM.clearActiveCard ();
 	}

@@ -1183,8 +1183,8 @@ public class Board {
 			numAlliesCursed += curAllies[i].aiSimHasBeenCursedCount;
 
 			//tally up the charms (subtracting the old values from the current values to see if there was change) 
-			Debug.Log(curAllies[i].Charms.Count+" charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
-			if (printInfo)Debug.Log("charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
+			//Debug.Log(curAllies[i].Charms.Count+" charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
+			//if (printInfo)Debug.Log("charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
 			foreach(Charm c in curAllies[i].Charms){
 				deltaAllyGoodCharms += c.aiGoodCharmPoints;
 				deltaAllyBadCharms += c.aiBadCharmPoints;
@@ -1267,15 +1267,14 @@ public class Board {
 			info.val += change * curAllies[i].aiProfile.distanceToEnemiesWeight;
 
 			if (printInfo) {
-//				Debug.Log ("min dist: " + minDistFromClosest);
-//				Debug.Log ("max dist: " + maxDistFromClosest);
-//				Debug.Log ("old closest: " + oldClosestDistToEnemy);
-//				Debug.Log ("new closest: " + newClosestDistToEnemy);
-//				Debug.Log ("old val: " + oldVal);
-//				Debug.Log ("new val: " + newVal);
-//				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
+				Debug.Log ("min dist: " + minDistFromClosest);
+				Debug.Log ("max dist: " + maxDistFromClosest);
+				Debug.Log ("old closest: " + oldClosestDistToEnemy);
+				Debug.Log ("new closest: " + newClosestDistToEnemy);
+				Debug.Log ("old val: " + oldVal);
+				Debug.Log ("new val: " + newVal);
+				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
 			}
-
 		}
 
 		//how has ally cover changed?
@@ -1308,14 +1307,14 @@ public class Board {
 				newLowestCover = curAllies [i].CurTile.getHighestAdjacentCover ();
 			}
 
-			float changeVal = curAllies [i].aiProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
+			//float changeVal = curAllies [i].aiProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
+			float changeVal = curUnit.aiProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
 			info.val += changeVal;
 
 			if (printInfo) {
 				//Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
 			}
 		}
-
 
 		//what is the average cover for enemies?
 

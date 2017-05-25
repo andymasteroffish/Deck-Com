@@ -77,7 +77,7 @@ public class AIProfile {
 			}
 		}
 		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Part] = 4;
-		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Full] = 50;
+		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Full] = 20;
 
 		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.None] = -5;
 		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.Full] = 1;

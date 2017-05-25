@@ -388,9 +388,6 @@ public class GameManager {
 			//Profiler.BeginSample("resolve and return board");
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
 			//Profiler.EndSample ();
-			if (GameManagerTacticsInterface.instance.debugPrintAIInfo) {
-				turn.debugResultingBoard = newBoard;
-			}
 
 			//find all of the moves the AI could make from there
 			TurnInfo followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth+1);
@@ -405,19 +402,16 @@ public class GameManager {
 				Profiler.EndSample ();
 			}
 
-			//if we're not storing the board to print debug info, we can just return it to the pool
-			if (newBoard != turn.debugResultingBoard) {
-				if (ObjectPooler.instance.checkIfBoardHasBeenRetired (newBoard)) {
-					Debug.Log ("huh oh fuck");
-				}
-				newBoard.returnToPool ();	//PUT THIS BACK IN A WAY THAT DOES NOT BREAK debugResultingBoard
+			//return the board to the pool
+			if (ObjectPooler.instance.checkIfBoardHasBeenRetired (newBoard)) {
+				Debug.Log ("huh oh fuck");
 			}
+			newBoard.returnToPool ();	//PUT THIS BACK IN A WAY THAT DOES NOT BREAK debugResultingBoard
 
 			potentialTurns.Add (turn);
 		}
 
 		//find the best one
-		//int bestID = 0;
 		float bestValue = -9999;
 		for (int i = 0; i < potentialTurns.Count; i++) {
 			if (potentialTurns [i].val > bestValue) {
@@ -453,23 +447,20 @@ public class GameManager {
 		}
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
-
-			returnVal.print (board);
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
 			Debug.Log ("------TEST-------");
 			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
-			returnVal.debugResultingBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
-			//temp.print (board);
+
+			Board tempBoard = ObjectPooler.instance.getBoard();
+			tempBoard.setFromParent(originalBoard);
+
+			foreach (MoveInfo move in returnVal.moves) {
+				tempBoard.resolveMove (move);
+			}
+			tempBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
+			temp.print (board);
 		}
 
-		//if were storing debug boards, they should be returned to the pool
-		for (int i = 0; i < potentialTurns.Count; i++) {
-			if (potentialTurns [i].debugResultingBoard != null) {
-				if (!ObjectPooler.instance.checkIfBoardHasBeenRetired (potentialTurns [i].debugResultingBoard)) {
-					potentialTurns [i].debugResultingBoard.returnToPool ();
-				}
-			}
-		}
 
 		//if(curDepth == 0)	Profiler.EndSample();
 		return returnVal;
