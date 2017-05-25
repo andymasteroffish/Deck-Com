@@ -37,7 +37,7 @@ public class Card_Equipment : Card {
 		Owner.board.clearHighlights ();
 		Charm newEquipment = unit.addCharm (idNameOfEquipment);
 		newEquipment.storeCard (this);
-		unit.aiSimHasBeenAidedCount++;
+		//unit.aiSimHasBeenAidedCount++;
 		finish (false, true);
 	}
 

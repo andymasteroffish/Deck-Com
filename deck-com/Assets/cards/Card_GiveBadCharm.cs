@@ -56,13 +56,17 @@ public class Card_GiveBadCharm : Card {
 		Debug.Log ("give a bad charm");
 		unit.addCharm (idNameOfGift);
 
-		if (bonusRandomDiscards > 0) {
-			for (int i = 0; i < bonusRandomDiscards; i++) {
-				unit.deck.discardACardAtRandom ();
+		if (bonusRandomDiscards > 0){
+			unit.aiSimHasBeenCursedCount++;
+			Debug.Log ("increase to " + unit.aiSimHasBeenCursedCount);
+
+			if (!unit.isAISimUnit) {
+				for (int i = 0; i < bonusRandomDiscards; i++) {
+					unit.deck.discardACardAtRandom ();
+				}
 			}
 		}
-		unit.aiSimHasBeenCursedCount++;
-		Debug.Log ("increase to " + unit.aiSimHasBeenCursedCount);
+
 		finish ();
 	}
 

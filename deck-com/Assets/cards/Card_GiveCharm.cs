@@ -48,7 +48,7 @@ public class Card_GiveCharm : Card {
 
 	public override void passInUnitCustom(Unit unit){
 		unit.addCharm (idNameOfGift);
-		unit.aiSimHasBeenAidedCount++;
+		//unit.aiSimHasBeenAidedCount++;
 		finish ();
 	}
 

@@ -1132,6 +1132,9 @@ public class Board {
 			numEnemiesCursed += curEnemies[i].aiSimHasBeenCursedCount;
 
 			//tally up the charms (subtracting the old values from the current values to see if there was change) 
+			Debug.Log(curEnemies[i].Charms.Count+" charms for enemy "+oldEnemies[i].CurTile.Pos.x+","+oldEnemies[i].CurTile.Pos.y);
+			//if (printInfo)Debug.Log("charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
+
 			foreach(Charm c in curEnemies[i].Charms){
 				deltaEnemyGoodCharms += c.aiGoodCharmPoints;
 				deltaEnemyBadCharms += c.aiBadCharmPoints;
@@ -1180,9 +1183,12 @@ public class Board {
 			numAlliesCursed += curAllies[i].aiSimHasBeenCursedCount;
 
 			//tally up the charms (subtracting the old values from the current values to see if there was change) 
+			Debug.Log(curAllies[i].Charms.Count+" charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
+			if (printInfo)Debug.Log("charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
 			foreach(Charm c in curAllies[i].Charms){
 				deltaAllyGoodCharms += c.aiGoodCharmPoints;
 				deltaAllyBadCharms += c.aiBadCharmPoints;
+				if(printInfo)Debug.Log (c.idName+" " + c.aiBadCharmPoints);
 			}
 			foreach(Charm c in oldAllies[i].Charms){
 				deltaAllyGoodCharms -= c.aiGoodCharmPoints;

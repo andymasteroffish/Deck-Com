@@ -34,7 +34,7 @@ public class Card_RemoveCharm : Card {
 		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
 			if (unit.Charms [i].type == Charm.CharmType.Equipment && removesEquipment) {
 				unit.removeCharm (unit.Charms [i]);
-				unit.aiSimHasBeenCursedCount++;
+				//unit.aiSimHasBeenCursedCount++;
 			}
 		}
 
