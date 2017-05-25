@@ -1,3 +1,4 @@
+dumbfound
 equipment_heal_ring
 move6
 swap_spots

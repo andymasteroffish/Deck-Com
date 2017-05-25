@@ -43,6 +43,9 @@ public class Charm  {
 	//if a charm came from a card (most likely equipment) that card should be stored in limbo until the charm is destroyed
 	public Card storedCard;
 
+	//ai stuff
+	public float aiGoodCharmPoints, aiBadCharmPoints;
+
 
 	//this should never be
 	public Charm(){}
@@ -103,12 +106,24 @@ public class Charm  {
 			expiresAfterAttack = bool.Parse (node ["expires_after_attack"].InnerXml);
 		}
 
+		aiGoodCharmPoints = 0;
+		aiBadCharmPoints = 0;
+
 		//do the charm's own setup
 		setupCustom ();
 
 		//if a description was specified, overwrite whatever was going on
 		if (node ["desc"] != null) {
 			description = node ["desc"].InnerText;
+		}
+
+		//check if an alternate ai value was provided
+		if (node ["ai_good_points"] != null) {
+			aiGoodCharmPoints = float.Parse(node ["ai_good_points"].InnerText);
+		}
+		if (node ["ai_bad_points"] != null) {
+			aiBadCharmPoints = float.Parse(node ["ai_bad_points"].InnerText);
+			Debug.Log ("I'm alla bout " + aiBadCharmPoints);
 		}
 	}
 	public virtual void setupCustom(){}
@@ -128,6 +143,9 @@ public class Charm  {
 		storedCard = null;
 
 		//protectDuringAISim = false;
+
+		aiGoodCharmPoints = parent.aiGoodCharmPoints;
+		aiBadCharmPoints = parent.aiBadCharmPoints;
 
 		costToAddToDeck = parent.costToAddToDeck;
 

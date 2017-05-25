@@ -40,6 +40,8 @@ public class Charm_WeaponBonus : Charm {
 	public override void setupCustom(){
 		type = Charm.CharmType.StatusEffect;
 		className = CharmClass.WeaponBonus;
+
+		aiGoodCharmPoints = 1;
 	}
 
 	public override void setFromParentCustom(Charm parent){

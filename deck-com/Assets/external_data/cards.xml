@@ -111,7 +111,7 @@
 <script>Card_GiveBadCharm</script>
 <desc>Target unit discards a card at random and draws one less card for the rest of the match</desc>
 <bonus_discard>1</bonus_discard>
-<gift_id>rdumbfounded</gift_id>
+<gift_id>dumbfounded</gift_id>
 </card>
 <card idName="focus">
 <name>Focus</name>

@@ -1108,6 +1108,8 @@ public class Board {
 		int numEnemiesKilled = 0;
 		int numEnemiesAided = 0;
 		int numEnemiesCursed = 0;
+		float deltaEnemyGoodCharms = 0;
+		float deltaEnemyBadCharms = 0;
 		for (int i = 0; i < oldEnemies.Count; i++) {
 			//will enemies be damaged?
 			if (curEnemies[i].health < oldEnemies[i].health){
@@ -1128,6 +1130,16 @@ public class Board {
 			numEnemiesAided += curEnemies [i].aiSimHasBeenAidedCount;
 			//what about cursed?
 			numEnemiesCursed += curEnemies[i].aiSimHasBeenCursedCount;
+
+			//tally up the charms (subtracting the old values from the current values to see if there was change) 
+			foreach(Charm c in curEnemies[i].Charms){
+				deltaEnemyGoodCharms += c.aiGoodCharmPoints;
+				deltaEnemyBadCharms += c.aiBadCharmPoints;
+			}
+			foreach(Charm c in oldEnemies[i].Charms){
+				deltaEnemyGoodCharms -= c.aiGoodCharmPoints;
+				deltaEnemyBadCharms -= c.aiBadCharmPoints;
+			}
 		}
 			
 		//add it to the total
@@ -1135,7 +1147,8 @@ public class Board {
 		info.val += totalEnemyHeal * curUnit.aiProfile.totalEnemyHealWeight;
 		info.val += numEnemiesKilled * curUnit.aiProfile.numEnemiesKilledWeight;
 		info.val += numEnemiesAided * curUnit.aiProfile.numEnemiesAidedWeight;
-		info.val += numEnemiesCursed * curUnit.aiProfile.numEnemiesCursedWeight;
+		info.val += deltaEnemyGoodCharms * curUnit.aiProfile.deltaEnemyGoodCharmWeight;
+		info.val += deltaEnemyBadCharms * curUnit.aiProfile.deltaEnemyBadCharmWeight;
 
 		//going through allies
 		int totalAllyDamage = 0;
@@ -1143,6 +1156,8 @@ public class Board {
 		int numAlliesKilled = 0;
 		int numAlliesAided = 0;
 		int numAlliesCursed = 0;
+		float deltaAllyGoodCharms = 0;
+		float deltaAllyBadCharms = 0;
 		for (int i = 0; i < oldAllies.Count; i++) {
 			//will allies be damaged?
 			if (curAllies [i].health < oldAllies [i].health) {
@@ -1163,6 +1178,16 @@ public class Board {
 			numAlliesAided += curAllies[i].aiSimHasBeenAidedCount;
 			//what about cursed?
 			numAlliesCursed += curAllies[i].aiSimHasBeenCursedCount;
+
+			//tally up the charms (subtracting the old values from the current values to see if there was change) 
+			foreach(Charm c in curAllies[i].Charms){
+				deltaAllyGoodCharms += c.aiGoodCharmPoints;
+				deltaAllyBadCharms += c.aiBadCharmPoints;
+			}
+			foreach(Charm c in oldAllies[i].Charms){
+				deltaAllyGoodCharms -= c.aiGoodCharmPoints;
+				deltaAllyBadCharms -= c.aiBadCharmPoints;
+			}
 		}
 
 
@@ -1176,6 +1201,8 @@ public class Board {
 		info.val += numAlliesKilled * curUnit.aiProfile.numAlliesKilledWeight;
 		info.val += numAlliesAided * curUnit.aiProfile.numAlliesAidedWeight;
 		info.val += numAlliesCursed * curUnit.aiProfile.numAlliesCursedWeight;
+		info.val += deltaAllyGoodCharms * curUnit.aiProfile.deltaAllyGoodCharmWeight;
+		info.val += deltaAllyBadCharms * curUnit.aiProfile.deltaAllyBadCharmWeight;
 
 		if (printInfo) {
 			Debug.Log ("AI turn info for " + curUnit.unitName);
@@ -1184,13 +1211,16 @@ public class Board {
 			Debug.Log ("foe heal " + totalEnemyHeal);
 			Debug.Log ("foes aided " + numEnemiesAided);
 			Debug.Log ("foes cursed " + numEnemiesCursed);
-		
+			Debug.Log ("foe good charm delta " + deltaEnemyGoodCharms);
+			Debug.Log ("foe bad charm delta " + deltaEnemyBadCharms);
+
 			Debug.Log ("ally damaged " + totalAllyDamage);
 			Debug.Log ("num allies killed " + numAlliesKilled);
 			Debug.Log ("ally heal " + totalAllyHeal);
 			Debug.Log ("allies aided " + numAlliesAided+ "  weight " + curUnit.aiProfile.numAlliesAidedWeight);
 			Debug.Log ("allies cursed " + numAlliesCursed);
-
+			Debug.Log ("ally good charm delta " + deltaAllyGoodCharms);
+			Debug.Log ("ally bad charm delta " + deltaAllyBadCharms);
 		}
 
 		//checking distance stuff

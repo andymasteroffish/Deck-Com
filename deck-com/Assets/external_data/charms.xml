@@ -132,6 +132,7 @@
 <script>Charm</script>
 <desc>Hand size reduced by 1 for the match.</desc>
 <hand_size_mod>-1</hand_size_mod>
+<ai_bad_points>2</ai_bad_points>
 </charm>
 <charm idName="acid_burn">
 <name>Acid Burn</name>
@@ -140,5 +141,6 @@
 <script>Charm</script>
 <desc>All damage taken is increased by 1.</desc>
 <general_take_damage_mod>1</general_take_damage_mod>
+<ai_bad_points>1</ai_bad_points>
 </charm>
 </charms>

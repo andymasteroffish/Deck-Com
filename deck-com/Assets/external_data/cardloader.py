@@ -106,7 +106,6 @@ def getCharms():
 
             #We need to store some info for equpment so we can make cards for 'em
             if typeName == "Equipment":
-                print("store "+idName)
                 equipmentNames.append(displayName)
                 equipmentIDs.append(idName)
                 equipmentLevels.append(level)
@@ -171,7 +170,6 @@ def getCards():
 
         #now add equipment
         for i in range(0, len(equipmentNames)):
-            print("add "+equipmentNames[i]) 
             file.write('<card idName="equipment_'+equipmentIDs[i]+'">\n')
             file.write('<name>'+equipmentNames[i]+'</name>\n')
             file.write('<level>'+str(equipmentLevels[i])+'</level>\n')

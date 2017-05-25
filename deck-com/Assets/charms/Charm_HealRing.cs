@@ -19,6 +19,7 @@ public class Charm_HealRing : Charm {
 	public override void setupCustom(){
 		type = Charm.CharmType.Equipment;
 		className = CharmClass.HealRing;
+		aiGoodCharmPoints = 1;
 	}
 
 	public override void setFromParentCustom(Charm parent){
