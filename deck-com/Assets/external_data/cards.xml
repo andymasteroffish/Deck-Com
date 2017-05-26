@@ -261,6 +261,45 @@
 <desc>Destroy equipment</desc>
 <hits_equipment>true</hits_equipment>
 </card>
+<card idName="spit_web">
+<name>Spit Web</name>
+<level>2</level>
+<script>Card_GiveCharm</script>
+<desc>Target is trapped in a web</desc>
+<gift_id>web_binding</gift_id>
+</card>
+<card idName="web_shield">
+<name>Web Shield</name>
+<level>-1</level>
+<script>Card_GiveCharm</script>
+<desc>Prevent the next 2 damage unit would recieve</desc>
+<gift_id>one_time_shield</gift_id>
+</card>
+<card idName="spider_egg">
+<name>Lay Spider Egg</name>
+<level>-1</level>
+<script>Card_SpawnUnit</script>
+<desc>Lays an egg that will hatch into a baby spider after one turn</desc>
+<range>1</range>
+<spawn_id>spider_egg</spawn_id>
+</card>
+<card idName="spider_hatch">
+<name>Hatch</name>
+<level>-1</level>
+<script>Card_SpawnUnit</script>
+<desc>It's a baby!</desc>
+<replace_parent>true</replace_parent>
+<spawn_id>spider_baby</spawn_id>
+</card>
+<card idName="arcane_balistics">
+<name>Arcane Balistics</name>
+<level>2</level>
+<script>Card_DirectDamage</script>
+<desc>Deal 3 damage to target unit ignoring cover and any status effects or items (on you and the target)</desc>
+<damage>3</damage>
+<ignore_target_charms>true</ignore_target_charms>
+<ignore_user_charms>true</ignore_user_charms>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>4</level>

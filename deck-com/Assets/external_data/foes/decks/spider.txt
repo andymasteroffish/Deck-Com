@@ -1,0 +1,10 @@
+move6
+spit_web
+spider_egg
+web_shield
+web_shield
+move5
+move5
+attack
+attack
+attack

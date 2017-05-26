@@ -143,4 +143,35 @@
 <general_take_damage_mod>1</general_take_damage_mod>
 <ai_bad_points>1</ai_bad_points>
 </charm>
+<charm idName="web_binding">
+<name>Webbing</name>
+<type>StatusEffect</type>
+<level>-1</level>
+<script>Charm_Web</script>
+<desc>Unit cannot play cards. The next time unit would take damage, prevent that damage and remove this</desc>
+</charm>
+<charm idName="fangs_small">
+<name>Little Fangs</name>
+<type>Weapon</type>
+<level>-1</level>
+<script>Weapon_Basic</script>
+<damage>1</damage>
+<range>2</range>
+</charm>
+<charm idName="fangs">
+<name>Fangs</name>
+<type>Weapon</type>
+<level>-1</level>
+<script>Weapon_Basic</script>
+<damage>4</damage>
+<range>2</range>
+</charm>
+<charm idName="nothing">
+<name>Nothing</name>
+<type>Weapon</type>
+<level>-1</level>
+<script>Weapon_Basic</script>
+<damage>0</damage>
+<range>0</range>
+</charm>
 </charms>

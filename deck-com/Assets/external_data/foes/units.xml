@@ -37,6 +37,41 @@
       <charm>acid_knife</charm>
     </charms>
   </unit>
+  <unit idName = "spider">
+    <name>Spider</name>
+    <sprite>spider</sprite>
+    <deck>spider</deck>
+    <player_controlled>false</player_controlled>
+    <level>4</level>
+    <base_health>8</base_health>
+    <charms>
+      <charm>fangs</charm>
+    </charms>
+  </unit>
+  <unit idName = "spider_egg">
+    <name>Spider Egg</name>
+    <sprite>spider_egg</sprite>
+    <deck>spider_egg</deck>
+    <player_controlled>false</player_controlled>
+    <level>1</level>
+    <base_health>2</base_health>
+    <hand_size>1</hand_size>
+    <charms>
+      <charm>nothing</charm>
+    </charms>
+  </unit>
+  <unit idName = "spider_baby">
+    <name>Baby Spider</name>
+    <sprite>spider_baby</sprite>
+    <deck>spider_baby</deck>
+    <player_controlled>false</player_controlled>
+    <level>1</level>
+    <base_health>3</base_health>
+    <hand_size>4</hand_size>
+    <charms>
+      <charm>fangs_small</charm>
+    </charms>
+  </unit>
   <unit idName = "grunt">
     <name>Grunt</name>
     <sprite>grunt</sprite>
