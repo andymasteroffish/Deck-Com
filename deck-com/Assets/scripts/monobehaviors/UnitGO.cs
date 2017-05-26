@@ -22,6 +22,13 @@ public class UnitGO : MonoBehaviour {
 
 	public BoxCollider2D boxCol;
 
+	//showing damage
+	private int healthLastFrame;
+	public float hitShakeRange;
+	public float minHitTime, maxHitTime;
+	public int hitTimeMaxDamage;
+
+
 	public void activate(Unit unit){
 		owner = unit;
 
@@ -32,6 +39,8 @@ public class UnitGO : MonoBehaviour {
 		transform.position = owner.CurTile.Pos.getV3 ();
 
 		gameObject.name = "unit " + owner.unitName;
+
+		healthLastFrame = owner.health;
 
 		spriteRend.sprite = unit.sprite;
 		outline.setup ();
@@ -95,6 +104,12 @@ public class UnitGO : MonoBehaviour {
 		if (curTile != owner.CurTile && !doingAnimation) {
 			curTile = owner.CurTile;
 			StartCoroutine (doMoveAnimation (owner.CurTile.Pos.getV3 (), moveTime));
+		}
+
+		//check if we just got hit
+		if (healthLastFrame > owner.health && !doingAnimation) {
+			StartCoroutine (doHitAnimation ( healthLastFrame-owner.health));
+			healthLastFrame = owner.health;
 		}
 
 		boxCol.enabled = owner.mouseColliderIsActive;
@@ -161,7 +176,25 @@ public class UnitGO : MonoBehaviour {
 		}
 
 		deactivate();
+	}
 
+	IEnumerator doHitAnimation(float damage){
+		doingAnimation = true;
+		Vector3 startPos = transform.position;
+
+		float prc = Mathf.Min (hitTimeMaxDamage, damage) / hitTimeMaxDamage;
+		float timer = minHitTime + (maxHitTime-minHitTime) * prc;
+		timer *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
+
+		while (timer > 0) {
+			timer -= Time.deltaTime;
+			Vector3 offset = new Vector3 (Random.Range (-hitShakeRange, hitShakeRange), Random.Range (-hitShakeRange, hitShakeRange), 0);
+			transform.position = startPos + offset;
+			yield return null;
+		}
+
+		transform.position = startPos;
+		doingAnimation = false;
 	}
 
 	public bool areAnimationsHappening(){

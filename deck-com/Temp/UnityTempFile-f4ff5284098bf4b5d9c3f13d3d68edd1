@@ -87,7 +87,6 @@
 'Assets/cards/Card_CoverAttack.cs'
 'Assets/cards/Card_DirectDamage.cs'
 'Assets/cards/Card_Equipment.cs'
-'Assets/cards/Card_GiveBadCharm.cs'
 'Assets/cards/Card_GiveCharm.cs'
 'Assets/cards/Card_Heal.cs'
 'Assets/cards/Card_Loot.cs'
