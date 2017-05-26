@@ -7,6 +7,9 @@ public class CardGO : MonoBehaviour {
 
 	private Card card;
 
+	public GameObject cardFront;
+	public GameObject cardBack;
+
 	public Text nameField;
 	public Text descField;
 	public Text typeField;
@@ -17,7 +20,8 @@ public class CardGO : MonoBehaviour {
 
 	private bool isActive;
 
-	public float xSpacing;	
+	public float xSpacingPlayer, xSpacingAI;
+	private float xSpacing;
 	public float mouseOverYRaise; 
 	public float activeYRaise;	
 
@@ -49,6 +53,8 @@ public class CardGO : MonoBehaviour {
 		gameObject.SetActive (true);
 
 		playerControlled = card.Owner.isPlayerControlled;
+
+		xSpacing = playerControlled ? xSpacingPlayer : xSpacingAI;
 
 		inAiRevealSpot = false;
 
@@ -87,8 +93,21 @@ public class CardGO : MonoBehaviour {
 		colorSprite.color = new Color(card.baseHighlightColor.r, card.baseHighlightColor.g, card.baseHighlightColor.b, 0.3f);
 
 		transform.position = startPos;
-		spriteRend.transform.localPosition = Vector3.zero;
-		StartCoroutine (doMoveAnimation (getPos(), moveTime, false));
+		cardFront.transform.localPosition = Vector3.zero;
+		cardBack.transform.localPosition = Vector3.zero;
+
+		cardFront.transform.localScale = new Vector3 (1, 1, 1);
+		cardBack.transform.localScale = new Vector3 (1, 1, 1);
+
+		if (card.Owner.isPlayerControlled) {
+			cardFront.SetActive (true);
+			cardBack.SetActive (false);
+		} else {
+			cardFront.SetActive (false);
+			cardBack.SetActive (true);
+		}
+
+		StartCoroutine (doMoveAnimation (getPos(), moveTime, false, false));
 	}
 
 	public void deactivate(){
@@ -119,7 +138,7 @@ public class CardGO : MonoBehaviour {
 			}
 
 
-			spriteRend.transform.localPosition = spritePos;
+			cardFront.transform.localPosition = spritePos;
 
 			transform.position = getPos ();
 		}
@@ -141,26 +160,29 @@ public class CardGO : MonoBehaviour {
 		//putting a card in the discard
 		if (!doingAnimation && !card.Owner.deck.Hand.Contains (card)) {
 			StopAllCoroutines();
-			StartCoroutine(doMoveAnimation(endPos, moveTime, true));
+			StartCoroutine(doMoveAnimation(endPos, moveTime, false, true));
 		}
 
 		//moving to a different player
 		if (!doingAnimation && !card.Owner.IsActive){
-			StartCoroutine(doMoveAnimation(startPos, moveTime, true));
+			StartCoroutine(doMoveAnimation(startPos, moveTime, false, true));
 		}
 
 		//player death
 		if (!doingAnimation && card.Owner.isDead){
-			StartCoroutine(doMoveAnimation(startPos, moveTime, true));
+			StartCoroutine(doMoveAnimation(startPos, moveTime, false, true));
 		}
 
 		//showing an AI card
 		if (!doingAnimation && card.revealAICardFlag && !inAiRevealSpot) {
 			inAiRevealSpot = true;
-			StartCoroutine (doMoveAnimation (aiRevealPos, moveTime, false));
+			StartCoroutine (doMoveAnimation (aiRevealPos, moveTime, true, false));
 		}
-			
-		spriteRend.gameObject.SetActive (card.Owner.getIsVisibleToPlayer ());
+
+		if (!card.Owner.getIsVisibleToPlayer ()) {
+			cardFront.SetActive (false);
+			cardBack.SetActive (false);
+		}
 	}
 
 	Vector3 getPos(){
@@ -185,7 +207,11 @@ public class CardGO : MonoBehaviour {
 		}
 	}
 
-	IEnumerator doMoveAnimation(Vector3 target, float time, bool deactivateWhenDone){
+	IEnumerator flipCardSprite(float time){
+		yield return null;
+	}
+
+	IEnumerator doMoveAnimation(Vector3 target, float time, bool flipCard, bool deactivateWhenDone){
 		doingAnimation = true;
 
 		Vector3 startPos = transform.position;
@@ -199,6 +225,24 @@ public class CardGO : MonoBehaviour {
 			float prc = Mathf.Clamp (timer / time, 0, 1);
 			prc = Mathf.Pow (prc, 0.75f);
 			transform.position = Vector3.Lerp (startPos, target, prc);
+
+			if (flipCard) {
+				if (timer < time / 2) {
+					float flipPrc = 1.0f - (timer / (time / 2.0f));
+					Debug.Log ("1st flip " + timer + " " + flipPrc + "%");
+					cardBack.transform.localScale = new Vector3 (flipPrc, 1, 1);
+					cardFront.SetActive (false);
+				} else {
+					float flipPrc = (timer-(time/2.0f)) / (time / 2.0f);
+					if (flipPrc > 1)	flipPrc = 1;
+					Debug.Log ("2nd flip " + timer + " " + flipPrc + "%");
+					cardFront.SetActive (true);
+					cardFront.transform.localScale = new Vector3 (flipPrc, 1, 1);
+					cardBack.SetActive (false);
+				}
+			}
+
+
 			yield return null;
 		}
 

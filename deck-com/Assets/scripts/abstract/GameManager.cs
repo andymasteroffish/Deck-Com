@@ -241,19 +241,18 @@ public class GameManager {
 		cam.setTarget (newActive);
 	}
 
-	void setActiveAIUnit(Unit newActive){
-//		if (newActive == activeAIUnit) {
-//			return;
-//		}
+	public void setActiveAIUnit(Unit newActive, bool startTurn){
 		activeAIUnit = newActive;
 		List<Unit> playerUnits = getAIUnits ();
 		foreach (Unit unit in playerUnits){
 			unit.setActive ( unit==activeAIUnit);
 		}
-		if (newActive.getIsVisibleToPlayer ()) {
+		if (newActive.getIsVisibleToPlayer () && !isPlayerTurn) {
 			cam.setTarget (newActive);
 		}
-		GameManagerTacticsInterface.instance.startNewAIUnitTurn ();
+		if (startTurn) {
+			GameManagerTacticsInterface.instance.startNewAIUnitTurn ();
+		}
 	}
 
 	public void tab(int dir){
@@ -312,7 +311,7 @@ public class GameManager {
 
 		//if we found one, great, otherwise, go to the next turn
 		if (count <= unitsAI.Count) {
-			setActiveAIUnit (unitsAI [idNum]);
+			setActiveAIUnit (unitsAI [idNum], true);
 		} else {
 			startPlayerTurn ();
 		}

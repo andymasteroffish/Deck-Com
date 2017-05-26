@@ -123,6 +123,11 @@ public class UnitGO : MonoBehaviour {
 			owner.GM.activeCard.potentialTargetMouseOver (owner);
 		}
 
+		//testing
+		if (owner.GM.IsPlayerTurn && !owner.isPlayerControlled) {
+			owner.GM.setActiveAIUnit (owner, false);
+		}
+
 		if (GameManagerTacticsInterface.instance.debugShowTileDist) {
 			for (int x = 0; x < GameManagerTacticsInterface.instance.gm.board.cols; x++) {
 				for (int y = 0; y < GameManagerTacticsInterface.instance.gm.board.rows; y++) {
@@ -134,6 +139,11 @@ public class UnitGO : MonoBehaviour {
 	void OnMouseExit(){
 		owner.mouseIsOver = false;
 		owner.GM.targetInfoText.unitRollOff(owner);
+
+		if (owner.GM.IsPlayerTurn && !owner.isPlayerControlled && owner.GM.activeAIUnit == owner) {
+			owner.setActive (false);
+			owner.GM.activeAIUnit = null;
+		}
 	}
 
 
