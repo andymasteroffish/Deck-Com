@@ -97,6 +97,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_Equipment (node);
 		} else if (scriptName == "Card_RemoveCharm") {
 			thisCard = new Card_RemoveCharm (node);
+		} else if (scriptName == "Card_SpawnUnit") {
+			thisCard = new Card_SpawnUnit (node);
 		}
 
 		else{

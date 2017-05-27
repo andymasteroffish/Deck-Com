@@ -59,6 +59,9 @@ public class Card_DirectDamage : Card {
 			text += unit.Charms [i].getDamagePreventionText (this, Owner);
 			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
 		}
+		if (totalPrevention < -damage) {
+			totalPrevention = -damage;
+		}
 
 		//print the total
 		text += "\nDAMAGE: "+(damage+totalPrevention);

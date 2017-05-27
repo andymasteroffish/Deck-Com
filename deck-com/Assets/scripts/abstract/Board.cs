@@ -384,13 +384,14 @@ public class Board {
 		}
 	}
 
-	public void highlightTilesInVisibleRange(Tile source, float range, Color col){
+	public List<Tile> highlightTilesInVisibleRange(Tile source, float range, Color col){
 		clearHighlights ();
 		turnOffUnitMouseColliders ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
 		foreach (Tile tile in selectable) {
 			tile.setHighlighted (true, col);
 		}
+		return selectable;
 	}
 
 	public List<Tile> getTilesInVisibleRange(Tile source, float range){
@@ -495,7 +496,6 @@ public class Board {
 	//Units should have a list of tiles visible to them
 	public void highlightUnitsVisibleToUnit(Unit source, bool includeAllies, bool includeFoes, Color col){
 		clearHighlights ();
-		Debug.Log ("vision " + source.sightRange);
 		if (source.visibleTiles == null) {
 			Debug.Log ("set visible tiles for " + source.unitName + " with vision " + source.sightRange);
 			source.setVisibleTiles ();
@@ -1054,7 +1054,7 @@ public class Board {
 			}
 		}
 
-		//Debug.Log ("found " + moves.Count + " moves for " + units [unitID].deck.Hand [cardID].idName);
+		Debug.Log ("found " + moves.Count + " moves for " + units [unitID].deck.Hand [cardID].idName);
 		thisCard.cancel ();
 		clearHighlights ();
 		return moves;
@@ -1098,8 +1098,19 @@ public class Board {
 		}
 
 		//sanity check
-		if (oldEnemies.Count != curEnemies.Count || oldAllies.Count != curAllies.Count) {
+		if (oldEnemies.Count != curEnemies.Count || oldAllies.Count > curAllies.Count) {
 			Debug.Log ("BAD BAD BAD BAD");
+		}
+		if (oldAllies.Count < curAllies.Count) {
+			int dif = curAllies.Count - oldAllies.Count;
+			info.val += curUnit.aiProfile.newAlliesWeight * dif;
+			if (printInfo) {
+			
+				Debug.Log (dif + " new allies with weight of "+curUnit.aiProfile.newAlliesWeight);
+				for (int i = oldAllies.Count; i < curAllies.Count; i++) {
+					Debug.Log ("  " + curAllies [i].unitName);
+				}
+			}
 		}
 
 		//going through enemies
@@ -1132,9 +1143,6 @@ public class Board {
 			numEnemiesCursed += curEnemies[i].aiSimHasBeenCursedCount;
 
 			//tally up the charms (subtracting the old values from the current values to see if there was change) 
-			Debug.Log(curEnemies[i].Charms.Count+" charms for enemy "+oldEnemies[i].CurTile.Pos.x+","+oldEnemies[i].CurTile.Pos.y);
-			//if (printInfo)Debug.Log("charms for ally "+oldAllies[i].CurTile.Pos.x+","+oldAllies[i].CurTile.Pos.y);
-
 			foreach(Charm c in curEnemies[i].Charms){
 				deltaEnemyGoodCharms += c.aiGoodCharmPoints;
 				deltaEnemyBadCharms += c.aiBadCharmPoints;
@@ -1266,15 +1274,15 @@ public class Board {
 			float change = newVal - oldVal;
 			info.val += change * curAllies[i].aiProfile.distanceToEnemiesWeight;
 
-			if (printInfo) {
-				Debug.Log ("min dist: " + minDistFromClosest);
-				Debug.Log ("max dist: " + maxDistFromClosest);
-				Debug.Log ("old closest: " + oldClosestDistToEnemy);
-				Debug.Log ("new closest: " + newClosestDistToEnemy);
-				Debug.Log ("old val: " + oldVal);
-				Debug.Log ("new val: " + newVal);
-				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
-			}
+//			if (printInfo) {
+//				Debug.Log ("min dist: " + minDistFromClosest);
+//				Debug.Log ("max dist: " + maxDistFromClosest);
+//				Debug.Log ("old closest: " + oldClosestDistToEnemy);
+//				Debug.Log ("new closest: " + newClosestDistToEnemy);
+//				Debug.Log ("old val: " + oldVal);
+//				Debug.Log ("new val: " + newVal);
+//				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
+//			}
 		}
 
 		//how has ally cover changed?
@@ -1313,6 +1321,19 @@ public class Board {
 
 			if (printInfo) {
 				//Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
+			}
+		}
+
+		//were any prefered cards played?
+		Debug.Log("see what sparkles");
+		for (int i = 0; i < info.moves.Count; i++) {
+			if (!info.moves [i].passMove) {
+				string cardName = info.moves [i].cardIDName;
+				Debug.Log ("  played " + info.moves [i].cardIDName);
+				if (curUnit.aiProfile.preferedCardWeights.ContainsKey(cardName)){
+					info.val += curUnit.aiProfile.preferedCardWeights [cardName];
+					Debug.Log("played "+cardName+" worth "+curUnit.aiProfile.preferedCardWeights [cardName]);
+				}
 			}
 		}
 

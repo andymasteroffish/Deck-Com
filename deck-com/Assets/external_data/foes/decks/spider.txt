@@ -1,6 +1,9 @@
+spider_egg
+move1
+spider_egg
+move1
 move6
 spit_web
-spider_egg
 web_shield
 web_shield
 move5

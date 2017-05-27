@@ -40,21 +40,18 @@ public class CharmManager : MonoBehaviour {
 		string scriptName = node ["script"].InnerText;// node.Attributes ["script"].Value;
 		if (scriptName == "Charm") {
 			thisCharm = new Charm (node);
-		}
-		else if (scriptName == "Weapon_Basic") {
+		} else if (scriptName == "Weapon_Basic") {
 			thisCharm = new Weapon_Basic (node);
-		}
-		else if (scriptName == "Charm_ExtraCard") {
+		} else if (scriptName == "Charm_ExtraCard") {
 			thisCharm = new Charm_ExtraCard (node);
-		}
-		else if (scriptName == "Charm_HealRing") {
+		} else if (scriptName == "Charm_HealRing") {
 			thisCharm = new Charm_HealRing (node);
-		}
-		else if (scriptName == "Charm_WeaponBonus") {
+		} else if (scriptName == "Charm_WeaponBonus") {
 			thisCharm = new Charm_WeaponBonus (node);
-		}
-		else if (scriptName == "Charm_OneTimeShield") {
+		} else if (scriptName == "Charm_OneTimeShield") {
 			thisCharm = new Charm_OneTimeShield (node);
+		} else if (scriptName == "Charm_Web") {
+			thisCharm = new Charm_Web (node);
 		}
 		else{
 			Debug.Log ("SCRIPT NAME FOR CHARM NOT FOUND: "+scriptName);
@@ -82,6 +79,9 @@ public class CharmManager : MonoBehaviour {
 		}
 		else if (parent.className == Charm.CharmClass.OneTimeShield) {
 			thisCharm = new Charm_OneTimeShield (parent);
+		}
+		else if (parent.className == Charm.CharmClass.Web) {
+			thisCharm = new Charm_Web (parent);
 		}
 		else{
 			Debug.Log ("SOMETHING WENT WRONG MAKING: "+parent.className);

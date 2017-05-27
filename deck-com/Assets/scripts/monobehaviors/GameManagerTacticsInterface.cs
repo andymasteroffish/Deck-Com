@@ -204,7 +204,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	}
 
 	public void endPlayerTurn(){
-		if (playerTurnTimer > minTimeOnPlayerTurn) {
+		if (playerTurnTimer > minTimeOnPlayerTurn || GameManagerTacticsInterface.instance.debugDoNotShuffle) {
 			gm.endPlayerTurn ();
 			autoPlayAITurn = false;
 		}
@@ -258,7 +258,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				}
 				//otherwise, just move on
 				else {
-					autoPlayAITurn = true;;
+					autoPlayAITurn = true;
 				}
 
 				//testing

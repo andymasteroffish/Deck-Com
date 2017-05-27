@@ -274,6 +274,7 @@
 <script>Card_GiveCharm</script>
 <desc>Prevent the next 2 damage unit would recieve</desc>
 <gift_id>one_time_shield</gift_id>
+<any_unit>false</any_unit>
 </card>
 <card idName="spider_egg">
 <name>Lay Spider Egg</name>

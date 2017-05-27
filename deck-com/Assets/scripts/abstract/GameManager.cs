@@ -171,7 +171,7 @@ public class GameManager {
 		for(int i=unitsPlayer.Count-1; i>=0; i--){
 			unitsPlayer[i].endTurn ();
 			//testing
-			unitsPlayer[i].deck.printDeck();
+			//unitsPlayer[i].deck.printDeck();
 		}
 		//check if anything (including foes) has clean up effects
 		for (int i = board.units.Count-1; i >= 0; i--) {
@@ -182,7 +182,7 @@ public class GameManager {
 	}
 
 	public void advanceAITurn(){
-		Debug.Log ("do ai tirn step " + activeAIUnit.curAITurnStep);
+		Debug.Log ("do ai turn step " + activeAIUnit.curAITurnStep);
 		board.resolveMove (activeAIUnit.aiTurnInfo.moves [activeAIUnit.curAITurnStep]);
 		activeAIUnit.curAITurnStep++;
 		Debug.Log ("advance");
@@ -385,16 +385,23 @@ public class GameManager {
 			TurnInfo turn = new TurnInfo (move);
 			//generate a board with this move
 			//Profiler.BeginSample("resolve and return board");
+			Debug.Log("resolving "+move.cardIDName+" pass: "+move.passMove);
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
 			//Profiler.EndSample ();
 
 			//find all of the moves the AI could make from there
-			TurnInfo followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth+1);
+			TurnInfo followingMoves = null;
+			if (!newBoard.units [unitID].isDead) {
+				followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth + 1);
+			} else {
+				Debug.Log ("I'm dead lol");
+			}
 
 			//if there were move moves, add them to the turn
 			if (followingMoves != null) {
 				turn.addMoves (followingMoves);
 			} else {
+				Debug.Log ("time to compare");
 				//if there were no further moves, this is the end of this set and we should evaluate the board
 				Profiler.BeginSample("compare boards");
 				newBoard.compareBoardSates (originalBoard, newBoard.units [unitID], ref turn, false);
@@ -443,12 +450,13 @@ public class GameManager {
 			Debug.Log ("---AI THINKING---");
 			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
 			Debug.Log ("on frame " + (Time.frameCount-1));
+			returnVal.print (board);
 		}
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
 			Debug.Log ("------TEST-------");
-			TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
+			//TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
 
 			Board tempBoard = ObjectPooler.instance.getBoard();
 			tempBoard.setFromParent(originalBoard);
@@ -456,8 +464,8 @@ public class GameManager {
 			foreach (MoveInfo move in returnVal.moves) {
 				tempBoard.resolveMove (move);
 			}
-			tempBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref temp, true);
-			temp.print (board);
+			tempBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref returnVal, true);
+			//temp.print (board);
 		}
 
 

@@ -324,11 +324,16 @@ public class Card {
 			text += owner.Charms [i].getWeaponDamageModifierText (this, unit);
 		}
 
+		int damage = getWeaponDamageToUnit (unit, damageMod);
+
 		//check if the unit has any charms that would alter damage values
 		int totalPrevention = 0;
 		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
 			text += unit.Charms [i].getDamagePreventionText (this, Owner);
 			totalPrevention += unit.Charms [i].getDamageTakenMod (this, owner);
+		}
+		if (totalPrevention < -damage) {
+			totalPrevention = -damage;
 		}
 
 		//calculate cover
@@ -336,7 +341,7 @@ public class Card {
 		text += "\n"+getInfoStringForCover (coverVal)+"\n";
 
 		//print the total
-		text += "\nDAMAGE: "+(getWeaponDamageToUnit(unit, damageMod)+totalPrevention);
+		text += "\nDAMAGE: "+(damage+totalPrevention);
 
 		//set the target info text
 		owner.GM.targetInfoText.turnOn(text, unit);

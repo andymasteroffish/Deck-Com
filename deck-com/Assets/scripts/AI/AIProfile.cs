@@ -30,7 +30,11 @@ public class AIProfile {
 
 	public float distanceToEnemiesWeight;
 
+	public float newAlliesWeight;
+
 	public float[,] coverChange;	//first value represents what it was, second what it is now
+
+	public Dictionary<string, float> preferedCardWeights = new Dictionary<string, float>();
 
 	//need to factor in healing allies or enemies as their own stat
 
@@ -69,6 +73,8 @@ public class AIProfile {
 		acceptableDistanceRangeToClosestEnemy = 1.5f;
 
 		distanceToEnemiesWeight = 1;
+
+		newAlliesWeight = 4;
 
 		coverChange = new float[3, 3];
 		for (int i=0; i<3; i++){
@@ -127,7 +133,10 @@ public class AIProfile {
 				deltaAllyGoodCharmWeight = value;
 			} else if (nodeName == "deltaAllyBadCharmWeight") {
 				deltaAllyBadCharmWeight = value;
-			} else if (nodeName == "coverNoneToPart") {
+			} else if (nodeName == "newAlliesWeight") {
+				newAlliesWeight = value;
+			}
+			else if (nodeName == "coverNoneToPart") {
 				coverChange [(int)Tile.Cover.None, (int)Tile.Cover.Part] = value;
 			} else if (nodeName == "coverNoneToFull") {
 				coverChange [(int)Tile.Cover.None, (int)Tile.Cover.Full] = value;
@@ -139,7 +148,16 @@ public class AIProfile {
 				coverChange [(int)Tile.Cover.Full, (int)Tile.Cover.None] = value;
 			} else if (nodeName == "coverFullToPart") {
 				coverChange [(int)Tile.Cover.Full, (int)Tile.Cover.Part] = value;
-			} else {
+			} 
+
+			else if (nodeName == "prefered_card") {
+				foreach (XmlNode info in child.ChildNodes) {
+					preferedCardWeights.Add(info.Name, float.Parse (info.InnerText));
+					Debug.Log ("love " + info.Name + " for " + float.Parse (info.InnerText));
+				}
+			}
+
+			else {
 				Debug.Log ("unkown AI atribute: " + nodeName);
 			}
 

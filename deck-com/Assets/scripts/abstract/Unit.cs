@@ -135,6 +135,10 @@ public class Unit {
 		board = _board;
 		curTile = startTile;
 
+		if (board.isAISim) {
+			useGO = false;
+		}
+
 		health = baseHealth;
 		isDead = false;
 
@@ -346,7 +350,7 @@ public class Unit {
 	}
 
 	public void wakeUp(){
-		Debug.Log ("wake up " + unitName);
+		//Debug.Log ("wake up " + unitName);
 		isAwake = true;
 		foreach (Unit mate in podmates) {
 			if (!mate.isAwake) {

@@ -229,13 +229,11 @@ public class CardGO : MonoBehaviour {
 			if (flipCard) {
 				if (timer < time / 2) {
 					float flipPrc = 1.0f - (timer / (time / 2.0f));
-					Debug.Log ("1st flip " + timer + " " + flipPrc + "%");
 					cardBack.transform.localScale = new Vector3 (flipPrc, 1, 1);
 					cardFront.SetActive (false);
 				} else {
 					float flipPrc = (timer-(time/2.0f)) / (time / 2.0f);
 					if (flipPrc > 1)	flipPrc = 1;
-					Debug.Log ("2nd flip " + timer + " " + flipPrc + "%");
 					cardFront.SetActive (true);
 					cardFront.transform.localScale = new Vector3 (flipPrc, 1, 1);
 					cardBack.SetActive (false);
