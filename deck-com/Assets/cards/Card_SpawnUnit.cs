@@ -35,33 +35,30 @@ public class Card_SpawnUnit : Card {
 
 	public override void mouseEnterEffects(){
 
-		//filter out tiles with units (except for the one this unit is on if it will kill itself)
-		List<Tile> tiles = Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
-		foreach (Tile tile in tiles) {
-			if (Owner.board.getUnitOnTile (tile) != null) {
-				tile.setHighlighted (false);
-			}
-		}
-		if (replace_parent) {
-			Owner.CurTile.setHighlighted (true, baseHighlightColor);
-		}
+		doHighlight ();
 
 	}
 		
 	public override void selectCardCustom(){
 		WaitingForTile = true;
 
+		doHighlight ();
+	}
+
+	private void doHighlight(){
 		//filter out tiles with units (except for the one this unit is on if it will kill itself)
 		List<Tile> tiles = Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
 		foreach (Tile tile in tiles) {
 			if (Owner.board.getUnitOnTile (tile) != null) {
 				tile.setHighlighted (false);
 			}
+			if (tile.CoverVal != Tile.Cover.None) {
+				tile.setHighlighted (false);
+			}
 		}
 		if (replace_parent) {
 			Owner.CurTile.setHighlighted (true, baseHighlightColor);
 		}
-
 	}
 
 	public override void passInTileCustom(Tile tile){

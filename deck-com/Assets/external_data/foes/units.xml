@@ -45,9 +45,9 @@
     <player_controlled>false</player_controlled>
     <level>4</level>
     <base_health>8</base_health>
-    <hand_size>2</hand_size>
     <charms>
       <charm>fangs</charm>
+      <charm>one_time_shield</charm>
     </charms>
   </unit>
   <unit idName = "spider_egg">
@@ -67,6 +67,7 @@
     <name>Baby Spider</name>
     <sprite>spider_baby</sprite>
     <deck>spider_baby</deck>
+    <ai_profile>aggro_melee</ai_profile>
     <player_controlled>false</player_controlled>
     <level>1</level>
     <base_health>3</base_health>

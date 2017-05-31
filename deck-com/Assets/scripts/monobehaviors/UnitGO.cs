@@ -37,6 +37,8 @@ public class UnitGO : MonoBehaviour {
 
 		curTile = owner.CurTile;
 		transform.position = owner.CurTile.Pos.getV3 ();
+		transform.localScale = Vector3.one;
+		spriteRend.gameObject.transform.localScale = Vector3.one;
 
 		gameObject.name = "unit " + owner.unitName;
 

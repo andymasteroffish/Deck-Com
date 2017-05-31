@@ -25,7 +25,7 @@ public class Charm_OneTimeShield : Charm {
 		damagePrevented = ((Charm_OneTimeShield)parent).damagePrevented;
 	}
 
-	public override int getDamageTakenMod(Card card, Unit source){
+	public override int getDamageTakenModCustom(Card card, Unit source){
 
 		return -damagePrevented;
 	}

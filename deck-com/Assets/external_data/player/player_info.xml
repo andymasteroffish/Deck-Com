@@ -11,6 +11,7 @@
     <currently_active>false</currently_active>
     <charms>
       <charm>long_bow</charm>
+      <charm>focus_charm</charm>
     </charms>
   </unit>
   <unit idName="wizard">

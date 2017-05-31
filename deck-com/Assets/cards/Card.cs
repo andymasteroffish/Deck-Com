@@ -31,6 +31,10 @@ public class Card {
 	public int bonusCards;
 	public int bonusHeal;
 
+	//ignoring charms
+	public bool ignoreTargetCharms;
+	public bool ignoreCasterCharms;
+
 	//adding the card to a deck
 	private int costToAddToDeck;
 
@@ -79,6 +83,19 @@ public class Card {
 		}
 		if (node ["bonus_heal"] != null) {
 			bonusHeal = int.Parse (node ["bonus_heal"].InnerText);
+		}
+
+		//will this ignore any charms
+		ignoreTargetCharms = false;
+		if (node["ignore_target_charms"] != null){
+			ignoreTargetCharms = bool.Parse (node ["ignore_target_charms"].InnerText);
+			Debug.Log (idName + " ignore target charms " + ignoreTargetCharms);
+		}
+
+		ignoreCasterCharms = false;
+		if (node["ignore_user_charms"] != null){
+			ignoreCasterCharms = bool.Parse (node ["ignore_user_charms"].InnerText);
+			Debug.Log (idName + " ignoreCasterCharms " + ignoreCasterCharms);
 		}
 
 		//default values

@@ -9,6 +9,8 @@ public class Card_DirectDamage : Card {
 	public float range;
 	public bool useLineOfSight;
 
+
+
 	public Card_DirectDamage(XmlNode _node){
 		node = _node;
 
@@ -21,6 +23,9 @@ public class Card_DirectDamage : Card {
 			useLineOfSight = false;
 			range = float.Parse (node ["range"].InnerXml);
 		}
+
+
+
 	}
 
 	public override void setupCustom(){
@@ -53,12 +58,14 @@ public class Card_DirectDamage : Card {
 			text += Owner.Charms [i].getGeneralDamageModifierText (this, unit);
 		}
 
+
 		//check if the unit has any charms that would alter damage values
 		int totalPrevention = 0;
 		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
 			text += unit.Charms [i].getDamagePreventionText (this, Owner);
 			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
 		}
+
 		if (totalPrevention < -damage) {
 			totalPrevention = -damage;
 		}
@@ -83,8 +90,10 @@ public class Card_DirectDamage : Card {
 	public override void passInUnitCustom(Unit unit){
 		int damageVal = damage;
 
-		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
+		if (!ignoreCasterCharms) {
+			for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+				damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
+			}
 		}
 
 		if (damageVal < 0) {

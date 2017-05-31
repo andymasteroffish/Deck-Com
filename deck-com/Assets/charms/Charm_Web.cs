@@ -16,11 +16,10 @@ public class Charm_Web : Charm {
 	public override void setupCustom(){
 		type = Charm.CharmType.StatusEffect;
 		className = CharmClass.Web;
-		aiGoodCharmPoints = 1;
 	}
 
 
-	public override int getDamageTakenMod(Card card, Unit source){
+	public override int getDamageTakenModCustom(Card card, Unit source){
 
 		return -9999;
 	}

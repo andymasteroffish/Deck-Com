@@ -219,11 +219,23 @@ public class Charm  {
 
 	//modifiers
 	public virtual int getCardActionCostMod(Card card){return 0;}
+
 	public virtual int getGeneralDamageMod(Card card, Unit target){return 0;}
+
 	public virtual int getWeaponDamageMod(Card card, Unit target){return 0;}
+
 	public virtual int getWeaponRangeMod(Card card){return 0;}
-	public virtual int getDamageTakenMod(Card card, Unit source){return generalTakeDamageMod;}
+
+	public int getDamageTakenMod(Card card, Unit source){
+		if (card.ignoreTargetCharms) {
+			return 0;
+		}
+		return getDamageTakenModCustom (card, source);
+	}
+	public virtual int getDamageTakenModCustom(Card card, Unit source){return generalTakeDamageMod;}
+
 	public virtual int getHealMod(Card card, Unit target){return 0;}
+
 	public virtual int getHandSizeMod(){return handSizeMod;}
 
 	//writing modifiers in the info box
