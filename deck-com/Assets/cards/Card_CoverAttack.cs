@@ -52,7 +52,7 @@ public class Card_CoverAttack : Card {
 		doDamageToUnit( unit, damageVal );
 
 		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			Owner.Charms [i].dealWeaponDamage (unit, damageVal);
+			Owner.Charms [i].dealWeaponDamage (this, unit, damageVal);
 		}
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();

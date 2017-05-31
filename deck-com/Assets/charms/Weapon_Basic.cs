@@ -39,14 +39,14 @@ public class Weapon_Basic : Charm {
 		charmToGive = ((Weapon_Basic)parent).charmToGive;
 	}
 
-	public override void dealWeaponDamage(Unit target, int damage){
+	public override void dealWeaponDamageCustom(Card card, Unit target, int damage){
 		if (charmToGive != "none") {
 			//target.aiSimHasBeenCursedCount++;
 			target.addCharm (charmToGive);
 		}
 	}
 
-	public override int getCardActionCostMod(Card card){
+	public override int getCardActionCostModCustom(Card card){
 		if (card.type == Card.CardType.Attack) {
 			return attackCardActionCostMod;
 		}

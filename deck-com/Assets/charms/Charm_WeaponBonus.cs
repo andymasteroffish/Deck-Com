@@ -49,10 +49,10 @@ public class Charm_WeaponBonus : Charm {
 		rangeMod = ((Charm_WeaponBonus)parent).rangeMod;
 	}
 
-	public override int getWeaponDamageMod(Card card, Unit target){
+	public override int getWeaponDamageModCustom(Card card, Unit target){
 		return damageMod;
 	}
-	public override int getWeaponRangeMod(Card card){
+	public override int getWeaponRangeModCustom(Card card){
 		return rangeMod;
 	}
 }

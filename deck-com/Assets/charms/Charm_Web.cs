@@ -24,11 +24,11 @@ public class Charm_Web : Charm {
 		return -9999;
 	}
 
-	public override void takeDamage(Card card, Unit source){
+	public override void takeDamageCustom(Card card, Unit source){
 		Owner.removeCharm (this);
 	}
 
-	public override int getCardActionCostMod(Card card){
+	public override int getCardActionCostModCustom(Card card){
 		return 999;
 	}
 }

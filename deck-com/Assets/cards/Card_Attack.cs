@@ -42,7 +42,7 @@ public class Card_Attack : Card {
 		doDamageToUnit( unit, damageVal );
 
 		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			Owner.Charms [i].dealWeaponDamage (unit, damageVal);
+			Owner.Charms [i].dealWeaponDamageCustom (this, unit, damageVal);
 		}
 		//doWeaponDamageToUnit (unit, damageAdjust);
 		finish ();

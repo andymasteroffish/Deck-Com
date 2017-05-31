@@ -57,7 +57,7 @@ public class Card_MoveAndAttack : Card {
 			int damageVal = getWeaponDamageToUnit (unit, damageMod);
 			doDamageToUnit( unit, damageVal );
 			for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-				Owner.Charms [i].dealWeaponDamage (unit, damageVal);
+				Owner.Charms [i].dealWeaponDamage (this, unit, damageVal);
 			}
 			//doWeaponDamageToUnit (unit, damageMod);
 			finish ();

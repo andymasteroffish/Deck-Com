@@ -38,7 +38,7 @@ public class Charm_HealRing : Charm {
 		}
 	}
 
-	public override int getHealMod(Card card, Unit target){
+	public override int getHealModCustom(Card card, Unit target){
 		return healIncrease;
 	}
 }

@@ -30,7 +30,7 @@ public class Charm_OneTimeShield : Charm {
 		return -damagePrevented;
 	}
 
-	public override void takeDamage(Card card, Unit source){
+	public override void takeDamageCustom(Card card, Unit source){
 		Owner.removeCharm (this);
 	}
 }

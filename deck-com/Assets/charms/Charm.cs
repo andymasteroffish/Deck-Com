@@ -206,25 +206,65 @@ public class Charm  {
 	public virtual void turnEndPostDiscard(){}
 
 	public void cardPlayed(Card card){
+		if (card.ignoreCasterCharms) {
+			return;
+		}
 		cardPlayedCustom (card);
 		if (expiresAfterAttack && card.type == Card.CardType.Attack) {
 			Owner.removeCharm (this);
 		}
 	}
-	public virtual void cardPlayedCustom(Card card){
-	}
+	public virtual void cardPlayedCustom(Card card){}
 
-	public virtual void takeDamage (Card card, Unit source){}
-	public virtual void dealWeaponDamage(Unit target, int damage){}
+	public void takeDamage (Card card, Unit source){
+		if (card.ignoreTargetCharms) {
+			return;
+		}
+		takeDamageCustom (card, source);
+	}
+	public virtual void takeDamageCustom (Card card, Unit source){}
+
+	public void dealWeaponDamage(Card card, Unit target, int damage){
+		if (card.ignoreCasterCharms) {
+			return;
+		}
+		dealWeaponDamageCustom (card, target, damage);
+
+	}
+	public virtual void dealWeaponDamageCustom(Card card, Unit target, int damage){}
 
 	//modifiers
-	public virtual int getCardActionCostMod(Card card){return 0;}
+	public int getCardActionCostMod(Card card){
+		if (card.ignoreCasterCharms) {
+			return 0;
+		}
+		return getCardActionCostModCustom (card);
+	}
+	public virtual int getCardActionCostModCustom(Card card){return 0;}
 
-	public virtual int getGeneralDamageMod(Card card, Unit target){return 0;}
+	public int getGeneralDamageMod(Card card, Unit target){
+		if (card.ignoreCasterCharms) {
+			return 0;
+		}
+		return getGeneralDamageModCustom (card, target);
+	}
+	public virtual int getGeneralDamageModCustom(Card card, Unit target){return 0;}
 
-	public virtual int getWeaponDamageMod(Card card, Unit target){return 0;}
+	public int getWeaponDamageMod(Card card, Unit target){
+		if (card.ignoreCasterCharms) {
+			return 0;
+		}
+		return getWeaponDamageModCustom (card, target);
+	}
+	public virtual int getWeaponDamageModCustom(Card card, Unit target){return 0;}
 
-	public virtual int getWeaponRangeMod(Card card){return 0;}
+	public int getWeaponRangeMod(Card card){
+		if (card.ignoreCasterCharms) {
+			return 0;
+		}
+		return getWeaponRangeModCustom (card);
+	}
+	public virtual int getWeaponRangeModCustom(Card card){return 0;}
 
 	public int getDamageTakenMod(Card card, Unit source){
 		if (card.ignoreTargetCharms) {
@@ -234,9 +274,18 @@ public class Charm  {
 	}
 	public virtual int getDamageTakenModCustom(Card card, Unit source){return generalTakeDamageMod;}
 
-	public virtual int getHealMod(Card card, Unit target){return 0;}
+	public int getHealMod(Card card, Unit target){
+		if (card.ignoreCasterCharms) {
+			return 0;
+		}
+		return getHealModCustom (card, target);
+	}
+	public virtual int getHealModCustom(Card card, Unit target){return 0;}
 
-	public virtual int getHandSizeMod(){return handSizeMod;}
+	public int getHandSizeMod(){
+		return getHandSizeModCustom();
+	}
+	public virtual int getHandSizeModCustom(){return handSizeMod;}
 
 	//writing modifiers in the info box
 	public string getWeaponDamageModifierText(Card card, Unit target){
