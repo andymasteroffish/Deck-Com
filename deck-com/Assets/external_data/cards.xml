@@ -301,6 +301,19 @@
 <ignore_target_charms>true</ignore_target_charms>
 <ignore_user_charms>true</ignore_user_charms>
 </card>
+<card idName="bite_n_scurry">
+<name>Bite 'n Scurry</name>
+<level>3</level>
+<script>Card_Attack</script>
+<desc>Attack and get a bonus move</desc>
+<bonus_card_id>scurry</bonus_card_id>
+</card>
+<card idName="scurry">
+<name>Scurry</name>
+<level>-1</level>
+<script>Card_MovementSelfDestruct</script>
+<range>4</range>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>4</level>

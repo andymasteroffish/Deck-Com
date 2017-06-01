@@ -30,6 +30,7 @@ public class Card {
 	public int bonusActions;
 	public int bonusCards;
 	public int bonusHeal;
+	public string bonusCardID;
 
 	//ignoring charms
 	public bool ignoreTargetCharms;
@@ -74,15 +75,23 @@ public class Card {
 
 		//any bonuses?
 		bonusActions = 0;
-		bonusCards = 0;
 		if (node ["bonus_actions"] != null) {
 			bonusActions = int.Parse (node ["bonus_actions"].InnerText);
 		}
+
+		bonusCards = 0;
 		if (node ["bonus_cards"] != null) {
 			bonusCards = int.Parse (node ["bonus_cards"].InnerText);
 		}
+
+		bonusHeal = 0;
 		if (node ["bonus_heal"] != null) {
 			bonusHeal = int.Parse (node ["bonus_heal"].InnerText);
+		}
+
+		bonusCardID = "none";
+		if (node ["bonus_card_id"] != null) {
+			bonusCardID = node ["bonus_card_id"].InnerText;
 		}
 
 		//will this ignore any charms
@@ -219,6 +228,11 @@ public class Card {
 		}
 		if (bonusHeal > 0) {
 			owner.heal (bonusHeal);
+		}
+		if (bonusCardID != "none") {
+			Card gift = CardManager.instance.getCardFromIdName (bonusCardID);
+			gift.setup (owner, owner.deck);
+			owner.deck.addCardToHand (gift);
 		}
 
 		owner.markCardPlayed (this);

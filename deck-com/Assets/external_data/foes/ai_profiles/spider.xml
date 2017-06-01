@@ -1,4 +1,5 @@
 <ai>
+<preferedDistToClosestEnemy>5</preferedDistToClosestEnemy>
 <prefered_card>
 	<spider_egg>3</spider_egg>
 	<spider_hatch>999</spider_hatch>

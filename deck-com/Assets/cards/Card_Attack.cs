@@ -11,8 +11,16 @@ public class Card_Attack : Card {
 	public Card_Attack(XmlNode _node){
 		node = _node;
 
-		rangeMod = int.Parse (node ["range_mod"].InnerText);
-		damageMod = int.Parse (node ["damage_mod"].InnerText);
+		rangeMod = 0;
+		if (node ["range_mod"] != null) {
+			rangeMod = int.Parse (node ["range_mod"].InnerText);
+		}
+
+		damageMod = 0;
+		if (node ["damage_mod"] != null) {
+			damageMod = int.Parse (node ["damage_mod"].InnerText);
+		}
+
 	}
 
 	public override void setupCustom(){

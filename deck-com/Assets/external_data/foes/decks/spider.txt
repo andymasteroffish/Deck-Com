@@ -1,3 +1,9 @@
+move6
+bite_n_scurry
+attack
+move1
+move1
+move1
 spider_egg
 move1
 spider_egg

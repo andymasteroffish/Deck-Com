@@ -47,7 +47,6 @@
     <base_health>8</base_health>
     <charms>
       <charm>fangs</charm>
-      <charm>one_time_shield</charm>
     </charms>
   </unit>
   <unit idName = "spider_egg">

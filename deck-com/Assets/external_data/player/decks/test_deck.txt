@@ -1,5 +1,4 @@
-spider_egg
-spider_hatch
+bite_n_scurry
 move6
 attack
 arcane_balistics

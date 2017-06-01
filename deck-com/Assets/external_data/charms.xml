@@ -148,8 +148,8 @@
 <type>StatusEffect</type>
 <level>-1</level>
 <script>Charm_Web</script>
-<desc>Unit cannot play cards. The next time unit would take damage, prevent that damage and remove this</desc>
-<ai_bad_points>0.1</ai_bad_points>
+<desc>Unit cannot play cards. The next time unit would take damage, prevent it and remove this</desc>
+<ai_bad_points>1</ai_bad_points>
 </charm>
 <charm idName="fangs_small">
 <name>Little Fangs</name>
