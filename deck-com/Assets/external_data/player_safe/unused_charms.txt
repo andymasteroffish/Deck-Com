@@ -1,7 +1,0 @@
-extra_card
-extra_card
-goblin_king_wep
-wizard_staff
-heal_ring
-aim_charm
-goblin_wep

@@ -46,7 +46,7 @@ public class EndGameManager {
 		LootReward reward = new LootReward();
 		int level = lootCard.level;
 
-		reward.money = getRewardMoney(level);
+		reward.money = 0;//getRewardMoney(level)/2f;
 
 		List<string> cardsThisLevel = CardManager.instance.getIDListAtLevel (level);
 		List<string> cardsNextLevel = CardManager.instance.getIDListAtLevel (level+1);
@@ -95,7 +95,7 @@ public class EndGameManager {
 	}
 
 	int getRewardMoney(int level){
-		float val = Mathf.Pow (level, 1.3f) * 4;
+		float val = Mathf.Pow (level, 1.3f) * 3;
 		float wiggle = val * 0.4f;
 		val += Random.Range (-wiggle, wiggle);
 		return (int) val;

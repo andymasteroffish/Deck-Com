@@ -161,6 +161,7 @@ public class DBManager {
 
 		xmlText += "<info>\n";
 		xmlText += "<money>" + money + "</money>\n";
+		xmlText += "<cur_level>" + curLevel + "</cur_level>\n";
 		xmlText += "</info>\n";
 
 		for (int i = 0; i < decks.Count; i++) {

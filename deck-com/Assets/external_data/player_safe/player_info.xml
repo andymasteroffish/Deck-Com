@@ -1,6 +1,6 @@
 <player>
   <info>
-    <money>15</money>
+    <money>5</money>
     <cur_level>1</cur_level>
   </info>
   <unit idName = "test_player">
@@ -21,7 +21,6 @@
     <currently_active>true</currently_active>
     <charms>
       <charm>wizard_staff</charm>
-      <charm>heal_ring</charm>
     </charms>
   </unit>
   <unit idName = "ranger">

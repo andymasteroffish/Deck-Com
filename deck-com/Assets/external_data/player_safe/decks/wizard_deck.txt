@@ -1,8 +1,8 @@
 move3
 move4
 move4
+heal_ring
 move5
-teleport
 attack
 attack
 heal

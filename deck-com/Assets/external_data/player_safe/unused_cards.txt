@@ -1,6 +1,0 @@
-teleport
-teleport
-move4
-grenade
-blade_dash
-shield

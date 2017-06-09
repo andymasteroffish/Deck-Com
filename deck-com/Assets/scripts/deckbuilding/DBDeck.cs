@@ -170,6 +170,7 @@ public class DBDeck {
 		xmlText += "<sprite>" + spriteName + "</sprite>\n";
 		xmlText += "<deck>" + deckListShortName + "</deck>\n";
 		xmlText += "<player_controlled>true</player_controlled>\n";
+		xmlText += "<currently_active>true</currently_active>\n";
 
 		xmlText += "<charms>\n";
 		xmlText += "<charm>" + curWeapon.idName + "</charm>\n";

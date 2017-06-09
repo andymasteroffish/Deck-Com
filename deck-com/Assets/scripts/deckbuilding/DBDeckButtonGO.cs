@@ -73,7 +73,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 		if (DBManagerInterface.instance.manager.activeDeck == null) {
 			transform.position = homePos;
 		} else {
-			transform.position = homePos - new Vector3 (10, 0, 0);
+			transform.position = homePos - new Vector3 (50, 0, 0);
 		}
 
 		//putting it up top when the deck is selected
