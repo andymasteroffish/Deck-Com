@@ -19,6 +19,9 @@ public class LootRewardOpenGO : MonoBehaviour {
 	//public float cardAngleSpread;
 	public float cardDistX, cardDistY;
 
+	public float cardY;
+	public float moneyY;
+
 	public float danceSpeed, danceSpeedRange;
 	private float danceAngleRange;
 
@@ -39,7 +42,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 		//placememt
 		Vector3 centerPos = GameObject.Find ("lootCenterPos").transform.position;
 		targetPos.x = centerPos.x + (orderPrc * 2 - 1) * cardDistX;
-		targetPos.y = centerPos.y + 1f - Mathf.Abs((orderPrc-0.5f) * cardDistY);// 1f;
+		targetPos.y = centerPos.y + cardY - Mathf.Abs((orderPrc-0.5f) * cardDistY);// 1f;
 		targetPos.z = 0;
 
 		//general stuff
@@ -48,6 +51,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 
 	public void setup(int money){
 		targetPos = GameObject.Find ("lootCenterPos").transform.position;
+		targetPos.y += moneyY;
 		spriteRend.sprite = coinFrameSprite;
 		nameField.text = "";
 		descField.text = "";

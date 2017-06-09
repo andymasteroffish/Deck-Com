@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Loot {
 
-	public enum Type{money, booster};
+	//public enum Type{money, booster};
 
 	private bool createGO = true;
 
-	public Type type;
+	//public Type type;
 	public int level;
 
 	//loot lives on a unit until that unit dies
@@ -21,9 +21,7 @@ public class Loot {
 	public Loot(Unit holder, int curArea){
 		curUnit = holder;
 		curTile = null;
-		type = Random.value > 0.5f ? Loot.Type.booster : Loot.Type.money;
 		level = curArea;
-		//Debug.Log ("loot level: " + level);
 		isDone = false;
 	}
 
@@ -61,7 +59,7 @@ public class Loot {
 	public void collect(Unit collector){
 		//give them a loot card
 		Card_Loot card = (Card_Loot) CardManager.instance.getCardFromIdName ("loot");
-		card.lootSetup (type, level);
+		card.lootSetup (level);
 		card.setup (collector, collector.deck);
 		collector.deck.addCardToHand (card);
 

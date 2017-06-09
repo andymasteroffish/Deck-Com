@@ -4,8 +4,7 @@ using UnityEngine;
 using System.Xml;
 
 public class Card_Loot : Card {
-
-	public Loot.Type lootType;
+	
 	public int level;
 
 	public Card_Loot(XmlNode _node){
@@ -14,8 +13,7 @@ public class Card_Loot : Card {
 		baseActionCost = 1000;
 	}
 
-	public void lootSetup(Loot.Type _type, int _level){
-		lootType = _type;
+	public void lootSetup(int _level){
 		level = _level;
 	}
 

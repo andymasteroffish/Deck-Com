@@ -109,6 +109,9 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 		if (reward.cards.Count > 0) {
 			for (int i = 0; i < reward.cards.Count; i++) {
 				float prc = (float)i / (float)(reward.cards.Count - 1);
+				if (reward.cards.Count == 1) {
+					prc = 0.5f;
+				}
 				Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ().setup (reward.cards [i], prc);
 			}
 		}

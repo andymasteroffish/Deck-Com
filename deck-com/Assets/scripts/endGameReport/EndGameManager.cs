@@ -14,12 +14,7 @@ public class EndGameManager {
 		rewards = new List<LootReward> ();
 		//generate the rewards
 		for (int i = 0; i < lootCards.Count; i++) {
-			if (lootCards [i].lootType == Loot.Type.booster) {
-				rewards.Add (getBoosterRewardFromLootCard (lootCards [i]));
-			}
-			if (lootCards [i].lootType == Loot.Type.money) {
-				rewards.Add (getMoneyRewardFromLootCard (lootCards [i]));
-			}
+			rewards.Add (getRewardFromLootCard (lootCards [i]));
 		}
 
 		//add it all up
@@ -32,44 +27,42 @@ public class EndGameManager {
 			}
 		}
 
+		Debug.Log ("money total: " + totalMoneyEarned);
+
 		//save 'em!
 		saveMoney(totalMoneyEarned);
 		saveCards (newCards);
 
 	}
 
-	private LootReward getMoneyRewardFromLootCard(Card_Loot lootCard){
-		LootReward reward = new LootReward();
-		int level = lootCard.level;
-
-		float baseValue = 6 * level;
-		float variance = 2 * level;
-
-		reward.money = Mathf.RoundToInt((baseValue + Random.Range (-variance, variance)));
-		reward.money = Mathf.Max (1, reward.money);	//make sure they can't get less than 1 somehow
-
-		return reward;
-	}
-
-	private LootReward getBoosterRewardFromLootCard(Card_Loot lootCard){
+	private LootReward getRewardFromLootCard(Card_Loot lootCard){
 
 		int numCardsAtLevel = 3;
 		int numCardsAtNextLeve = 1;
 		int bonusSlots = 1;
 
+		float chanceOfCardAtLevelBecomingMoney = 0.3f;
+
 		LootReward reward = new LootReward();
 		int level = lootCard.level;
+
+		reward.money = getRewardMoney(level);
 
 		List<string> cardsThisLevel = CardManager.instance.getIDListAtLevel (level);
 		List<string> cardsNextLevel = CardManager.instance.getIDListAtLevel (level+1);
 
 		for (int i = 0; i < numCardsAtLevel; i++) {
-			int idNum = (int)Random.Range (0, cardsThisLevel.Count);
-			string idName = cardsThisLevel[idNum];
-			cardsThisLevel.RemoveAt (idNum);	//no duplicate cards in the same pack
-			Card card = CardManager.instance.getCardFromIdName(idName);
-			card.setup (null, null);
-			reward.cards.Add (card);
+			float moneyRoll = Random.value;
+			if (moneyRoll < chanceOfCardAtLevelBecomingMoney) {
+				reward.money += getRewardMoney (level);
+			} else {
+				int idNum = (int)Random.Range (0, cardsThisLevel.Count);
+				string idName = cardsThisLevel [idNum];
+				cardsThisLevel.RemoveAt (idNum);	//no duplicate cards in the same pack
+				Card card = CardManager.instance.getCardFromIdName (idName);
+				card.setup (null, null);
+				reward.cards.Add (card);
+			}
 		}
 
 		for (int i = 0; i < numCardsAtNextLeve; i++) {
@@ -82,60 +75,31 @@ public class EndGameManager {
 		}
 
 		//bonus slot
-		int roll = (int)Random.Range(0,3);
+		int roll = (int)Random.Range(0,4);
 		if (roll == 0) {
 			//do nothing
-		}
-		else {
+		} else if (roll == 1 || roll == 2) {
 			List<string> listToUse = roll == 1 ? cardsThisLevel : cardsNextLevel;
 			int idNum = (int)Random.Range (0, listToUse.Count);
-			string idName = listToUse[idNum];
+			string idName = listToUse [idNum];
 			listToUse.RemoveAt (idNum);	//no duplicate cards in the same pack
-			Card card = CardManager.instance.getCardFromIdName(idName);
+			Card card = CardManager.instance.getCardFromIdName (idName);
 			card.setup (null, null);
 			reward.cards.Add (card);
+		} else {
+			reward.money += getRewardMoney (level + 1);
 		}
+
 
 		return reward;
 	}
 
-//	private LootReward getBoosterRewardFromLootCard(Card_Loot lootCard){
-//
-//		LootReward reward = new LootReward();
-//		int level = lootCard.level;
-//
-//		float[] chanceOfCardAtLevel = new float[3];	//must all add up to 1
-//		chanceOfCardAtLevel [0] = 							0.4f;
-//		chanceOfCardAtLevel [1] = chanceOfCardAtLevel [0] + 0.4f;
-//		chanceOfCardAtLevel [2] = chanceOfCardAtLevel [1] + 0.2f;
-//
-//		List<string>[] possibleCardIDs = new List<string>[3];
-//		for (int i = 0; i < possibleCardIDs.Length; i++) {
-//			possibleCardIDs [i] = CardManager.instance.getIDListAtLevel (level - 1 + i);
-//		}
-//
-//		int numCards = (int)Random.Range (2, 5);
-//		for (int i = 0; i < numCards; i++) {
-//			float roll = Random.value;
-//
-//			int listToUse = 0;
-//			for (int k = 0; k < chanceOfCardAtLevel.Length; k++) {
-//				if (roll > chanceOfCardAtLevel [k]) {
-//					listToUse = k;
-//				}
-//			}
-//			if (possibleCardIDs[listToUse].Count == 0) listToUse++;
-//
-//			int idNum = (int)Random.Range (0, possibleCardIDs [listToUse].Count);
-//			string idName = possibleCardIDs [listToUse] [idNum];
-//			possibleCardIDs [listToUse].RemoveAt (idNum);	//no duplicate cards in the same pack
-//			Card card = CardManager.instance.getCardFromIdName(idName);
-//			card.setup (null, null);
-//			reward.cards.Add (card);
-//		}
-//
-//		return reward;
-//	}
+	int getRewardMoney(int level){
+		float val = Mathf.Pow (level, 1.3f) * 4;
+		float wiggle = val * 0.4f;
+		val += Random.Range (-wiggle, wiggle);
+		return (int) val;
+	}
 
 	private void saveCards(List<Card> newCards){
 		//load in the unused cards
@@ -159,9 +123,6 @@ public class EndGameManager {
 	}
 
 	private void saveMoney(int freshEarnings){
-
-
-
 		//load in the player XML
 		string xmlPath = Application.dataPath + "/external_data/player/player_info.xml";
 		XmlDocument xmlDoc = new XmlDocument();
