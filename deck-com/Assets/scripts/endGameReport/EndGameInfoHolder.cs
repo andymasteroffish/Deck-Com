@@ -41,6 +41,7 @@ public class EndGameInfoHolder : MonoBehaviour {
 		lootList = new List<Card_Loot> ();
 		for (int i = 0; i < 4; i++) {
 			Loot.Type type = i % 2 == 0 ? Loot.Type.booster :  Loot.Type.money;
+			type = Loot.Type.booster;
 			int level = 1;
 			Card_Loot card = (Card_Loot) CardManager.instance.getCardFromIdName ("loot");
 			card.lootSetup (type, level);

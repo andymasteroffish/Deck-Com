@@ -27,7 +27,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public GameObject aiTurnText;
 
 	public int levelsPerArea;
-	public float lootDropPrc;
+
+	public int lootPerLevel, potentialBonusLootPerLevel;
 
 	public float minTimeOnPlayerTurn;
 	private float playerTurnTimer;

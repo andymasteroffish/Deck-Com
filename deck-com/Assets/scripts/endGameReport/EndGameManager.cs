@@ -22,12 +22,6 @@ public class EndGameManager {
 			}
 		}
 
-		//testing
-//		for (int i = 0; i < rewards.Count; i++) {
-//			Debug.Log ("-- reward level " + lootCards [i].level + " --");
-//			rewards [i].print ();
-//		}
-
 		//add it all up
 		int totalMoneyEarned = 0;
 		List<Card> newCards = new List<Card> ();
@@ -59,34 +53,44 @@ public class EndGameManager {
 
 	private LootReward getBoosterRewardFromLootCard(Card_Loot lootCard){
 
+		int numCardsAtLevel = 3;
+		int numCardsAtNextLeve = 1;
+		int bonusSlots = 1;
+
 		LootReward reward = new LootReward();
 		int level = lootCard.level;
 
-		float[] chanceOfCardAtLevel = new float[3];	//must all add up to 1
-		chanceOfCardAtLevel [0] = 							0.4f;
-		chanceOfCardAtLevel [1] = chanceOfCardAtLevel [0] + 0.4f;
-		chanceOfCardAtLevel [2] = chanceOfCardAtLevel [1] + 0.2f;
+		List<string> cardsThisLevel = CardManager.instance.getIDListAtLevel (level);
+		List<string> cardsNextLevel = CardManager.instance.getIDListAtLevel (level+1);
 
-		List<string>[] possibleCardIDs = new List<string>[3];
-		for (int i = 0; i < possibleCardIDs.Length; i++) {
-			possibleCardIDs [i] = CardManager.instance.getIDListAtLevel (level - 1 + i);
+		for (int i = 0; i < numCardsAtLevel; i++) {
+			int idNum = (int)Random.Range (0, cardsThisLevel.Count);
+			string idName = cardsThisLevel[idNum];
+			cardsThisLevel.RemoveAt (idNum);	//no duplicate cards in the same pack
+			Card card = CardManager.instance.getCardFromIdName(idName);
+			card.setup (null, null);
+			reward.cards.Add (card);
 		}
 
-		int numCards = (int)Random.Range (2, 5);
-		for (int i = 0; i < numCards; i++) {
-			float roll = Random.value;
+		for (int i = 0; i < numCardsAtNextLeve; i++) {
+			int idNum = (int)Random.Range (0, cardsNextLevel.Count);
+			string idName = cardsNextLevel[idNum];
+			cardsNextLevel.RemoveAt (idNum);	//no duplicate cards in the same pack
+			Card card = CardManager.instance.getCardFromIdName(idName);
+			card.setup (null, null);
+			reward.cards.Add (card);
+		}
 
-			int listToUse = 0;
-			for (int k = 0; k < chanceOfCardAtLevel.Length; k++) {
-				if (roll > chanceOfCardAtLevel [k]) {
-					listToUse = k;
-				}
-			}
-			if (possibleCardIDs[listToUse].Count == 0) listToUse++;
-
-			int idNum = (int)Random.Range (0, possibleCardIDs [listToUse].Count);
-			string idName = possibleCardIDs [listToUse] [idNum];
-			possibleCardIDs [listToUse].RemoveAt (idNum);	//no duplicate cards in the same pack
+		//bonus slot
+		int roll = (int)Random.Range(0,3);
+		if (roll == 0) {
+			//do nothing
+		}
+		else {
+			List<string> listToUse = roll == 1 ? cardsThisLevel : cardsNextLevel;
+			int idNum = (int)Random.Range (0, listToUse.Count);
+			string idName = listToUse[idNum];
+			listToUse.RemoveAt (idNum);	//no duplicate cards in the same pack
 			Card card = CardManager.instance.getCardFromIdName(idName);
 			card.setup (null, null);
 			reward.cards.Add (card);
@@ -94,6 +98,44 @@ public class EndGameManager {
 
 		return reward;
 	}
+
+//	private LootReward getBoosterRewardFromLootCard(Card_Loot lootCard){
+//
+//		LootReward reward = new LootReward();
+//		int level = lootCard.level;
+//
+//		float[] chanceOfCardAtLevel = new float[3];	//must all add up to 1
+//		chanceOfCardAtLevel [0] = 							0.4f;
+//		chanceOfCardAtLevel [1] = chanceOfCardAtLevel [0] + 0.4f;
+//		chanceOfCardAtLevel [2] = chanceOfCardAtLevel [1] + 0.2f;
+//
+//		List<string>[] possibleCardIDs = new List<string>[3];
+//		for (int i = 0; i < possibleCardIDs.Length; i++) {
+//			possibleCardIDs [i] = CardManager.instance.getIDListAtLevel (level - 1 + i);
+//		}
+//
+//		int numCards = (int)Random.Range (2, 5);
+//		for (int i = 0; i < numCards; i++) {
+//			float roll = Random.value;
+//
+//			int listToUse = 0;
+//			for (int k = 0; k < chanceOfCardAtLevel.Length; k++) {
+//				if (roll > chanceOfCardAtLevel [k]) {
+//					listToUse = k;
+//				}
+//			}
+//			if (possibleCardIDs[listToUse].Count == 0) listToUse++;
+//
+//			int idNum = (int)Random.Range (0, possibleCardIDs [listToUse].Count);
+//			string idName = possibleCardIDs [listToUse] [idNum];
+//			possibleCardIDs [listToUse].RemoveAt (idNum);	//no duplicate cards in the same pack
+//			Card card = CardManager.instance.getCardFromIdName(idName);
+//			card.setup (null, null);
+//			reward.cards.Add (card);
+//		}
+//
+//		return reward;
+//	}
 
 	private void saveCards(List<Card> newCards){
 		//load in the unused cards

@@ -16,9 +16,10 @@ public class LootRewardOpenGO : MonoBehaviour {
 
 	public float lerpSpeed;
 
-	public float cardAngleSpread;
+	//public float cardAngleSpread;
 	public float cardDistX, cardDistY;
 
+	public float danceSpeed, danceSpeedRange;
 	private float danceAngleRange;
 
 	void setupGeneral(){
@@ -33,10 +34,12 @@ public class LootRewardOpenGO : MonoBehaviour {
 		moneyField.text = "";
 		danceAngleRange = 6;
 
+		danceSpeed += Random.Range (-danceSpeedRange, danceSpeedRange);
+
 		//placememt
 		Vector3 centerPos = GameObject.Find ("lootCenterPos").transform.position;
 		targetPos.x = centerPos.x + (orderPrc * 2 - 1) * cardDistX;
-		targetPos.y = centerPos.y + 1f;
+		targetPos.y = centerPos.y + 1f - Mathf.Abs((orderPrc-0.5f) * cardDistY);// 1f;
 		targetPos.z = 0;
 
 		//general stuff
@@ -55,7 +58,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		float angle = Mathf.Sin(Time.time + targetPos.x) * danceAngleRange;
+		float angle = Mathf.Sin(Time.time * danceSpeed + targetPos.x) * danceAngleRange;
 		transform.localEulerAngles = new Vector3 (0, 0, angle);
 
 		transform.position = Vector3.Lerp (transform.position, targetPos, lerpSpeed);

@@ -79,25 +79,43 @@ public class Board {
 			unit.reset ();
 		}
 
-		//add some loot to some of them
+		int lootToDistribute = GameManagerTacticsInterface.instance.lootPerLevel + (int)Random.Range (0, (float)GameManagerTacticsInterface.instance.potentialBonusLootPerLevel+1);
+		Debug.Log ("loot to distribute: " + lootToDistribute);
+
+		List<Unit> potentialLootHolders = new List<Unit> ();
 		for (int i = 0; i < units.Count; i++) {
 			if (!units [i].isPlayerControlled) {
-				if (Random.value < GameManagerTacticsInterface.instance.lootDropPrc) {
-					Debug.Log (units [i].unitName + " got loot");
-					Loot thisLoot = new Loot (units [i], curAreaNum);
-					loot.Add (thisLoot);
-				}
+				potentialLootHolders.Add (units [i]);
 			}
+		}
+		for (int i = 0; i < lootToDistribute && potentialLootHolders.Count > 0; i++) {
+			int lootGetterID = (int)Random.Range (0,potentialLootHolders.Count);
+			Unit lootGetter = potentialLootHolders [lootGetterID];
+			potentialLootHolders.RemoveAt (lootGetterID);
+			//Debug.Log (lootGetter.unitName + " got loot");
+			Loot thisLoot = new Loot (lootGetter, curAreaNum);
+			loot.Add (thisLoot);
 		}
 
-		//if straight up nobody got loot, just select one
-		while(loot.Count == 0) {
-			int randID = (int)Random.Range (0, units.Count);
-			if (!units [randID].isPlayerControlled) {
-				Loot thisLoot = new Loot (units [randID], curAreaNum);
-				loot.Add (thisLoot);
-			}
-		}
+//		//add some loot to some of them
+//		for (int i = 0; i < units.Count; i++) {
+//			if (!units [i].isPlayerControlled) {
+//				if (Random.value < GameManagerTacticsInterface.instance.lootDropPrc) {
+//					Debug.Log (units [i].unitName + " got loot");
+//					Loot thisLoot = new Loot (units [i], curAreaNum);
+//					loot.Add (thisLoot);
+//				}
+//			}
+//		}
+//
+//		//if straight up nobody got loot, just select one
+//		while(loot.Count == 0) {
+//			int randID = (int)Random.Range (0, units.Count);
+//			if (!units [randID].isPlayerControlled) {
+//				Loot thisLoot = new Loot (units [randID], curAreaNum);
+//				loot.Add (thisLoot);
+//			}
+//		}
 	}
 
 	//creating a board for AI stuff
