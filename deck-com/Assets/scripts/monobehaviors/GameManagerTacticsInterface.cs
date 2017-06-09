@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManagerTacticsInterface : MonoBehaviour {
 
+	public bool publicRelease;
 
 	private CameraControl cam;
 
@@ -25,6 +26,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public TargetInfoText targetInfoText;
 	public GameObject aiTurnText;
 
+	public int levelsPerArea;
 	public float lootDropPrc;
 
 	public float minTimeOnPlayerTurn;
@@ -61,6 +63,17 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	}
 
 	void Start(){
+		if (publicRelease) {
+			debugDoNotShuffle = false;
+			debugPrintAIInfo = false;
+			debugRevealFOW = false;
+			debugRemoveFOW = false;
+			debugIgnoreStandardSpawns = false;
+			debugShowTileDist = false;
+			debugClearTileDists = false;
+			debugWakeAllFoes = false;
+		}
+
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 		gm.targetInfoText = targetInfoText;
 		gm.setup (debugSpawnList);

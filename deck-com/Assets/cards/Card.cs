@@ -98,13 +98,11 @@ public class Card {
 		ignoreTargetCharms = false;
 		if (node["ignore_target_charms"] != null){
 			ignoreTargetCharms = bool.Parse (node ["ignore_target_charms"].InnerText);
-			Debug.Log (idName + " ignore target charms " + ignoreTargetCharms);
 		}
 
 		ignoreCasterCharms = false;
 		if (node["ignore_user_charms"] != null){
 			ignoreCasterCharms = bool.Parse (node ["ignore_user_charms"].InnerText);
-			Debug.Log (idName + " ignoreCasterCharms " + ignoreCasterCharms);
 		}
 
 		//default values

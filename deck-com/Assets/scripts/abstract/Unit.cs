@@ -102,8 +102,8 @@ public class Unit {
 		}
 
 		challengeLevel = 1;
-		if (node ["level"] != null) {
-			challengeLevel = int.Parse(node ["level"].InnerText);
+		if (node ["cr"] != null) {
+			challengeLevel = int.Parse(node ["cr"].InnerText);
 		}
 
 		aiProfileName = "none";

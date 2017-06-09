@@ -34,13 +34,9 @@ public class Board {
 		levelGen = new LevelGen ();
 		units = new List<Unit> ();
 		loot = new List<Loot> ();
-
 	}
 
-
-
-
-	public void reset(){
+	public void reset(int curLevelNum, int curAreaNum){
 		//clear ();
 		if (GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
 			grid = levelGen.getTestLevel (GameManagerTacticsInterface.instance.debugMapName);
@@ -78,7 +74,7 @@ public class Board {
 //		}
 	}
 
-	public void resetUnitsAndLoot(){
+	public void resetUnitsAndLoot(int curAreaNum){
 		foreach(Unit unit in units){
 			unit.reset ();
 		}
@@ -88,7 +84,7 @@ public class Board {
 			if (!units [i].isPlayerControlled) {
 				if (Random.value < GameManagerTacticsInterface.instance.lootDropPrc) {
 					Debug.Log (units [i].unitName + " got loot");
-					Loot thisLoot = new Loot (units [i]);
+					Loot thisLoot = new Loot (units [i], curAreaNum);
 					loot.Add (thisLoot);
 				}
 			}
@@ -98,7 +94,7 @@ public class Board {
 		while(loot.Count == 0) {
 			int randID = (int)Random.Range (0, units.Count);
 			if (!units [randID].isPlayerControlled) {
-				Loot thisLoot = new Loot (units [randID]);
+				Loot thisLoot = new Loot (units [randID], curAreaNum);
 				loot.Add (thisLoot);
 			}
 		}

@@ -30,7 +30,7 @@ public class GameManager {
 	//getting and setting info about player progress
 	string playerDocPath;
 	XmlDocument playerDoc;
-	private int curLevelNum;
+	private int curLevelNum, curAreaNum;
 
 	//pooling objects
 	ObjectPooler objectPool;
@@ -50,15 +50,17 @@ public class GameManager {
 		XmlNode infoNode = playerDoc.GetElementsByTagName("info")[0];
 		curLevelNum = int.Parse(infoNode["cur_level"].InnerXml);
 
-		Debug.Log ("level: " + curLevelNum);
+		curAreaNum = (curLevelNum / GameManagerTacticsInterface.instance.levelsPerArea) + 1;
+
+		Debug.Log ("level: " + curLevelNum+" area "+curAreaNum);
 
 		//setup the board
 		board = new Board ();
 		board.mainBoardSetup ();
-		board.reset ();
+		board.reset (curLevelNum, curAreaNum);
 
 		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
-			podPlacement.placeFoes (this, board, curLevelNum);
+			podPlacement.placeFoes (this, board, curLevelNum, curAreaNum);
 			List<Unit> activePlayerUnits = UnitManager.instance.getActivePlayerUnits ();
 			for (int i = 0; i < activePlayerUnits.Count; i++) {
 				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.Player);
@@ -92,7 +94,7 @@ public class GameManager {
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
 
 
-		board.resetUnitsAndLoot ();
+		board.resetUnitsAndLoot (curAreaNum);
 
 		startPlayerTurn ();
 

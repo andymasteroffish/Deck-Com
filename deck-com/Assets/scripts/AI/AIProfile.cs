@@ -153,7 +153,7 @@ public class AIProfile {
 			else if (nodeName == "prefered_card") {
 				foreach (XmlNode info in child.ChildNodes) {
 					preferedCardWeights.Add(info.Name, float.Parse (info.InnerText));
-					Debug.Log ("love " + info.Name + " for " + float.Parse (info.InnerText));
+					//Debug.Log ("love " + info.Name + " for " + float.Parse (info.InnerText));
 				}
 			}
 

@@ -7,9 +7,13 @@ public class FoeInfo{
 	public int challengeLevel;
 	public string idName;
 
-	public FoeInfo(int _challengeLevel, string _idName){
+	public int minArea, maxArea;
+
+	public FoeInfo(int _challengeLevel, string _idName, int _minArea, int _maxArea){
 		challengeLevel = _challengeLevel;
 		idName = _idName;
+		minArea = _minArea;
+		maxArea = _maxArea;
 	}
 		
 }
@@ -19,7 +23,7 @@ public class PodPlacement {
 	private List<FoeInfo> foeInfo = new List<FoeInfo>();
 
 	private float podClRangePrc = 0.4f;
-	private int podCLPadding = 1; //how much it can be over by and still be OK
+	private int podCLPadding = 2; //how much it can be over by and still be OK
 	private int maxMoveDistAwayToSpawn = 2;
 
 	private Board board;
@@ -29,54 +33,67 @@ public class PodPlacement {
 
 		//populate the foe list
 		foreach (XmlNode node in foeNodes) {
-			int level = int.Parse (node ["level"].InnerText);
+			int level = int.Parse (node ["cr"].InnerText);
 			string idName = node.Attributes ["idName"].Value;
+			int minArea = -1;
+			if (node ["min_area"] != null) {
+				minArea = int.Parse(node ["min_area"].InnerText);
+			}
+			int maxArea = 100;
+			if (node ["max_area"] != null) {
+				maxArea = int.Parse(node ["max_area"].InnerText);
+			}
 			if (level >= 0) {
-				foeInfo.Add (new FoeInfo (level, idName));
+				foeInfo.Add (new FoeInfo (level, idName, minArea, maxArea));
 			}
 		}
 
 	}
 
 	//these are wack numbers for now
-	public void placeFoes(GameManager _gm, Board _board, int levelNum){
-		int totalCL = levelNum * 6;
-		int numPods = 3 + levelNum/3;
-		if (numPods > 6) {
-			numPods = 6;
+	public void placeFoes(GameManager _gm, Board _board, int levelNum, int curArea){
+		int totalCR = levelNum * 6;
+		Debug.Log ("total CL " + totalCR);
+		int numPods = 2 + levelNum/3;
+		if (numPods > 5) {
+			numPods = 5;
 		}
-		int podCL = (int)Mathf.Ceil((float)totalCL / (float)numPods);
-		placeFoes(_gm, _board, numPods, podCL);
+		int podCL = (int)Mathf.Ceil((float)totalCR / (float)numPods);
+		placePods(_gm, _board, numPods, podCL, curArea);
 	}
 
-	public void placeFoes(GameManager _gm, Board _board, int numPods, int podCL){
-		Debug.Log ("Placing " + numPods + " with a CL of " + podCL);
+	public void placePods(GameManager _gm, Board _board, int numPods, int podCR, int curArea){
+		Debug.Log ("Placing " + numPods + " with a CL of " + podCR);
 		gm = _gm;
 		board = _board;
 
-		//List<Unit> foes = new List<Unit> ();
-
 		for (int i = 0; i < numPods; i++) {
-			makePod (podCL);
-			//foes.AddRange( makePod (podCL) );
+			makePod (podCR, curArea);
 		}
-
-		//return foes;
 	}
 
-	public void makePod(int podCL){
+	public void makePod(int podCR, int curArea){
 		
 		int curCL = 0;
-		int rangeMod = (int) Mathf.Ceil( (float)podCL * podClRangePrc);
+		int rangeMod = (int) Mathf.Ceil( (float)podCR * podClRangePrc);
 		if (rangeMod < 1) {
 			rangeMod = 1;
 		}
-		int targetCL = podCL + Random.Range (-rangeMod, rangeMod);
+		int targetCL = podCR + Random.Range (-rangeMod, rangeMod);
 		if (targetCL < 2) {
 			targetCL = 2;
 		}
 		//Debug.Log (rangeMod);
 		Debug.Log ("making a pod with CL " + targetCL);
+
+		List<FoeInfo> potentialFoes = new List<FoeInfo> ();
+		foreach (FoeInfo info in foeInfo) {
+			if (info.minArea <= curArea && info.maxArea >= curArea) {
+				potentialFoes.Add (info);
+			} else {
+				Debug.Log (info.idName + " is out!");
+			}
+		}
 
 		List<FoeInfo> foesToSpawn = new List<FoeInfo> ();
 
@@ -84,7 +101,7 @@ public class PodPlacement {
 		while (curCL < targetCL && count < 1000) {
 			count++;
 			//find a foe
-			FoeInfo thisFoe = foeInfo[(int)Random.Range(0,foeInfo.Count)];
+			FoeInfo thisFoe = potentialFoes[(int)Random.Range(0,potentialFoes.Count)];
 
 			//make sure it would not push us over
 			if (curCL + thisFoe.challengeLevel <= targetCL + podCLPadding) {

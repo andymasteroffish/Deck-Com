@@ -1,21 +1,21 @@
 <cards>
 <card idName="attack">
 <name>Attack</name>
-<level>0</level>
+<level>1</level>
 <script>Card_Attack</script>
 <damage_mod>0</damage_mod>
 <range_mod>0</range_mod>
 </card>
 <card idName="attack_r1_d-1">
 <name>Attack</name>
-<level>0</level>
+<level>-1</level>
 <script>Card_Attack</script>
 <damage_mod>-1</damage_mod>
 <range_mod>1</range_mod>
 </card>
 <card idName="attack_r-1_d2">
 <name>Attack</name>
-<level>0</level>
+<level>1</level>
 <script>Card_Attack</script>
 <damage_mod>2</damage_mod>
 <range_mod>-1</range_mod>
@@ -29,7 +29,7 @@
 </card>
 <card idName="attack_r1">
 <name>Attack</name>
-<level>1</level>
+<level>-1</level>
 <script>Card_Attack</script>
 <damage_mod>0</damage_mod>
 <range_mod>1</range_mod>
@@ -69,7 +69,7 @@
 </card>
 <card idName="draw_a_card">
 <name>Draw A Card</name>
-<level>0</level>
+<level>1</level>
 <script>Card_BasicTargetBonus</script>
 <any_unit>true</any_unit>
 <cards_to_draw>1</cards_to_draw>
@@ -77,7 +77,7 @@
 </card>
 <card idName="gain_an_action">
 <name>Gain An Action</name>
-<level>0</level>
+<level>1</level>
 <script>Card_BasicTargetBonus</script>
 <any_unit>true</any_unit>
 <cards_to_draw>0</cards_to_draw>
@@ -115,7 +115,7 @@
 </card>
 <card idName="focus">
 <name>Focus</name>
-<level>0</level>
+<level>1</level>
 <script>Card_GiveCharm</script>
 <desc>Next weapon attack this turn has +1 damage and +2 range</desc>
 <any_unit>false</any_unit>
@@ -139,7 +139,7 @@
 </card>
 <card idName="adjust_sights">
 <name>Adjust sights</name>
-<level>3</level>
+<level>2</level>
 <script>Card_GiveCharm</script>
 <desc>Your weapon's range increases by 1 for the rest of the match</desc>
 <any_unit>true</any_unit>
@@ -147,7 +147,7 @@
 </card>
 <card idName="heal">
 <name>Heal</name>
-<level>0</level>
+<level>1</level>
 <script>Card_Heal</script>
 <heal>2</heal>
 <range>5</range>
@@ -181,13 +181,13 @@
 </card>
 <card idName="move3">
 <name>Move3</name>
-<level>0</level>
+<level>-1</level>
 <script>Card_Movement</script>
 <range>3</range>
 </card>
 <card idName="move4">
 <name>Move4</name>
-<level>0</level>
+<level>1</level>
 <script>Card_Movement</script>
 <range>4</range>
 </card>
@@ -219,7 +219,7 @@
 </card>
 <card idName="move6">
 <name>Move6</name>
-<level>-1</level>
+<level>2</level>
 <script>Card_Movement</script>
 <range>6</range>
 </card>
@@ -244,7 +244,7 @@
 </card>
 <card idName="teleport">
 <name>Teleport</name>
-<level>1</level>
+<level>2</level>
 <script>Card_Teleport</script>
 <move_range>3</move_range>
 </card>
@@ -263,7 +263,7 @@
 </card>
 <card idName="spit_web">
 <name>Spit Web</name>
-<level>2</level>
+<level>-1</level>
 <script>Card_GiveCharm</script>
 <desc>Target is trapped in a web</desc>
 <gift_id>web_binding</gift_id>
