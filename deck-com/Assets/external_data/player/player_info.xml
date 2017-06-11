@@ -1,7 +1,7 @@
 <player>
   <info>
-    <money>21</money>
-    <cur_level>2</cur_level>
+    <money>32</money>
+    <cur_level>4</cur_level>
   </info>
   <unit idName="wizard">
     <name>Wizard</name>

@@ -1,7 +1,7 @@
 move3
 move4
 move4
-heal_ring
+equipment_heal_ring
 move5
 attack
 attack

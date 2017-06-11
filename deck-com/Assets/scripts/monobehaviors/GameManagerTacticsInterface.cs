@@ -156,7 +156,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			}
 				
 		}
-			
 
 		//is the game over?
 		if (gm.GameIsOver && !areAnimationsHappening()) {

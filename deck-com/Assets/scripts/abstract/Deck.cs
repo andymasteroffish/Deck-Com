@@ -74,7 +74,7 @@ public class Deck {
 		return null;
 	}
 	//manipulating the deck
-	void shuffle(){
+	public void shuffle(){
 		if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
 			return;
 		}
@@ -233,7 +233,7 @@ public class Deck {
 
 	//saving
 	public void saveDrawPile(string filePath){
-		sortDrawPileAlphabetically ();
+		drawPile.Sort();
 
 		string[] lines = new string[drawPile.Count];
 		for (int i = 0; i < drawPile.Count; i++) {
@@ -241,11 +241,6 @@ public class Deck {
 		}
 
 		File.WriteAllLines(filePath, lines);
-	}
-
-	//sorting
-	public void sortDrawPileAlphabetically(){
-		//FILL THIS IN
 	}
 
 	//info

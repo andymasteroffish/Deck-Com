@@ -513,6 +513,7 @@ public class Unit {
 
 	public void killUnit(){
 		isDead = true;
+		clearAllEquipment ();
 		board.checksWhenUnitDies (this);
 	}
 
@@ -543,6 +544,9 @@ public class Unit {
 	//saving and cleaning up at the end of the game
 
 	public void endGame(){
+		//turn any equipment back into cards
+		clearAllEquipment();
+
 		//move all cards to the deck
 		deck.discardHand();
 		deck.putDiscardInDrawPile ();
@@ -550,6 +554,14 @@ public class Unit {
 
 	public List<Card_Loot> syphonLoot(){
 		return deck.syphonLootFromDrawPile ();
+	}
+
+	public void clearAllEquipment(){
+		for (int i = charms.Count - 1; i >= 0; i--) {
+			if (charms [i] != weapon) {
+				removeCharm (charms [i]);
+			}
+		}
 	}
 
 	public void saveDeckFile(){

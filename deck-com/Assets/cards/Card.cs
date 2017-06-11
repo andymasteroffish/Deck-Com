@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 
-public class Card {
+public class Card : IComparable<Card> {
 
-	public enum CardType{Loot, Attack, AttackSpecial, Movement, Aid, Magic, Equipment, Other};
+	public enum CardType{Loot, Movement, Attack, AttackSpecial, Aid, Magic, Equipment, Other};
 
 	public string name, idName;
 	public string description;
@@ -290,6 +291,14 @@ public class Card {
 	public virtual void resolveFromMove(MoveInfo move){
 		Debug.Log ("problem with: "+idName+" CARD HAS NOT BEEN SETUP TO RESOLVE FROM MOVE. THIS RESULT WILL PROBABLY BE NONSENSE");
 		finish ();
+	}
+
+	public int CompareTo(Card other) {
+		if (type == other.type) {
+			return name.CompareTo (other.name);
+		} else {
+			return (int)type - (int)other.type;
+		}
 	}
 
 	//**********************************
