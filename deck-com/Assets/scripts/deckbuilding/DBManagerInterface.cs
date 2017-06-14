@@ -67,7 +67,7 @@ public class DBManagerInterface : MonoBehaviour {
 		startButton.SetActive (manager.activeDeck == null);
 
 		//turn the card selector backgorund on if that is active
-		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen || manager.unusedCharmsOpen);
+		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen || manager.unusedWeaponsOpen);
 			
 		//update the text
 		moneyText.text = "$"+manager.money;
@@ -153,11 +153,13 @@ public class DBManagerInterface : MonoBehaviour {
 		//check if we have any inactive in the list
 		for (int i = 0; i < unusedCharmButtons.Count; i++) {
 			if (unusedCharmButtons [i].IsActive == false) {
+				Debug.Log ("gimme unused");
 				return unusedCharmButtons [i];
 			}
 		}
 
 		//otherwise make one
+		Debug.Log("gimme new");
 		GameObject obj = Instantiate(unusedCharmButtonPrefab) as GameObject;
 		DBUnusedCharmGO GO = obj.GetComponent<DBUnusedCharmGO> ();
 		unusedCharmButtons.Add (GO);

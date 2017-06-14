@@ -15,3 +15,5 @@ cover_attack
 move5
 village
 move_and_attack
+equipment_heal_ring
+focus

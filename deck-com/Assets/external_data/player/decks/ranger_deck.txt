@@ -10,3 +10,4 @@ move5
 move4
 swap_spots
 shield
+vampire_stab

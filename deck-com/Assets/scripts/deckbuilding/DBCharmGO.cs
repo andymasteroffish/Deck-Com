@@ -103,7 +103,7 @@ public class DBCharmGO : MonoBehaviour {
 
 		//were we clicked?
 		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
-			manager.openUnusedCharms (type);
+			manager.openUnusedWeapons();
 			mouseIsOver = false;
 		}
 	}

@@ -40,9 +40,7 @@ public class DBDeckButtonGO : MonoBehaviour {
 		iconSpriteRend.sprite = deck.sprite;
 		nameText.text = deck.displayName;
 
-		for (int i = 0; i < 2; i++) {
-			DBManagerInterface.instance.getCharmGO ().activate (deck, this, (Charm.CharmType)i);
-		}
+		DBManagerInterface.instance.getCharmGO ().activate (deck, this, Charm.CharmType.Weapon);
 
 	}
 

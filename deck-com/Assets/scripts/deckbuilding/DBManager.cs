@@ -20,17 +20,17 @@ public class DBManager {
 	public int curLevel;
 
 	private string xmlPath;
-	private string unusedCharmListPath;
+	private string unusedWeaponsListPath;
 
-	private Charm.CharmType charmReplaceType;
-	public bool unusedCharmsOpen;
+	//private Charm.CharmType charmReplaceType;
+	public bool unusedWeaponsOpen;
 
 	public DBManager(){
 
 		activeDeck = null;
 
 		unusedCardsOpen = false;
-		unusedCharmsOpen = false;
+		unusedWeaponsOpen = false;
 
 		//grabbing the info for the player
 		xmlPath = Application.dataPath + "/external_data/player/player_info.xml";
@@ -61,12 +61,13 @@ public class DBManager {
 		DBManagerInterface.instance.getDeckButtonGO().activate(unusedCardsDeck);
 
 		//gather up all of the unused charms
-		unusedCharmListPath = Application.dataPath + "/external_data/player/unused_charms.txt";
-		string charmText = File.ReadAllText (unusedCharmListPath);
+		unusedWeaponsListPath = Application.dataPath + "/external_data/player/unused_weapons.txt";
+		string charmText = File.ReadAllText (unusedWeaponsListPath);
 		string[] charmLines = charmText.Split ('\n');
 
 		for (int i = 0; i < charmLines.Length; i++) {
 			if (charmLines [i].Length > 2) {
+				Debug.Log ("load " + charmLines [i]);
 				Charm thisCharm = CharmManager.instance.getCharmFromIdName (charmLines [i]);
 				thisCharm.setup (null, false, charmLines [i]);
 				unusedCharms.Add (thisCharm);
@@ -98,19 +99,23 @@ public class DBManager {
 	public void openUnusedCards(){
 		unusedCardsDeck.setAsUnusedActive ();
 		unusedCardsOpen = true;
-		unusedCharmsOpen = false;
+		unusedWeaponsOpen = false;
 	}
 
 	//opens the list of unused charms
-	public void openUnusedCharms(Charm.CharmType replaceType){
-		charmReplaceType = replaceType;
-		unusedCharmsOpen = true;
+	public void openUnusedWeapons(){
+		//charmReplaceType = replaceType;
+		unusedWeaponsOpen = true;
 		unusedCardsOpen = false;
+
+		Debug.Log ("open " + unusedCharms.Count + " charms");
 
 		int order = 0;
 		for (int i = 0; i < unusedCharms.Count; i++) {
-			if (unusedCharms [i].type == replaceType) {
-				DBManagerInterface.instance.getUnusedCharmGO ().activate (unusedCharms [i], order);
+			if (unusedCharms [i].type == Charm.CharmType.Weapon) {
+				DBUnusedCharmGO thisGO = DBManagerInterface.instance.getUnusedCharmGO ();
+				Debug.Log (thisGO);
+				thisGO.activate (unusedCharms [i], order);
 				order++;
 			}
 		}
@@ -122,14 +127,14 @@ public class DBManager {
 		} else {
 			activeDeck.charmToAdd = newCharm;
 		}
-		unusedCharmsOpen = false;
+		unusedWeaponsOpen = false;
 	}
 
 	//steps back one
 	public void cancel(){
-		if (unusedCardsOpen || unusedCharmsOpen) {
+		if (unusedCardsOpen || unusedWeaponsOpen) {
 			unusedCardsOpen = false;
-			unusedCharmsOpen = false;
+			unusedWeaponsOpen = false;
 		} else {
 			if (activeDeck != null) {
 				activeDeck.setAsInactive ();
@@ -140,6 +145,9 @@ public class DBManager {
 
 	//saves changes to active deck and goes back
 	public void saveChanges(){
+		unusedCardsOpen = false;
+		unusedWeaponsOpen = false;
+
 		money -= activeDeck.getCurrentSaveCost ();
 
 		unusedCardsDeck.removeCards (activeDeck.cardsToAdd);
@@ -187,7 +195,7 @@ public class DBManager {
 			charmLines [i] = unusedCharms [i].idName;
 		}
 
-		File.WriteAllLines(unusedCharmListPath, charmLines);
+		File.WriteAllLines(unusedWeaponsListPath, charmLines);
 
 	}
 }

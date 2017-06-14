@@ -64,7 +64,7 @@ public class DBUnusedCharmGO : MonoBehaviour {
 		DBManager manager = DBManagerInterface.instance.manager;
 
 		//time to die?
-		if (manager.unusedCharmsOpen == false) {
+		if (manager.unusedWeaponsOpen == false) {
 			deactivate ();
 			return;
 		}

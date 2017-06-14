@@ -6,7 +6,4 @@ aim
 attack_r2
 attack_d1
 draw_a_card
-equipment_heal_ring
-focus
 move_and_attack
-vampire_stab
