@@ -17,7 +17,7 @@ public class DBCharmGO : MonoBehaviour {
 	public float ySpacing;
 
 	public SpriteRenderer frameRend;
-	public Text nameText;
+	public Text nameText, descText;
 
 	private bool mouseIsOver;
 	public Color normalColor = Color.white;
@@ -69,25 +69,31 @@ public class DBCharmGO : MonoBehaviour {
 		//update this thing
 		bool isNew = false;
 		string nameString = "Open";
+		string descString = "no desc";
 		if (type == Charm.CharmType.Weapon) {
 			if (deck.weaponToAdd != null) {
 				nameString = deck.weaponToAdd.name;
+				descString = deck.weaponToAdd.description;
 				isNew = true;
 			} else {
 				nameString = deck.curWeapon.name;
+				descString = deck.curWeapon.description;
 			}
 		} 
 		if (type == Charm.CharmType.Equipment){
 			if (deck.charmToAdd != null) {
 				nameString = deck.charmToAdd.name;
+				descString = deck.charmToAdd.description;
 				isNew = true;
 			}
 			else if (deck.curCharm != null) {
 				nameString = deck.curCharm.name;
+				descString = deck.curCharm.description;
 			}
 		}
 			
 		nameText.text = nameString;
+		descText.text = descString;
 		transform.position = deckButton.transform.position + startOffsetFromDeckButton + new Vector3 (0, ySpacing, 0) * (int)type;
 	
 		//update the color

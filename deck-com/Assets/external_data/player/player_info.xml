@@ -30,7 +30,7 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>long_bow</charm>
+      <charm>sniper_rifle</charm>
     </charms>
   </unit>
 </player>
