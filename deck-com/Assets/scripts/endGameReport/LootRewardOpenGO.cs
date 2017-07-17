@@ -9,7 +9,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 	public Text descField;
 	public Text moneyField;
 
-	public SpriteRenderer spriteRend;
+	public SpriteRenderer spriteRend, cardColorSpriteRend;
 	public Sprite cardFrameSprite, coinFrameSprite;
 
 	private Vector3 targetPos;
@@ -29,6 +29,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 		transform.localScale = new Vector3 (0, 0, 0);
 	}
 
+	//for cards
 	public void setup(Card card, float orderPrc){
 		//info
 		spriteRend.sprite = cardFrameSprite;
@@ -38,6 +39,9 @@ public class LootRewardOpenGO : MonoBehaviour {
 		danceAngleRange = 6;
 
 		danceSpeed += Random.Range (-danceSpeedRange, danceSpeedRange);
+
+		cardColorSpriteRend.enabled = true;
+		cardColorSpriteRend.color = new Color(card.baseHighlightColor.r, card.baseHighlightColor.g, card.baseHighlightColor.b, 0.3f);
 
 		//placememt
 		Vector3 centerPos = GameObject.Find ("lootCenterPos").transform.position;
@@ -49,6 +53,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 		setupGeneral ();
 	}
 
+	//for money
 	public void setup(int money){
 		targetPos = GameObject.Find ("lootCenterPos").transform.position;
 		targetPos.y += moneyY;
@@ -57,6 +62,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 		descField.text = "";
 		moneyField.text = "$" + money;
 		danceAngleRange = 30;
+		cardColorSpriteRend.enabled = false;
 		setupGeneral ();
 	}
 	

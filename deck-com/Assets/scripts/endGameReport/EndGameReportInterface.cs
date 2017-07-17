@@ -46,7 +46,6 @@ public class EndGameReportInterface : MonoBehaviour {
 			buttonText.text = "DONE";
 		} else {
 			if (!rewardGOs [nextRewardToShow].IsActive) {
-				Debug.Log ("advance");
 				nextRewardToShow++;
 			}
 		}

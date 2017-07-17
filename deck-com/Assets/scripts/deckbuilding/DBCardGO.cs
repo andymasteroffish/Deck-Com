@@ -21,6 +21,7 @@ public class DBCardGO : MonoBehaviour {
 	public Text nameField;
 	public Text descField;
 	public SpriteRenderer spriteRend;
+	public SpriteRenderer colorSprite;
 
 	private bool doingAnimation;
 
@@ -56,6 +57,9 @@ public class DBCardGO : MonoBehaviour {
 
 		spriteRend.transform.localPosition = Vector3.zero;
 		spriteRend.color = Color.white;
+
+		colorSprite.color = new Color(card.baseHighlightColor.r, card.baseHighlightColor.g, card.baseHighlightColor.b, 0.3f);
+
 
 		//set the text
 		nameField.text = card.name;

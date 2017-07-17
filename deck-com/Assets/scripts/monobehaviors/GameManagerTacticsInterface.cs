@@ -306,7 +306,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		Debug.Log ("load pls");
 		doingAnimation = false;
-		UnityEngine.SceneManagement.SceneManager.LoadScene ("endGameResport");
+		UnityEngine.SceneManagement.SceneManager.LoadScene ("endGameReport");
 	}
 
 	//FILL THIS IN!!!!!
