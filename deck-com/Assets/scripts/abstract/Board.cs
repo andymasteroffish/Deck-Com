@@ -165,6 +165,7 @@ public class Board {
 			Profiler.EndSample ();
 		} else {
 			Profiler.BeginSample ("set existing tiles");
+			//JUST GOING THROUGH THIS FOR LOOP IS TAKING A HUGELY LONG TIME. LONGER THAN THE TIME SPENT RUNNING setFromParent()
 			for (int x = 0; x < cols; x++) {
 				for (int y = 0; y < rows; y++) {
 					grid [x, y].setFromParent(parent.grid [x, y]);
@@ -292,6 +293,7 @@ public class Board {
 	}
 
 	public void changeCover(Tile target, Tile.Cover newCoverVal){
+		Profiler.BeginSample("change cover");
 		//check if any change is needed
 		if (target.CoverVal == newCoverVal) {
 			return;
@@ -306,17 +308,24 @@ public class Board {
 				tile.clearVisibilityGridCrossingTile (target.Pos.x, target.Pos.y);
 			}
 		}
-		//otherwise just mark that we should no longer us
+		//otherwise just mark that we should no longer use those values
 		else {
 			foreach (Tile tile in grid) {
 				tile.ignoreStoredRanges = true;
 			}
 		}
 
+//		//redo all adjacent lists
+//		foreach (Tile tile in grid) {
+//			tile.setAdjacentTiles();
+//		}
+
 		//have each unit check their new visibility
 		foreach (Unit unit in units) {
 			unit.setVisibleTiles ();
 		}
+
+		Profiler.EndSample ();
 	}
 
 	//telling the tiles if any player unit can see them
@@ -724,8 +733,12 @@ public class Board {
 
 	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
 		Profiler.BeginSample ("get adjacent tiles");
-		List<Tile> tiles = new List<Tile> ();
 
+		Profiler.BeginSample ("make list for adjcent");
+		List<Tile> tiles = new List<Tile> ();
+		Profiler.EndSample ();
+
+		Profiler.BeginSample ("go through tiles");
 		for (int xOffset = - 1; xOffset <= 1; xOffset++) {
 			for (int yOffset = - 1; yOffset <= 1; yOffset++) {
 				int x = start.Pos.x + xOffset;
@@ -733,12 +746,16 @@ public class Board {
 				if (x >= 0 && x < cols && y >= 0 && y < rows && (xOffset != 0 || yOffset !=0)) {
 					if (includeDiagonal || (xOffset != yOffset)) {
 						if ((int)grid [x, y].CoverVal <= (int)maxCover) {
+							Profiler.BeginSample ("add to lsit");
 							tiles.Add (grid [x, y]);
+							Profiler.EndSample ();
 						}
 					}
 				}
 			}
 		}
+		Profiler.EndSample ();
+
 		Profiler.EndSample ();
 
 		return tiles;
@@ -1068,7 +1085,7 @@ public class Board {
 			}
 		}
 
-		Debug.Log ("found " + moves.Count + " moves for " + units [unitID].deck.Hand [cardID].idName);
+		//Debug.Log ("found " + moves.Count + " moves for " + units [unitID].deck.Hand [cardID].idName);
 		thisCard.cancel ();
 		clearHighlights ();
 		return moves;
@@ -1085,17 +1102,22 @@ public class Board {
 	}
 
 	public void compareBoardSates(Board oldBoard, Unit curUnit, ref TurnInfo info, bool printInfo){
+		Profiler.BeginSample("compare boards");
+
 		//create unit lists. These lists should line up exactly. it is bad if they don't
+		Profiler.BeginSample("making lists");
 		List<Unit> curAllies = new List<Unit>();
 		List<Unit> oldAllies = new List<Unit>();
 		List<Unit> curEnemies = new List<Unit> ();
 		List<Unit> oldEnemies = new List<Unit>();
+		Profiler.EndSample ();
 
 		bool rootingForAI = !curUnit.isPlayerControlled;
 
 		info.val = 0;
 
 		//sepeare them into allies on enemies depending on which side we are trying to get a move for
+		Profiler.BeginSample("sepearte allies and foes");
 		foreach (Unit unit in units) {
 			if (unit.isPlayerControlled == rootingForAI) {
 				curEnemies.Add (unit);
@@ -1126,8 +1148,10 @@ public class Board {
 				}
 			}
 		}
+		Profiler.EndSample ();
 
 		//going through enemies
+		Profiler.BeginSample("go through enemies");
 		int totalEnemyDamage = 0;
 		int totalEnemyHeal = 0;
 		int numEnemiesKilled = 0;
@@ -1174,8 +1198,10 @@ public class Board {
 		info.val += numEnemiesAided * curUnit.aiProfile.numEnemiesAidedWeight;
 		info.val += deltaEnemyGoodCharms * curUnit.aiProfile.deltaEnemyGoodCharmWeight;
 		info.val += deltaEnemyBadCharms * curUnit.aiProfile.deltaEnemyBadCharmWeight;
+		Profiler.EndSample ();
 
 		//going through allies
+		Profiler.BeginSample("go through allies");
 		int totalAllyDamage = 0;
 		int totalAllyHeal = 0;
 		int numAlliesKilled = 0;
@@ -1231,6 +1257,7 @@ public class Board {
 		info.val += numAlliesCursed * curUnit.aiProfile.numAlliesCursedWeight;
 		info.val += deltaAllyGoodCharms * curUnit.aiProfile.deltaAllyGoodCharmWeight;
 		info.val += deltaAllyBadCharms * curUnit.aiProfile.deltaAllyBadCharmWeight;
+		Profiler.EndSample ();
 
 		if (printInfo) {
 			Debug.Log ("AI turn info for " + curUnit.unitName);
@@ -1252,6 +1279,7 @@ public class Board {
 		}
 
 		//checking distance stuff
+		Profiler.BeginSample("distance stuff");
 		for (int i = 0; i < oldAllies.Count; i++) {
 
 			float minDistFromClosest = curAllies [i].aiProfile.preferedDistToClosestEnemy - curAllies [i].aiProfile.acceptableDistanceRangeToClosestEnemy;
@@ -1298,8 +1326,10 @@ public class Board {
 //				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
 //			}
 		}
+		Profiler.EndSample ();
 
 		//how has ally cover changed?
+		Profiler.BeginSample("cover checks");
 		for (int i = 0; i < oldAllies.Count; i++) {
 			Tile.Cover oldLowestCover = Tile.Cover.Full;
 			foreach (Unit enemy in oldEnemies) {
@@ -1337,19 +1367,22 @@ public class Board {
 				//Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
 			}
 		}
+		Profiler.EndSample ();
 
 		//were any prefered cards played?
-		Debug.Log("see what sparkles");
+		//Debug.Log("see what sparkles");
+		Profiler.BeginSample("check preferred cards");
 		for (int i = 0; i < info.moves.Count; i++) {
 			if (!info.moves [i].passMove) {
 				string cardName = info.moves [i].cardIDName;
-				Debug.Log ("  played " + info.moves [i].cardIDName);
+				//Debug.Log ("  played " + info.moves [i].cardIDName);
 				if (curUnit.aiProfile.preferedCardWeights.ContainsKey(cardName)){
 					info.val += curUnit.aiProfile.preferedCardWeights [cardName];
-					Debug.Log("played "+cardName+" worth "+curUnit.aiProfile.preferedCardWeights [cardName]);
+					//Debug.Log("played "+cardName+" worth "+curUnit.aiProfile.preferedCardWeights [cardName]);
 				}
 			}
 		}
+		Profiler.EndSample ();
 
 		//what is the average cover for enemies?
 
@@ -1357,6 +1390,7 @@ public class Board {
 
 		//have allies retreated or advanced?
 
+		Profiler.EndSample ();
 	}
 
 	//*************

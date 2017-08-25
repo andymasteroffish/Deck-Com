@@ -1,9 +1,9 @@
 move4
-move3
-move3
-attack
-attack
-attack
 attack_r2
-focus
+move3
 grenade
+move3
+attack
+attack
+attack
+focus

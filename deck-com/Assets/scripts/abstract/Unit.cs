@@ -28,7 +28,7 @@ public class Unit {
 	public int health;
 	public bool isDead;
 
-	public int baseHandSize = 5;
+	public int baseHandSize = 2;	//PUT THIS BACK TO 5
 
 	public int baseActions = 2;
 	private int actionsLeft;
@@ -206,15 +206,19 @@ public class Unit {
 
 		baseHandSize = parent.baseHandSize;
 
+		Profiler.BeginSample ("making that deck");
 		if (!isActingAIUnit) {
+			Profiler.BeginSample ("making null deck");
 			deck = null;
 			aiHandSize = parent.aiHandSize;
 			if (parent.deck != null) {
 				aiHandSize = parent.deck.Hand.Count;
 			}
+			Profiler.EndSample ();
 		} else {
 			deck = new Deck (parent.deck, this);
 		}
+		Profiler.EndSample ();
 
 		baseActions = parent.baseActions;
 		actionsLeft = parent.actionsLeft;
@@ -466,7 +470,11 @@ public class Unit {
 	//movement
 	public void moveTo(Tile target){
 		curTile = target;
-		setVisibleTiles ();
+		//trying out only updating visible tiles on the root board.
+		//this means that AI units will do their entire turn based on what they could see at the start of theri turns
+		if (!board.isAISim) {
+			setVisibleTiles ();
+		}
 	}
 
 	//damage and health

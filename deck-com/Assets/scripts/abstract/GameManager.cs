@@ -387,7 +387,7 @@ public class GameManager {
 			TurnInfo turn = new TurnInfo (move);
 			//generate a board with this move
 			//Profiler.BeginSample("resolve and return board");
-			Debug.Log("resolving "+move.cardIDName+" pass: "+move.passMove);
+			//Debug.Log("resolving "+move.cardIDName+" pass: "+move.passMove);
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
 			//Profiler.EndSample ();
 
@@ -396,18 +396,17 @@ public class GameManager {
 			if (!newBoard.units [unitID].isDead) {
 				followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth + 1);
 			} else {
-				Debug.Log ("I'm dead lol");
+				//Debug.Log ("I'm dead lol");
 			}
 
 			//if there were move moves, add them to the turn
 			if (followingMoves != null) {
 				turn.addMoves (followingMoves);
 			} else {
-				Debug.Log ("time to compare");
+				//Debug.Log ("time to compare");
 				//if there were no further moves, this is the end of this set and we should evaluate the board
-				Profiler.BeginSample("compare boards");
+
 				newBoard.compareBoardSates (originalBoard, newBoard.units [unitID], ref turn, false);
-				Profiler.EndSample ();
 			}
 
 			//return the board to the pool
@@ -453,6 +452,7 @@ public class GameManager {
 			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
 			Debug.Log ("on frame " + (Time.frameCount-1));
 			returnVal.print (board);
+
 		}
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {

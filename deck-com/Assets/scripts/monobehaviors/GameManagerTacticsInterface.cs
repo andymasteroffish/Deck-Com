@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Profiling;
 
 public class GameManagerTacticsInterface : MonoBehaviour {
 
@@ -54,6 +55,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public Tile curMouseOverTile;	//for roll over effects
 	private Tile prevMouseOverTile;
 
+	private int thisIsATest = -1;
+
 	void Awake () {
 		if (instance == null) {
 			instance = this;
@@ -91,7 +94,18 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	void Update () {
 
+//		Profiler.BeginSample ("HELLO FRIEND");
+//		for (int i = 0; i < 1000; i++) {
+//			Debug.Log ("CURSE ALL MEN");
+//		}
+//		Profiler.EndSample ();
+
 		//getting input
+
+		thisIsATest--;
+		if (thisIsATest == 0) {
+			UnityEditor.EditorApplication.isPaused = true;
+		}
 
 		//tabbing
 		if (Input.GetKeyDown (KeyCode.Tab)) {
@@ -113,6 +127,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			//ending the turn for a unit
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				endPlayerTurn ();
+				if (!publicRelease && debugPrintAIInfo) {
+					thisIsATest = 3;
+				}
 			}
 
 			//pressing escape to cancel a move

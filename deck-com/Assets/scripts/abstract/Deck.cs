@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
 using System.IO;
+using UnityEngine.Profiling;
 
 public class Deck {
 	
@@ -18,19 +19,31 @@ public class Deck {
 
 	//creating an AI deck
 	public Deck(Deck parent, Unit _owner){
+		Profiler.BeginSample ("makign deck from parent");
 		owner = _owner;
 
+		Profiler.BeginSample ("making lists");
 		drawPile = new List<Card> ();
 		discardPile = new List<Card> ();
 		hand = new List<Card>();
+		Profiler.EndSample ();
 
 		//let's try leaving deck and discard empty and only fill up hand
 		//THIS WILL MAKE AI FOR CARDS THAT DRAW CARDS OR OTHERWISE MANIPULATE THE DECK IMPOSSIBLE
+		Profiler.BeginSample("filling hand");
 		foreach (Card card in parent.hand) {
+			Profiler.BeginSample ("get card from xml");
 			Card newCard = CardManager.instance.getCardFromXMLNode (card.node);
+			Profiler.EndSample ();
+
+			Profiler.BeginSample ("setup card");
 			newCard.setup (owner, this);
+			Profiler.EndSample ();
 			hand.Add (newCard);
 		}
+		Profiler.EndSample ();
+
+		Profiler.EndSample ();
 	}
 
 	//setup
