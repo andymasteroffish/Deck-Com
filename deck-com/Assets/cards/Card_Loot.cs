@@ -7,6 +7,7 @@ public class Card_Loot : Card {
 	
 	public int level;
 
+	public Card_Loot(){}
 	public Card_Loot(XmlNode _node){
 		node = _node;
 
@@ -18,7 +19,7 @@ public class Card_Loot : Card {
 	}
 
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = Card.CardType.Loot;
 
 		description = "Loot! This card cannot be played but turns into treausure at the end of the encounter\n";

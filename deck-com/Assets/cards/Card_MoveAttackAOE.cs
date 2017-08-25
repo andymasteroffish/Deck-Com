@@ -8,7 +8,7 @@ public class Card_MoveAttackAOE : Card {
 	public int damage;
 	public int range;
 
-
+	public Card_MoveAttackAOE(){}
 	public Card_MoveAttackAOE(XmlNode _node){
 		node = _node;
 
@@ -16,10 +16,16 @@ public class Card_MoveAttackAOE : Card {
 		range = int.Parse(node["range"].InnerXml);
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Movement;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + range + " spaces and deal "+damage+" to ALL adjacent units";
+	}
+
+	public override void setupCustom(){
+		Card_MoveAttackAOE blueprintCustom = (Card_MoveAttackAOE)blueprint;
+		damage = blueprintCustom.damage;
+		range = blueprintCustom.range;
 	}
 
 	public override void mouseEnterEffects(){

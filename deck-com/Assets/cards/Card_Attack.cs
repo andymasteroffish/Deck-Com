@@ -8,6 +8,7 @@ public class Card_Attack : Card {
 	public int damageMod;
 	public int rangeMod;
 
+	public Card_Attack (){}
 	public Card_Attack(XmlNode _node){
 		node = _node;
 
@@ -23,13 +24,19 @@ public class Card_Attack : Card {
 
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = Card.CardType.Attack;
 
 		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
 		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
 
 		description = damageText + "\n" + rangeText;
+	}
+
+	public override void setupCustom(){
+		Card_Attack blueprintCustom = (Card_Attack)blueprint;
+		damageMod = blueprintCustom.damageMod;
+		rangeMod = blueprintCustom.rangeMod;
 	}
 
 	public override void mouseEnterEffects(){

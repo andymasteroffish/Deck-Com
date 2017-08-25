@@ -8,11 +8,10 @@ public class Card_GiveCharm : Card {
 	public string idNameOfGift;
 	public bool anyUnit;
 
-	public string infoText;
 
 	public int bonusRandomDiscards;	//affects the target
 
-
+	public Card_GiveCharm(){}
 	public Card_GiveCharm(XmlNode _node){
 		node = _node;
 
@@ -31,8 +30,14 @@ public class Card_GiveCharm : Card {
 	}
 
 	// Use this for initialization
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Other;
+	}
+	public override void setupCustom(){
+		Card_GiveCharm blueprintCustom = (Card_GiveCharm)blueprint;
+		idNameOfGift = blueprintCustom.idNameOfGift;
+		anyUnit = blueprintCustom.anyUnit;
+		bonusRandomDiscards = blueprintCustom.bonusRandomDiscards;
 	}
 
 	public override void mouseEnterEffects(){

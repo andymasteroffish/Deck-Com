@@ -8,7 +8,7 @@ public class Card_Equipment : Card {
 	public string idNameOfEquipment;
 
 
-
+	public Card_Equipment(){}
 	public Card_Equipment(XmlNode _node){
 		node = _node;
 
@@ -17,10 +17,15 @@ public class Card_Equipment : Card {
 	}
 
 	// Use this for initialization
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Equipment;
 
 		description = "Equip " + idNameOfEquipment;
+	}
+
+	public override void setupCustom(){
+		Card_Equipment blueprintCustom = (Card_Equipment)blueprint;
+		idNameOfEquipment = blueprintCustom.idNameOfEquipment;
 	}
 
 	public override void mouseEnterEffects(){

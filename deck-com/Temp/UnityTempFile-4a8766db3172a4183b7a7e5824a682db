@@ -80,6 +80,7 @@
 -define:UNITY_EDITOR_OSX
 -define:UNITY_TEAM_LICENSE
 'Assets/cards/Card.cs'
+'Assets/cards/CardBlueprint.cs'
 'Assets/cards/Card_Attack.cs'
 'Assets/cards/Card_AttackIgnoreWeapon.cs'
 'Assets/cards/Card_BasicAOEAttack.cs'

@@ -13,6 +13,8 @@ public class CardManager : MonoBehaviour {
 
 	private XmlNodeList nodes;
 
+	private Dictionary<string, Card> cardBlueprints = new Dictionary<string, Card> ();
+
 	void Awake(){
 		if (instance == null) {
 			instance = this;
@@ -23,6 +25,14 @@ public class CardManager : MonoBehaviour {
 		XmlDocument fullXML = new XmlDocument ();
 		fullXML.Load (Application.dataPath + "/external_data/cards.xml");
 		nodes = fullXML.GetElementsByTagName ("card");
+
+		foreach (XmlNode node in nodes) {
+			Card blueprint = getCardFromXMLNode (node);
+			//Debug.Log (blueprint != null);
+			blueprint.setupBlueprint ();
+			cardBlueprints.Add (blueprint.idName, blueprint);
+		}
+		Debug.Log (cardBlueprints.Count + " unique cards found");
 	}
 
 	public List<Card> getDeckFromTextFile(string filePath){
@@ -46,20 +56,24 @@ public class CardManager : MonoBehaviour {
 	}
 
 	public Card getCardFromIdName(string idName){
-		foreach (XmlNode node in nodes) {
-			if (node.Attributes ["idName"].Value == idName) {
-				return	getCardFromXMLNode (node);
-			}
+//		foreach (XmlNode node in nodes) {
+//			if (node.Attributes ["idName"].Value == idName) {
+//				return	getCardFromXMLNode (node);
+//			}
+//		}
+		if (cardBlueprints.ContainsKey (idName)) {
+			return getCardFromBlueprint(cardBlueprints[idName]);
 		}
+
 		Debug.Log ("COULD NOT FIND CARD ID: " + idName);
 		return null;
 	}
 
+	//used when loading in the cards on start
 	public Card getCardFromXMLNode(XmlNode node){
 		Card thisCard = null;
 
 		string scriptName = node ["script"].InnerText;
-
 
 		if (scriptName == "Card_Loot") {
 			thisCard = new Card_Loot (node);
@@ -100,12 +114,64 @@ public class CardManager : MonoBehaviour {
 		} else if (scriptName == "Card_SpawnUnit") {
 			thisCard = new Card_SpawnUnit (node);
 		}
-
 		else{
 			Debug.Log ("SCRIPT NAME FOR CARD NOT FOUND: "+scriptName);
 		}
 
+		return thisCard;
+	}
 
+	//used to actually get new cards during the game
+	public Card getCardFromBlueprint(Card blueprint){
+		Card thisCard = null;
+
+		string scriptName = blueprint.scriptName;
+
+		if (scriptName == "Card_Loot") {
+			thisCard = new Card_Loot ();
+		} else if (scriptName == "Card_Movement") {
+			thisCard = new Card_Movement ();
+		} else if (scriptName == "Card_Attack") {
+			thisCard = new Card_Attack ();
+		}else if (scriptName == "Card_AttackIgnoreWeapon") {
+			thisCard = new  Card_AttackIgnoreWeapon ();
+		} else if (scriptName == "Card_BasicAOEAttack") {
+			thisCard = new Card_BasicAOEAttack ();
+		} else if (scriptName == "Card_BasicTargetBonus") {
+			thisCard = new Card_BasicTargetBonus ();
+		} else if (scriptName == "Card_CoverAttack") {
+			thisCard = new Card_CoverAttack ();
+		} else if (scriptName == "Card_GiveCharm") {
+			thisCard = new Card_GiveCharm ();
+		} else if (scriptName == "Card_Heal") {
+			thisCard = new Card_Heal ();
+		} else if (scriptName == "Card_MoveAndAttack") {
+			thisCard = new Card_MoveAndAttack ();
+		} else if (scriptName == "Card_MoveAttackAOE") {
+			thisCard = new Card_MoveAttackAOE ();
+		} else if (scriptName == "Card_MovementSelfDestruct") {
+			thisCard = new Card_MovementSelfDestruct ();
+		} else if (scriptName == "Card_TeamDash") {
+			thisCard = new Card_TeamDash ();
+		} else if (scriptName == "Card_Teleport") {
+			thisCard = new Card_Teleport ();
+		} else if (scriptName == "Card_Trade_Places") {
+			thisCard = new Card_Trade_Places ();
+		} else if (scriptName == "Card_DirectDamage") {
+			thisCard = new Card_DirectDamage ();
+		} else if (scriptName == "Card_Equipment") {
+			thisCard = new Card_Equipment ();
+		} else if (scriptName == "Card_RemoveCharm") {
+			thisCard = new Card_RemoveCharm ();
+		} else if (scriptName == "Card_SpawnUnit") {
+			thisCard = new Card_SpawnUnit ();
+		}else{
+			Debug.Log ("SCRIPT NAME FOR BLUEPRINT NOT FOUND: "+scriptName);
+		}
+			
+		if (thisCard != null) {
+			thisCard.blueprint = blueprint;
+		}
 		return thisCard;
 	}
 

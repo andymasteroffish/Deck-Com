@@ -12,6 +12,7 @@ public class Card_BasicAOEAttack : Card {
 	public bool destroysCover;
 	public bool harmsFriendly;
 
+	public Card_BasicAOEAttack(){}
 	public Card_BasicAOEAttack(XmlNode _node){
 		node = _node;
 
@@ -23,8 +24,7 @@ public class Card_BasicAOEAttack : Card {
 		harmsFriendly = bool.Parse (node ["harms_friendly"].InnerXml);
 	}
 
-	public override void setupCustom(){
-
+	public override void setupBlueprintCustom(){
 		type = CardType.AttackSpecial;
 
 		description = "Deals " + damage + " damage in area.\nRange "+throwRange;
@@ -34,6 +34,15 @@ public class Card_BasicAOEAttack : Card {
 		if (harmsFriendly){
 			description += "\ncan hurt allies";
 		}
+	}
+
+	public override void setupCustom(){
+		Card_BasicAOEAttack blueprintCustom = (Card_BasicAOEAttack)blueprint;
+		damage = blueprintCustom.damage;
+		throwRange = blueprintCustom.throwRange;
+		damageRange = blueprintCustom.damageRange;
+		destroysCover = blueprintCustom.destroysCover;
+		harmsFriendly = blueprintCustom.harmsFriendly;
 	}
 
 	public override void mouseEnterEffects(){

@@ -11,16 +11,22 @@ public class Card_Teleport : Card {
 
 	private Unit selectedUnit;
 
+	public Card_Teleport(){}
 	public Card_Teleport(XmlNode _node){
 		node = _node;
 
 		moveRange = int.Parse (node ["move_range"].InnerText);
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Magic;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "teleport a visible unit up to "+moveRange+" spaces";
+	}
+
+	public override void setupCustom(){
+		Card_Teleport blueprintCustom = (Card_Teleport)blueprint;
+		moveRange = blueprintCustom.moveRange;
 	}
 
 	public override void mouseEnterEffects(){

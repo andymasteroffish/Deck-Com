@@ -12,6 +12,8 @@ public class Card : IComparable<Card> {
 	public string description;
 
 	public XmlNode node;
+	public string scriptName;
+	public Card blueprint;
 
 	public CardType type;
 	public int baseActionCost;
@@ -44,7 +46,7 @@ public class Card : IComparable<Card> {
 	public bool isDead;
 
 	//some colors
-	public Dictionary<CardType, Color> highlightColors = new Dictionary<CardType, Color>();
+	public Dictionary<CardType, Color> highlightColors;
 	public Color baseHighlightColor;
 
 	public bool showVisibilityIconsWhenHighlighting;
@@ -55,13 +57,11 @@ public class Card : IComparable<Card> {
 	//a few flags for display
 	public bool revealAICardFlag;
 
-	public void setup(Unit _owner, Deck _deck){
-		owner = _owner;
-		deck = _deck;
+	public void setupBlueprint(){
+		
 		idName = node.Attributes ["idName"].Value;
 
-		isDead = false;
-
+		scriptName = node ["script"].InnerText;
 		name = node ["name"].InnerText;
 
 		baseActionCost = 1;
@@ -110,9 +110,9 @@ public class Card : IComparable<Card> {
 		baseActionCost = 1;
 		type = CardType.Other;
 
-		revealAICardFlag = false;
 
 		//set the colors
+		highlightColors = new Dictionary<CardType, Color>();
 		highlightColors.Clear();
 		highlightColors.Add(CardType.Attack, new Color(1f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.AttackSpecial, new Color(1f, 0.5f, 0.5f));
@@ -126,7 +126,7 @@ public class Card : IComparable<Card> {
 		showVisibilityIconsWhenHighlighting = false;
 
 		//custom setup
-		setupCustom ();
+		setupBlueprintCustom ();
 
 		//add bonus stuff to the description
 		if (bonusActions > 0) {
@@ -145,6 +145,46 @@ public class Card : IComparable<Card> {
 		if (node ["desc"] != null) {
 			description = node ["desc"].InnerText;
 		}
+	}
+	public virtual void setupBlueprintCustom(){}
+
+	public void setup(Unit _owner, Deck _deck){
+		owner = _owner;
+		deck = _deck;
+		isDead = false;
+		revealAICardFlag = false;
+
+		//grab eveything from the blueprint
+		description = blueprint.description;
+		idName = blueprint.idName;
+		scriptName = blueprint.scriptName;
+		name = blueprint.name;
+
+		baseActionCost = blueprint.baseActionCost;
+		costToAddToDeck = blueprint.costToAddToDeck;
+
+		//any bonuses?
+		bonusActions = blueprint.bonusActions;
+
+		bonusCards = blueprint.bonusCards;
+		bonusHeal = blueprint.bonusHeal;
+		bonusCardID = blueprint.bonusCardID;
+
+		//will this ignore any charms
+		ignoreTargetCharms = blueprint.ignoreTargetCharms;
+		ignoreCasterCharms = blueprint.ignoreCasterCharms;
+
+		//default values
+		baseActionCost = blueprint.baseActionCost;
+		type = blueprint.type;
+
+		//set the colors
+		highlightColors = blueprint.highlightColors;
+		showVisibilityIconsWhenHighlighting = blueprint.showVisibilityIconsWhenHighlighting;
+		baseHighlightColor = blueprint.baseHighlightColor;
+
+		//have cards check their blueprints for any custom values
+		setupCustom ();
 	}
 	public virtual void setupCustom(){}
 

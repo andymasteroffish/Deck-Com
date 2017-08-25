@@ -7,18 +7,24 @@ public class Card_MovementSelfDestruct : Card {
 
 	public int range;
 
+	public Card_MovementSelfDestruct(){}
 	public Card_MovementSelfDestruct(XmlNode _node){
 		node = _node;
 
 		range = int.Parse (node ["range"].InnerXml);
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = Card.CardType.Movement;
 
 		baseActionCost = 0;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + range + " spaces.\nCosts 0 actions. One Time Use.";
+	}
+
+	public override void setupCustom(){
+		Card_MovementSelfDestruct blueprintCustom = (Card_MovementSelfDestruct)blueprint;
+		range = blueprintCustom.range;
 	}
 
 	public override void mouseEnterEffects(){

@@ -10,7 +10,7 @@ public class Card_SpawnUnit : Card {
 	public bool replace_parent;
 
 
-
+	public Card_SpawnUnit(){}
 	public Card_SpawnUnit(XmlNode _node){
 		node = _node;
 
@@ -29,8 +29,15 @@ public class Card_SpawnUnit : Card {
 	}
 
 	// Use this for initialization
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Other;
+	}
+
+	public override void setupCustom(){
+		Card_SpawnUnit blueprintCustom = (Card_SpawnUnit)blueprint;
+		spawn_id = blueprintCustom.spawn_id;
+		range = blueprintCustom.range;
+		replace_parent = blueprintCustom.replace_parent;
 	}
 
 	public override void mouseEnterEffects(){

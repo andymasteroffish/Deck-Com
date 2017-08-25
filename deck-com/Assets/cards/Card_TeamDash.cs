@@ -11,6 +11,7 @@ public class Card_TeamDash : Card {
 
 	private bool onGiftStep = false;
 
+	public Card_TeamDash(){}
 	public Card_TeamDash(XmlNode _node){
 		node = _node;
 
@@ -18,10 +19,16 @@ public class Card_TeamDash : Card {
 		giftCardID = node ["gift_id"].InnerXml;
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = Card.CardType.Movement;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + range + " spaces and give an a free "+range+" space move";
+	}
+
+	public override void setupCustom(){
+		Card_TeamDash blueprintCustom = (Card_TeamDash)blueprint;
+		range = blueprintCustom.range;
+		giftCardID = blueprintCustom.giftCardID;
 	}
 
 	public override void mouseEnterEffects(){

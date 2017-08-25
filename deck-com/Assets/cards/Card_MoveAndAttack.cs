@@ -10,6 +10,7 @@ public class Card_MoveAndAttack : Card {
 
 	private bool onAttackStep = false;
 
+	public Card_MoveAndAttack(){}
 	public Card_MoveAndAttack(XmlNode _node){
 		node = _node;
 
@@ -17,10 +18,16 @@ public class Card_MoveAndAttack : Card {
 		damageMod = int.Parse (node ["damage_mod"].InnerXml);
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Attack;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + moveRange + " spaces and attack at "+damageMod+" damage";
+	}
+
+	public override void setupCustom(){
+		Card_MoveAndAttack blueprintCustom = (Card_MoveAndAttack)blueprint;
+		moveRange = blueprintCustom.moveRange;
+		damageMod = blueprintCustom.damageMod;
 	}
 
 	public override void mouseEnterEffects(){

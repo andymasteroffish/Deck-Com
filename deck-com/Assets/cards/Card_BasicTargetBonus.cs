@@ -9,6 +9,7 @@ public class Card_BasicTargetBonus : Card {
 	public int numCardsToDraw;
 	public int numActionsToGain;
 
+	public Card_BasicTargetBonus(){}
 	public Card_BasicTargetBonus(XmlNode _node){
 		node = _node;
 
@@ -18,7 +19,7 @@ public class Card_BasicTargetBonus : Card {
 	}
 
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Aid;
 
 		description = "Gain";
@@ -31,6 +32,13 @@ public class Card_BasicTargetBonus : Card {
 		if (anyUnit) {
 			description += "\n(any unit)";
 		}
+	}
+
+	public override void setupCustom(){
+		Card_BasicTargetBonus blueprintCustom = (Card_BasicTargetBonus)blueprint;
+		anyUnit = blueprintCustom.anyUnit;
+		numCardsToDraw = blueprintCustom.numCardsToDraw;
+		numActionsToGain = blueprintCustom.numActionsToGain;
 	}
 
 	public override void mouseEnterEffects(){

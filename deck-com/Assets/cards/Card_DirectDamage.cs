@@ -10,7 +10,7 @@ public class Card_DirectDamage : Card {
 	public bool useLineOfSight;
 
 
-
+	public Card_DirectDamage(){}
 	public Card_DirectDamage(XmlNode _node){
 		node = _node;
 
@@ -24,11 +24,9 @@ public class Card_DirectDamage : Card {
 			range = float.Parse (node ["range"].InnerXml);
 		}
 
-
-
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = Card.CardType.Magic;
 
 		description = "deal " + damage + " damage to";// target unit";
@@ -39,6 +37,13 @@ public class Card_DirectDamage : Card {
 		}
 			
 		description += "\nIgnores cover";
+	}
+
+	public override void setupCustom(){
+		Card_DirectDamage blueprintCustom = (Card_DirectDamage)blueprint;
+		damage = blueprintCustom.damage;
+		range = blueprintCustom.range;
+		useLineOfSight = blueprintCustom.useLineOfSight;
 	}
 
 	public override void mouseEnterEffects(){

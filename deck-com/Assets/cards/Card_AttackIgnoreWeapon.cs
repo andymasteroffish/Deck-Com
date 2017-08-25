@@ -8,6 +8,7 @@ public class Card_AttackIgnoreWeapon : Card {
 	public int damage;
 	public float range;
 
+	public Card_AttackIgnoreWeapon(){}
 	public Card_AttackIgnoreWeapon(XmlNode _node){
 		node = _node;
 
@@ -15,13 +16,19 @@ public class Card_AttackIgnoreWeapon : Card {
 		range = float.Parse (node ["range"].InnerXml);
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = Card.CardType.Attack;
 
 		string damageText = "Damage: " + damage;
 		string rangeText = "Range: " + Mathf.Floor(range);
 
 		description = damageText + "\n" + rangeText + "\nDoes not use weapon.";
+	}
+
+	public override void setupCustom(){
+		Card_AttackIgnoreWeapon blueprintCustom = (Card_AttackIgnoreWeapon)blueprint;
+		damage = blueprintCustom.damage;
+		range = blueprintCustom.range;
 	}
 
 	public override void mouseEnterEffects(){

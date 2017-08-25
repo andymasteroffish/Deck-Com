@@ -1,12 +1,7 @@
 move6
 move6
-attack
-attack
+move5
+move4
+move3
 move6
-move6
-attack
-attack
-move6
-move6
-attack
-attack
+move5

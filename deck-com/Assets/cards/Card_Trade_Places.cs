@@ -4,13 +4,13 @@ using UnityEngine;
 using System.Xml;
 
 public class Card_Trade_Places : Card {
-	
+
+	public Card_Trade_Places(){}
 	public Card_Trade_Places(XmlNode _node){
 		node = _node;
-
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Magic;
 	}
 

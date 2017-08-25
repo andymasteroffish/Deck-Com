@@ -8,6 +8,7 @@ public class Card_Heal : Card {
 	public int healAmount;
 	public int range;
 
+	public Card_Heal(){}
 	public Card_Heal(XmlNode _node){
 		node = _node;
 
@@ -15,10 +16,16 @@ public class Card_Heal : Card {
 		range = int.Parse (node ["range"].InnerXml);
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Aid;
 
 		description = "heals "+healAmount+" at range "+range;
+	}
+
+	public override void setupCustom(){
+		Card_Heal blueprintCustom = (Card_Heal)blueprint;
+		healAmount = blueprintCustom.healAmount;
+		range = blueprintCustom.range;
 	}
 
 	public override void mouseEnterEffects(){

@@ -8,7 +8,7 @@ public class Card_CoverAttack : Card {
 	public int damageMod;
 	public int rangeMod;
 
-
+	public Card_CoverAttack(){}
 	public Card_CoverAttack(XmlNode _node){
 		node = _node;
 
@@ -17,13 +17,19 @@ public class Card_CoverAttack : Card {
 
 	}
 
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Attack;
 
 		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
 		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
 
 		description = damageText + "\n" + rangeText+"\nCan go through cover, destroying it";
+	}
+
+	public override void setupCustom(){
+		Card_CoverAttack blueprintCustom = (Card_CoverAttack)blueprint;
+		damageMod = blueprintCustom.damageMod;
+		rangeMod = blueprintCustom.rangeMod;
 	}
 
 	public override void mouseEnterEffects(){

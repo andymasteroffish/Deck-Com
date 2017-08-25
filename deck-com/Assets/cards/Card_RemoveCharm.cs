@@ -7,7 +7,7 @@ public class Card_RemoveCharm : Card {
 
 	public bool removesEquipment;
 
-
+	public Card_RemoveCharm(){}
 	public Card_RemoveCharm(XmlNode _node){
 		node = _node;
 
@@ -15,8 +15,13 @@ public class Card_RemoveCharm : Card {
 	}
 
 	// Use this for initialization
-	public override void setupCustom(){
+	public override void setupBlueprintCustom(){
 		type = CardType.Other;
+	}
+
+	public override void setupCustom(){
+		Card_RemoveCharm blueprintCustom = (Card_RemoveCharm)blueprint;
+		removesEquipment = blueprintCustom.removesEquipment;
 	}
 
 	public override void mouseEnterEffects(){

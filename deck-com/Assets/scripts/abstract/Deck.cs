@@ -32,8 +32,8 @@ public class Deck {
 		//THIS WILL MAKE AI FOR CARDS THAT DRAW CARDS OR OTHERWISE MANIPULATE THE DECK IMPOSSIBLE
 		Profiler.BeginSample("filling hand");
 		foreach (Card card in parent.hand) {
-			Profiler.BeginSample ("get card from xml");
-			Card newCard = CardManager.instance.getCardFromXMLNode (card.node);
+			Profiler.BeginSample ("get card");
+			Card newCard = CardManager.instance.getCardFromBlueprint (card.blueprint);//  CardManager.instance.getCardFromXMLNode (card.node);
 			Profiler.EndSample ();
 
 			Profiler.BeginSample ("setup card");

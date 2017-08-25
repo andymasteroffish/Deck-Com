@@ -7,17 +7,22 @@ public class Card_Movement : Card {
 
 	public int range;
 
+	public Card_Movement(){}
 	public Card_Movement(XmlNode _node){
 		node = _node;
 		range = int.Parse (node ["range"].InnerText);
 	}
 
-	public override void setupCustom(){
+
+	public override void setupBlueprintCustom(){
 		type = Card.CardType.Movement;
-
 		description = "move up to " + range + " spaces";
-
 		showVisibilityIconsWhenHighlighting = true;
+	}
+
+	public override void setupCustom(){
+		Card_Movement blueprintCustom = (Card_Movement)blueprint;
+		range = blueprintCustom.range;
 	}
 
 	public override void mouseEnterEffects(){
