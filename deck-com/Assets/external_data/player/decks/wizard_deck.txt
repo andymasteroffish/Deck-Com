@@ -1,4 +1,5 @@
 move4
+grenade
 move4
 move5
 move3

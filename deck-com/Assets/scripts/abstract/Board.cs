@@ -13,7 +13,9 @@ public class Board {
 
 	public float diagonalVal = 1.41f;
 
-	private Tile[,] grid = null;
+	private Tile[,] grid = null;		//this will be a pointer to the parent grid or to novelGrid
+	private Tile[,] novelGrid = null;	//this is the fesh grid waiting in the wings
+	private bool usingParentGrid;
 
 	public List<Unit> units;
 	public List<Loot> loot;
@@ -31,6 +33,7 @@ public class Board {
 
 	public void mainBoardSetup(){
 		isAISim = false;
+		usingParentGrid = false;
 		levelGen = new LevelGen ();
 		units = new List<Unit> ();
 		loot = new List<Loot> ();
@@ -96,31 +99,11 @@ public class Board {
 			Loot thisLoot = new Loot (lootGetter, curAreaNum);
 			loot.Add (thisLoot);
 		}
-
-//		//add some loot to some of them
-//		for (int i = 0; i < units.Count; i++) {
-//			if (!units [i].isPlayerControlled) {
-//				if (Random.value < GameManagerTacticsInterface.instance.lootDropPrc) {
-//					Debug.Log (units [i].unitName + " got loot");
-//					Loot thisLoot = new Loot (units [i], curAreaNum);
-//					loot.Add (thisLoot);
-//				}
-//			}
-//		}
-//
-//		//if straight up nobody got loot, just select one
-//		while(loot.Count == 0) {
-//			int randID = (int)Random.Range (0, units.Count);
-//			if (!units [randID].isPlayerControlled) {
-//				Loot thisLoot = new Loot (units [randID], curAreaNum);
-//				loot.Add (thisLoot);
-//			}
-//		}
 	}
 
 	//creating a board for AI stuff
 	public void setFromParent(Board parent){
-		//Profiler.BeginSample ("board setup");
+		Profiler.BeginSample ("board setup");
 		isAISim = true;
 
 		debugCounter++;
@@ -137,7 +120,9 @@ public class Board {
 		dm = parent.dm;
 
 		//tiles
-
+		grid = parent.grid;
+		usingParentGrid = true;
+		/*
 		if (grid == null) {
 			Profiler.BeginSample ("making new tiles");
 		
@@ -171,9 +156,9 @@ public class Board {
 					grid [x, y].setFromParent(parent.grid [x, y]);
 				}
 			}
-			//grid = parent.grid;
 			Profiler.EndSample ();
 		}
+		*/
 
 		//units
 		//Profiler.BeginSample("make units");
@@ -188,9 +173,61 @@ public class Board {
 
 		//loot is not represented and can stay empty
 		loot = new List<Loot>();
-		//Profiler.EndSample ();
 
+		Profiler.EndSample ();
+	}
 
+	void copyParentGridToNewGrid(){
+		usingParentGrid = false;
+
+		//if this is the first time this pooled board has needed a novel grid, let's make one
+		if (novelGrid == null) {
+			Profiler.BeginSample ("making a fresh novel grid");
+
+			novelGrid = new Tile[cols, rows];
+			for (int x = 0; x < cols; x++) {
+				for (int y = 0; y < rows; y++) {
+					novelGrid [x, y] = new Tile (grid [x, y]);
+				}
+			}
+
+			for (int x = 0; x < cols; x++) {
+				for (int y = 0; y < rows; y++) {
+					Tile[] adjacent = new Tile[] { null, null, null, null };
+					if (x < cols - 1)
+						adjacent [(int)Tile.Direction.Right] = novelGrid [x + 1, y];
+					if (x > 0)
+						adjacent [(int)Tile.Direction.Left] = novelGrid [x - 1, y];
+					if (y < rows - 1)
+						adjacent [(int)Tile.Direction.Up] = novelGrid [x, y + 1];
+					if (y > 0)
+						adjacent [(int)Tile.Direction.Down] = novelGrid [x, y - 1];
+					novelGrid [x, y].setInfo (adjacent);
+				}
+			}
+			Profiler.EndSample ();
+		} 
+
+		//otherwise, just copy the parent grid to the novel grid
+		else {
+			Profiler.BeginSample ("copying old grid to novel grid");
+			//JUST GOING THROUGH THIS FOR LOOP IS TAKING A HUGELY LONG TIME. LONGER THAN THE TIME SPENT RUNNING setFromParent()
+			for (int x = 0; x < cols; x++) {
+				for (int y = 0; y < rows; y++) {
+					novelGrid [x, y].setFromParent(grid [x, y]);
+				}
+			}
+			Profiler.EndSample ();
+		}
+
+		//move all units to the new grid
+		foreach (Unit unit in units) {
+			TilePos pos = unit.CurTile.Pos;
+			unit.moveTo (grid [pos.x, pos.y]);
+		}
+
+		//and then set the novel grid as the grid
+		grid = novelGrid;
 	}
 
 	//**************************
@@ -294,11 +331,21 @@ public class Board {
 	}
 
 	public void changeCover(Tile target, Tile.Cover newCoverVal){
-		Profiler.BeginSample("change cover");
 		//check if any change is needed
 		if (target.CoverVal == newCoverVal) {
 			return;
 		}
+
+		Profiler.BeginSample("change cover");
+
+		//if we were using the parent grid, we now need to update that
+		if (usingParentGrid) {
+			copyParentGridToNewGrid ();
+		}
+
+		//redirect the target to the new grid in case it changed from the parent grid to the novel one
+		TilePos pos = target.Pos;
+		target = grid [pos.x, pos.y];
 
 		//change this tile
 		target.setCover (newCoverVal);
@@ -315,11 +362,6 @@ public class Board {
 				tile.ignoreStoredRanges = true;
 			}
 		}
-
-//		//redo all adjacent lists
-//		foreach (Tile tile in grid) {
-//			tile.setAdjacentTiles();
-//		}
 
 		//have each unit check their new visibility
 		foreach (Unit unit in units) {
@@ -540,6 +582,7 @@ public class Board {
 		clearHighlights ();
 		turnOffUnitMouseColliders ();
 		if (source.visibleTiles == null) {
+			Debug.Log ("no vis tiles, so set visible tiles for " + source.unitName + " with vision " + source.sightRange);
 			source.setVisibleTiles ();
 		}
 		foreach (Tile tile in source.visibleTiles) {

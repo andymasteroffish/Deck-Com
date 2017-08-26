@@ -283,6 +283,7 @@ public class Unit {
 			deck.drawCard ();
 		}
 		actionsLeft = 0;
+		Debug.Log ("set vis tiles on reset");
 		setVisibleTiles ();
 	}
 
@@ -473,6 +474,7 @@ public class Unit {
 		//trying out only updating visible tiles on the root board.
 		//this means that AI units will do their entire turn based on what they could see at the start of theri turns
 		if (!board.isAISim) {
+			Debug.Log ("set vis tiles on move");
 			setVisibleTiles ();
 		}
 	}
