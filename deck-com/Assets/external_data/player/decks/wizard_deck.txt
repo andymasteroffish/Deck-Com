@@ -1,6 +1,14 @@
+move4
+move4
 move5
-equipment_heal_ring
-move3
-move5
 move3
 move3
+move2_cantrip
+attack
+psychic_poke
+gain_an_action
+draw_a_card
+heal
+attack
+destroy_equipment
+heal

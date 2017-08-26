@@ -213,6 +213,18 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		prevMouseOverTile = curMouseOverTile;
 
 		//testing
+		if (Input.GetKeyDown (KeyCode.Q)) {
+			Debug.Log ("on frame " + Time.frameCount);
+			Profiler.BeginSample ("test me out");
+			for (int i = 0; i < 18095; i++) {
+				for (int x = 0; x < gm.board.cols; x++) {
+					for (int y = 0; y < gm.board.cols; y++) {
+
+					}
+				}
+			}
+			Profiler.EndSample ();
+		}
 //		for (int i = 0; i < 4; i++) {
 //			if (gm.board.units [i] != gm.activePlayerUnit) {
 //				gm.board.getCover (gm.activePlayerUnit, gm.board.units [i]);

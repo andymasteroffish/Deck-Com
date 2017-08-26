@@ -28,7 +28,7 @@ public class Unit {
 	public int health;
 	public bool isDead;
 
-	public int baseHandSize = 2;	//PUT THIS BACK TO 5
+	public int baseHandSize = 5;	//PUT THIS BACK TO 5
 
 	public int baseActions = 2;
 	private int actionsLeft;

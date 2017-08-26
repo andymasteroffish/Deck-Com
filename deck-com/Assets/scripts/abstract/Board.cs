@@ -171,6 +171,7 @@ public class Board {
 					grid [x, y].setFromParent(parent.grid [x, y]);
 				}
 			}
+			//grid = parent.grid;
 			Profiler.EndSample ();
 		}
 
