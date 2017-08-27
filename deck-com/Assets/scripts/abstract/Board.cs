@@ -1148,26 +1148,29 @@ public class Board {
 		//if the number of moves at best val is less than this, we'll include less good moves if there are any
 		int minimumAcceptableBestMoves = 5;
 
-		Dictionary<MoveInfo, int> values = new Dictionary<MoveInfo, int>();
+		//don't bother checking if we don't even have that many moves
+		if (moves.Count > minimumAcceptableBestMoves) {
+			Dictionary<MoveInfo, int> values = new Dictionary<MoveInfo, int> ();
 
-		foreach (MoveInfo move in moves) {
-			int thisVal = checkMoveVal (move, cardID);
-			values.Add (move, thisVal);
-			//if this is the new best, mark it and reste our count
-			if (thisVal > bestVal) {
-				bestVal = thisVal;
-				numMovesAtBestVal = 0;
+			foreach (MoveInfo move in moves) {
+				int thisVal = checkMoveVal (move, cardID);
+				values.Add (move, thisVal);
+				//if this is the new best, mark it and reste our count
+				if (thisVal > bestVal) {
+					bestVal = thisVal;
+					numMovesAtBestVal = 0;
+				}
+				//if this macthes the best, increase our count
+				if (thisVal == bestVal) {
+					numMovesAtBestVal++;
+				}
 			}
-			//if this macthes the best, increase our count
-			if (thisVal == bestVal) {
-				numMovesAtBestVal++;
-			}
-		}
 
-		if (numMovesAtBestVal >= minimumAcceptableBestMoves) {
-			for (int i = moves.Count - 1; i >= 0; i--) {
-				if (values[moves[i]] < bestVal) {
-					moves.RemoveAt (i);
+			if (numMovesAtBestVal >= minimumAcceptableBestMoves) {
+				for (int i = moves.Count - 1; i >= 0; i--) {
+					if (values [moves [i]] < bestVal) {
+						moves.RemoveAt (i);
+					}
 				}
 			}
 		}
