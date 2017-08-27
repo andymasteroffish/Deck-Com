@@ -46,4 +46,8 @@ public class Card_MovementSelfDestruct : Card {
 	public override void resolveFromMove(MoveInfo move){
 		passInTileCustom ( Owner.board.Grid[move.targetTilePos.x, move.targetTilePos.y]);
 	}
+
+	public override int checkMoveVal(MoveInfo move, Board board){
+		return GenericMovementCardCheckMoveVal (move, board);
+	}
 }

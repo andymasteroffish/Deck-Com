@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using UnityEngine.Profiling;
 
 public class Card_Movement : Card {
 
@@ -41,6 +42,11 @@ public class Card_Movement : Card {
 
 	public override void resolveFromMove(MoveInfo move){
 		passInTileCustom ( Owner.board.Grid[move.targetTilePos.x, move.targetTilePos.y]);
+	}
+
+
+	public override int checkMoveVal(MoveInfo move, Board board){
+		return GenericMovementCardCheckMoveVal (move, board);
 	}
 
 }

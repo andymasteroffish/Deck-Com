@@ -1153,7 +1153,7 @@ public class Board {
 			Dictionary<MoveInfo, int> values = new Dictionary<MoveInfo, int> ();
 
 			foreach (MoveInfo move in moves) {
-				int thisVal = checkMoveVal (move, cardID);
+				int thisVal = units[move.unitID].deck.Hand[cardID].checkMoveVal (move, this);
 				values.Add (move, thisVal);
 				//if this is the new best, mark it and reste our count
 				if (thisVal > bestVal) {
@@ -1179,74 +1179,74 @@ public class Board {
 
 	//this is used with filterBadMovesIfApplicable()
 	//Most moves do not get checked here and will just return 0.
-	public int checkMoveVal(MoveInfo move, int cardID){
-		Profiler.BeginSample ("check move val");
-		Unit unit = units [move.unitID];
-		Card card = unit.deck.Hand [cardID];
-
-		int moveVal = 0;
-
-		if (card.type == Card.CardType.Movement) {
-			Tile targetTile = grid [move.targetTilePos.x, move.targetTilePos.y];
-			float highestPreferedDist = unit.aiProfile.preferedDistToClosestEnemy + unit.aiProfile.acceptableDistanceRangeToClosestEnemy;
-
-			//let's figure out who our enemies are
-			Profiler.BeginSample("sorting allies and foes");
-			List<Unit> enemies = new List<Unit> ();
-			bool rootingForAI = !unit.isPlayerControlled;
-			foreach (Unit u in units) {
-				if (u.isPlayerControlled == rootingForAI) {
-					enemies.Add (u);
-				}
-			}
-			Profiler.EndSample ();
-
-			//let's get the closest distance for this target
-			float newCloseDist = 99999;
-			float curCloseDist = 99999;
-			foreach (Unit foe in enemies) {
-				float dist = dm.getDist (move.targetTilePos, foe.CurTile.Pos);
-				if (dist < newCloseDist) {
-					newCloseDist = dist;
-				}
-
-				float curDist = dm.getDist (unit.CurTile.Pos, foe.CurTile.Pos);
-				if (curDist < curCloseDist) {
-					curCloseDist = curDist;
-				}
-			}
-
-			//targetTile.debugText = newCloseDist.ToString("N1");
-
-			//avoid moves that are further away than the max prefered dist and further away than we are now
-			//no cowards!
-			if ( !(newCloseDist > highestPreferedDist && newCloseDist > curCloseDist)) {
-				moveVal++;
-			}
-
-			//is there cover (or would the move put us very close to a foe since many units like that)
-			Tile.Cover lowestCover = targetTile.getHighestAdjacentCover();
-			bool nextToFoe = newCloseDist < 2.5f;
-			if ((int)lowestCover > (int)Tile.Cover.None || nextToFoe) {
-				moveVal++;
-			}
-
-			//testing
-//			if (moveVal == 2) {
-//				targetTile.setHighlighted (true, Color.green);
+//	public int checkMoveVal(MoveInfo move, int cardID){
+//		Profiler.BeginSample ("check move val");
+//		Unit unit = units [move.unitID];
+//		Card card = unit.deck.Hand [cardID];
+//
+//		int moveVal = 0;
+//
+//		if (card.type == Card.CardType.Movement) {
+//			Tile targetTile = grid [move.targetTilePos.x, move.targetTilePos.y];
+//			float highestPreferedDist = unit.aiProfile.preferedDistToClosestEnemy + unit.aiProfile.acceptableDistanceRangeToClosestEnemy;
+//
+//			//let's figure out who our enemies are
+//			Profiler.BeginSample("sorting allies and foes");
+//			List<Unit> enemies = new List<Unit> ();
+//			bool rootingForAI = !unit.isPlayerControlled;
+//			foreach (Unit u in units) {
+//				if (u.isPlayerControlled == rootingForAI) {
+//					enemies.Add (u);
+//				}
 //			}
-//			if (moveVal == 1) {
-//				targetTile.setHighlighted (true, Color.yellow);
+//			Profiler.EndSample ();
+//
+//			//let's get the closest distance for this target
+//			float newCloseDist = 99999;
+//			float curCloseDist = 99999;
+//			foreach (Unit foe in enemies) {
+//				float dist = dm.getDist (move.targetTilePos, foe.CurTile.Pos);
+//				if (dist < newCloseDist) {
+//					newCloseDist = dist;
+//				}
+//
+//				float curDist = dm.getDist (unit.CurTile.Pos, foe.CurTile.Pos);
+//				if (curDist < curCloseDist) {
+//					curCloseDist = curDist;
+//				}
 //			}
-//			if (moveVal == 0) {
-//				targetTile.setHighlighted (true, Color.red);
+//
+//			//targetTile.debugText = newCloseDist.ToString("N1");
+//
+//			//avoid moves that are further away than the max prefered dist and further away than we are now
+//			//no cowards!
+//			if ( !(newCloseDist > highestPreferedDist && newCloseDist > curCloseDist)) {
+//				moveVal++;
 //			}
-
-		}
-
-		Profiler.EndSample ();
-		return moveVal;
-	}
+//
+//			//is there cover (or would the move put us very close to a foe since many units like that)
+//			Tile.Cover lowestCover = targetTile.getHighestAdjacentCover();
+//			bool nextToFoe = newCloseDist < 2.5f;
+//			if ((int)lowestCover > (int)Tile.Cover.None || nextToFoe) {
+//				moveVal++;
+//			}
+//
+//			//testing
+////			if (moveVal == 2) {
+////				targetTile.setHighlighted (true, Color.green);
+////			}
+////			if (moveVal == 1) {
+////				targetTile.setHighlighted (true, Color.yellow);
+////			}
+////			if (moveVal == 0) {
+////				targetTile.setHighlighted (true, Color.red);
+////			}
+//
+//		}
+//
+//		Profiler.EndSample ();
+//		return moveVal;
+//	}
 
 	public int getUnitID(Unit unit){
 		for(int i=0; i<units.Count; i++){
