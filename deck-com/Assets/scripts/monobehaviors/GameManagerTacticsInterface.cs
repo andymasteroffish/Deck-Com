@@ -103,7 +103,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		//getting input
 
 		thisIsATest--;
-		if (thisIsATest == 0) {
+		if (thisIsATest == 0 && Profiler.enabled) {
 			UnityEditor.EditorApplication.isPaused = true;
 		}
 
@@ -214,16 +214,14 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//testing
 		if (Input.GetKeyDown (KeyCode.Q)) {
-			Debug.Log ("on frame " + Time.frameCount);
-			Profiler.BeginSample ("test me out");
-			for (int i = 0; i < 18095; i++) {
-				for (int x = 0; x < gm.board.cols; x++) {
-					for (int y = 0; y < gm.board.cols; y++) {
+			int unitID = 3;
+			int cardID = 0;
+			List<MoveInfo> testMoves = gm.board.getAllMovesForCard (unitID, cardID);
+			gm.board.filterBadMovesIfApplicable (testMoves, cardID);
 
-					}
-				}
+			foreach (MoveInfo move in testMoves) {
+				gm.board.Grid [move.targetTilePos.x, move.targetTilePos.y].debugText = "X";
 			}
-			Profiler.EndSample ();
 		}
 //		for (int i = 0; i < 4; i++) {
 //			if (gm.board.units [i] != gm.activePlayerUnit) {

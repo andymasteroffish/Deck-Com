@@ -367,10 +367,8 @@ public class GameManager {
 		float startTime = Time.realtimeSinceStartup;
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			Board.debugCounter = 0;	
-			//ObjectPooler.instance.debugNewTileCount = 0;
 		}
 
-		//Debug.Log ("get move at depth " + curDepth);
 		List<MoveInfo> allMoves = curBoard.getAllMovesForUnit (unitID);
 
 		if (allMoves.Count == 0) {
@@ -378,18 +376,13 @@ public class GameManager {
 			return null;
 		}
 
-		//Debug.Log ("actions " + curBoard.units [unitID].ActionsLeft + "  depth " + curDepth);
-
 		//find all possible moves that could follow
 		List<TurnInfo> potentialTurns = new List<TurnInfo>();
 
 		foreach (MoveInfo move in allMoves) {
 			TurnInfo turn = new TurnInfo (move);
 			//generate a board with this move
-			//Profiler.BeginSample("resolve and return board");
-			//Debug.Log("resolving "+move.cardIDName+" pass: "+move.passMove);
 			Board newBoard = curBoard.resolveMoveAndReturnResultingBoard (move);
-			//Profiler.EndSample ();
 
 			//find all of the moves the AI could make from there
 			TurnInfo followingMoves = null;
@@ -403,9 +396,7 @@ public class GameManager {
 			if (followingMoves != null) {
 				turn.addMoves (followingMoves);
 			} else {
-				//Debug.Log ("time to compare");
 				//if there were no further moves, this is the end of this set and we should evaluate the board
-
 				newBoard.compareBoardSates (originalBoard, newBoard.units [unitID], ref turn, false);
 			}
 

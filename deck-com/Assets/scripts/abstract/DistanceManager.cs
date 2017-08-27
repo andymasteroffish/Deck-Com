@@ -22,4 +22,11 @@ public class DistanceManager : MonoBehaviour {
 		int newY = Mathf.Abs (a.Pos.y - b.Pos.y);
 		return dists [newX, newY];
 	}
+
+	public float getDist(TilePos a, TilePos b){
+		//transpose the points so that one will be at 0,0 and the other will be moved (and/or flipped) the same way
+		int newX = Mathf.Abs (a.x - b.x);
+		int newY = Mathf.Abs (a.y - b.y);
+		return dists [newX, newY];
+	}
 }

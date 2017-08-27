@@ -283,7 +283,6 @@ public class Unit {
 			deck.drawCard ();
 		}
 		actionsLeft = 0;
-		Debug.Log ("set vis tiles on reset");
 		setVisibleTiles ();
 	}
 

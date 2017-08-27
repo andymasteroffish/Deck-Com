@@ -1089,13 +1089,15 @@ public class Board {
 			if (actionsLeft >= units [unitID].deck.Hand [i].getNumActionsNeededToPlay ()) {
 				//make sure we have not gotten moves for the same card alread
 				if (cardIDsUsed.Contains (idName) == false) {
-					moves.AddRange (getAllMovesForCard (unitID, i));
+					List<MoveInfo> movesForThisCard = getAllMovesForCard (unitID, i);
+					filterBadMovesIfApplicable (movesForThisCard, i);
+					moves.AddRange (movesForThisCard);
 					cardIDsUsed.Add (idName);
 				}
 			}
 		}
 
-		//if the unit has at least one action, pass is also a viable move
+		//if the unit has at least one action, pass-turn is also a viable move
 		if (actionsLeft >= 1) {
 			MoveInfo thisMove = new MoveInfo (unitID);
 			thisMove.passMove = true;
@@ -1133,6 +1135,114 @@ public class Board {
 		thisCard.cancel ();
 		clearHighlights ();
 		return moves;
+	}
+
+	//some cards (like movement cards) can result in lots and lots of potential moves, most of which are obviously bad
+	//rather than allow these to create tons of branching trees, let's try and filter out obviousl bad calls
+	public void filterBadMovesIfApplicable(List<MoveInfo> moves, int cardID){
+		Profiler.BeginSample ("filtering out moves");
+		int bestVal = 0;
+		int numMovesAtBestVal = 0;
+
+		//MAGIC NUMBER
+		//if the number of moves at best val is less than this, we'll include less good moves if there are any
+		int minimumAcceptableBestMoves = 5;
+
+		Dictionary<MoveInfo, int> values = new Dictionary<MoveInfo, int>();
+
+		foreach (MoveInfo move in moves) {
+			int thisVal = checkMoveVal (move, cardID);
+			values.Add (move, thisVal);
+			//if this is the new best, mark it and reste our count
+			if (thisVal > bestVal) {
+				bestVal = thisVal;
+				numMovesAtBestVal = 0;
+			}
+			//if this macthes the best, increase our count
+			if (thisVal == bestVal) {
+				numMovesAtBestVal++;
+			}
+		}
+
+		if (numMovesAtBestVal >= minimumAcceptableBestMoves) {
+			for (int i = moves.Count - 1; i >= 0; i--) {
+				if (values[moves[i]] < bestVal) {
+					moves.RemoveAt (i);
+				}
+			}
+		}
+		Profiler.EndSample ();
+	}
+
+	//this is used with filterBadMovesIfApplicable()
+	//Most moves do not get checked here and will just return 0.
+	public int checkMoveVal(MoveInfo move, int cardID){
+		Profiler.BeginSample ("check move val");
+		Unit unit = units [move.unitID];
+		Card card = unit.deck.Hand [cardID];
+
+		int moveVal = 0;
+
+		if (card.type == Card.CardType.Movement) {
+			Tile targetTile = grid [move.targetTilePos.x, move.targetTilePos.y];
+			float highestPreferedDist = unit.aiProfile.preferedDistToClosestEnemy + unit.aiProfile.acceptableDistanceRangeToClosestEnemy;
+
+			//let's figure out who our enemies are
+			Profiler.BeginSample("sorting allies and foes");
+			List<Unit> enemies = new List<Unit> ();
+			bool rootingForAI = !unit.isPlayerControlled;
+			foreach (Unit u in units) {
+				if (u.isPlayerControlled == rootingForAI) {
+					enemies.Add (u);
+				}
+			}
+			Profiler.EndSample ();
+
+			//let's get the closest distance for this target
+			float newCloseDist = 99999;
+			float curCloseDist = 99999;
+			foreach (Unit foe in enemies) {
+				float dist = dm.getDist (move.targetTilePos, foe.CurTile.Pos);
+				if (dist < newCloseDist) {
+					newCloseDist = dist;
+				}
+
+				float curDist = dm.getDist (unit.CurTile.Pos, foe.CurTile.Pos);
+				if (curDist < curCloseDist) {
+					curCloseDist = curDist;
+				}
+			}
+
+			//targetTile.debugText = newCloseDist.ToString("N1");
+
+			//avoid moves that are further away than the max prefered dist and further away than we are now
+			//no cowards!
+			if ( !(newCloseDist > highestPreferedDist && newCloseDist > curCloseDist)) {
+				moveVal++;
+			}
+
+			//is there cover (or would the move put us very close to a foe since many units like that)
+			Tile.Cover lowestCover = targetTile.getHighestAdjacentCover();
+			bool nextToFoe = newCloseDist < 2.5f;
+			if ((int)lowestCover > (int)Tile.Cover.None || nextToFoe) {
+				moveVal++;
+			}
+
+			//testing
+//			if (moveVal == 2) {
+//				targetTile.setHighlighted (true, Color.green);
+//			}
+//			if (moveVal == 1) {
+//				targetTile.setHighlighted (true, Color.yellow);
+//			}
+//			if (moveVal == 0) {
+//				targetTile.setHighlighted (true, Color.red);
+//			}
+
+		}
+
+		Profiler.EndSample ();
+		return moveVal;
 	}
 
 	public int getUnitID(Unit unit){
@@ -1403,7 +1513,6 @@ public class Board {
 				newLowestCover = curAllies [i].CurTile.getHighestAdjacentCover ();
 			}
 
-			//float changeVal = curAllies [i].aiProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
 			float changeVal = curUnit.aiProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
 			info.val += changeVal;
 
