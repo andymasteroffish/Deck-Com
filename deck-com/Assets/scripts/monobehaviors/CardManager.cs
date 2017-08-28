@@ -97,8 +97,6 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_MoveAndAttack (node);
 		} else if (scriptName == "Card_MoveAttackAOE") {
 			thisCard = new Card_MoveAttackAOE (node);
-		} else if (scriptName == "Card_MovementSelfDestruct") {
-			thisCard = new Card_MovementSelfDestruct (node);
 		} else if (scriptName == "Card_TeamDash") {
 			thisCard = new Card_TeamDash (node);
 		} else if (scriptName == "Card_Teleport") {
@@ -149,8 +147,6 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_MoveAndAttack ();
 		} else if (scriptName == "Card_MoveAttackAOE") {
 			thisCard = new Card_MoveAttackAOE ();
-		} else if (scriptName == "Card_MovementSelfDestruct") {
-			thisCard = new Card_MovementSelfDestruct ();
 		} else if (scriptName == "Card_TeamDash") {
 			thisCard = new Card_TeamDash ();
 		} else if (scriptName == "Card_Teleport") {

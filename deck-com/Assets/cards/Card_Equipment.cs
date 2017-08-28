@@ -43,7 +43,7 @@ public class Card_Equipment : Card {
 		Charm newEquipment = unit.addCharm (idNameOfEquipment);
 		newEquipment.storeCard (this);
 		//unit.aiSimHasBeenAidedCount++;
-		finish (false, true);
+		finish (true);
 	}
 
 	public override void resolveFromMove(MoveInfo move){

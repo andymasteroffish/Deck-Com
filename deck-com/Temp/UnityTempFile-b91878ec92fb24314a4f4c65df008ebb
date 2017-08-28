@@ -93,7 +93,6 @@
 'Assets/cards/Card_MoveAndAttack.cs'
 'Assets/cards/Card_MoveAttackAOE.cs'
 'Assets/cards/Card_Movement.cs'
-'Assets/cards/Card_MovementSelfDestruct.cs'
 'Assets/cards/Card_RemoveCharm.cs'
 'Assets/cards/Card_SpawnUnit.cs'
 'Assets/cards/Card_TeamDash.cs'

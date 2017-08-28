@@ -311,8 +311,9 @@
 <card idName="scurry">
 <name>Scurry</name>
 <level>-1</level>
-<script>Card_MovementSelfDestruct</script>
+<script>Card_Movement</script>
 <range>4</range>
+<self_destruct>true</self_destruct>
 </card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>

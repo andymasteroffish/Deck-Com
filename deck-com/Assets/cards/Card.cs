@@ -36,6 +36,8 @@ public class Card : IComparable<Card> {
 	public int bonusHeal;
 	public string bonusCardID;
 
+	public bool selfDestructWhenPlayed;
+
 	//ignoring charms
 	public bool ignoreTargetCharms;
 	public bool ignoreCasterCharms;
@@ -107,6 +109,12 @@ public class Card : IComparable<Card> {
 			ignoreCasterCharms = bool.Parse (node ["ignore_user_charms"].InnerText);
 		}
 
+		selfDestructWhenPlayed = false;
+		if (node ["self_destruct"] != null) {
+			Debug.Log ("YAAA DOGGY");
+			selfDestructWhenPlayed = bool.Parse (node ["self_destruct"].InnerText);
+		}
+
 		//default values
 		baseActionCost = 1;
 		type = CardType.Other;
@@ -170,6 +178,8 @@ public class Card : IComparable<Card> {
 		bonusCards = blueprint.bonusCards;
 		bonusHeal = blueprint.bonusHeal;
 		bonusCardID = blueprint.bonusCardID;
+
+		selfDestructWhenPlayed = blueprint.selfDestructWhenPlayed;
 
 		//will this ignore any charms
 		ignoreTargetCharms = blueprint.ignoreTargetCharms;
@@ -255,7 +265,7 @@ public class Card : IComparable<Card> {
 	public virtual void passInUnitCustom(Unit unit){}
 
 
-	public void finish(bool destroyCard = false, bool removeFromPlay = false){
+	public void finish(bool removeFromPlay = false){
 		owner.GM.targetInfoText.turnOff ();
 		revealAICardFlag = false;
 
@@ -279,9 +289,9 @@ public class Card : IComparable<Card> {
 
 		deck.removeCardFromHand (this);
 
-		if (!destroyCard && !removeFromPlay) {
+		if (!selfDestructWhenPlayed && !removeFromPlay) {
 			deck.discardCard (this);
-		} else if (destroyCard) {
+		} else if (selfDestructWhenPlayed) {
 			deck.destroyCard (this);
 		} else if (removeFromPlay) {
 			owner.GM.clearActiveCard ();
