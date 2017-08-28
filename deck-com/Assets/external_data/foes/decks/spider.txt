@@ -1,3 +1,4 @@
+grenade
 move6
 bite_n_scurry
 attack

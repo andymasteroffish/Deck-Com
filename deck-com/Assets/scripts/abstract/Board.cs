@@ -1139,7 +1139,7 @@ public class Board {
 
 	//some cards (like movement cards) can result in lots and lots of potential moves, most of which are obviously bad
 	//rather than allow these to create tons of branching trees, let's try and filter out obviousl bad calls
-	public void filterBadMovesIfApplicable(List<MoveInfo> moves, int cardID){
+	public void filterBadMovesIfApplicable(List<MoveInfo> moves, int cardID, bool showDebugColors=false){
 		Profiler.BeginSample ("filtering out moves");
 		int bestVal = 0;
 		int numMovesAtBestVal = 0;
@@ -1148,105 +1148,59 @@ public class Board {
 		//if the number of moves at best val is less than this, we'll include less good moves if there are any
 		int minimumAcceptableBestMoves = 5;
 
-		//don't bother checking if we don't even have that many moves
-		if (moves.Count > minimumAcceptableBestMoves) {
-			Dictionary<MoveInfo, int> values = new Dictionary<MoveInfo, int> ();
+		Dictionary<MoveInfo, int> values = new Dictionary<MoveInfo, int> ();
 
-			foreach (MoveInfo move in moves) {
-				int thisVal = units[move.unitID].deck.Hand[cardID].checkMoveVal (move, this);
-				values.Add (move, thisVal);
-				//if this is the new best, mark it and reste our count
-				if (thisVal > bestVal) {
-					bestVal = thisVal;
-					numMovesAtBestVal = 0;
-				}
-				//if this macthes the best, increase our count
-				if (thisVal == bestVal) {
-					numMovesAtBestVal++;
-				}
+		foreach (MoveInfo move in moves) {
+			int thisVal = units[move.unitID].deck.Hand[cardID].checkMoveVal (move, this);
+			values.Add (move, thisVal);
+			//if this is the new best, mark it and reste our count
+			if (thisVal > bestVal) {
+				bestVal = thisVal;
+				numMovesAtBestVal = 0;
 			}
+			//if this macthes the best, increase our count
+			if (thisVal == bestVal) {
+				numMovesAtBestVal++;
+			}
+		}
 
-			if (numMovesAtBestVal >= minimumAcceptableBestMoves) {
-				for (int i = moves.Count - 1; i >= 0; i--) {
-					if (values [moves [i]] < bestVal) {
-						moves.RemoveAt (i);
-					}
+		//go through each move and paint the coresponding tile based on the move value for debug purposes
+		if (showDebugColors) {
+			foreach (MoveInfo move in moves) {
+				Tile targetTile = Grid [move.targetTilePos.x, move.targetTilePos.y]; 
+				if (values [move] < 0) {
+					targetTile.setHighlighted (true, Color.red);
+				} else {
+					float prc = (float)values [move] / (float)bestVal;
+					targetTile.setHighlighted (true, Color.Lerp(Color.blue, Color.green, prc));
 				}
 			}
 		}
+
+		//starting from the highest value, grab enough moves
+		int lowestGoodVal = bestVal;
+		int numMovesAtThisVal = numMovesAtBestVal;
+		//never grab a move with an initial value less than 0
+		while (numMovesAtThisVal < minimumAcceptableBestMoves && lowestGoodVal>1) {
+			lowestGoodVal--;
+			numMovesAtThisVal = 0;
+			foreach(MoveInfo move in moves){
+				if (values [move] >= lowestGoodVal) {
+					numMovesAtThisVal++;
+				}
+			}
+		}
+
+		for (int i = moves.Count - 1; i >= 0; i--) {
+			if (values [moves [i]] < lowestGoodVal) {
+				moves.RemoveAt (i);
+			}
+		}
+
+
 		Profiler.EndSample ();
 	}
 
-	//this is used with filterBadMovesIfApplicable()
-	//Most moves do not get checked here and will just return 0.
-//	public int checkMoveVal(MoveInfo move, int cardID){
-//		Profiler.BeginSample ("check move val");
-//		Unit unit = units [move.unitID];
-//		Card card = unit.deck.Hand [cardID];
-//
-//		int moveVal = 0;
-//
-//		if (card.type == Card.CardType.Movement) {
-//			Tile targetTile = grid [move.targetTilePos.x, move.targetTilePos.y];
-//			float highestPreferedDist = unit.aiProfile.preferedDistToClosestEnemy + unit.aiProfile.acceptableDistanceRangeToClosestEnemy;
-//
-//			//let's figure out who our enemies are
-//			Profiler.BeginSample("sorting allies and foes");
-//			List<Unit> enemies = new List<Unit> ();
-//			bool rootingForAI = !unit.isPlayerControlled;
-//			foreach (Unit u in units) {
-//				if (u.isPlayerControlled == rootingForAI) {
-//					enemies.Add (u);
-//				}
-//			}
-//			Profiler.EndSample ();
-//
-//			//let's get the closest distance for this target
-//			float newCloseDist = 99999;
-//			float curCloseDist = 99999;
-//			foreach (Unit foe in enemies) {
-//				float dist = dm.getDist (move.targetTilePos, foe.CurTile.Pos);
-//				if (dist < newCloseDist) {
-//					newCloseDist = dist;
-//				}
-//
-//				float curDist = dm.getDist (unit.CurTile.Pos, foe.CurTile.Pos);
-//				if (curDist < curCloseDist) {
-//					curCloseDist = curDist;
-//				}
-//			}
-//
-//			//targetTile.debugText = newCloseDist.ToString("N1");
-//
-//			//avoid moves that are further away than the max prefered dist and further away than we are now
-//			//no cowards!
-//			if ( !(newCloseDist > highestPreferedDist && newCloseDist > curCloseDist)) {
-//				moveVal++;
-//			}
-//
-//			//is there cover (or would the move put us very close to a foe since many units like that)
-//			Tile.Cover lowestCover = targetTile.getHighestAdjacentCover();
-//			bool nextToFoe = newCloseDist < 2.5f;
-//			if ((int)lowestCover > (int)Tile.Cover.None || nextToFoe) {
-//				moveVal++;
-//			}
-//
-//			//testing
-////			if (moveVal == 2) {
-////				targetTile.setHighlighted (true, Color.green);
-////			}
-////			if (moveVal == 1) {
-////				targetTile.setHighlighted (true, Color.yellow);
-////			}
-////			if (moveVal == 0) {
-////				targetTile.setHighlighted (true, Color.red);
-////			}
-//
-//		}
-//
-//		Profiler.EndSample ();
-//		return moveVal;
-//	}
 
 	public int getUnitID(Unit unit){
 		for(int i=0; i<units.Count; i++){

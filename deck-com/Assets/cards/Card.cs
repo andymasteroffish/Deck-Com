@@ -111,7 +111,6 @@ public class Card : IComparable<Card> {
 
 		selfDestructWhenPlayed = false;
 		if (node ["self_destruct"] != null) {
-			Debug.Log ("YAAA DOGGY");
 			selfDestructWhenPlayed = bool.Parse (node ["self_destruct"].InnerText);
 		}
 

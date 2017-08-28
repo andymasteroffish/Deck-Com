@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using UnityEngine.Profiling;
 
 public class Card_BasicAOEAttack : Card {
 
@@ -76,5 +77,75 @@ public class Card_BasicAOEAttack : Card {
 
 	public override void resolveFromMove(MoveInfo move){
 		passInTileCustom ( Owner.board.Grid[move.targetTilePos.x, move.targetTilePos.y]);
+	}
+
+
+
+
+	public override int checkMoveVal(MoveInfo move, Board board){
+		//return 0;
+
+		Unit unit = board.units [move.unitID];
+		int moveVal = 0;
+
+		Tile targetTile = board.Grid [move.targetTilePos.x, move.targetTilePos.y];
+		List<Tile> tilesHit = Owner.board.getTilesInRange (targetTile, damageRange, Tile.Cover.Full, true);
+
+
+		int enemiesHit = 0;
+		int alliesHit = 0;
+
+		//let's figure out who our enemies are
+		Profiler.BeginSample("sorting allies and foes for AOE");
+		List<Unit> enemies = new List<Unit> ();
+		List<Unit> allies = new List<Unit> ();
+		bool rootingForAI = !unit.isPlayerControlled;
+		foreach (Unit u in board.units) {
+			if (u.isPlayerControlled == rootingForAI) {
+				enemies.Add (u);
+				if (tilesHit.Contains (u.CurTile)) {
+					enemiesHit++;
+				}
+			} else {
+				allies.Add (u);
+				if (tilesHit.Contains (u.CurTile) && harmsFriendly) {
+					alliesHit++;
+				}
+			}
+		}
+		Profiler.EndSample ();
+
+
+		//we like hitting enemies, but don't like hitting friends
+		if (alliesHit == 0 && enemiesHit > 0) {
+			moveVal++;
+		}
+		if (enemiesHit == 0 && alliesHit > 0) {
+			moveVal--;
+		}
+
+		//if we can destroy cover, see if we're destroying anything near the enemies
+		Profiler.BeginSample("checking cover destruction");
+		bool hitsEnemyCover = false;
+		if (destroysCover) {
+			foreach (Tile t in tilesHit) {
+				foreach (Tile adjacent in t.Adjacent) {
+					foreach (Unit enemy in enemies) {
+						if (enemy.CurTile == adjacent) {
+							hitsEnemyCover = true;
+							break;
+						}
+					}
+				}
+			}
+		}
+		Profiler.EndSample ();
+
+		if (hitsEnemyCover) {
+			moveVal++;
+		}
+
+
+		return moveVal;
 	}
 }

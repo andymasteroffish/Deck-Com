@@ -232,8 +232,9 @@
 <card idName="team_dash_gift">
 <name>Free Dash</name>
 <level>-1</level>
-<script>Card_MovementSelfDestruct</script>
+<script>Card_Movement</script>
 <range>3</range>
+<self_destruct>true</self_destruct>
 </card>
 <card idName="team_dash">
 <name>Team Dash</name>

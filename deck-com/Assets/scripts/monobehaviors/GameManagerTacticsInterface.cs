@@ -213,11 +213,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		prevMouseOverTile = curMouseOverTile;
 
 		//testing
-		if (Input.GetKeyDown (KeyCode.Q)) {
+		if (Input.GetKeyDown (KeyCode.F)) {
 			int unitID = 3;
 			int cardID = 0;
 			List<MoveInfo> testMoves = gm.board.getAllMovesForCard (unitID, cardID);
-			gm.board.filterBadMovesIfApplicable (testMoves, cardID);
+			gm.board.filterBadMovesIfApplicable (testMoves, cardID, true);
 
 			foreach (MoveInfo move in testMoves) {
 				gm.board.Grid [move.targetTilePos.x, move.targetTilePos.y].debugText = "X";
