@@ -16,7 +16,8 @@ public class Tile {
 
 	private Cover cover;
 	public SpawnProperty spawnProperty;
-	private Tile[] adjacent = new Tile[4];
+	private Tile[] adjacent;// = new Tile[4];
+	private Tile[] adjacentIncludingDiag;// = new Tile[8];
 
 	private bool mouseIsOver;
 
@@ -90,10 +91,12 @@ public class Tile {
 		Profiler.EndSample ();
 	}
 
-	public void setInfo(Tile[] _adjacent){
-		for (int i = 0; i < 4; i++) {
-			adjacent [i] = _adjacent [i];
-		}
+	public void setInfo(Tile[] _adjacent, Tile[] _adjacentIncludingDiag){
+		adjacent = _adjacent;
+		adjacentIncludingDiag = _adjacentIncludingDiag;
+//		for (int i = 0; i < 4; i++) {
+//			adjacent [i] = _adjacent [i];
+//		}
 	}
 		
 
@@ -131,6 +134,7 @@ public class Tile {
 
 	//storing rnage and distance to other tiles
 	public void createVisibilityGrid(int _cols, int _rows){
+		Profiler.BeginSample ("create vis grid");
 		cols = _cols;
 		rows = _rows;
 		ignoreStoredRanges = false;
@@ -141,6 +145,7 @@ public class Tile {
 			}
 		}
 		visibleRangeDists [pos.x, pos.y] = 0;
+		Profiler.EndSample ();
 	}
 
 	public void setVisibleRangeDist(Tile other, float dist){
@@ -203,6 +208,12 @@ public class Tile {
 	public Tile[] Adjacent{
 		get{
 			return this.adjacent;
+		}
+	}
+
+	public Tile[] AdjacentIncludingDiag{
+		get{
+			return this.adjacentIncludingDiag;
 		}
 	}
 

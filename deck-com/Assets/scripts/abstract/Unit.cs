@@ -111,7 +111,7 @@ public class Unit {
 			aiProfileName = node ["ai_profile"].InnerText;
 		}
 
-		sightRange = 9;
+		sightRange = 9;	//this was 9
 
 		charmIDs = new List<string> ();
 		XmlNodeList childNodes = node["charms"].ChildNodes;

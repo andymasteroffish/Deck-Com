@@ -14,7 +14,7 @@ public class Loot {
 	//loot lives on a unit until that unit dies
 	private Unit curUnit;
 	private Tile curTile;
-	private List<Tile> adjacentTiles = new List<Tile>();
+	//private List<Tile> adjacentTiles = new List<Tile>();
 
 	public bool isDone;
 
@@ -33,8 +33,8 @@ public class Loot {
 
 	void drop(){
 		curTile = curUnit.CurTile;
-		adjacentTiles = curUnit.GM.board.getAdjacentTiles (curTile, true, Tile.Cover.Full);
-		adjacentTiles.Add (curTile);
+		//adjacentTiles = curUnit.GM.board.getAdjacentTiles (curTile, true, Tile.Cover.Full);
+		//adjacentTiles.Add (curTile);
 
 		if (createGO) {
 			GameObjectManager.instance.getLootGO ().activate (this);
@@ -48,8 +48,8 @@ public class Loot {
 			return false;
 		}
 
-		for (int i = 0; i < adjacentTiles.Count; i++) {
-			if (adjacentTiles [i] == collector.CurTile) {
+		for (int i = 0; i < CurTile.AdjacentIncludingDiag.Length; i++) {
+			if (CurTile.AdjacentIncludingDiag [i] == collector.CurTile) {
 				return true;
 			}
 		}

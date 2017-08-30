@@ -54,51 +54,9 @@ public class Board {
 
 		dm = new DistanceManager (cols, rows);
 
-		//give them some relevant info
-		for (int x = 0; x < cols; x++) {
-			for (int y = 0; y < rows; y++) {
-				Tile[] adjacent = new Tile[] {null, null, null, null};
-				if (x < cols-1)	adjacent [(int)Tile.Direction.Right]= grid [x+1, y];
-				if (x > 0)		adjacent [(int)Tile.Direction.Left] = grid [x-1, y];
-				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= grid [x, y + 1];
-				if (y > 0)		adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
-				grid [x, y].setInfo (adjacent);
-				grid [x, y].createVisibilityGrid (cols, rows);
-			}
-		}
+		setupTilesOnNewGrid (grid);
 
 		clearHighlights ();
-
-		//testing
-//		for (int x = 0; x < cols; x++) {
-//			for (int y = 0; y < rows; y++) {
-//				grid [x, y].debugText = dm.dists [x, y].ToString("N1");
-//			}
-//		}
-	}
-
-	public void resetUnitsAndLoot(int curAreaNum){
-		foreach(Unit unit in units){
-			unit.reset ();
-		}
-
-		int lootToDistribute = GameManagerTacticsInterface.instance.lootPerLevel + (int)Random.Range (0, (float)GameManagerTacticsInterface.instance.potentialBonusLootPerLevel+1);
-		Debug.Log ("loot to distribute: " + lootToDistribute);
-
-		List<Unit> potentialLootHolders = new List<Unit> ();
-		for (int i = 0; i < units.Count; i++) {
-			if (!units [i].isPlayerControlled) {
-				potentialLootHolders.Add (units [i]);
-			}
-		}
-		for (int i = 0; i < lootToDistribute && potentialLootHolders.Count > 0; i++) {
-			int lootGetterID = (int)Random.Range (0,potentialLootHolders.Count);
-			Unit lootGetter = potentialLootHolders [lootGetterID];
-			potentialLootHolders.RemoveAt (lootGetterID);
-			//Debug.Log (lootGetter.unitName + " got loot");
-			Loot thisLoot = new Loot (lootGetter, curAreaNum);
-			loot.Add (thisLoot);
-		}
 	}
 
 	//creating a board for AI stuff
@@ -122,43 +80,6 @@ public class Board {
 		//tiles
 		grid = parent.grid;
 		usingParentGrid = true;
-		/*
-		if (grid == null) {
-			Profiler.BeginSample ("making new tiles");
-		
-			grid = new Tile[cols, rows];
-			for (int x = 0; x < cols; x++) {
-				for (int y = 0; y < rows; y++) {
-					grid [x, y] = new Tile (parent.grid [x, y]);//ObjectPooler.instance.getTile (parent.grid [x, y]);
-				}
-			}
-
-			for (int x = 0; x < cols; x++) {
-				for (int y = 0; y < rows; y++) {
-					Tile[] adjacent = new Tile[] { null, null, null, null };
-					if (x < cols - 1)
-						adjacent [(int)Tile.Direction.Right] = grid [x + 1, y];
-					if (x > 0)
-						adjacent [(int)Tile.Direction.Left] = grid [x - 1, y];
-					if (y < rows - 1)
-						adjacent [(int)Tile.Direction.Up] = grid [x, y + 1];
-					if (y > 0)
-						adjacent [(int)Tile.Direction.Down] = grid [x, y - 1];
-					grid [x, y].setInfo (adjacent);
-				}
-			}
-			Profiler.EndSample ();
-		} else {
-			Profiler.BeginSample ("set existing tiles");
-			//JUST GOING THROUGH THIS FOR LOOP IS TAKING A HUGELY LONG TIME. LONGER THAN THE TIME SPENT RUNNING setFromParent()
-			for (int x = 0; x < cols; x++) {
-				for (int y = 0; y < rows; y++) {
-					grid [x, y].setFromParent(parent.grid [x, y]);
-				}
-			}
-			Profiler.EndSample ();
-		}
-		*/
 
 		//units
 		//Profiler.BeginSample("make units");
@@ -191,20 +112,8 @@ public class Board {
 				}
 			}
 
-			for (int x = 0; x < cols; x++) {
-				for (int y = 0; y < rows; y++) {
-					Tile[] adjacent = new Tile[] { null, null, null, null };
-					if (x < cols - 1)
-						adjacent [(int)Tile.Direction.Right] = novelGrid [x + 1, y];
-					if (x > 0)
-						adjacent [(int)Tile.Direction.Left] = novelGrid [x - 1, y];
-					if (y < rows - 1)
-						adjacent [(int)Tile.Direction.Up] = novelGrid [x, y + 1];
-					if (y > 0)
-						adjacent [(int)Tile.Direction.Down] = novelGrid [x, y - 1];
-					novelGrid [x, y].setInfo (adjacent);
-				}
-			}
+			setupTilesOnNewGrid (novelGrid);
+
 			Profiler.EndSample ();
 		} 
 
@@ -228,6 +137,59 @@ public class Board {
 
 		//and then set the novel grid as the grid
 		grid = novelGrid;
+	}
+
+	void setupTilesOnNewGrid(Tile[,] newGrid){
+		Profiler.BeginSample ("setup tiles on new grid");
+		//give them some relevant info
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				Tile[] adjacent = new Tile[] {null, null, null, null};
+				if (x < cols-1)	adjacent [(int)Tile.Direction.Right]= newGrid [x+1, y];
+				if (x > 0)		adjacent [(int)Tile.Direction.Left] = newGrid [x-1, y];
+				if (y < rows-1)	adjacent [(int)Tile.Direction.Up] 	= newGrid [x, y + 1];
+				if (y > 0)		adjacent [(int)Tile.Direction.Down] = newGrid [x, y - 1];
+
+				Tile[] adjacentIncludingDiag = new Tile[] {adjacent[0], adjacent[1], adjacent[2], adjacent[3], null, null, null, null};
+				//up, right
+				if (x < cols-1 	&& y < rows-1)	adjacentIncludingDiag [4]= newGrid [x+1, y+1];
+				//up, left
+				if (x > 0	 	&& y < rows-1)	adjacentIncludingDiag [5]= newGrid [x-1, y+1];
+				//down, right
+				if (x < cols-1 	&& y > 0)		adjacentIncludingDiag [6]= newGrid [x+1, y-1];
+				//down, left
+				if (x > 0	 	&& y > 0)		adjacentIncludingDiag [7]= newGrid [x-1, y-1];
+
+				newGrid [x, y].setInfo (adjacent, adjacentIncludingDiag);
+				newGrid [x, y].createVisibilityGrid (cols, rows);
+			}
+		}
+		Profiler.EndSample ();
+	}
+
+
+	public void resetUnitsAndLoot(int curAreaNum){
+		foreach(Unit unit in units){
+			unit.reset ();
+		}
+
+		int lootToDistribute = GameManagerTacticsInterface.instance.lootPerLevel + (int)Random.Range (0, (float)GameManagerTacticsInterface.instance.potentialBonusLootPerLevel+1);
+		Debug.Log ("loot to distribute: " + lootToDistribute);
+
+		List<Unit> potentialLootHolders = new List<Unit> ();
+		for (int i = 0; i < units.Count; i++) {
+			if (!units [i].isPlayerControlled) {
+				potentialLootHolders.Add (units [i]);
+			}
+		}
+		for (int i = 0; i < lootToDistribute && potentialLootHolders.Count > 0; i++) {
+			int lootGetterID = (int)Random.Range (0,potentialLootHolders.Count);
+			Unit lootGetter = potentialLootHolders [lootGetterID];
+			potentialLootHolders.RemoveAt (lootGetterID);
+			//Debug.Log (lootGetter.unitName + " got loot");
+			Loot thisLoot = new Loot (lootGetter, curAreaNum);
+			loot.Add (thisLoot);
+		}
 	}
 
 	//**************************
@@ -527,10 +489,15 @@ public class Board {
 		Profiler.BeginSample("get bleed");
 		foreach (Tile curTile in returnTiles) {
 			if (curTile.CoverVal != Tile.Cover.Full) {
-				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Full);
-				foreach (Tile t in adjacentTiles) {
-					bleedTiles.Add (t);
+				foreach (Tile t in curTile.AdjacentIncludingDiag) {
+					if (t != null) {
+						bleedTiles.Add (t);
+					}
 				}
+//				List<Tile> adjacentTiles = getAdjacentTiles (curTile, true, Tile.Cover.Full);
+//				foreach (Tile t in adjacentTiles) {
+//					bleedTiles.Add (t);
+//				}
 			}
 		}
 		Profiler.EndSample ();
@@ -778,41 +745,42 @@ public class Board {
 //		}
 //	}
 
-	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
-		Profiler.BeginSample ("get adjacent tiles");
-
-		Profiler.BeginSample ("make list for adjcent");
-		List<Tile> tiles = new List<Tile> ();
-		Profiler.EndSample ();
-
-		Profiler.BeginSample ("go through tiles");
-		for (int xOffset = - 1; xOffset <= 1; xOffset++) {
-			for (int yOffset = - 1; yOffset <= 1; yOffset++) {
-				int x = start.Pos.x + xOffset;
-				int y = start.Pos.y + yOffset;
-				if (x >= 0 && x < cols && y >= 0 && y < rows && (xOffset != 0 || yOffset !=0)) {
-					if (includeDiagonal || (xOffset != yOffset)) {
-						if ((int)grid [x, y].CoverVal <= (int)maxCover) {
-							Profiler.BeginSample ("add to lsit");
-							tiles.Add (grid [x, y]);
-							Profiler.EndSample ();
-						}
-					}
-				}
-			}
-		}
-		Profiler.EndSample ();
-
-		Profiler.EndSample ();
-
-		return tiles;
-	}
+//	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
+//		Profiler.BeginSample ("get adjacent tiles");
+//
+//		Profiler.BeginSample ("make list for adjcent");
+//		List<Tile> tiles = new List<Tile> ();
+//		Profiler.EndSample ();
+//
+//		Profiler.BeginSample ("go through tiles");
+//		for (int xOffset = - 1; xOffset <= 1; xOffset++) {
+//			for (int yOffset = - 1; yOffset <= 1; yOffset++) {
+//				int x = start.Pos.x + xOffset;
+//				int y = start.Pos.y + yOffset;
+//				if (x >= 0 && x < cols && y >= 0 && y < rows && (xOffset != 0 || yOffset !=0)) {
+//					if (includeDiagonal || (xOffset != yOffset)) {
+//						if ((int)grid [x, y].CoverVal <= (int)maxCover) {
+//							Profiler.BeginSample ("add to lsit");
+//							tiles.Add (grid [x, y]);
+//							Profiler.EndSample ();
+//						}
+//					}
+//				}
+//			}
+//		}
+//		Profiler.EndSample ();
+//
+//		Profiler.EndSample ();
+//
+//		return tiles;
+//	}
 
 	public List<Unit> getAdjacentUnits(Tile start, bool includeDiagonal){
-		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, Tile.Cover.Full);
+		Tile[] tiles = includeDiagonal ? start.AdjacentIncludingDiag : start.Adjacent;
+		//List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, Tile.Cover.Full);
 		List<Unit> units = new List<Unit> ();
 
-		for (int i = 0; i < tiles.Count; i++) {
+		for (int i = 0; i < tiles.Length; i++) {
 			Unit unit = getUnitOnTile (tiles [i]);
 			if (unit != null) {
 				units.Add (unit);
