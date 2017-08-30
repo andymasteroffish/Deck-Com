@@ -146,6 +146,7 @@ public class GameManager {
 
 	public void markAIStart(){
 		//Debug.Log ("reset all AI flags");
+		board.refreshAllyAndEnemyListsForBoardCompare(true);
 		foreach (Unit unit in board.units) {
 			unit.markAIStart ();
 		}
@@ -363,7 +364,7 @@ public class GameManager {
 
 	//AI shit
 	public TurnInfo getAIMove(int unitID, Board curBoard, Board originalBoard, int curDepth){
-		//if(curDepth == 0)	Profiler.BeginSample("AI Thinking");
+		if(curDepth == 0)	Profiler.BeginSample("AI Thinking");
 		float startTime = Time.realtimeSinceStartup;
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
 			Board.debugBoardCount = 0;
@@ -449,6 +450,7 @@ public class GameManager {
 		}
 		//print info if we should
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
+			Profiler.BeginSample ("print AI info");
 			//in order to see what the hell the board evaluation is doing, we'll do one more but have it print info as it goes
 			Debug.Log ("------TEST-------");
 			//TurnInfo temp = new TurnInfo (new MoveInfo(unitID));
@@ -460,11 +462,11 @@ public class GameManager {
 				tempBoard.resolveMove (move);
 			}
 			tempBoard.compareBoardSates (originalBoard, curBoard.units [unitID], ref returnVal, true);
-			//temp.print (board);
+			Profiler.EndSample();
 		}
 
 
-		//if(curDepth == 0)	Profiler.EndSample();
+		if(curDepth == 0)	Profiler.EndSample();
 		return returnVal;
 	}
 

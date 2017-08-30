@@ -76,6 +76,8 @@ public class Unit {
 	public TurnInfo aiTurnInfo;
 	public int curAITurnStep;
 
+	public Tile.Cover oldLowestCoverForAISim;
+
 	public Unit(){
 	}
 	public Unit(XmlNode node){
@@ -581,7 +583,7 @@ public class Unit {
 		ObjectPooler.instance.retireUnit (this);
 	}
 
-	//stters getters
+	//setters getters
 
 	public Tile CurTile{
 		get{

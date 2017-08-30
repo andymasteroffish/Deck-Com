@@ -28,6 +28,11 @@ public class Board {
 
 	public DistanceManager dm;
 
+	//these values are used for comparing boards and may not be up to date for other parts of the game
+	//as a result, they should not be used outside of comparing boards
+	public List<Unit> alliesForBoardCompare = null;
+	public List<Unit> enemiesForBoardCompare = null;
+
 	public Board(){
 		debugBoardCount = 0;
 	}
@@ -66,7 +71,6 @@ public class Board {
 		isAISim = true;
 
 		debugBoardCount++;
-		//Debug.Log ("board num " + debugCounter);
 
 		levelGen = null;
 		//info
@@ -215,6 +219,7 @@ public class Board {
 	}
 
 	public Board resolveMoveAndReturnResultingBoard(MoveInfo move){
+		Profiler.BeginSample ("resolve and return");
 		//Debug.Log ("new resolve for unit with " + units [move.unitID].ActionsLeft + " actions left");
 		units [move.unitID].isActingAIUnit = true;
 		//Profiler.BeginSample ("creating board");
@@ -223,6 +228,7 @@ public class Board {
 		//Profiler.EndSample ();
 
 		newBoard.resolveMove (move);
+		Profiler.EndSample ();
 		return newBoard;
 	}
 
@@ -1053,6 +1059,7 @@ public class Board {
 	//AI stuff
 	//*************
 	public List<MoveInfo> getAllMovesForUnit(int unitID){
+		Profiler.BeginSample ("get all AI moves for unit");
 		List<MoveInfo> moves = new List<MoveInfo> ();
 		int actionsLeft = units [unitID].ActionsLeft;
 		List<string> cardIDsUsed = new List<string> ();
@@ -1075,7 +1082,7 @@ public class Board {
 			thisMove.passMove = true;
 			moves.Add (thisMove);
 		}
-
+		Profiler.EndSample ();
 		//Debug.Log ("found " + moves.Count + " moves");
 		return moves;
 	}
@@ -1184,17 +1191,57 @@ public class Board {
 		return -1;
 	}
 
+	//we clal this once on the original board in an AI turn so that we don't recalculate the old board state for every single new board state
+	public void refreshAllyAndEnemyListsForBoardCompare(bool rootingForAI){
+		Debug.Log ("refresh my boys!");
+
+		if (alliesForBoardCompare == null) {
+			alliesForBoardCompare = new List<Unit> ();
+		}
+		if (enemiesForBoardCompare == null) {
+			enemiesForBoardCompare = new List<Unit> ();
+		}
+		alliesForBoardCompare.Clear ();
+		enemiesForBoardCompare.Clear ();
+
+		foreach (Unit unit in units) {
+			if (unit.isPlayerControlled == rootingForAI) {
+				enemiesForBoardCompare.Add (unit);
+			} else {
+				alliesForBoardCompare.Add (unit);
+			}
+		}
+
+		//set their lowest cover too
+		for (int i = 0; i < alliesForBoardCompare.Count; i++) {
+			Tile.Cover oldLowestCover = Tile.Cover.Full;
+			foreach (Unit enemy in enemiesForBoardCompare) {
+				if (!enemy.isDead) {
+					Tile.Cover thisCover = getCover (enemy.CurTile, alliesForBoardCompare [i].CurTile);
+					if ((int)thisCover < (int)oldLowestCover) {
+						oldLowestCover = thisCover;
+						if (thisCover == Tile.Cover.None) {
+							break;
+						}
+					}	
+				}
+			}
+			alliesForBoardCompare [i].oldLowestCoverForAISim = oldLowestCover;
+		}
+	}
+
 	public void compareBoardSates(Board oldBoard, Unit curUnit, ref TurnInfo info, bool printInfo){
 		Profiler.BeginSample("compare boards");
 
 		//create unit lists. These lists should line up exactly. it is bad if they don't
 		Profiler.BeginSample("making lists");
 		List<Unit> curAllies = new List<Unit>();
-		List<Unit> oldAllies = new List<Unit>();
+		List<Unit> oldAllies = oldBoard.alliesForBoardCompare;// new List<Unit>();
 		List<Unit> curEnemies = new List<Unit> ();
-		List<Unit> oldEnemies = new List<Unit>();
+		List<Unit> oldEnemies = oldBoard.enemiesForBoardCompare;// new List<Unit>();
 		Profiler.EndSample ();
 
+		//Debug.Log ("old allies: " + oldAllies.Count);
 		bool rootingForAI = !curUnit.isPlayerControlled;
 
 		info.val = 0;
@@ -1208,13 +1255,13 @@ public class Board {
 				curAllies.Add (unit);
 			}
 		}
-		foreach (Unit unit in oldBoard.units) {
-			if (unit.isPlayerControlled == rootingForAI) {
-				oldEnemies.Add (unit);
-			} else {
-				oldAllies.Add (unit);
-			}
-		}
+//		foreach (Unit unit in oldBoard.units) {
+//			if (unit.isPlayerControlled == rootingForAI) {
+//				oldEnemies.Add (unit);
+//			} else {
+//				oldAllies.Add (unit);
+//			}
+//		}
 
 		//sanity check
 		if (oldEnemies.Count != curEnemies.Count || oldAllies.Count > curAllies.Count) {
@@ -1414,15 +1461,20 @@ public class Board {
 		//how has ally cover changed?
 		Profiler.BeginSample("cover checks");
 		for (int i = 0; i < oldAllies.Count; i++) {
-			Tile.Cover oldLowestCover = Tile.Cover.Full;
-			foreach (Unit enemy in oldEnemies) {
-				if (!enemy.isDead) {
-					Tile.Cover thisCover = getCover (enemy.CurTile, oldAllies [i].CurTile);
-					if ((int)thisCover < (int)oldLowestCover) {
-						oldLowestCover = thisCover;
-					}	
-				}
-			}
+//			Tile.Cover oldLowestCover = Tile.Cover.Full;
+//			foreach (Unit enemy in oldEnemies) {
+//				if (!enemy.isDead) {
+//					Tile.Cover thisCover = getCover (enemy.CurTile, oldAllies [i].CurTile);
+//					if ((int)thisCover < (int)oldLowestCover) {
+//						oldLowestCover = thisCover;
+//						if (thisCover == Tile.Cover.None) {
+//							break;
+//						}
+//					}	
+//				}
+//			}
+
+			Tile.Cover oldLowestCover = oldAllies [i].oldLowestCoverForAISim;
 
 			Tile.Cover newLowestCover = Tile.Cover.Full;
 			foreach (Unit enemy in curEnemies) {
@@ -1430,6 +1482,9 @@ public class Board {
 					Tile.Cover thisCover = getCover (enemy.CurTile, curAllies [i].CurTile);
 					if ((int)thisCover < (int)newLowestCover) {
 						newLowestCover = thisCover;
+						if (thisCover == Tile.Cover.None) {
+							break;
+						}
 					}	
 				}
 			}
