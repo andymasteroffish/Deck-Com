@@ -366,7 +366,8 @@ public class GameManager {
 		//if(curDepth == 0)	Profiler.BeginSample("AI Thinking");
 		float startTime = Time.realtimeSinceStartup;
 		if (GameManagerTacticsInterface.instance.debugPrintAIInfo && curDepth == 0) {
-			Board.debugCounter = 0;	
+			Board.debugBoardCount = 0;
+			Board.debugCounter = 0;
 		}
 
 		List<MoveInfo> allMoves = curBoard.getAllMovesForUnit (unitID);
@@ -440,8 +441,9 @@ public class GameManager {
 
 		if (curDepth == 0) {
 			Debug.Log ("---AI THINKING---");
-			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugCounter + " boards to generate move");
+			Debug.Log ("it took " + (Time.realtimeSinceStartup - startTime) + " seconds and " + Board.debugBoardCount + " boards to generate move");
 			Debug.Log ("on frame " + (Time.frameCount-1));
+			Debug.Log ("debug counter val: " + Board.debugCounter);
 			returnVal.print (board);
 
 		}

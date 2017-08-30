@@ -5,6 +5,7 @@ using UnityEngine.Profiling;
 
 public class Board {
 
+	public static int debugBoardCount;	//testing
 	public static int debugCounter;	//testing
 	
 	private LevelGen levelGen;
@@ -28,7 +29,7 @@ public class Board {
 	public DistanceManager dm;
 
 	public Board(){
-		debugCounter = 0;
+		debugBoardCount = 0;
 	}
 
 	public void mainBoardSetup(){
@@ -64,7 +65,7 @@ public class Board {
 		Profiler.BeginSample ("board setup");
 		isAISim = true;
 
-		debugCounter++;
+		debugBoardCount++;
 		//Debug.Log ("board num " + debugCounter);
 
 		levelGen = null;
@@ -327,8 +328,8 @@ public class Board {
 
 		//have each unit check their new visibility
 		//it is way too goddamn slow to do this for every unit on AI boards.
-		foreach (Unit unit in units) {
-			if (!unit.isAISimUnit || unit.isActingAIUnit) {
+		if (!isAISim) {
+			foreach (Unit unit in units) {
 				unit.setVisibleTiles ();
 			}
 		}

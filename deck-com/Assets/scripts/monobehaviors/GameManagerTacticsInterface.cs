@@ -128,7 +128,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			if (Input.GetKeyDown (KeyCode.Space)) {
 				endPlayerTurn ();
 				if (!publicRelease && debugPrintAIInfo) {
-					thisIsATest = 3;
+					thisIsATest = 1;
 				}
 			}
 
