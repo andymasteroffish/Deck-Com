@@ -365,7 +365,9 @@ public class Board {
 
 		//have each unit check their new visibility
 		foreach (Unit unit in units) {
-			unit.setVisibleTiles ();
+			if (!unit.isAISimUnit || unit.isActingAIUnit) {
+				unit.setVisibleTiles ();
+			}
 		}
 
 		Profiler.EndSample ();
