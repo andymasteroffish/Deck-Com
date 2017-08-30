@@ -364,6 +364,7 @@ public class Board {
 		}
 
 		//have each unit check their new visibility
+		//it is way too goddamn slow to do this for every unit on AI boards.
 		foreach (Unit unit in units) {
 			if (!unit.isAISimUnit || unit.isActingAIUnit) {
 				unit.setVisibleTiles ();
@@ -768,14 +769,14 @@ public class Board {
 	//getting tiles and units from a tile
 	//********************
 
-	public void highlightAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover, Color col){
-		turnOffUnitMouseColliders ();
-		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, maxCover);
-		Debug.Log("tile count "+tiles.Count);
-		for (int i = 0; i < tiles.Count; i++) {
-			tiles [i].setHighlighted (true, col);
-		}
-	}
+//	public void highlightAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover, Color col){
+//		turnOffUnitMouseColliders ();
+//		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, maxCover);
+//		Debug.Log("tile count "+tiles.Count);
+//		for (int i = 0; i < tiles.Count; i++) {
+//			tiles [i].setHighlighted (true, col);
+//		}
+//	}
 
 	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
 		Profiler.BeginSample ("get adjacent tiles");
