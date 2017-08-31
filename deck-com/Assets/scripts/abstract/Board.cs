@@ -275,7 +275,9 @@ public class Board {
 		for (int i = 0; i < loot.Count; i++) {
 			loot [i].checkShouldDrop (deadUnit);
 		}
-		updateVisible ();
+		if (!deadUnit.isAISimUnit) {
+			updateVisible ();
+		}
 	}
 
 	//some loot specific functions
@@ -345,12 +347,14 @@ public class Board {
 
 	//telling the tiles if any player unit can see them
 	public void updateVisible(){
+		//Debug.Log ("updating visible on frame "+Time.frameCount);
 		//mark all tiles that are visible to player units
 		for (int x = 0; x < cols; x++) {
 			for (int y = 0; y < rows; y++) {
 				grid [x, y].isVisibleToPlayer = false;
 				foreach (Unit unit in units) {
 					if (unit.isPlayerControlled && !unit.isDead && !grid[x,y].isVisibleToPlayer && unit.visibleTiles != null) {
+						//Debug.Log ("unit " + unit.unitName + " has sight " + unit.sightRange + " and currently sees " + unit.visibleTiles.Count + " tiles");
 						if (unit.visibleTiles.Contains (grid [x, y])) {
 							grid [x, y].isVisibleToPlayer = true;
 						}
@@ -1193,8 +1197,6 @@ public class Board {
 
 	//we clal this once on the original board in an AI turn so that we don't recalculate the old board state for every single new board state
 	public void refreshAllyAndEnemyListsForBoardCompare(bool rootingForAI){
-		Debug.Log ("refresh my boys!");
-
 		if (alliesForBoardCompare == null) {
 			alliesForBoardCompare = new List<Unit> ();
 		}

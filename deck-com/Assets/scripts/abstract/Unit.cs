@@ -350,6 +350,7 @@ public class Unit {
 		visibleTiles.Clear ();
 		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
 		if (isPlayerControlled && !isAISimUnit) {
+			Debug.Log ("set vis for " + unitName + " with sight " + sightRange+ " on frame "+Time.frameCount);
 			board.updateVisible ();
 		}
 		Profiler.EndSample ();

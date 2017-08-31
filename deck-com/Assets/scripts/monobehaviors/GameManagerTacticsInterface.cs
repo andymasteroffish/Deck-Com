@@ -362,7 +362,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	//data stuff
 
 	void resetPlayerData(){
-		Debug.Log ("do it dad");
+		Debug.Log ("Dad's getting a brand new boy!");
 		string playerTargetPath = Application.dataPath + "/external_data/player";
 		string playerSourcePath = Application.dataPath + "/external_data/player_safe";
 		CopyDir (playerSourcePath, playerTargetPath);
