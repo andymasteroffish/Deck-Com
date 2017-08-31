@@ -246,8 +246,8 @@ public class GameManager {
 
 	public void setActiveAIUnit(Unit newActive, bool startTurn){
 		activeAIUnit = newActive;
-		List<Unit> playerUnits = getAIUnits ();
-		foreach (Unit unit in playerUnits){
+		List<Unit> aiUnits = getAIUnits ();
+		foreach (Unit unit in aiUnits){
 			unit.setActive ( unit==activeAIUnit);
 		}
 		if (newActive.getIsVisibleToPlayer () && !isPlayerTurn) {

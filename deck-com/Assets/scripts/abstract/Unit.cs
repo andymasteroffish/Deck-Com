@@ -328,7 +328,8 @@ public class Unit {
 			}
 		}
 
-		if (!isPlayerControlled && isActive){
+		//time to get the AI move?
+		if (!isPlayerControlled && isActive && !gm.IsPlayerTurn){
 			if (isAwake) {
 				gm.markAIStart ();
 				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
