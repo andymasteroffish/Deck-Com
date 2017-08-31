@@ -38,7 +38,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public string debugMapName;
 
-	public int mapChunkCols, mapChunkRows;
+	//public int mapChunkCols, mapChunkRows;
 	public TextAsset[] mapChunks;
 
 	public string[] debugSpawnList;

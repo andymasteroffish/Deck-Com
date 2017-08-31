@@ -50,7 +50,7 @@ public class Board {
 		if (GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
 			grid = levelGen.getTestLevel (GameManagerTacticsInterface.instance.debugMapName);
 		} else {
-			grid = levelGen.getLevel ();
+			grid = levelGen.getLevel (curLevelNum, curAreaNum);
 		}
 
 		loot.Clear ();

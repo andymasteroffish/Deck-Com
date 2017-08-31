@@ -13,12 +13,14 @@ public class LevelGen {
 		return loadLevelFromText ( Resources.Load<TextAsset>("maps/"+mapName) );
 	}
 
-	public Tile[,] getLevel(){
+	public Tile[,] getLevel(int curLevelNum, int curAreaNum){
 		TextAsset[] files = GameManagerTacticsInterface.instance.mapChunks;
 
 		//create a grid
-		int chunkCols = GameManagerTacticsInterface.instance.mapChunkCols;
-		int chunkRows = GameManagerTacticsInterface.instance.mapChunkRows;
+		int chunkCols = 3 + curAreaNum/2;//curAreNum //GameManagerTacticsInterface.instance.mapChunkCols;
+		int chunkRows = 2 + curAreaNum;// GameManagerTacticsInterface.instance.mapChunkRows;
+
+		Debug.Log ("level is " + chunkCols + " x " + chunkRows + " chunks");
 		int gridW = chunkCols * chunkSize;
 		int gridH = chunkRows * chunkSize;
 		Tile[,] grid = new Tile[gridW, gridH];
