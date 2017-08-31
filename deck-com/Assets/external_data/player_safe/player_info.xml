@@ -1,6 +1,6 @@
 <player>
   <info>
-    <money>5</money>
+    <money>3</money>
     <cur_level>1</cur_level>
   </info>
   <unit idName = "test_player">
@@ -29,6 +29,7 @@
     <name>Ranger</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
+    <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>

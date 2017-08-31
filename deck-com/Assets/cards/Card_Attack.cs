@@ -31,6 +31,10 @@ public class Card_Attack : Card {
 		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
 
 		description = damageText + "\n" + rangeText;
+
+		if (damageMod == 0 && rangeMod == 0) {
+			description = "Attack using your equiped weapon";
+		}
 	}
 
 	public override void setupCustom(){

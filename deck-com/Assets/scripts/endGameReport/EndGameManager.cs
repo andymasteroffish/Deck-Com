@@ -42,11 +42,12 @@ public class EndGameManager {
 		int bonusSlots = 1;
 
 		float chanceOfCardAtLevelBecomingMoney = 0.3f;
+		float chaneMoneyReplacementDecrease = 0.1f;
 
 		LootReward reward = new LootReward();
 		int level = lootCard.level;
 
-		reward.money = 0;//getRewardMoney(level)/2f;
+		reward.money = 0;
 
 		List<string> cardsThisLevel = CardManager.instance.getIDListAtLevel (level);
 		List<string> cardsNextLevel = CardManager.instance.getIDListAtLevel (level+1);
@@ -55,6 +56,7 @@ public class EndGameManager {
 			float moneyRoll = Random.value;
 			if (moneyRoll < chanceOfCardAtLevelBecomingMoney) {
 				reward.money += getRewardMoney (level);
+				chanceOfCardAtLevelBecomingMoney -= chaneMoneyReplacementDecrease;
 			} else {
 				int idNum = (int)Random.Range (0, cardsThisLevel.Count);
 				string idName = cardsThisLevel [idNum];
@@ -86,16 +88,21 @@ public class EndGameManager {
 			Card card = CardManager.instance.getCardFromIdName (idName);
 			card.setup (null, null);
 			reward.cards.Add (card);
-		} else {
-			reward.money += getRewardMoney (level + 1);
+		} else if (roll == 3) {
+			reward.money += getRewardMoney (level);
 		}
 
+		//pitty dollar
+		if (reward.money <= 0) {
+			reward.money = 1;
+		}
 
 		return reward;
 	}
 
 	int getRewardMoney(int level){
-		float val = Mathf.Pow (level, 1.3f) * 3;
+		float val = Mathf.Pow (level, 1.3f) * 3.3f;
+		Debug.Log ("level " + level + "  val " + val);
 		float wiggle = val * 0.4f;
 		val += Random.Range (-wiggle, wiggle);
 		return (int) val;
