@@ -32,6 +32,7 @@
     <ai_profile>aggro_melee</ai_profile>
     <player_controlled>false</player_controlled>
     <cr>3</cr>
+    <min_area>1</min_area>
     <max_area>2</max_area>
     <base_health>5</base_health>
     <charms>
@@ -109,8 +110,8 @@
     <deck>goblin_king_deck</deck>
     <ai_profile>goblin_king</ai_profile>
     <player_controlled>false</player_controlled>
-    <cr>3</cr>
-    <max_area>2</max_area>
+    <cr>4</cr>
+    <min_area>1</min_area>
     <base_health>8</base_health>
     <charms>
       <charm>goblin_king_wep</charm>

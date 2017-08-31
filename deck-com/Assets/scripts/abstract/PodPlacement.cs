@@ -91,7 +91,7 @@ public class PodPlacement {
 			if (info.minArea <= curArea && info.maxArea >= curArea) {
 				potentialFoes.Add (info);
 			} else {
-				Debug.Log (info.idName + " is out!");
+				//Debug.Log (info.idName + " is out!");
 			}
 		}
 

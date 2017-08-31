@@ -45,7 +45,7 @@ public class EndGameManager {
 		float chaneMoneyReplacementDecrease = 0.1f;
 
 		LootReward reward = new LootReward();
-		int level = lootCard.level;
+		int level = (int)Mathf.Max(lootCard.level, 1);
 
 		reward.money = 0;
 

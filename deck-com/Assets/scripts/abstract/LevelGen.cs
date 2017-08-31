@@ -20,6 +20,9 @@ public class LevelGen {
 		int chunkCols = 3 + curAreaNum/2;//curAreNum //GameManagerTacticsInterface.instance.mapChunkCols;
 		int chunkRows = 2 + curAreaNum;// GameManagerTacticsInterface.instance.mapChunkRows;
 
+		//make sure it has at least enough height to feel good
+		chunkRows = (int)Mathf.Max(3, chunkRows);
+
 		Debug.Log ("level is " + chunkCols + " x " + chunkRows + " chunks");
 		int gridW = chunkCols * chunkSize;
 		int gridH = chunkRows * chunkSize;

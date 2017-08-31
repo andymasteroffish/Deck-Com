@@ -51,6 +51,9 @@ public class GameManager {
 		curLevelNum = int.Parse(infoNode["cur_level"].InnerXml);
 
 		curAreaNum = (curLevelNum / GameManagerTacticsInterface.instance.levelsPerArea) + 1;
+		if (curLevelNum < 0) {
+			curAreaNum = 0;
+		}
 
 		Debug.Log ("level: " + curLevelNum+" area "+curAreaNum);
 
@@ -353,6 +356,7 @@ public class GameManager {
 
 		//increase the level and save
 		curLevelNum++;
+		Debug.Log ("graduate to level " + curLevelNum);
 		XmlNode infoNode = playerDoc.GetElementsByTagName("info")[0];
 		int curMoney = int.Parse(infoNode["cur_level"].InnerXml);
 		infoNode ["cur_level"].InnerXml = curLevelNum.ToString ();

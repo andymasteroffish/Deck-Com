@@ -179,6 +179,11 @@ public class Board {
 		}
 
 		int lootToDistribute = GameManagerTacticsInterface.instance.lootPerLevel + (int)Random.Range (0, (float)GameManagerTacticsInterface.instance.potentialBonusLootPerLevel+1);
+		//intro level only gets one
+		if (curAreaNum == 0) {
+			lootToDistribute = 1;
+		}
+			
 		Debug.Log ("loot to distribute: " + lootToDistribute);
 
 		List<Unit> potentialLootHolders = new List<Unit> ();
@@ -484,7 +489,6 @@ public class Board {
 									source.setVisibleRangeDist (grid [x, y], dist);
 									returnTiles.Add (grid [x, y]);
 									doneChecking = true;
-
 								}
 							}
 						}
