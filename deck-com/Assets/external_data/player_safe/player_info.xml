@@ -7,6 +7,7 @@
     <name>Test Player</name>
     <sprite>unit_test</sprite>
     <deck>test_deck</deck>
+    <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>false</currently_active>
     <charms>
@@ -17,6 +18,7 @@
     <name>Wizard</name>
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
+    <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
@@ -37,6 +39,7 @@
     <name>Tank</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
+    <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>

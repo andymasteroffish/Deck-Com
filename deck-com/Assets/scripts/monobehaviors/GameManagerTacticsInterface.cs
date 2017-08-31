@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Profiling;
+using System.IO;
 
 public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public bool publicRelease;
+	public bool resetPlayerDataBool;
 
 	private CameraControl cam;
 
@@ -63,6 +65,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			gm = new GameManager ();
 		} else if (instance != this) {
 			Destroy (gameObject);
+		}
+
+		if (resetPlayerDataBool) {
+			resetPlayerData();
 		}
 	}
 
@@ -348,5 +354,29 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		//		}
 
 		return false;
+	}
+
+
+
+
+	//data stuff
+
+	void resetPlayerData(){
+		Debug.Log ("do it dad");
+		string playerTargetPath = Application.dataPath + "/external_data/player";
+		string playerSourcePath = Application.dataPath + "/external_data/player_safe";
+		CopyDir (playerSourcePath, playerTargetPath);
+	}
+
+	//this code from https://stackoverflow.com/questions/7146021/copy-all-files-in-directory
+	void CopyDir(string sourceDir, string targetDir)
+	{
+		Directory.CreateDirectory(targetDir);
+
+		foreach(var file in Directory.GetFiles(sourceDir))
+			File.Copy(file, Path.Combine(targetDir, Path.GetFileName(file)), true);
+
+		foreach(var directory in Directory.GetDirectories(sourceDir))
+			CopyDir(directory, Path.Combine(targetDir, Path.GetFileName(directory)));
 	}
 }

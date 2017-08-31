@@ -1,13 +1,10 @@
 move4
+move4
+move5
 attack
 attack
 attack
-heal
-village
 move_and_attack
 blade_dash
-move5
-move4
-swap_spots
-shield
-vampire_stab
+village
+heal
