@@ -125,7 +125,6 @@ public class UnitGO : MonoBehaviour {
 			owner.GM.activeCard.potentialTargetMouseOver (owner);
 		}
 
-		//testing
 		if (owner.GM.IsPlayerTurn && !owner.isPlayerControlled) {
 			owner.GM.setActiveAIUnit (owner, false);
 		}
