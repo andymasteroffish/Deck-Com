@@ -324,10 +324,10 @@
 <equipment_id>extra_card</equipment_id>
 </card>
 <card idName="equipment_heal_ring">
-<name>Heal Ring</name>
+<name>Helper's Ring</name>
 <level>1</level>
 <script>Card_Equipment</script>
-<desc>Draw a card when you play your first aid card each turn</desc>
+<desc>gain 1 card and 1 action when you play your first aid card each turn</desc>
 <equipment_id>heal_ring</equipment_id>
 </card>
 </cards>

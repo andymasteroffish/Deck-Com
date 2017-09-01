@@ -1,14 +1,10 @@
+equipment_heal_ring
 move3
 move4
 move4
 move5
 attack
 attack
-draw_a_card
-gain_an_action
 heal
-psychic_poke
-equipment_heal_ring
-teleport
-teleport
-psychic_poke
+gain_an_action
+draw_a_card

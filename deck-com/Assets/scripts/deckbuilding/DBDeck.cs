@@ -74,6 +74,8 @@ public class DBDeck {
 			cards [i].setup (null, null);
 		}
 
+		cards.Sort ();
+
 	}
 
 	public void setAsActive(){
@@ -93,7 +95,8 @@ public class DBDeck {
 		charmToAdd = null;
 	}
 
-	public void setAsUnusedActive(){
+	public void setAsUnusedActive(int startingIndex){
+		int curIndex = 0;
 		int orderCount = 0;
 		for (int i = 0; i < cards.Count; i++) {
 			//first check that this card is not already in the added list
@@ -104,8 +107,14 @@ public class DBDeck {
 				}
 			}
 			if (canAdd) {
-				DBManagerInterface.instance.getCardGO ().activate (cards [i], orderCount, true);
-				orderCount++;
+				curIndex++;
+				if (curIndex >= startingIndex) {
+					DBManagerInterface.instance.getCardGO ().activate (cards [i], orderCount, true);
+					orderCount++;
+					if (orderCount >= DBManagerInterface.instance.maxUnusedCardsShownAtOnce) {
+						return;
+					}
+				}
 			}
 		}
 	}

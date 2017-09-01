@@ -84,11 +84,11 @@
 <extra_cards>1</extra_cards>
 </charm>
 <charm idName="heal_ring">
-<name>Heal Ring</name>
+<name>Helper's Ring</name>
 <type>Equipment</type>
 <level>1</level>
 <script>Charm_HealRing</script>
-<desc>Draw a card when you play your first aid card each turn</desc>
+<desc>gain 1 card and 1 action when you play your first aid card each turn</desc>
 </charm>
 <charm idName="focus_charm">
 <name>Focus</name>

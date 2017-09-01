@@ -15,6 +15,8 @@ public class DBManager {
 	private List<Charm> unusedCharms = new List<Charm>();
 
 	public bool unusedCardsOpen;
+	public int curUnusedCardWindowPage = 0;
+	public int maxUnusedCardWindowPage = 0;
 
 	public int money;
 	public int curLevel;
@@ -97,9 +99,19 @@ public class DBManager {
 
 	//opens the list of unused cards on top of the active deck
 	public void openUnusedCards(){
-		unusedCardsDeck.setAsUnusedActive ();
+		curUnusedCardWindowPage = 0;
+		maxUnusedCardWindowPage = (int)Mathf.Ceil ((float)unusedCardsDeck.cards.Count / (float)DBManagerInterface.instance.maxUnusedCardsShownAtOnce) -1;
+		unusedCardsDeck.setAsUnusedActive (0);
 		unusedCardsOpen = true;
 		unusedWeaponsOpen = false;
+	}
+	public void scrollUnusedCards(int dir){
+		if (curUnusedCardWindowPage + dir < 0)							return;
+		if (curUnusedCardWindowPage + dir > maxUnusedCardWindowPage)	return;
+
+		curUnusedCardWindowPage += dir;
+
+		unusedCardsDeck.setAsUnusedActive (curUnusedCardWindowPage * DBManagerInterface.instance.maxUnusedCardsShownAtOnce);
 	}
 
 	//opens the list of unused charms

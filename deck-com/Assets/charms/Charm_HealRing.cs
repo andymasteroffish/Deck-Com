@@ -6,7 +6,7 @@ using System.Xml;
 public class Charm_HealRing : Charm {
 
 	bool usedThisRound;
-	public int healIncrease;
+	//public int healIncrease;
 
 
 	public Charm_HealRing(XmlNode _node){
@@ -24,7 +24,7 @@ public class Charm_HealRing : Charm {
 
 	public override void setFromParentCustom(Charm parent){
 		usedThisRound = ((Charm_HealRing)parent).usedThisRound;
-		healIncrease = ((Charm_HealRing)parent).healIncrease;
+		//healIncrease = ((Charm_HealRing)parent).healIncrease;
 	}
 
 	public override void resetRoundCustom(){
@@ -34,11 +34,12 @@ public class Charm_HealRing : Charm {
 	public override void cardPlayedCustom(Card card){
 		if (!usedThisRound && card.type == Card.CardType.Aid) {
 			usedThisRound = true;
+			Owner.gainActions (1);
 			Owner.deck.drawCard ();
 		}
 	}
 
-	public override int getHealModCustom(Card card, Unit target){
-		return healIncrease;
-	}
+//	public override int getHealModCustom(Card card, Unit target){
+//		return healIncrease;
+//	}
 }

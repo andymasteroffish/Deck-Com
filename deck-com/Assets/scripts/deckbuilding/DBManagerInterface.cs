@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System.Xml;
 
 public class DBManagerInterface : MonoBehaviour {
@@ -23,10 +24,14 @@ public class DBManagerInterface : MonoBehaviour {
 
 	public GameObject[] deckViewButtons;
 	public GameObject startButton;
+	public GameObject[] unusedCardsScrollButtons;
 
 	public GameObject unusedCardSelectionBG;
 
 	public TextMesh moneyText, levelText;
+
+	public int maxUnusedCardsShownAtOnce;
+	public Text unusedCardWindowPageText;
 
 	void Awake(){
 		if (instance == null) {
@@ -66,6 +71,17 @@ public class DBManagerInterface : MonoBehaviour {
 
 		startButton.SetActive (manager.activeDeck == null);
 
+		//unused card window UI
+//		unusedCardsScrollButtons[0].SetActive(manager.unusedCardsOpen && manager.curUnusedCardWindowPage > 0);	//prev
+//		unusedCardsScrollButtons[1].SetActive(manager.unusedCardsOpen && manager.curUnusedCardWindowPage < manager.maxUnusedCardWindowPage);	//next
+		foreach (GameObject thisButton in unusedCardsScrollButtons) {
+			thisButton.SetActive (manager.unusedCardsOpen);
+		}
+		unusedCardWindowPageText.text = "";
+		if (manager.unusedCardsOpen) {
+			unusedCardWindowPageText.text = (manager.curUnusedCardWindowPage+1).ToString () + "/" + (manager.maxUnusedCardWindowPage+1).ToString ();
+		}
+
 		//turn the card selector backgorund on if that is active
 		unusedCardSelectionBG.SetActive( manager.unusedCardsOpen || manager.unusedWeaponsOpen);
 			
@@ -92,6 +108,13 @@ public class DBManagerInterface : MonoBehaviour {
 		if (manager.activeDeck != null && manager.activeDeck != manager.unusedCardsDeck) {
 			manager.openUnusedCards ();
 		}
+	}
+
+	public void scrollUnusedCardsForward(){
+		manager.scrollUnusedCards (1);
+	}
+	public void scrollUnusedCardsBack(){
+		manager.scrollUnusedCards (-1);
 	}
 
 //	public void saveChanges(){

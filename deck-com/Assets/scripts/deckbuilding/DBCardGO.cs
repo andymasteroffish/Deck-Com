@@ -20,6 +20,7 @@ public class DBCardGO : MonoBehaviour {
 
 	public Text nameField;
 	public Text descField;
+	public Text typeField;
 	public SpriteRenderer spriteRend;
 	public SpriteRenderer colorSprite;
 
@@ -36,12 +37,17 @@ public class DBCardGO : MonoBehaviour {
 	//positiong the cards used to select from the unused list
 	private bool isUnusedCardSelector;
 	public Vector3 unusedCardOffset;
+	private int unusedCardPage;
 
 	public void activate(Card _card, int _order, bool _isUnusedCardSelector){
+		manager = DBManagerInterface.instance.manager;
+
 		card = _card;
 		isUnusedCardSelector = _isUnusedCardSelector;
 
-		manager = DBManagerInterface.instance.manager;
+		if (isUnusedCardSelector) {
+			unusedCardPage = manager.curUnusedCardWindowPage;
+		}
 
 		isActive = true;
 		gameObject.SetActive (true);
@@ -64,6 +70,7 @@ public class DBCardGO : MonoBehaviour {
 		//set the text
 		nameField.text = card.name;
 		descField.text = card.description;
+		typeField.text = CardManager.instance.TypeNames [card.type];
 
 		mouseIsOver = false;
 	}
@@ -130,12 +137,18 @@ public class DBCardGO : MonoBehaviour {
 		if (!isUnusedCardSelector) {
 			if (manager.activeDeck == null) {
 				deactivate ();
-			} else if (manager.activeDeck.cards.Contains (card)==false && manager.activeDeck.cardsToAdd.Contains (card)==false) {
+			} else if (manager.activeDeck.cards.Contains (card) == false && manager.activeDeck.cardsToAdd.Contains (card) == false) {
 				deactivate ();
 			}
-		}
-		if (isUnusedCardSelector && !manager.unusedCardsOpen) {
-			deactivate ();
+
+		} else {
+			if (!manager.unusedCardsOpen) {
+				deactivate ();
+			}
+
+			if (manager.curUnusedCardWindowPage != unusedCardPage) {
+				deactivate ();
+			}
 		}
 
 		//recently added cards can be removed and may need to be repositioned

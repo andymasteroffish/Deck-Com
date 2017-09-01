@@ -1,11 +1,10 @@
-move4
-move4
 move5
 move5
-attack
-attack
-attack
-cover_attack
+move4
+move4
 grenade
-village
+cover_attack
 aim
+attack
+attack
+attack

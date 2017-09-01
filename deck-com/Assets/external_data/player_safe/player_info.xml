@@ -1,6 +1,6 @@
 <player>
   <info>
-    <money>3</money>
+    <money>5</money>
     <cur_level>-1</cur_level>
   </info>
   <unit idName = "test_player">
@@ -15,7 +15,7 @@
     </charms>
   </unit>
   <unit idName = "wizard">
-    <name>Wizard</name>
+    <name>Gorb The Charmer</name>
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
     <hand_size>5</hand_size>
@@ -26,7 +26,7 @@
     </charms>
   </unit>
   <unit idName = "ranger">
-    <name>Ranger</name>
+    <name>Quick Alexi</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
     <hand_size>5</hand_size>
@@ -37,7 +37,7 @@
     </charms>
   </unit>
   <unit idName = "tank">
-    <name>Tank</name>
+    <name>Big Bobo</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
     <hand_size>5</hand_size>

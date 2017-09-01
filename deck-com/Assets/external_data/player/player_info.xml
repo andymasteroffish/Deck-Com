@@ -1,10 +1,10 @@
 <player>
   <info>
-    <money>4</money>
-    <cur_level>2</cur_level>
+    <money>3</money>
+    <cur_level>-1</cur_level>
   </info>
   <unit idName="wizard">
-    <name>Wizard</name>
+    <name>Gorb The Charmer</name>
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
     <player_controlled>true</player_controlled>
@@ -14,7 +14,7 @@
     </charms>
   </unit>
   <unit idName="ranger">
-    <name>Ranger</name>
+    <name>Quick Alexi</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
     <player_controlled>true</player_controlled>
@@ -24,7 +24,7 @@
     </charms>
   </unit>
   <unit idName="tank">
-    <name>Tank</name>
+    <name>Big Bobo</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
     <player_controlled>true</player_controlled>

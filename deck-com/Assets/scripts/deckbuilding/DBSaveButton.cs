@@ -27,7 +27,7 @@ public class DBSaveButton : MonoBehaviour {
 	void Update () {
 
 		if (manager == null) {
-				manager = DBManagerInterface.instance.manager;
+			manager = DBManagerInterface.instance.manager;
 		}
 
 		bool gotThatCash = false;
@@ -37,14 +37,9 @@ public class DBSaveButton : MonoBehaviour {
 
 		frameRend.color = mouseIsOver ? mouseOverColor : normalColor;
 
-		if (Input.GetMouseButtonDown (0) && mouseIsOver && gotThatCash) {
-			manager.saveChanges ();
-			mouseIsOver = false;
-		}
-
 		//figure out when this thing should be on
 		bool shouldShow = false;
-		if (manager.activeDeck != null && (manager.activeDeck.cardsToAdd.Count > 0 || manager.activeDeck.weaponToAdd != null || manager.activeDeck.charmToAdd != null)) {
+		if (manager.activeDeck != null && !manager.unusedCardsOpen && (manager.activeDeck.cardsToAdd.Count > 0 || manager.activeDeck.weaponToAdd != null || manager.activeDeck.charmToAdd != null)) {
 			shouldShow = true;
 
 			//and if it is on, set the text
@@ -57,6 +52,11 @@ public class DBSaveButton : MonoBehaviour {
 		}
 
 		displayHolder.SetActive (shouldShow);
+
+		if (shouldShow && Input.GetMouseButtonDown (0) && mouseIsOver && gotThatCash) {
+			manager.saveChanges ();
+			mouseIsOver = false;
+		}
 
 	}
 

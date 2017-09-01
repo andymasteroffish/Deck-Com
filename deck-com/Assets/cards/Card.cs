@@ -355,6 +355,7 @@ public class Card : IComparable<Card> {
 		finish ();
 	}
 
+	//for sorting
 	public int CompareTo(Card other) {
 		if (type == other.type) {
 			return name.CompareTo (other.name);

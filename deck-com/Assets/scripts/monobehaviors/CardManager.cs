@@ -15,6 +15,8 @@ public class CardManager : MonoBehaviour {
 
 	private Dictionary<string, Card> cardBlueprints = new Dictionary<string, Card> ();
 
+	private Dictionary<Card.CardType, string> typeNames;
+
 	void Awake(){
 		if (instance == null) {
 			instance = this;
@@ -26,6 +28,7 @@ public class CardManager : MonoBehaviour {
 		fullXML.Load (Application.dataPath + "/external_data/cards.xml");
 		nodes = fullXML.GetElementsByTagName ("card");
 
+		//get the cards and store a copy of each one to use as a blueprint
 		foreach (XmlNode node in nodes) {
 			Card blueprint = getCardFromXMLNode (node);
 			//Debug.Log (blueprint != null);
@@ -33,6 +36,18 @@ public class CardManager : MonoBehaviour {
 			cardBlueprints.Add (blueprint.idName, blueprint);
 		}
 		Debug.Log (cardBlueprints.Count + " unique cards found");
+
+		//set display names for the card types
+		typeNames = new Dictionary<Card.CardType, string> ();
+		typeNames.Add (Card.CardType.Loot, "");
+		typeNames.Add (Card.CardType.Attack, "Attack");
+		typeNames.Add (Card.CardType.AttackSpecial, "Special Attack");
+		typeNames.Add (Card.CardType.Movement, "Movement");
+		typeNames.Add (Card.CardType.Aid, "Action - Aid");
+		typeNames.Add (Card.CardType.Magic, "Action - Spell");
+		typeNames.Add (Card.CardType.Equipment, "Equipment");
+		typeNames.Add (Card.CardType.Other, "Action - Other");
+
 	}
 
 	public List<Card> getDeckFromTextFile(string filePath){
@@ -181,5 +196,16 @@ public class CardManager : MonoBehaviour {
 		}
 		return returnVal;
 	}
+
+
+	//setters getters
+	public Dictionary<Card.CardType, string> TypeNames{
+		get{
+			return this.typeNames;
+		}
+	}
+
+
+
 
 }
