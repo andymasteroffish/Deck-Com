@@ -7,4 +7,5 @@ attack
 attack
 cover_attack
 grenade
+village
 aim

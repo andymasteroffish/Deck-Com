@@ -22,6 +22,8 @@ public class GameObjectManager : MonoBehaviour {
 	private List<LootGO> loot = new List<LootGO> ();
 	private List<TargetGO> targets = new List<TargetGO>();
 
+	public GameObject tileHolder;
+
 	void Awake(){
 		if (instance == null) {
 			instance = this;
@@ -41,6 +43,7 @@ public class GameObjectManager : MonoBehaviour {
 		//otherwise make one
 		GameObject tileObj = Instantiate(tilePrefab) as GameObject;
 		TileGO tileGO = tileObj.GetComponent<TileGO> ();
+		tileGO.transform.parent = tileHolder.transform;
 		tiles.Add (tileGO);
 		return tileGO;
 	}

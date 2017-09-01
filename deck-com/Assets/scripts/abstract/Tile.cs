@@ -84,7 +84,7 @@ public class Tile {
 		isHighlighted = parent.isHighlighted;
 		highlightCol = parent.highlightCol;
 		isVisibleToPlayer = parent.isVisibleToPlayer;
-		Debug.Log ("set from parent on frame " + Time.frameCount);
+		//Debug.Log ("set from parent on frame " + Time.frameCount);
 
 		ignoreStoredRanges = parent.ignoreStoredRanges;
 		visibleRangeDists = parent.visibleRangeDists;	//this is a pointer so AI tiles should not change this value if the boardstate changes at all (ex: cover is destroyed)

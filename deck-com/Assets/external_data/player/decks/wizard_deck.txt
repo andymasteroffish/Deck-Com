@@ -7,4 +7,8 @@ attack
 draw_a_card
 gain_an_action
 heal
+psychic_poke
 equipment_heal_ring
+teleport
+teleport
+psychic_poke
