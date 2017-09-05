@@ -172,6 +172,7 @@ public class GameManager {
 	}
 
 	public void endPlayerTurn(){
+		Debug.Log ("end player turn");
 		clearActiveCard ();
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		for(int i=unitsPlayer.Count-1; i>=0; i--){

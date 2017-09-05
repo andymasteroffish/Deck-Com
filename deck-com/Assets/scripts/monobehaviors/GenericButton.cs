@@ -13,7 +13,7 @@ public class GenericButton : MonoBehaviour {
 	public Color normalColor = Color.white;
 	public Color mouseOverColor = new Color (0.75f, 0.75f, 0.75f);
 
-	public bool doNotForceMouseIsOver;
+	//public bool doNotForceMouseIsOver;
 
 	// Use this for initialization
 	void Start () {
@@ -24,18 +24,25 @@ public class GenericButton : MonoBehaviour {
 	void Update () {
 		frameRend.color = mouseIsOver ? mouseOverColor : normalColor;
 
-		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
-			target.SendMessage (message);
-			if (!doNotForceMouseIsOver) {
-				mouseIsOver = false;
-			}
-		}
+		mouseIsOver = false;	//this will be overwritten by onMouseOver if they are on the button
 	}
 
-	void OnMouseEnter(){
+	void OnMouseOver(){
 		mouseIsOver = true;
 	}
-	void OnMouseExit(){
+
+	void OnMouseDown(){
+		target.SendMessage (message);
 		mouseIsOver = false;
 	}
+
+//	void OnMouseEnter(){
+//		mouseIsOver = true;
+//	}
+//	void OnMouseExit(){
+//		mouseIsOver = false;
+//	}
+
+
+
 }
