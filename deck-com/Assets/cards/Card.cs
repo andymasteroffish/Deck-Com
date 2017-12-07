@@ -67,6 +67,10 @@ public class Card : IComparable<Card> {
 		scriptName = node ["script"].InnerText;
 		name = node ["name"].InnerText;
 
+
+		//default values
+		type = CardType.Other;
+
 		baseActionCost = 1;
 		if (node ["action_cost"] != null) {
 			baseActionCost = int.Parse(node ["action_cost"].InnerText);
@@ -113,10 +117,6 @@ public class Card : IComparable<Card> {
 		if (node ["self_destruct"] != null) {
 			selfDestructWhenPlayed = bool.Parse (node ["self_destruct"].InnerText);
 		}
-
-		//default values
-		baseActionCost = 1;
-		type = CardType.Other;
 
 
 		//set the colors

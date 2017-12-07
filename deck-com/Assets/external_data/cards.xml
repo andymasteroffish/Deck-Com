@@ -233,8 +233,10 @@
 <name>Free Dash</name>
 <level>-1</level>
 <script>Card_Movement</script>
+<desc>Move up to 3 spaces. Costs 0 actions.</desc>
 <range>3</range>
 <self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
 </card>
 <card idName="team_dash">
 <name>Team Dash</name>

@@ -1,3 +1,4 @@
+team_dash
 equipment_heal_ring
 move3
 move4
