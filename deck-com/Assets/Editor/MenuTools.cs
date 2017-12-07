@@ -3,30 +3,31 @@ using UnityEditor;
 using System.Xml;
 using System;
 using System.IO;
+using System.Diagnostics;
 
 public class MenuTools {
 
 	[MenuItem("DeckCom/Reset Player Folder")]
 	//[MenuItem("Andy's l33t hakz/BLAST THOSE FIL3z")]
-	private static void testOption(){
-		Debug.Log ("replacing the current player folder with the default player files");
+	private static void resetPlayerFolder(){
+		UnityEngine.Debug.Log ("replacing the current player folder with the default player files");
 		string defaultFolder =  Application.dataPath + "/external_data/player_default";
 		string folderToReplace = Application.dataPath + "/external_data/player";
 
 		//Debug.Log ("kill " + folderToReplace);
 		//delete it
 		if (System.IO.Directory.Exists (folderToReplace)) {
-			Debug.Log ("deleting existing player folder");
+			UnityEngine.Debug.Log ("deleting existing player folder");
 			System.IO.Directory.Delete (folderToReplace, true);
 		} else {
-			Debug.Log ("player folder already gone");
+			UnityEngine.Debug.Log ("player folder already gone");
 		}
 
 		//make a new one
 		System.IO.Directory.CreateDirectory (folderToReplace);
 
 		//copy that shit
-		Debug.Log("copying the contents of "+defaultFolder);
+		UnityEngine.Debug.Log("copying the contents of "+defaultFolder);
 		Copy(defaultFolder, folderToReplace);
 	}
 
@@ -59,6 +60,29 @@ public class MenuTools {
 		}
 	}
 
+
+
+
+	[MenuItem("DeckCom/Scrape Card Data")]
+	//[MenuItem("Andy's l33t hakz/BLAST THOSE FIL3z")]
+	private static void scrapeCardData(){
+		UnityEngine.Debug.Log ("do it");
+		string scriptFile = Application.dataPath + "/external_data/cardloader.py";
+		ProcessStartInfo start = new ProcessStartInfo();
+		start.FileName = "my/full/path/to/python.exe";
+		//start.Arguments = string.Format("{0} {1}", cmd, args);
+		start.UseShellExecute = false;
+		start.RedirectStandardOutput = true;
+		using(Process process = Process.Start(start))
+		{
+			using(StreamReader reader = process.StandardOutput)
+			{
+				string result = reader.ReadToEnd();
+				UnityEngine.Debug.Log(result);
+			}
+		}
+		UnityEngine.Debug.Log ("done scraping files");
+	}
 
 
 }
