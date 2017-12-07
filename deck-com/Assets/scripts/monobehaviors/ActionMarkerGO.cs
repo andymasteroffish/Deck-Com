@@ -8,7 +8,8 @@ public class ActionMarkerGO : MonoBehaviour {
 	private Unit owner;
 	private int idNum;
 
-	private SpriteRenderer spriteRend = null;
+	public SpriteRenderer spriteRend;
+	public SpriteRenderer labelSprite;
 
 	private bool needsStartPos = true;
 	private Transform startPosPlayer, startPosAI;
@@ -39,9 +40,9 @@ public class ActionMarkerGO : MonoBehaviour {
 			return;
 		}
 
-		if (spriteRend == null) {
-			spriteRend = GetComponent<SpriteRenderer> ();
-		}
+//		if (spriteRend == null) {
+//			spriteRend = GetComponent<SpriteRenderer> ();
+//		}
 
 		gameObject.SetActive(true);
 
@@ -112,6 +113,7 @@ public class ActionMarkerGO : MonoBehaviour {
 		}
 
 		spriteRend.enabled = owner.getIsVisibleToPlayer ();
+		labelSprite.enabled = owner.getIsVisibleToPlayer () && idNum == 1;
 	}
 
 	IEnumerator doScaleAnim(float targetScale, float time, bool deactivateWhenDone){
@@ -119,7 +121,7 @@ public class ActionMarkerGO : MonoBehaviour {
 
 		time *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
 		float timer = 0;
-		float startScale = transform.localScale.x;
+		float startScale = spriteRend.gameObject.transform.localScale.x;
 
 		while (timer < time) {
 			timer += Time.deltaTime;
@@ -127,12 +129,12 @@ public class ActionMarkerGO : MonoBehaviour {
 
 			float newScale = Mathf.Lerp(startScale, targetScale,  timer / time);
 			newScale = Mathf.Pow (newScale, 2);
-			transform.localScale = new Vector3 (newScale, newScale, newScale);
+			spriteRend.gameObject.transform.localScale = new Vector3 (newScale, newScale, newScale);
 
 			yield return null;
 		}
 
-		transform.localScale = new Vector3 (targetScale, targetScale, targetScale);	
+		spriteRend.gameObject.transform.localScale = new Vector3 (targetScale, targetScale, targetScale);	
 
 		doingAnimation = false;
 

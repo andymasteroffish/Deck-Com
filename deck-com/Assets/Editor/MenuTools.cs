@@ -63,26 +63,5 @@ public class MenuTools {
 
 
 
-	[MenuItem("DeckCom/Scrape Card Data")]
-	//[MenuItem("Andy's l33t hakz/BLAST THOSE FIL3z")]
-	private static void scrapeCardData(){
-		UnityEngine.Debug.Log ("do it");
-		string scriptFile = Application.dataPath + "/external_data/cardloader.py";
-		ProcessStartInfo start = new ProcessStartInfo();
-		start.FileName = "my/full/path/to/python.exe";
-		//start.Arguments = string.Format("{0} {1}", cmd, args);
-		start.UseShellExecute = false;
-		start.RedirectStandardOutput = true;
-		using(Process process = Process.Start(start))
-		{
-			using(StreamReader reader = process.StandardOutput)
-			{
-				string result = reader.ReadToEnd();
-				UnityEngine.Debug.Log(result);
-			}
-		}
-		UnityEngine.Debug.Log ("done scraping files");
-	}
-
 
 }

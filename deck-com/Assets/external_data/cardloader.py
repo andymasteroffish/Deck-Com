@@ -138,6 +138,8 @@ def getCards():
         #we found stuff!
         pathname = os.path.dirname(os.path.realpath(__file__))
 
+        print("saving to "+pathname)
+
         file = open(pathname+'/cards.xml', 'w')
         file.write('<cards>\n')
         for row in values:
