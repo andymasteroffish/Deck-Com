@@ -33,8 +33,32 @@ public class GameObjectManager : MonoBehaviour {
 	}
 
 	public bool areAnimationsHappening(){
+		for (int i = 0; i < charms.Count; i++) {
+			if (charms [i].IsActive == true && charms[i].DoingAnimation) {
+				return true;
+			}
+		}
+
+		for (int i = 0; i < cards.Count; i++) {
+			if (cards [i].IsActive == true && cards[i].DoingAnimation) {
+				return true;
+			}
+		}
+
+		for (int i = 0; i < actionMarkers.Count; i++) {
+			if (actionMarkers [i].IsActive == true && actionMarkers[i].DoingAnimation) {
+				return true;
+			}
+		}
+
 		for (int i = 0; i < units.Count; i++) {
 			if (units [i].IsActive == true && units[i].DoingAnimation) {
+				return true;
+			}
+		}
+
+		for (int i = 0; i < targets.Count; i++) {
+			if (targets [i].IsActive == true && targets[i].DoingAnimation) {
 				return true;
 			}
 		}

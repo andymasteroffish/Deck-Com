@@ -354,7 +354,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		UnityEngine.SceneManagement.SceneManager.LoadScene ("endGameReport");
 	}
 
-	//FILL THIS IN!!!!!
 	public bool areAnimationsHappening(){
 		if (doingAnimation){
 			return true;
