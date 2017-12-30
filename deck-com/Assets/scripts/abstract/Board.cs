@@ -832,6 +832,10 @@ public class Board {
 			}
 		}
 
+		if (matches.Count == 0) {
+			return null;
+		}
+
 		return matches [(int)Random.Range (0, matches.Count)];
 	}
 
@@ -842,11 +846,13 @@ public class Board {
 	}
 
 	//checking cover
+
 	public Tile.Cover getCover(Unit sourceUnit, Unit targetUnit){
 		//just get the line from the source to the target
 		return getCover (sourceUnit.CurTile, targetUnit.CurTile);
 	}
 
+	/*
 	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
 		//get the direction
 		float dist = dm.getDist(sourceTile, targetTile); // sourceTile.Pos.getDist(targetTile.Pos);
@@ -860,9 +866,6 @@ public class Board {
 		if (raytraceFloat (sourceTile, targetTile, Tile.Cover.Full) != null) {
 			return Tile.Cover.Full;
 		}
-//		if (raytrace (sourceTile, targetTile, Tile.Cover.Full) != null) {
-//			return Tile.Cover.Full;
-//		}
 
 		//and for partial cover
 		//only tiles directly adjacent to a unit should provide partial cover
@@ -880,6 +883,73 @@ public class Board {
 
 		//if nothing hit, then there is no cover
 		return Tile.Cover.None;
+	}
+	*/
+
+	//right now only adjacent tiles can provide cover. Maybe that's bad?
+	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
+		int highestCoverVal = 0;
+
+		//attacks from north
+		if (sourceTile.Pos.y-1 > targetTile.Pos.y) {
+			Tile coverTile = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Up) );
+			if ((int)coverTile.CoverVal > highestCoverVal) {
+				highestCoverVal = (int)coverTile.CoverVal;
+			}
+		}
+		//attacks from south
+		if (sourceTile.Pos.y+1 < targetTile.Pos.y) {
+			Tile coverTile = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Down) );
+			if ((int)coverTile.CoverVal > highestCoverVal) {
+				highestCoverVal = (int)coverTile.CoverVal;
+			}
+		}
+		//attacks from east
+		if (sourceTile.Pos.x-1 > targetTile.Pos.x) {
+			Tile coverTile = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Right) );
+			if ((int)coverTile.CoverVal > highestCoverVal) {
+				highestCoverVal = (int)coverTile.CoverVal;
+			}
+		}
+		//attacks from west
+		if (sourceTile.Pos.x+1 < targetTile.Pos.x) {
+			Tile coverTile = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Left) );
+			if ((int)coverTile.CoverVal > highestCoverVal) {
+				highestCoverVal = (int)coverTile.CoverVal;
+			}
+		}
+
+		//litteral corner cases. If the source is diagonal to the target, get both of the adjacent cover values and use the lowest
+		TilePos deltaPos = targetTile.Pos-sourceTile.Pos;
+		//source is to bottom left
+		if (deltaPos.x == 1 && deltaPos.y == 1) {
+			Tile coverTileA = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Left) );
+			Tile coverTileB = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Down) );
+			highestCoverVal = (int)coverTileA.CoverVal < (int)coverTileB.CoverVal ? (int)coverTileA.CoverVal : (int)coverTileB.CoverVal;
+		}
+		//source is to bottom right
+		if (deltaPos.x == -1 && deltaPos.y == 1) {
+			Tile coverTileA = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Right) );
+			Tile coverTileB = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Down) );
+			highestCoverVal = (int)coverTileA.CoverVal < (int)coverTileB.CoverVal ? (int)coverTileA.CoverVal : (int)coverTileB.CoverVal;
+		}
+		//source is to top left
+		if (deltaPos.x == 1 && deltaPos.y == -1) {
+			Tile coverTileA = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Left) );
+			Tile coverTileB = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Up) );
+			highestCoverVal = (int)coverTileA.CoverVal < (int)coverTileB.CoverVal ? (int)coverTileA.CoverVal : (int)coverTileB.CoverVal;
+		}
+		//source is to top right
+		if (deltaPos.x == -1 && deltaPos.y == -1) {
+			Tile coverTileA = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Right) );
+			Tile coverTileB = getTileFromPos(targetTile.Pos.addDirection (Tile.Direction.Up) );
+			highestCoverVal = (int)coverTileA.CoverVal < (int)coverTileB.CoverVal ? (int)coverTileA.CoverVal : (int)coverTileB.CoverVal;
+		}
+
+
+
+		//if nothing hit, then there is no cover
+		return (Tile.Cover)highestCoverVal;
 	}
 
 	public int getNewDamageValFromCover(int origDamage, Tile.Cover cover){
@@ -1060,6 +1130,14 @@ public class Board {
 		}
 		//Debug.DrawLine (new Vector3 (x0-offset, y0-offset, 0), new Vector3 (x1-offset, y1-offset, 0), Color.green);
 		return null;
+	}
+
+	public Tile getTileFromPos(TilePos pos){
+		if (pos.x < 0 || pos.x >= cols || pos.y < 0 || pos.y >= rows) {
+			Debug.Log ("BAD POS");
+			return null;
+		}
+		return grid [pos.x, pos.y];
 	}
 
 

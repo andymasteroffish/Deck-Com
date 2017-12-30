@@ -75,8 +75,10 @@ public class GameManager {
 			for (int i = 0; i < debugSpawnList.Length; i++) {
 				Unit unit = UnitManager.instance.getUnitFromIdName (debugSpawnList [i]);
 				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty (unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
-				unit.setup (this, board, spawnTile);
-				board.units.Add (unit);
+				if (spawnTile != null) {
+					unit.setup (this, board, spawnTile);
+					board.units.Add (unit);
+				}
 			}
 
 			List<Unit> foes = getAIUnits ();
