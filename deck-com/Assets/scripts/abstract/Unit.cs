@@ -43,6 +43,7 @@ public class Unit {
 
 	//decks and cards
 	public Deck deck;
+	public List<Card> cardsPlayedThisTurn;
 
 	public string deckListPath;
 
@@ -286,6 +287,12 @@ public class Unit {
 		}
 		actionsLeft = 0;
 		setVisibleTiles ();
+
+		//turn-to-turn info
+		if (cardsPlayedThisTurn == null) {
+			cardsPlayedThisTurn = new List<Card> ();
+		}
+		cardsPlayedThisTurn.Clear ();
 	}
 
 	public void resetRound(){
@@ -419,6 +426,9 @@ public class Unit {
 		for (int i=charms.Count-1; i>=0; i--){
 			charms[i].cardPlayed (card);
 		}
+
+		//add this to the list
+		cardsPlayedThisTurn.Add(card);
 
 		//reduce the actions
 		//Debug.Log(card.idName+" has action cost "+card.getNumActionsNeededToPlay());
@@ -556,6 +566,20 @@ public class Unit {
 
 	public void setMouseColliderActive(bool newVal){
 		mouseColliderIsActive = newVal;
+	}
+
+	//getting some info
+	public int getCardsOfTypePlayedThisTurn(Card.CardType type){
+		if (cardsPlayedThisTurn == null) {
+			return 0;
+		}
+		int total = 0;
+		foreach (Card card in cardsPlayedThisTurn) {
+			if (card.type == type) {
+				total++;
+			}
+		}
+		return total;
 	}
 
 	//saving and cleaning up at the end of the game

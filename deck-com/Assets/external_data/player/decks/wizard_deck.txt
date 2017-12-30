@@ -1,4 +1,6 @@
-team_dash
+nimble_strike
+village
+village
 equipment_heal_ring
 move3
 move4

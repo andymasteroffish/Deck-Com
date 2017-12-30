@@ -38,6 +38,9 @@ public class Card : IComparable<Card> {
 
 	public bool selfDestructWhenPlayed;
 
+	//modifying cost
+	public int numMoveCardsPlayedToMakeThisFree;
+
 	//ignoring charms
 	public bool ignoreTargetCharms;
 	public bool ignoreCasterCharms;
@@ -100,6 +103,12 @@ public class Card : IComparable<Card> {
 		bonusCardID = "none";
 		if (node ["bonus_card_id"] != null) {
 			bonusCardID = node ["bonus_card_id"].InnerText;
+		}
+
+		//cost effects?
+		numMoveCardsPlayedToMakeThisFree = -1;
+		if (node ["num_move_cards_played_to_make_free"] != null) {
+			numMoveCardsPlayedToMakeThisFree = int.Parse (node ["num_move_cards_played_to_make_free"].InnerText);
 		}
 
 		//will this ignore any charms
@@ -180,6 +189,9 @@ public class Card : IComparable<Card> {
 
 		selfDestructWhenPlayed = blueprint.selfDestructWhenPlayed;
 
+		//cost reductions
+		numMoveCardsPlayedToMakeThisFree = blueprint.numMoveCardsPlayedToMakeThisFree;
+
 		//will this ignore any charms
 		ignoreTargetCharms = blueprint.ignoreTargetCharms;
 		ignoreCasterCharms = blueprint.ignoreCasterCharms;
@@ -220,10 +232,24 @@ public class Card : IComparable<Card> {
 
 	public int getNumActionsNeededToPlay(){
 		int actionCost = baseActionCost;
+
+		actionCost += getCustomActionCostMod ();
+
 		for (int i=Owner.Charms.Count-1; i>=0; i--){
 			actionCost += Owner.Charms[i].getCardActionCostMod (this);
 		}
 		return actionCost;
+	}
+	public virtual int getCustomActionCostMod(){
+		int costMod = 0;
+
+		if (numMoveCardsPlayedToMakeThisFree >= 0) {
+			if (owner.getCardsOfTypePlayedThisTurn (CardType.Movement) >= numMoveCardsPlayedToMakeThisFree) {
+				costMod = -baseActionCost;
+			}
+		}
+
+		return costMod;
 	}
 		
 	public void selectCard(bool isForAI=false){

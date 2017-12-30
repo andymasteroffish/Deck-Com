@@ -8,6 +8,7 @@ public class Card_Attack : Card {
 	public int damageMod;
 	public int rangeMod;
 
+
 	public Card_Attack (){}
 	public Card_Attack(XmlNode _node){
 		node = _node;
@@ -42,6 +43,7 @@ public class Card_Attack : Card {
 		damageMod = blueprintCustom.damageMod;
 		rangeMod = blueprintCustom.rangeMod;
 	}
+
 
 	public override void mouseEnterEffects(){
 		mouseEnterForWeapon (rangeMod);
