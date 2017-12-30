@@ -265,6 +265,7 @@ public class GameManager {
 	public void tab(int dir){
 		clearActiveCard ();
 		tabActivePlayerUnit (dir);
+		GameManagerTacticsInterface.instance.cancelTabAfterAnimations();
 	}
 
 	public void tabActivePlayerUnitSkippingExausted(int dir){

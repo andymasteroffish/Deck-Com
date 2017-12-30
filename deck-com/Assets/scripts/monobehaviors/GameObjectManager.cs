@@ -32,6 +32,20 @@ public class GameObjectManager : MonoBehaviour {
 		}
 	}
 
+	public bool areAnimationsHappening(){
+		for (int i = 0; i < units.Count; i++) {
+			if (units [i].IsActive == true && units[i].DoingAnimation) {
+				return true;
+			}
+		}
+
+		//FILL THIS IN FOR OTHER GAME OBJECTS
+		return false;
+
+	}
+
+
+
 	public TileGO getTileGO(){
 		//check if we have any inactive in the list
 		for (int i = 0; i < tiles.Count; i++) {

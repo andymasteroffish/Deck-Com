@@ -53,6 +53,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	private int aiTurnPhase;
 	private bool autoPlayAITurn;	//for when ai units are not visible
 
+	public float pauseTimeBeforeTabbingExaustedUnit;
+	private float tabTimer;
+	private bool tabPlayerAfterAnimations;
+
 	[System.NonSerialized]
 	public Tile curMouseOverTile;	//for roll over effects
 	private Tile prevMouseOverTile;
@@ -218,30 +222,38 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 		prevMouseOverTile = curMouseOverTile;
 
-		//testing
-		if (Input.GetKeyDown (KeyCode.F)) {
-			int unitID = 3;
-			int cardID = 0;
-			List<MoveInfo> testMoves = gm.board.getAllMovesForCard (unitID, cardID);
-			gm.board.filterBadMovesIfApplicable (testMoves, cardID, true);
 
-			foreach (MoveInfo move in testMoves) {
-				gm.board.Grid [move.targetTilePos.x, move.targetTilePos.y].debugText = "X";
-			}
-		}
-//		for (int i = 0; i < 4; i++) {
-//			if (gm.board.units [i] != gm.activePlayerUnit) {
-//				gm.board.getCover (gm.activePlayerUnit, gm.board.units [i]);
+		//testing
+//		if (Input.GetKeyDown (KeyCode.F)) {
+//			int unitID = 3;
+//			int cardID = 0;
+//			List<MoveInfo> testMoves = gm.board.getAllMovesForCard (unitID, cardID);
+//			gm.board.filterBadMovesIfApplicable (testMoves, cardID, true);
+//
+//			foreach (MoveInfo move in testMoves) {
+//				gm.board.Grid [move.targetTilePos.x, move.targetTilePos.y].debugText = "X";
 //			}
 //		}
-//
-//		for (int x = 0; x <= gm.board.cols; x++) {
-//			Debug.DrawLine (new Vector3 (x, 0, 1), new Vector3 (x, gm.board.rows, 1), Color.red);
-//		}
-//		for (int y = 0; y <= gm.board.rows; y++) {
-//			Debug.DrawLine (new Vector3 (0, y, 1), new Vector3 (gm.board.cols, y, 1), Color.red);
-//		}
 
+	}
+
+	//things we need to chekc after various game objetcs have gottena  chance
+	void LateUpdate(){
+		//check if we should be tabbing the player
+		if (tabPlayerAfterAnimations) {
+			tabTimer -= Time.deltaTime;
+			if (tabTimer <= 0 && areAnimationsHappening () == false) {
+				gm.tab (1);
+			}
+		}
+	}
+
+	public void triggerTabAfterAnimations(){
+		tabPlayerAfterAnimations = true;
+		tabTimer = pauseTimeBeforeTabbingExaustedUnit;
+	}
+	public void cancelTabAfterAnimations(){
+		tabPlayerAfterAnimations = false;
 	}
 
 	//button listeners
@@ -347,11 +359,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		if (doingAnimation){
 			return true;
 		}
-		//		foreach(Unit unit in units){
-		//			if (unit.areAnimationsHappening()){
-		//				return true;
-		//			}
-		//		}
+		if (GameObjectManager.instance.areAnimationsHappening ()) {
+			return true;
+		}
 
 		return false;
 	}

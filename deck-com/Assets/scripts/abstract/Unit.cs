@@ -436,6 +436,11 @@ public class Unit {
 		if (isPlayerControlled){
 			canPickUpLoot = board.checkIfUnitIsCloseToLoot (this);
 		}
+
+		//if this unit is player controlled and exausted, it's time to to tab on
+		if (isExausted && gm.activePlayerUnit == this) {
+			GameManagerTacticsInterface.instance.triggerTabAfterAnimations ();
+		}
 	}
 
 	//a unit is exausted if they have no acitons and no cards they can play
