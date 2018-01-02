@@ -87,6 +87,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			debugShowTileDist = false;
 			debugClearTileDists = false;
 			debugWakeAllFoes = false;
+			debugAllFoesHaveLoot = false;
 		}
 
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();

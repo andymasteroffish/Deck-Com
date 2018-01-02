@@ -1,0 +1,33 @@
+Deck-Com Intro script
+
+**Goal**
+
+Defeat all enemies on each floor.
+
+
+**Cards**
+
+Each unit has their own deck of cards. At the start of each turn, they discard their existing hand and draw 4 new cards. When their deck runs out, their discard pile is shuffled and becomes a new deck.
+
+By default, all cards cost 1 action to play and units have 2 actions per turn.
+
+You can switch units freely during your turn, and can have units play cards in any order.
+
+
+**Cover**
+
+Cover affects standard attacks. Units in partial cover have damaged reduced by one. Units in full cover take half damage. Cover effects (and any other effects that would affect damage) are shown when mousing over a unit while playing an attack card.
+
+
+**Equipment**
+
+All units have an equipped weapon that will determine the range and damage of their attack cards (as well as any other potential effects).
+
+Other equipment cards can be played. These cards stay on the unit and do not go to the discard pile until they are destroyed.
+
+
+**Deck Building**
+
+Loot can be collected (as a free action) and will turn into a booster pack at the end of the level.
+
+In between levels, new cards can be added to the unit decks for $2 per card.

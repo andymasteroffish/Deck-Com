@@ -75,10 +75,11 @@ public class Card_DirectDamage : Card {
 		}
 
 		//print the total
-		text += "\nDAMAGE: "+(damage+totalPrevention);
+		//text += "\nDAMAGE: "+(damage+totalPrevention);
+		int totalDamage = damage+totalPrevention;
 
 		//set the target info text
-		Owner.GM.targetInfoText.turnOn(text, unit);
+		Owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
 	}
 
 	public override void selectCardCustom(){

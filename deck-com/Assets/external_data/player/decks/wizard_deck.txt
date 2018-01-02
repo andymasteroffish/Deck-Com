@@ -1,10 +1,12 @@
+equipment_helpers_ring
+attack
 move3
 move4
 move4
 move5
 attack
-attack
 draw_a_card
 gain_an_action
 heal
-equipment_helpers_ring
+aim
+psychic_poke

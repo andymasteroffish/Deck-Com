@@ -34,8 +34,11 @@ public class Card_Equipment : Card {
 		
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
-		Owner.board.clearHighlights ();
-		Owner.setHighlighted (true, baseHighlightColor);
+		//Owner.board.clearHighlights ();
+		//Owner.setHighlighted (true, baseHighlightColor);
+
+		//just do the thing
+		passInUnitCustom (Owner);
 	}
 
 	public override void passInUnitCustom(Unit unit){

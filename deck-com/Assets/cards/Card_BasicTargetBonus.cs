@@ -29,7 +29,7 @@ public class Card_BasicTargetBonus : Card {
 			description += "\n+" + numActionsToGain + " actions(s)";
 		}
 		if (anyUnit) {
-			description += "\n(any unit)";
+			description += "\n(any visible unit)";
 		}
 	}
 
@@ -53,8 +53,9 @@ public class Card_BasicTargetBonus : Card {
 		if (anyUnit) {
 			Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
 		} else {
-			Owner.board.clearHighlights ();
-			Owner.setHighlighted (true, baseHighlightColor);
+			//Owner.board.clearHighlights ();
+			//Owner.setHighlighted (true, baseHighlightColor);
+			passInUnitCustom(Owner);
 		}
 	}
 

@@ -51,13 +51,14 @@ public class Card_AttackIgnoreWeapon : Card {
 
 		//calculate cover
 		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		text += "\n"+getInfoStringForCover (coverVal)+"\n";
+		text += getInfoStringForCover (coverVal);
 
 		//print the total
-		text += "\nDAMAGE: "+(getDamageToUnit(unit)+totalPrevention);
+		//text += "\nDAMAGE: "+(getDamageToUnit(unit)+totalPrevention);
+		int totalDamage = getDamageToUnit(unit)+totalPrevention;
 
 		//set the target info text
-		Owner.GM.targetInfoText.turnOn(text, unit);
+		Owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
 	}
 
 	public override void selectCardCustom(){

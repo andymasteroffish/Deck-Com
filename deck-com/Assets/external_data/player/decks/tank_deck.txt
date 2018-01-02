@@ -8,3 +8,5 @@ attack
 attack
 cover_attack
 grenade
+draw_a_card
+blade_dash

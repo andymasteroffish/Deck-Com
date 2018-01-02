@@ -1,2 +1,8 @@
-move_and_attack
-psychic_poke
+move5
+adjust_sights
+village
+attack
+attack_d1
+teleport
+equipment_helpers_ring
+equipment_helpers_ring

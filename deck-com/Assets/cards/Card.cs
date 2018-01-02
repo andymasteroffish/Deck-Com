@@ -371,7 +371,7 @@ public class Card : IComparable<Card> {
 
 	public string getInfoStringForCover(Tile.Cover coverVal){
 		if (coverVal == Tile.Cover.Full) {
-			return "Full Cover: *0.5";
+			return "Full Cover: x0.5";
 		}
 		if (coverVal == Tile.Cover.Part) {
 			return "Part Cover: -1";
@@ -469,13 +469,14 @@ public class Card : IComparable<Card> {
 
 		//calculate cover
 		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		text += "\n"+getInfoStringForCover (coverVal)+"\n";
+		text += getInfoStringForCover (coverVal);
 
 		//print the total
-		text += "\nDAMAGE: "+(damage+totalPrevention);
+		//text += "\nDAMAGE: "+(damage+totalPrevention);
+		int totalDamage = damage+totalPrevention;
 
 		//set the target info text
-		owner.GM.targetInfoText.turnOn(text, unit);
+		owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
 	}
 
 	public int getWeaponDamageToUnit(Unit unit, int damageMod){
