@@ -9,7 +9,7 @@ Defeat all enemies on each floor.
 
 Each unit has their own deck of cards. At the start of each turn, they discard their existing hand and draw 4 new cards. When their deck runs out, their discard pile is shuffled and becomes a new deck.
 
-By default, all cards cost 1 action to play and units have 2 actions per turn.
+By default, all cards cost 1 action to play and units have 2 actions per turn. Action cost is shown in the bottom left corner of the card (This number includes any effects that would modify cost).
 
 You can switch units freely during your turn, and can have units play cards in any order.
 

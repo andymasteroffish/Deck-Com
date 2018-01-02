@@ -1,4 +1,5 @@
 village
+nimble_strike
 move4
 move4
 move5

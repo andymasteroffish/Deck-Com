@@ -13,6 +13,7 @@ public class CardGO : MonoBehaviour {
 	public Text nameField;
 	public Text descField;
 	public Text typeField;
+	public Text actionCostField;
 	public SpriteRenderer spriteRend;
 	public SpriteRenderer colorSprite;
 
@@ -111,6 +112,8 @@ public class CardGO : MonoBehaviour {
 		//set the text
 		nameField.text = card.name;
 		descField.text = card.description;
+
+		actionCostField.text = card.getNumActionsNeededToPlay ().ToString ();
 
 		//set the position (if we're not sliding it)
 		if (!doingAnimation && !inAiRevealSpot) {
