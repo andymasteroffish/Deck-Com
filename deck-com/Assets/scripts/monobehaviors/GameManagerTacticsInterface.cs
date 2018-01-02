@@ -20,6 +20,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public bool debugShowTileDist;
 	public bool debugClearTileDists;
 	public bool debugWakeAllFoes;
+	public bool debugAllFoesHaveLoot;
 
 	public static GameManagerTacticsInterface instance;
 
@@ -243,7 +244,12 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		if (tabPlayerAfterAnimations) {
 			tabTimer -= Time.deltaTime;
 			if (tabTimer <= 0 && areAnimationsHappening () == false) {
-				gm.tab (1);
+				//if there is a unit to go to, do it
+				if (!gm.areAllPlayerUnitsExausted ()) {
+					gm.tabActivePlayerUnitSkippingExausted (1);
+				} else {
+					tabPlayerAfterAnimations = false;
+				}
 			}
 		}
 	}

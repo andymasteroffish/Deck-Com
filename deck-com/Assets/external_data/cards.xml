@@ -98,7 +98,7 @@
 <name>Village</name>
 <level>1</level>
 <script>Card_BasicTargetBonus</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <any_unit>false</any_unit>
 <cards_to_draw>1</cards_to_draw>
 <actions_to_gain>2</actions_to_gain>
@@ -108,7 +108,7 @@
 <level>1</level>
 <script>Card_CoverAttack</script>
 <card_type>Attack</card_type>
-<damage_mod>-2</damage_mod>
+<damage_mod>-1</damage_mod>
 <range_mod>0</range_mod>
 </card>
 <card idName="psychic_poke">
@@ -132,7 +132,7 @@
 <name>Focus</name>
 <level>1</level>
 <script>Card_GiveCharm</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>Next weapon attack this turn has +1 damage and +2 range</desc>
 <any_unit>false</any_unit>
 <gift_id>focus_charm</gift_id>
@@ -141,7 +141,7 @@
 <name>Aim</name>
 <level>1</level>
 <script>Card_GiveCharm</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>This unit's next weapon attack does +1 damage</desc>
 <any_unit>false</any_unit>
 <gift_id>aim_charm</gift_id>
@@ -150,7 +150,7 @@
 <name>Shield</name>
 <level>2</level>
 <script>Card_GiveCharm</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>Next time target unit takes damage, reduce it by 2</desc>
 <any_unit>true</any_unit>
 <gift_id>one_time_shield</gift_id>
@@ -159,7 +159,7 @@
 <name>Adjust sights</name>
 <level>2</level>
 <script>Card_GiveCharm</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>Your weapon's range increases by 1 for the rest of the match</desc>
 <any_unit>true</any_unit>
 <gift_id>range_up_charm</gift_id>
@@ -168,7 +168,7 @@
 <name>Bandage</name>
 <level>1</level>
 <script>Card_Heal</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <heal>3</heal>
 <range>2</range>
 </card>
@@ -313,7 +313,7 @@
 <name>Spit Web</name>
 <level>-1</level>
 <script>Card_GiveCharm</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>Target is trapped in a web</desc>
 <gift_id>web_binding</gift_id>
 </card>
@@ -321,7 +321,7 @@
 <name>Web Shield</name>
 <level>-1</level>
 <script>Card_GiveCharm</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>Prevent the next 2 damage unit would recieve</desc>
 <gift_id>one_time_shield</gift_id>
 <any_unit>false</any_unit>
@@ -330,7 +330,7 @@
 <name>Lay Spider Egg</name>
 <level>-1</level>
 <script>Card_SpawnUnit</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>Lays an egg that will hatch into a baby spider after one turn</desc>
 <range>1</range>
 <spawn_id>spider_egg</spawn_id>
@@ -339,7 +339,7 @@
 <name>Hatch</name>
 <level>-1</level>
 <script>Card_SpawnUnit</script>
-<card_type>Action</card_type>
+<card_type>Skill</card_type>
 <desc>It's a baby!</desc>
 <replace_parent>true</replace_parent>
 <spawn_id>spider_baby</spawn_id>

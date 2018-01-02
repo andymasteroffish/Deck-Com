@@ -7,7 +7,7 @@ using UnityEngine.Profiling;
 
 public class Card : IComparable<Card> {
 
-	public enum CardType{Loot, Movement, Action, Attack, AttackSpecial, Spell, Equipment, Other};
+	public enum CardType{Loot, Movement, Skill, Attack, AttackSpecial, Spell, Equipment, Other};
 
 	public string name, idName;
 	public string description;
@@ -137,7 +137,7 @@ public class Card : IComparable<Card> {
 		highlightColors.Add(CardType.Attack, new Color(1f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.AttackSpecial, new Color(1f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.Movement, new Color(0.5f, 0.5f, 1f));
-		highlightColors.Add(CardType.Action, new Color(0.5f, 1f, 0.5f));
+		highlightColors.Add(CardType.Skill, new Color(0.5f, 1f, 0.5f));
 		highlightColors.Add(CardType.Loot, new Color(0.5f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.Equipment, new Color(0.8f, 0.8f, 0.8f));
 		highlightColors.Add(CardType.Other, new Color(0.5f, 1f, 1f));

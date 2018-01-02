@@ -288,6 +288,7 @@ public class GameManager {
 		}
 
 		setActivePlayerUnit (unitsPlayer [idNum]);
+		GameManagerTacticsInterface.instance.cancelTabAfterAnimations();
 	}
 
 	public void tabActivePlayerUnit(int dir){
@@ -497,6 +498,17 @@ public class GameManager {
 			}
 		}
 		return aiUnits;
+	}
+
+	public bool areAllPlayerUnitsExausted(){
+		bool isExausted = true;
+		List<Unit> playerUnits = getPlayerUnits ();
+		foreach (Unit unit in playerUnits) {
+			if (!unit.isExausted) {
+				isExausted = false;
+			}
+		}
+		return isExausted;
 	}
 
 	//checking for things

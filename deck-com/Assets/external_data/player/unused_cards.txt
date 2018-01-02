@@ -1,0 +1,2 @@
+move_and_attack
+psychic_poke

@@ -43,7 +43,7 @@ public class CardManager : MonoBehaviour {
 		typeNames.Add (Card.CardType.Attack, "Attack");
 		typeNames.Add (Card.CardType.AttackSpecial, "Special Attack");
 		typeNames.Add (Card.CardType.Movement, "Movement");
-		typeNames.Add (Card.CardType.Action, "Action");
+		typeNames.Add (Card.CardType.Skill, "Skill");
 		typeNames.Add (Card.CardType.Spell, "Spell");
 		typeNames.Add (Card.CardType.Equipment, "Equipment");
 		typeNames.Add (Card.CardType.Other, "Other");

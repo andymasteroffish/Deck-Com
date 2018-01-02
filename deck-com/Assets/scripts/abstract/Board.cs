@@ -183,6 +183,10 @@ public class Board {
 		if (curAreaNum == 0) {
 			lootToDistribute = 1;
 		}
+
+		if (GameManagerTacticsInterface.instance.debugAllFoesHaveLoot) {
+			lootToDistribute = 999;
+		}
 			
 		Debug.Log ("loot to distribute: " + lootToDistribute);
 

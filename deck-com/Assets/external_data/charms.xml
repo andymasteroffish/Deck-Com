@@ -36,9 +36,9 @@
 <type>Weapon</type>
 <level>-1</level>
 <script>Weapon_Basic</script>
-<desc>3 Damage, 9 Range, attack cards cost an additional action</desc>
-<damage>3</damage>
-<range>9</range>
+<desc>4 Damage, 8 Range, attack cards cost an additional action</desc>
+<damage>4</damage>
+<range>8</range>
 <attack_card_cost_mod>1</attack_card_cost_mod>
 </charm>
 <charm idName="grunt_wep">

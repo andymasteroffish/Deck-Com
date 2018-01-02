@@ -428,6 +428,9 @@ public class Unit {
 		}
 
 		//add this to the list
+		if (cardsPlayedThisTurn == null) {
+			cardsPlayedThisTurn = new List<Card> ();
+		}
 		cardsPlayedThisTurn.Add(card);
 
 		//reduce the actions
@@ -438,14 +441,16 @@ public class Unit {
 
 		//Debug.Log ("I just played " + card.name + " and have " + actionsLeft + " actions left");
 
-		//check which cards can still be played
-		deck.updateCardsDisabled();
-		checkExausted ();
-
 		//if this is the player, maybe there is delicious loot!
 		if (isPlayerControlled){
 			canPickUpLoot = board.checkIfUnitIsCloseToLoot (this);
 		}
+
+		//check which cards can still be played
+		deck.updateCardsDisabled();
+		checkExausted ();
+
+
 
 		//if this unit is player controlled and exausted, it's time to to tab on
 		if (isExausted && gm.activePlayerUnit == this) {
@@ -457,7 +462,7 @@ public class Unit {
 	public void checkExausted(){
 		isExausted = false;
 
-		if (actionsLeft <= 0 && deck.isWholeHandDisabled()){
+		if (actionsLeft <= 0 && deck.isWholeHandDisabled() && !canPickUpLoot){
 			isExausted = true;
 		}
 
