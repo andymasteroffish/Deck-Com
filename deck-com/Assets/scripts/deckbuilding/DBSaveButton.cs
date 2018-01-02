@@ -8,6 +8,7 @@ public class DBSaveButton : MonoBehaviour {
 	private bool mouseIsOver;
 
 	public GameObject displayHolder;
+	private BoxCollider2D boxCol;
 
 	public SpriteRenderer frameRend;
 	public Color normalColor = Color.white;
@@ -21,6 +22,7 @@ public class DBSaveButton : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		mouseIsOver = false;
+		boxCol = GetComponent<BoxCollider2D> ();
 	}
 
 	// Update is called once per frame
@@ -52,6 +54,7 @@ public class DBSaveButton : MonoBehaviour {
 		}
 
 		displayHolder.SetActive (shouldShow);
+		boxCol.enabled = shouldShow;
 
 		if (shouldShow && Input.GetMouseButtonDown (0) && mouseIsOver && gotThatCash) {
 			manager.saveChanges ();
