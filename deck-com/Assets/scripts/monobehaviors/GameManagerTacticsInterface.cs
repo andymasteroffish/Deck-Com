@@ -7,7 +7,6 @@ using System.IO;
 public class GameManagerTacticsInterface : MonoBehaviour {
 
 	public bool publicRelease;
-	public bool resetPlayerDataBool;
 
 	private CameraControl cam;
 
@@ -72,9 +71,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			Destroy (gameObject);
 		}
 
-		if (resetPlayerDataBool) {
-			resetPlayerData();
-		}
 	}
 
 	void Start(){
@@ -376,7 +372,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 
 	//data stuff
-
+	//THIS IS DONE IN MenuTools.cs NOW
+	/*
 	void resetPlayerData(){
 		Debug.Log ("Dad's getting a brand new boy!");
 		string playerTargetPath = Application.dataPath + "/external_data/player";
@@ -395,4 +392,5 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		foreach(var directory in Directory.GetDirectories(sourceDir))
 			CopyDir(directory, Path.Combine(targetDir, Path.GetFileName(directory)));
 	}
+	*/
 }

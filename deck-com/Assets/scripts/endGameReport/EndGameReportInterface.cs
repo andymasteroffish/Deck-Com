@@ -43,7 +43,7 @@ public class EndGameReportInterface : MonoBehaviour {
 	void Update () {
 		if (nextRewardToShow >= rewardGOs.Count) {
 			isDone = true;
-			buttonText.text = "DONE";
+			buttonText.text = "GO TO DECK-BUILDING";
 		} else {
 			if (!rewardGOs [nextRewardToShow].IsActive) {
 				nextRewardToShow++;

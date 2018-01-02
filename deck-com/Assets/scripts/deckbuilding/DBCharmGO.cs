@@ -13,8 +13,11 @@ public class DBCharmGO : MonoBehaviour {
 	private Charm.CharmType type;
 	private Charm charm;
 
-	public Vector3 startOffsetFromDeckButton;
+	public Vector3 smallOffsetFromDeckButton;
+	public Vector3 normalOffsetFromDeckButton;
 	public float ySpacing;
+
+	public float smallScale;
 
 	public SpriteRenderer frameRend;
 	public Text nameText, descText;
@@ -25,6 +28,8 @@ public class DBCharmGO : MonoBehaviour {
 	public Color newCharmColor = Color.cyan;
 
 	private bool isActive;
+
+	private bool isNew;
 
 	
 	public void activate(DBDeck _deck, DBDeckButtonGO _deckButton, Charm.CharmType _type){
@@ -64,10 +69,8 @@ public class DBCharmGO : MonoBehaviour {
 			return;
 		}
 
-
-
 		//update this thing
-		bool isNew = false;
+		isNew = false;
 		string nameString = "Open";
 		string descString = "no desc";
 		if (type == Charm.CharmType.Weapon) {
@@ -91,10 +94,22 @@ public class DBCharmGO : MonoBehaviour {
 				descString = deck.curCharm.description;
 			}
 		}
-			
+
+		//shrink if we are not editting this unit's deck
+		bool useSmallScale = manager.activeDeck == null;
+
 		nameText.text = nameString;
 		descText.text = descString;
-		transform.position = deckButton.transform.position + startOffsetFromDeckButton + new Vector3 (0, ySpacing, 0) * (int)type;
+
+		Vector3 offsetThisFrame = useSmallScale ? smallOffsetFromDeckButton : normalOffsetFromDeckButton;
+		transform.position = deckButton.transform.position + offsetThisFrame  + new Vector3 (0, ySpacing, 0) * (int)type;
+
+		if (useSmallScale){
+			transform.localScale = new Vector3 (smallScale, smallScale, smallScale);
+		}else{
+			transform.localScale = Vector3.one;
+		}
+
 	
 		//update the color
 		frameRend.color = mouseIsOver ? mouseOverColor : normalColor;
@@ -102,13 +117,9 @@ public class DBCharmGO : MonoBehaviour {
 			frameRend.color = newCharmColor;
 		}
 
-		//no clicking this on standard select screen
-		if (manager.activeDeck == null || isNew) {
-			mouseIsOver = false;
-		}
-
 		//were we clicked?
 		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
+			Debug.Log ("luv 2 fuk");
 			manager.openUnusedWeapons();
 			mouseIsOver = false;
 		}
@@ -117,6 +128,11 @@ public class DBCharmGO : MonoBehaviour {
 
 	void OnMouseEnter(){
 		mouseIsOver = true;
+
+		//no clicking this on standard select screen
+		if (manager.activeDeck == null || isNew) {
+			mouseIsOver = false;
+		}
 	}
 	void OnMouseExit(){
 		mouseIsOver = false;
