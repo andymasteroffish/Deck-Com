@@ -5,6 +5,6 @@ move5
 attack
 attack
 attack
+bandage
 blade_dash
 village
-heal

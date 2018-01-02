@@ -20,8 +20,7 @@ public class Card_BasicTargetBonus : Card {
 
 
 	public override void setupBlueprintCustom(){
-		type = CardType.Aid;
-
+		
 		description = "Gain";
 		if (numCardsToDraw > 0) {
 			description += "\n+" + numCardsToDraw + " card(s)";

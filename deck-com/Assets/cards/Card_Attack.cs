@@ -26,8 +26,6 @@ public class Card_Attack : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = Card.CardType.Attack;
-
 		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
 		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
 

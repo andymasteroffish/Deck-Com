@@ -26,8 +26,7 @@ public class Card_BasicAOEAttack : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = CardType.AttackSpecial;
-
+		
 		description = "Deals " + damage + " damage in area.\nRange "+throwRange;
 		if (destroysCover){
 			description += "\nDestroys cover";

@@ -20,7 +20,6 @@ public class Card_TeamDash : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = Card.CardType.Movement;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + range + " spaces and give an a free "+range+" space move to a teammate you can see";
 	}

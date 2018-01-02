@@ -32,7 +32,7 @@ public class Charm_HealRing : Charm {
 	}
 
 	public override void cardPlayedCustom(Card card){
-		if (!usedThisRound && card.type == Card.CardType.Aid) {
+		if (!usedThisRound && card.type == Card.CardType.Spell) {
 			usedThisRound = true;
 			Owner.gainActions (1);
 			Owner.deck.drawCard ();

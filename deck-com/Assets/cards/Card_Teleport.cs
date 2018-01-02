@@ -19,7 +19,6 @@ public class Card_Teleport : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = CardType.Magic;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "teleport a visible unit up to "+moveRange+" spaces";
 	}

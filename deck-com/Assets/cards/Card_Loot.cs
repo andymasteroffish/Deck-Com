@@ -20,8 +20,7 @@ public class Card_Loot : Card {
 
 
 	public override void setupBlueprintCustom(){
-		type = Card.CardType.Loot;
-
+		
 		description = "Loot! This card cannot be played but turns into treausure at the end of the encounter\n";
 		description += "Level: " + level;
 	}

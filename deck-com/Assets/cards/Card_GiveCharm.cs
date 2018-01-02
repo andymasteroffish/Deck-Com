@@ -31,7 +31,7 @@ public class Card_GiveCharm : Card {
 
 	// Use this for initialization
 	public override void setupBlueprintCustom(){
-		type = CardType.Other;
+		
 	}
 	public override void setupCustom(){
 		Card_GiveCharm blueprintCustom = (Card_GiveCharm)blueprint;

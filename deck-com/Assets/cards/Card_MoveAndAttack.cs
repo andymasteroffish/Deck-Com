@@ -19,7 +19,6 @@ public class Card_MoveAndAttack : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = CardType.Attack;
 		showVisibilityIconsWhenHighlighting = true;
 		description = "move up to " + moveRange + " spaces and attack at "+damageMod+" damage";
 	}

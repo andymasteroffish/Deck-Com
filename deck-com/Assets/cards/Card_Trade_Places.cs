@@ -11,7 +11,7 @@ public class Card_Trade_Places : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = CardType.Magic;
+		
 	}
 
 	public override void mouseEnterEffects(){

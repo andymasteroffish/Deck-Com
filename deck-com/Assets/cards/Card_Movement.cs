@@ -16,7 +16,6 @@ public class Card_Movement : Card {
 
 
 	public override void setupBlueprintCustom(){
-		type = Card.CardType.Movement;
 		description = "move up to " + range + " spaces";
 		showVisibilityIconsWhenHighlighting = true;
 	}

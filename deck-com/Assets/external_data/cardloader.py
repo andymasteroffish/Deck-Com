@@ -150,10 +150,11 @@ def getCards():
             if level == 'n/a':
                 level = -1
             scriptName = row[3]
-            description = row[4]
+            cardType = row[4]
+            description = row[5]
 
             #remaining elements are additional values that the card might need
-            otherVals = row[5:len(row)]
+            otherVals = row[6:len(row)]
             
 
             file.write('<card idName="'+idName+'">\n')
@@ -161,6 +162,7 @@ def getCards():
             file.write('<name>'+displayName+'</name>\n')
             file.write('<level>'+str(level)+'</level>\n')
             file.write('<script>'+scriptName+'</script>\n')
+            file.write('<card_type>'+cardType+'</card_type>\n')
             if description != ".":
                 file.write('<desc>'+description+'</desc>\n')
 

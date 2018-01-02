@@ -30,7 +30,7 @@ public class Card_SpawnUnit : Card {
 
 	// Use this for initialization
 	public override void setupBlueprintCustom(){
-		type = CardType.Other;
+		
 	}
 
 	public override void setupCustom(){

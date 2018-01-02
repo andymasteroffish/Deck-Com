@@ -17,8 +17,7 @@ public class Card_Heal : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = CardType.Aid;
-
+		
 		description = "heals "+healAmount+" at range "+range;
 	}
 

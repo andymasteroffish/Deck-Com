@@ -1,4 +1,4 @@
-equipment_heal_ring
+equipment_helpers_ring
 move3
 move4
 move4

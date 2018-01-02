@@ -7,7 +7,7 @@ using UnityEngine.Profiling;
 
 public class Card : IComparable<Card> {
 
-	public enum CardType{Loot, Movement, Attack, AttackSpecial, Aid, Magic, Equipment, Other};
+	public enum CardType{Loot, Movement, Action, Attack, AttackSpecial, Spell, Equipment, Other};
 
 	public string name, idName;
 	public string description;
@@ -73,6 +73,9 @@ public class Card : IComparable<Card> {
 
 		//default values
 		type = CardType.Other;
+		if (node ["card_type"] != null) {
+			type = (CardType) Enum.Parse(typeof(CardType), node ["card_type"].InnerText);  
+		}
 
 		baseActionCost = 1;
 		if (node ["action_cost"] != null) {
@@ -134,11 +137,11 @@ public class Card : IComparable<Card> {
 		highlightColors.Add(CardType.Attack, new Color(1f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.AttackSpecial, new Color(1f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.Movement, new Color(0.5f, 0.5f, 1f));
-		highlightColors.Add(CardType.Aid, new Color(0.5f, 1f, 0.5f));
+		highlightColors.Add(CardType.Action, new Color(0.5f, 1f, 0.5f));
 		highlightColors.Add(CardType.Loot, new Color(0.5f, 0.5f, 0.5f));
 		highlightColors.Add(CardType.Equipment, new Color(0.8f, 0.8f, 0.8f));
 		highlightColors.Add(CardType.Other, new Color(0.5f, 1f, 1f));
-		highlightColors.Add(CardType.Magic, new Color(1f, 0.5f, 1f));
+		highlightColors.Add(CardType.Spell, new Color(1f, 0.5f, 1f));
 
 		showVisibilityIconsWhenHighlighting = false;
 
@@ -176,6 +179,7 @@ public class Card : IComparable<Card> {
 		idName = blueprint.idName;
 		scriptName = blueprint.scriptName;
 		name = blueprint.name;
+		type = blueprint.type;
 
 		baseActionCost = blueprint.baseActionCost;
 		costToAddToDeck = blueprint.costToAddToDeck;

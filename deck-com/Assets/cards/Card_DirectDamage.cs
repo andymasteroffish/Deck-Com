@@ -27,8 +27,7 @@ public class Card_DirectDamage : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		type = Card.CardType.Magic;
-
+		
 		description = "deal " + damage + " damage to";// target unit";
 		if (useLineOfSight) {
 			description += " target visible unit.";
