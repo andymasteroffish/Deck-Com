@@ -53,9 +53,11 @@ public class Card_GiveCharm : Card {
 		if (anyUnit) {
 			Owner.board.highlightUnitsVisibleToUnit (Owner, true, true, baseHighlightColor);
 		} else {
-			Owner.board.clearHighlights ();
-			Owner.setHighlighted (true, baseHighlightColor);
+			//Owner.board.clearHighlights ();
+			//Owner.setHighlighted (true, baseHighlightColor);
+			passInUnitCustom(Owner);
 		}
+
 	}
 
 	public override void passInUnitCustom(Unit unit){

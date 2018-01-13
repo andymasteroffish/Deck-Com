@@ -48,6 +48,10 @@ public class Loot {
 			return false;
 		}
 
+		if (curTile == collector.CurTile) {
+			return true;
+		}
+
 		for (int i = 0; i < CurTile.AdjacentIncludingDiag.Length; i++) {
 			if (CurTile.AdjacentIncludingDiag [i] == collector.CurTile) {
 				return true;
