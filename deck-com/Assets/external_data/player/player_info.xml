@@ -1,7 +1,7 @@
 <player>
   <info>
-    <money>99</money>
-    <cur_level>0</cur_level>
+    <money>9</money>
+    <cur_level>3</cur_level>
   </info>
   <unit idName="wizard">
     <name>Gorb The Charmer</name>

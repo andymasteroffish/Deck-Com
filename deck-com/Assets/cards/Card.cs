@@ -163,10 +163,67 @@ public class Card : IComparable<Card> {
 
 		//check if the description needs to be overwritten
 		if (node ["desc"] != null) {
-			description = node ["desc"].InnerText;
+			setDescription ();
 		}
 	}
 	public virtual void setupBlueprintCustom(){}
+
+	void setDescription(){
+		Debug.Log ("set desc for " + idName);
+		//description = node ["desc"].InnerText;
+
+		string innerText = node ["desc"].InnerText;
+
+		//scrape out all of the words to replace
+		List<string> replacementWords = new List<string> ();
+		List<int>	replacementPos = new List<int> ();
+
+		string newDesc = "";
+
+		bool addingReplacementWord = false;
+		for (int i = 0; i < innerText.Length; i++) {
+
+			if (innerText [i] == '{') {
+				addingReplacementWord = true;
+				replacementWords.Add ("");
+				replacementPos.Add (newDesc.Length);
+			} else if (innerText [i] == '}') {
+				addingReplacementWord = false;
+			} else {
+
+				if (addingReplacementWord) {
+					replacementWords [replacementWords.Count - 1] += innerText [i];
+				} else {
+					newDesc += innerText [i];
+				}
+			}
+		}
+
+		//go through and add em
+		//reverse order otherwise adding the new value messes up the insert position
+		for (int i = replacementWords.Count-1; i>=0; i--) {
+
+			string val = "NODE " + replacementWords [i] + " NOT FOUND";
+			if (node [replacementWords [i]] != null) {
+				val = node [replacementWords [i]].InnerText;
+			}
+
+			Debug.Log ("putting " + replacementWords [i] + " at " + replacementPos [i]+ " :"+val);
+			newDesc = newDesc.Insert (replacementPos [i], val);
+		}
+
+		description = newDesc;
+
+		if (replacementWords.Count > 0) {
+			for (int i = 0; i < replacementWords.Count; i++) {
+				Debug.Log (replacementWords [i]);
+			}
+
+			Debug.Log("new: "+newDesc);
+		}
+
+
+	}
 
 	public void setup(Unit _owner, Deck _deck){
 		owner = _owner;

@@ -31,3 +31,8 @@ Other equipment cards can be played. These cards stay on the unit and do not go 
 Loot can be collected (as a free action) and will turn into a booster pack at the end of the level.
 
 In between levels, new cards can be added to the unit decks for $2 per card.
+
+
+
+WASD to move camera
+Scroll to zoom
