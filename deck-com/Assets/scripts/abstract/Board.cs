@@ -644,7 +644,7 @@ public class Board {
 						bool unfilled = true;
 						if (!includeOccupied) {
 							foreach (Unit unit in units) {
-								if (unit.CurTile == grid [x, y]) {
+								if (!unit.isDead && unit.CurTile == grid [x, y]) {
 									unfilled = false;
 								}
 							}

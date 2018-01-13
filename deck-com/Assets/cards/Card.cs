@@ -169,7 +169,6 @@ public class Card : IComparable<Card> {
 	public virtual void setupBlueprintCustom(){}
 
 	void setDescription(){
-		Debug.Log ("set desc for " + idName);
 		//description = node ["desc"].InnerText;
 
 		string innerText = node ["desc"].InnerText;
@@ -208,19 +207,19 @@ public class Card : IComparable<Card> {
 				val = node [replacementWords [i]].InnerText;
 			}
 
-			Debug.Log ("putting " + replacementWords [i] + " at " + replacementPos [i]+ " :"+val);
+			//Debug.Log ("putting " + replacementWords [i] + " at " + replacementPos [i]+ " :"+val);
 			newDesc = newDesc.Insert (replacementPos [i], val);
 		}
 
 		description = newDesc;
 
-		if (replacementWords.Count > 0) {
-			for (int i = 0; i < replacementWords.Count; i++) {
-				Debug.Log (replacementWords [i]);
-			}
-
-			Debug.Log("new: "+newDesc);
-		}
+//		if (replacementWords.Count > 0) {
+//			for (int i = 0; i < replacementWords.Count; i++) {
+//				Debug.Log (replacementWords [i]);
+//			}
+//
+//			Debug.Log("new: "+newDesc);
+//		}
 
 
 	}

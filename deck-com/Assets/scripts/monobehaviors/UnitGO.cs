@@ -44,6 +44,8 @@ public class UnitGO : MonoBehaviour {
 
 		healthLastFrame = owner.health;
 
+		doingAnimation = false;
+
 		spriteRend.sprite = unit.sprite;
 		outline.setup ();
 	}

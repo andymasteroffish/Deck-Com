@@ -90,6 +90,14 @@
 <script>Charm_HealRing</script>
 <desc>gain 1 card and 1 action when you play your first spell card each turn</desc>
 </charm>
+<charm idName="adjusted_sights">
+<name>Adjusted Sights</name>
+<type>Equipment</type>
+<level>2</level>
+<script>Charm_WeaponBonus</script>
+<desc>Weapon range increased by 2</desc>
+<range_mod>2</range_mod>
+</charm>
 <charm idName="focus_charm">
 <name>Focus</name>
 <type>StatusEffect</type>
@@ -117,13 +125,6 @@
 <script>Charm_OneTimeShield</script>
 <desc>The next time you take damage, prevent 2 of it.</desc>
 <damagePrevented>2</damagePrevented>
-</charm>
-<charm idName="range_up_charm">
-<name>Adjusted Sights</name>
-<type>StatusEffect</type>
-<level>-1</level>
-<script>Charm_WeaponBonus</script>
-<range_mod>1</range_mod>
 </charm>
 <charm idName="dumbfounded">
 <name>Dumbfounded</name>

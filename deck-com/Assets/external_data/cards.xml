@@ -155,15 +155,6 @@
 <any_unit>true</any_unit>
 <gift_id>one_time_shield</gift_id>
 </card>
-<card idName="adjust_sights">
-<name>Adjust sights</name>
-<level>2</level>
-<script>Card_GiveCharm</script>
-<card_type>Skill</card_type>
-<desc>Your weapon's range increases by 1 for the rest of the match</desc>
-<any_unit>true</any_unit>
-<gift_id>range_up_charm</gift_id>
-</card>
 <card idName="bandage">
 <name>Bandage</name>
 <level>1</level>
@@ -367,7 +358,7 @@
 <level>-1</level>
 <script>Card_Movement</script>
 <card_type>Movement</card_type>
-<range>4</range>
+<range>3</range>
 <self_destruct>true</self_destruct>
 <action_cost>0</action_cost>
 </card>
@@ -392,5 +383,12 @@
 <script>Card_Equipment</script>
 <desc>gain 1 card and 1 action when you play your first spell card each turn</desc>
 <equipment_id>helpers_ring</equipment_id>
+</card>
+<card idName="equipment_adjusted_sights">
+<name>Adjusted Sights</name>
+<level>2</level>
+<script>Card_Equipment</script>
+<desc>Weapon range increased by 2</desc>
+<equipment_id>adjusted_sights</equipment_id>
 </card>
 </cards>
