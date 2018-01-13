@@ -1,7 +1,5 @@
-bite_n_scurry
-vampire_stab
-psychic_poke
-arcane_balistics
+focus
+aim
 nimble_strike
 move3
 move4
