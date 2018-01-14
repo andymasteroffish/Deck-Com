@@ -1334,6 +1334,11 @@ public class Board {
 
 		info.val = 0;
 
+		//check if they are passing their turn
+		if (info.moves [0].passMove) {
+			info.val = -curUnit.aiProfile.hateForPassing;
+		}
+
 		//sepeare them into allies on enemies depending on which side we are trying to get a move for
 		Profiler.BeginSample("sepearte allies and foes");
 		foreach (Unit unit in units) {
@@ -1608,6 +1613,7 @@ public class Board {
 			}
 		}
 		Profiler.EndSample ();
+
 
 		//what is the average cover for enemies?
 

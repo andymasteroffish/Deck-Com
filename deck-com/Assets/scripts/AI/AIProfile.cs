@@ -11,6 +11,8 @@ public class AIProfile {
 	public float preferedDistToClosestEnemy;
 	public float acceptableDistanceRangeToClosestEnemy;
 
+	public float hateForPassing;
+
 	//each of these are the value that the given stat will be multiplied by
 	public float totalEnemyDamageWeight;
 	public float totalEnemyHealWeight;
@@ -72,6 +74,8 @@ public class AIProfile {
 		preferedDistToClosestEnemy = owner.Weapon.baseRange - 1;
 		acceptableDistanceRangeToClosestEnemy = 1.5f;
 
+		hateForPassing = 2;
+
 		distanceToEnemiesWeight = 1;
 
 		newAlliesWeight = 4;
@@ -103,6 +107,8 @@ public class AIProfile {
 				preferedDistToClosestEnemy = value;
 			} else if (nodeName == "acceptableDistanceRangeToClosestEnemy") {
 				acceptableDistanceRangeToClosestEnemy = value;
+			} else if (nodeName == "hateForPassing") {
+				hateForPassing = value;
 			} else if (nodeName == "distanceToEnemiesWeight") {
 				distanceToEnemiesWeight = value;
 			} else if (nodeName == "totalEnemyDamageWeight") {
