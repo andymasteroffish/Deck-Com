@@ -128,9 +128,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		if (gm.IsPlayerTurn) {
 			playerTurnTimer += Time.deltaTime;
 			//clicks
-			if (Input.GetMouseButtonDown (0)) {
-				Debug.Log ("anims :" + areAnimationsHappening ());
-			}
 			if (Input.GetMouseButtonDown (0) && !areAnimationsHappening()) {
 				gm.checkClick ();
 			}

@@ -164,10 +164,10 @@ public class GameManager {
 
 	//checking input
 	public void checkClick(){
-		//see if they clicked a card to play (but only if they are not in the process of playing one)
-		if (activeCard == null) {
+		//see if they clicked a card to play	
+		//if (activeCard == null) {					//I was only doing this if they were not in the process of playing one, but I want the user to be able to cancel by clicking a different card
 			activePlayerUnit.checkActiveClick ();
-		}
+		//}
 		//check potential targets
 		board.checkClick ();
 

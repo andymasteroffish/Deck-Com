@@ -74,7 +74,7 @@ public class AIProfile {
 		preferedDistToClosestEnemy = owner.Weapon.baseRange - 1;
 		acceptableDistanceRangeToClosestEnemy = 1.5f;
 
-		hateForPassing = 2;
+		hateForPassing = 10;
 
 		distanceToEnemiesWeight = 1;
 

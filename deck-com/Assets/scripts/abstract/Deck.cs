@@ -182,12 +182,24 @@ public class Deck {
 
 	//interacting with the hand
 	public void checkClick(){
+		//Debug.Log ("cheg clig");
 		//if nothing is selected, see if they clicked a card
 		if (!isCardWaitingForInput ()) {
 			foreach (Card card in hand) {
 				if (card.mouseIsOver && !card.IsDisabled) {
 					card.selectCard ();
 					return;
+				}
+			}
+		} 
+		//if they click a different card, cancel this one and select that one
+		//this is new and may be funky
+		else {
+			//using a for loop because sometimes the card is removed as a result of playing it
+			for (int i=hand.Count-1; i>=0; i--){
+				if (hand[i].mouseIsOver && !hand[i].IsDisabled) {
+					cancel ();
+					hand[i].selectCard ();
 				}
 			}
 		}
