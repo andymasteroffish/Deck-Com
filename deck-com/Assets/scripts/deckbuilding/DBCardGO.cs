@@ -21,6 +21,7 @@ public class DBCardGO : MonoBehaviour {
 	public Text nameField;
 	public Text descField;
 	public Text typeField;
+	public Text levelNumField;
 	public SpriteRenderer spriteRend;
 	public SpriteRenderer colorSprite;
 
@@ -71,6 +72,7 @@ public class DBCardGO : MonoBehaviour {
 		nameField.text = card.name;
 		descField.text = card.description;
 		typeField.text = CardManager.instance.TypeNames [card.type];
+		levelNumField.text = card.cardLevel.ToString();
 
 		mouseIsOver = false;
 	}

@@ -11,6 +11,7 @@ public class Card : IComparable<Card> {
 
 	public string name, idName;
 	public string description;
+	public int cardLevel;
 
 	public XmlNode node;
 	public string scriptName;
@@ -70,6 +71,10 @@ public class Card : IComparable<Card> {
 		scriptName = node ["script"].InnerText;
 		name = node ["name"].InnerText;
 
+		cardLevel = int.Parse(node ["level"].InnerText);
+		if (cardLevel < 0) {
+			cardLevel = 0;
+		}
 
 		//default values
 		type = CardType.Other;
@@ -82,7 +87,7 @@ public class Card : IComparable<Card> {
 			baseActionCost = int.Parse(node ["action_cost"].InnerText);
 		}
 
-		costToAddToDeck = 2;
+		costToAddToDeck = 2 * cardLevel;
 		if (node ["add_to_deck_cost"] != null) {
 			costToAddToDeck = int.Parse(node ["add_to_deck_cost"].InnerText);
 		}
@@ -236,6 +241,7 @@ public class Card : IComparable<Card> {
 		scriptName = blueprint.scriptName;
 		name = blueprint.name;
 		type = blueprint.type;
+		cardLevel = blueprint.cardLevel;
 
 		baseActionCost = blueprint.baseActionCost;
 		costToAddToDeck = blueprint.costToAddToDeck;
@@ -443,10 +449,15 @@ public class Card : IComparable<Card> {
 
 	//for sorting
 	public int CompareTo(Card other) {
-		if (type == other.type) {
-			return name.CompareTo (other.name);
+		//sort by level and then type
+		if (cardLevel != other.cardLevel) {
+			return other.cardLevel - cardLevel;
 		} else {
-			return (int)type - (int)other.type;
+			if (type == other.type) {
+				return name.CompareTo (other.name);
+			} else {
+				return (int)type - (int)other.type;
+			}
 		}
 	}
 

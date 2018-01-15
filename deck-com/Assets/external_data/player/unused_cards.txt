@@ -1,0 +1,7 @@
+dumbfound
+destroy_equipment
+bite_n_scurry
+move6
+draw_a_card
+team_dash
+attack

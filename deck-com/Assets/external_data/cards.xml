@@ -211,7 +211,7 @@
 </card>
 <card idName="move4">
 <name>Move4</name>
-<level>1</level>
+<level>-1</level>
 <script>Card_Movement</script>
 <card_type>Movement</card_type>
 <range>4</range>
