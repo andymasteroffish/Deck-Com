@@ -1,6 +1,6 @@
-equipment_helpers_ring
 move2_cantrip
 aim
+attack
 attack_r-1_d2
 move_and_attack
-attack
+equipment_helpers_ring

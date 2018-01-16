@@ -8,3 +8,4 @@ attack
 bandage
 blade_dash
 village
+team_dash

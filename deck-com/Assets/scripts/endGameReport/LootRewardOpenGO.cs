@@ -32,7 +32,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 	public Vector2 secondCardOffset;
 
 	public float cardY;
-	public float moneyY;
+	//public float moneyY;
 
 	public float danceSpeed, danceSpeedRange;
 	public float cardDanceRange, moneyDanceRange;
@@ -71,6 +71,10 @@ public class LootRewardOpenGO : MonoBehaviour {
 		cardColorSpriteRend.enabled = true;
 		cardColorSpriteRend.color = new Color(card.baseHighlightColor.r, card.baseHighlightColor.g, card.baseHighlightColor.b, 0.3f);
 
+		//curve it a little because groups of cards are at the start
+		orderPrc = Mathf.Pow(orderPrc, 0.95f);
+
+
 		//placememt
 		Vector3 centerPos = GameObject.Find ("lootCenterPos").transform.position;
 		targetPos.x = centerPos.x + (orderPrc * 2 - 1) * cardDistX;
@@ -90,8 +94,14 @@ public class LootRewardOpenGO : MonoBehaviour {
 		card = null;
 		endGameInterface = _endGameInterface;
 
-		targetPos = GameObject.Find ("lootCenterPos").transform.position;
-		targetPos.y += moneyY;
+		//targetPos = GameObject.Find ("lootCenterPos").transform.position;
+		//targetPos.y += moneyY;
+		Vector3 centerPos = GameObject.Find ("lootCenterPos").transform.position;
+		targetPos.x = centerPos.x + (1 * 2 - 1) * cardDistX;
+		targetPos.y = centerPos.y + cardY - Mathf.Abs((1-0.5f) * cardDistY);// 1f;
+		targetPos.z = (float)1 * -0.1f;
+
+
 		spriteRend.sprite = coinFrameSprite;
 		moneyField.text = "$" + money;
 		nameField.text = "";
@@ -122,7 +132,8 @@ public class LootRewardOpenGO : MonoBehaviour {
 			Color baseCol = new Color (card.baseHighlightColor.r, card.baseHighlightColor.g, card.baseHighlightColor.b, 0.3f);
 			cardColorSpriteRend.color = Color.Lerp (baseCol, new Color (0, 0, 0, 1), 0.5f);
 		} else {
-			spriteRend.color = new Color (1, 1, 1, 0.5f);
+			spriteRend.color = new Color (1, 1, 1, 0.4f);
+			moneyField.color = new Color (0, 0, 0, 0.5f);
 		}
 		if (mouseIsOver ) {
 			spritePos += mouseOverAdjust;
@@ -134,6 +145,7 @@ public class LootRewardOpenGO : MonoBehaviour {
 				cardColorSpriteRend.color = new Color (card.baseHighlightColor.r, card.baseHighlightColor.g, card.baseHighlightColor.b, 0.3f);
 			} else {
 				spriteRend.color = new Color (1, 1, 1, 1);
+				moneyField.color = new Color (0, 0, 0, 1f);
 			}
 		}
 

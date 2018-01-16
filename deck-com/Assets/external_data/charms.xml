@@ -78,7 +78,7 @@
 <charm idName="extra_card">
 <name>Extra Card Pendant</name>
 <type>Equipment</type>
-<level>4</level>
+<level>3</level>
 <script>Charm_ExtraCard</script>
 <desc>Draw an extra card each turn</desc>
 <extra_cards>1</extra_cards>
@@ -86,7 +86,7 @@
 <charm idName="helpers_ring">
 <name>Helper's Ring</name>
 <type>Equipment</type>
-<level>1</level>
+<level>2</level>
 <script>Charm_HealRing</script>
 <desc>gain 1 card and 1 action when you play your first spell card each turn</desc>
 </charm>

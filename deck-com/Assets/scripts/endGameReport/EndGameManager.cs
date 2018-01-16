@@ -11,7 +11,6 @@ public class EndGameManager {
 	private int totalMoneyEarned;
 
 	public EndGameManager(List<Card_Loot> lootCards){
-
 		rewards = new List<LootReward> ();
 		newCards = new List<Card> ();
 		totalMoneyEarned = 0;
@@ -24,17 +23,7 @@ public class EndGameManager {
 		//add the baseline money for the rewards
 		foreach(LootReward reward in rewards) {
 			totalMoneyEarned += reward.baseMoney;
-//			for (int i = 0; i < reward.cards.Count; i++) {
-//				newCards.Add (reward.cards [i]);
-//			}
 		}
-
-		Debug.Log ("money total: " + totalMoneyEarned);
-
-		//save 'em!
-		//saveMoney(totalMoneyEarned);
-		//saveCards (newCards);
-
 	}
 
 	private LootReward getRewardFromLootCard(Card_Loot lootCard){
@@ -50,7 +39,8 @@ public class EndGameManager {
 		int numCardsAtLevel = 2;
 		int numCardPairsAtLowerLevel = 2;
 
-
+		//every reward needs to include at least one movement card
+		bool hasMovementCard = false;
 
 		List<string> cardsThisLevel = CardManager.instance.getIDListAtLevel (level);
 		List<string> cardsLowerLevel = CardManager.instance.getIDListAtLevel ( (int)Mathf.Max(1,level-1));
@@ -69,6 +59,9 @@ public class EndGameManager {
 				Card card = CardManager.instance.getCardFromIdName (idName);
 				card.setup (null, null);
 				cards [j] = card;
+				if (card.type == Card.CardType.Movement) {
+					hasMovementCard = true;
+				}
 			}
 			reward.addMultipleCards (cards);
 		}
@@ -79,19 +72,26 @@ public class EndGameManager {
 			cardsThisLevel.RemoveAt (idNum);	//no duplicate cards in the same pack
 			Card card = CardManager.instance.getCardFromIdName (idName);
 			card.setup (null, null);
+			if (card.type == Card.CardType.Movement) {
+				hasMovementCard = true;
+			}
 			reward.addSingleCard (card);
 		}
 
 		//and a money option
 		reward.addMoneyOption( getRewardMoney(level) );
 
-
-		return reward;
+		//if there is a movement card, return it, otheriwse try again
+		if (hasMovementCard) {
+			return reward;
+		} else {
+			return getRewardFromLootCard (lootCard);
+		}
 	}
 
 	int getRewardMoney(int level){
 		float val = Mathf.Pow (level, 1.3f) * 3.0f;
-		Debug.Log ("level " + level + "  val " + val);
+		//Debug.Log ("level " + level + "  val " + val);
 		float wiggle = val * 0.4f;
 		val += Random.Range (-wiggle, wiggle);
 		return (int) val;
@@ -99,11 +99,11 @@ public class EndGameManager {
 
 	public void selectLoot(Card card, int money){
 		if (card != null) {
-			Debug.Log ("love to add " + card.idName);
+			//Debug.Log ("love to add " + card.idName);
 			newCards.Add (card);
 		}
 		totalMoneyEarned += money;
-		Debug.Log ("love to add $" + money);
+		//Debug.Log ("love to add $" + money);
 	}
 
 	public void saveCards(){

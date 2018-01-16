@@ -275,6 +275,7 @@
 <level>2</level>
 <script>Card_TeamDash</script>
 <card_type>Movement</card_type>
+<desc>move up to {range} spaces and give a free {range} space move to a teammate you can see"</desc>
 <range>3</range>
 <gift_id>team_dash_gift</gift_id>
 </card>
@@ -372,14 +373,14 @@
 </card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
-<level>4</level>
+<level>3</level>
 <script>Card_Equipment</script>
 <desc>Draw an extra card each turn</desc>
 <equipment_id>extra_card</equipment_id>
 </card>
 <card idName="equipment_helpers_ring">
 <name>Helper's Ring</name>
-<level>1</level>
+<level>2</level>
 <script>Card_Equipment</script>
 <desc>gain 1 card and 1 action when you play your first spell card each turn</desc>
 <equipment_id>helpers_ring</equipment_id>

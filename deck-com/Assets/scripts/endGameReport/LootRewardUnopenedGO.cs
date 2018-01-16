@@ -109,11 +109,8 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 
 
 		//spawn the rewards
-		if (reward.moneyOption > 0) {
-			Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ().setup (reward.moneyOption, endGameInterface);
-		}
 		for (int i = 0; i < reward.cardGroups.Count; i++) {
-			float prc = (float)i / (float)(reward.cardGroups.Count - 1);
+			float prc = (float)i / (float)(reward.cardGroups.Count );
 			LootRewardOpenGO[] rewards = new LootRewardOpenGO[reward.cardGroups[i].Count];
 			for (int c=0; c<reward.cardGroups[i].Count; c++){
 				rewards [c] = Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ();
@@ -125,6 +122,8 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 				rewards [1].pairedLoot = rewards [0];
 			}
 		}
+		Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ().setup (reward.moneyOption, endGameInterface);
+
 
 
 		//shrink down

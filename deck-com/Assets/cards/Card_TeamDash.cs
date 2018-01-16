@@ -21,7 +21,7 @@ public class Card_TeamDash : Card {
 
 	public override void setupBlueprintCustom(){
 		showVisibilityIconsWhenHighlighting = true;
-		description = "move up to " + range + " spaces and give an a free "+range+" space move to a teammate you can see";
+		//description = "move up to " + range + " spaces and give an a free "+range+" space move to a teammate you can see";
 	}
 
 	public override void setupCustom(){
