@@ -17,7 +17,10 @@ public class EndGameReportInterface : MonoBehaviour {
 
 	private bool isDone;
 
+	public GameObject button;
 	public Text buttonText;
+
+	public TextMesh topText;
 
 	// Use this for initialization
 	void Start () {
@@ -43,7 +46,6 @@ public class EndGameReportInterface : MonoBehaviour {
 	void Update () {
 		if (nextRewardToShow >= rewardGOs.Count) {
 			isDone = true;
-			buttonText.text = "GO TO DECK-BUILDING";
 		} else {
 			if (!rewardGOs [nextRewardToShow].IsActive) {
 				nextRewardToShow++;
@@ -51,24 +53,38 @@ public class EndGameReportInterface : MonoBehaviour {
 		}
 	}
 
+	public void selectLoot(LootRewardOpenGO lootGO){
+		manager.selectLoot (lootGO.card, lootGO.moneyVal);
+	}
+
+	public void continueToNext(){
+
+		//clear any current rewards
+		GameObject[] openRewards = GameObject.FindGameObjectsWithTag ("RewardItem");
+		for (int i = 0; i < openRewards.Length; i++) {
+			Destroy (openRewards [i]);
+		}
+
+		if (!isDone) {
+			rewardGOs [nextRewardToShow].startAnimation ();
+		} else {
+			buttonText.text = "GO TO DECK-BUILDING";
+			button.gameObject.SetActive (true);
+			topText.text = "That's it!";
+		}
+	}
+
 	public void continueHit(){
 		if (isDone) {
+			manager.saveCards ();
+			manager.saveMoney ();
 			EndGameInfoHolder.instance.kill ();
 			UnityEngine.SceneManagement.SceneManager.LoadScene ("deck_building");
-		} else {
-			if (rewardGOs [nextRewardToShow].DoingAnimation) {
-				//skip the animation
-				rewardGOs [nextRewardToShow].skipAnimation();
-			} else {
-				//clear any current rewards
-				GameObject[] openRewards = GameObject.FindGameObjectsWithTag ("RewardItem");
-				for (int i = 0; i < openRewards.Length; i++) {
-					Destroy (openRewards [i]);
-				}
-
-				//and start the next batch
-				rewardGOs [nextRewardToShow].startAnimation ();
-			}
+		} 
+		//the continue button opens the firts pack
+		else {
+			continueToNext ();
+			button.gameObject.SetActive (false);
 		}
 	}
 

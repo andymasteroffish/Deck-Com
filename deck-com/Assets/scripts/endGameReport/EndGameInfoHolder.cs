@@ -39,8 +39,8 @@ public class EndGameInfoHolder : MonoBehaviour {
 
 	void createDummyLoot(){
 		lootList = new List<Card_Loot> ();
-		for (int i = 0; i < 4; i++) {
-			int level = 1;
+		for (int i = 1; i < 6; i++) {
+			int level = (i%2) + 1;
 			Card_Loot card = (Card_Loot) CardManager.instance.getCardFromIdName ("loot");
 			card.lootSetup (level);
 			card.setup (null, null);

@@ -1,11 +1,10 @@
-equipment_adjusted_sights
 move4
-attack
 move4
+move5
+move5
 attack
-move5
-blade_dash
-move5
+attack
 attack
 bandage
+blade_dash
 village

@@ -5,7 +5,7 @@ using UnityEngine;
 public class LootRewardUnopenedGO : MonoBehaviour {
 
 	private LootReward reward;
-	private EndGameReportInterface manager;
+	private EndGameReportInterface endGameInterface;
 	private int order;
 
 	public GameObject openLootPrefab;
@@ -24,10 +24,10 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 
 	private bool skipAnimationFlag;
 
-	public void setup(LootReward _reward, int _order, EndGameReportInterface _manager){
+	public void setup(LootReward _reward, int _order, EndGameReportInterface _endGameInterface){
 		reward = _reward;
 		order = _order;
-		manager = _manager;
+		endGameInterface = _endGameInterface;
 		isActive = true;
 		doingAnimation = false;
 		waitBasePos = GameObject.Find ("lootWaitPos").transform.position;
@@ -39,7 +39,7 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 	void Update () {
 
 		if (!doingAnimation) {
-			int curOffsetLevel = order - manager.NextRewardToShow;
+			int curOffsetLevel = order - endGameInterface.NextRewardToShow;
 			transform.position = waitBasePos + waitOffset * curOffsetLevel;
 
 			float angle = (1 - Mathf.PerlinNoise (Time.time, order) * 2) * 30;
@@ -59,6 +59,8 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 	IEnumerator doAnimation(){
 		doingAnimation = true;
 		transform.localEulerAngles = new Vector3 (0, 0, 0);
+
+		endGameInterface.topText.text = "";
 
 		float timer = 0;
 
@@ -102,19 +104,28 @@ public class LootRewardUnopenedGO : MonoBehaviour {
 			yield return new WaitForSeconds (pauseTimeBetweenAnimSteps);
 		}
 
+		//change the top text
+		endGameInterface.topText.text = "You get $"+reward.baseMoney+" + select one";
+
+
 		//spawn the rewards
-		if (reward.money > 0) {
-			Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ().setup (reward.money);
+		if (reward.moneyOption > 0) {
+			Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ().setup (reward.moneyOption, endGameInterface);
 		}
-		if (reward.cards.Count > 0) {
-			for (int i = 0; i < reward.cards.Count; i++) {
-				float prc = (float)i / (float)(reward.cards.Count - 1);
-				if (reward.cards.Count == 1) {
-					prc = 0.5f;
-				}
-				Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ().setup (reward.cards [i], prc);
+		for (int i = 0; i < reward.cardGroups.Count; i++) {
+			float prc = (float)i / (float)(reward.cardGroups.Count - 1);
+			LootRewardOpenGO[] rewards = new LootRewardOpenGO[reward.cardGroups[i].Count];
+			for (int c=0; c<reward.cardGroups[i].Count; c++){
+				rewards [c] = Instantiate (openLootPrefab, transform.position, Quaternion.identity).GetComponent<LootRewardOpenGO> ();
+				rewards[c].setup (reward.cardGroups[i][c], prc, c, endGameInterface);
+			}
+			//if it was a set of two, pair them
+			if (rewards.Length == 2) {
+				rewards [0].pairedLoot = rewards [1];
+				rewards [1].pairedLoot = rewards [0];
 			}
 		}
+
 
 		//shrink down
 		timer = 0;
