@@ -59,8 +59,7 @@ public class Card_BasicAOEAttack : Card {
 
 		for (int i = 0; i < tiles.Count; i++) {
 			if (destroysCover) {
-				Owner.board.changeCover (tiles [i], Tile.Cover.None);
-				//tiles [i].setCover (Tile.Cover.None);
+				Owner.board.changeCover (tiles [i], Tile.Cover.None);	//PUT THIS BACK
 			}
 			Unit thisUnit = Owner.board.getUnitOnTile (tiles [i]);
 			if (thisUnit != null) {

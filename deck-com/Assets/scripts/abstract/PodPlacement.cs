@@ -164,6 +164,8 @@ public class PodPlacement {
 				unit.podmates.Add (mate);
 			}
 		}
+		//and define a leader
+		newFoes[0].isPodLeader = true;
 
 		board.units.AddRange (newFoes);
 	}

@@ -311,15 +311,19 @@ public class Board {
 	}
 
 	public void changeCover(Tile target, Tile.Cover newCoverVal){
+		
 		//check if any change is needed
 		if (target.CoverVal == newCoverVal) {
 			return;
 		}
 
+		//Debug.Log ("change cover " + target.Pos.x + "," + target.Pos.y + "  sim: " + isAISim);
+
 		Profiler.BeginSample("change cover");
 
 		//if we were using the parent grid, we now need to update that
 		if (usingParentGrid) {
+			//Debug.Log ("make a new grid");
 			copyParentGridToNewGrid ();
 		}
 
@@ -644,9 +648,9 @@ public class Board {
 						bool unfilled = true;
 						if (!includeOccupied) {
 							foreach (Unit unit in units) {
-								if (!unit.isDead && unit.CurTile == grid [x, y]) {
+								if (!unit.isDead && unit.CurTile.Pos == grid [x, y].Pos) {
 									unfilled = false;
-								}
+								} 
 							}
 						}
 
@@ -693,7 +697,9 @@ public class Board {
 		//compile a list of all tiles in the searched llist
 		List<Tile> returnTiles = new List<Tile>();
 		foreach (TileSearchInfo info in searched) {
-			returnTiles.Add (info.tile);
+			if (info.pos.x != sourceX || info.pos.y != sourceY) {	//don't include the source
+				returnTiles.Add (info.tile);
+			}
 			//testing
 			//info.tile.debugText.text = info.distFromStart.ToString();
 		}
@@ -1167,7 +1173,8 @@ public class Board {
 		}
 
 		//if the unit has at least one action, pass-turn is also a viable move
-		if (actionsLeft >= 1) {
+		//not when patrolling!
+		if (actionsLeft >= 1 && units[unitID].isAwake) {
 			MoveInfo thisMove = new MoveInfo (unitID);
 			thisMove.passMove = true;
 			moves.Add (thisMove);
@@ -1187,6 +1194,7 @@ public class Board {
 			for (int y = 0; y < rows; y++) {
 				if (grid [x, y].IsHighlighted) {
 					MoveInfo move = new MoveInfo (unitID, thisCard.idName, grid [x, y].Pos);
+					//Debug.Log (units [unitID].unitName + " can play " + units [unitID].deck.Hand [cardID].idName + " on " + grid [x, y].Pos.x + "," + grid [x, y].Pos.y);
 					moves.Add (move);
 				}
 			}
@@ -1321,6 +1329,17 @@ public class Board {
 	public void compareBoardSates(Board oldBoard, Unit curUnit, ref TurnInfo info, bool printInfo){
 		Profiler.BeginSample("compare boards");
 
+		AIProfile curAIProfile = curUnit.aiProfile;
+
+		//chekc if any charms on the unit would overwrite that profile
+		foreach (Charm charm in curUnit.Charms) {
+			AIProfile charmProfile = charm.checkReplaceAIProfile ();
+			if (charmProfile != null) {
+				Debug.Log ("replacing AI profile with the one from " + charm.idName);
+				curAIProfile = charmProfile;
+			}
+		}
+
 		//create unit lists. These lists should line up exactly. it is bad if they don't
 		Profiler.BeginSample("making lists");
 		List<Unit> curAllies = new List<Unit>();
@@ -1336,7 +1355,7 @@ public class Board {
 
 		//check if they are passing their turn
 		if (info.moves [0].passMove) {
-			info.val = -curUnit.aiProfile.hateForPassing;
+			info.val = -curAIProfile.hateForPassing;
 		}
 
 		//sepeare them into allies on enemies depending on which side we are trying to get a move for
@@ -1348,13 +1367,6 @@ public class Board {
 				curAllies.Add (unit);
 			}
 		}
-//		foreach (Unit unit in oldBoard.units) {
-//			if (unit.isPlayerControlled == rootingForAI) {
-//				oldEnemies.Add (unit);
-//			} else {
-//				oldAllies.Add (unit);
-//			}
-//		}
 
 		//sanity check
 		if (oldEnemies.Count != curEnemies.Count || oldAllies.Count > curAllies.Count) {
@@ -1362,10 +1374,10 @@ public class Board {
 		}
 		if (oldAllies.Count < curAllies.Count) {
 			int dif = curAllies.Count - oldAllies.Count;
-			info.val += curUnit.aiProfile.newAlliesWeight * dif;
+			info.val += curAIProfile.newAlliesWeight * dif;
 			if (printInfo) {
 			
-				Debug.Log (dif + " new allies with weight of "+curUnit.aiProfile.newAlliesWeight);
+				Debug.Log (dif + " new allies with weight of "+curAIProfile.newAlliesWeight);
 				for (int i = oldAllies.Count; i < curAllies.Count; i++) {
 					Debug.Log ("  " + curAllies [i].unitName);
 				}
@@ -1415,12 +1427,12 @@ public class Board {
 		}
 			
 		//add it to the total
-		info.val += totalEnemyDamage * curUnit.aiProfile.totalEnemyDamageWeight;
-		info.val += totalEnemyHeal * curUnit.aiProfile.totalEnemyHealWeight;
-		info.val += numEnemiesKilled * curUnit.aiProfile.numEnemiesKilledWeight;
-		info.val += numEnemiesAided * curUnit.aiProfile.numEnemiesAidedWeight;
-		info.val += deltaEnemyGoodCharms * curUnit.aiProfile.deltaEnemyGoodCharmWeight;
-		info.val += deltaEnemyBadCharms * curUnit.aiProfile.deltaEnemyBadCharmWeight;
+		info.val += totalEnemyDamage * curAIProfile.totalEnemyDamageWeight;
+		info.val += totalEnemyHeal * curAIProfile.totalEnemyHealWeight;
+		info.val += numEnemiesKilled * curAIProfile.numEnemiesKilledWeight;
+		info.val += numEnemiesAided * curAIProfile.numEnemiesAidedWeight;
+		info.val += deltaEnemyGoodCharms * curAIProfile.deltaEnemyGoodCharmWeight;
+		info.val += deltaEnemyBadCharms * curAIProfile.deltaEnemyBadCharmWeight;
 		Profiler.EndSample ();
 
 		//going through allies
@@ -1473,13 +1485,13 @@ public class Board {
 //		}
 
 		//add it to the total
-		info.val += totalAllyDamage * curUnit.aiProfile.totalAllyDamageWeight;
-		info.val += totalAllyHeal * curUnit.aiProfile.totalAllyHealWeight;
-		info.val += numAlliesKilled * curUnit.aiProfile.numAlliesKilledWeight;
-		info.val += numAlliesAided * curUnit.aiProfile.numAlliesAidedWeight;
-		info.val += numAlliesCursed * curUnit.aiProfile.numAlliesCursedWeight;
-		info.val += deltaAllyGoodCharms * curUnit.aiProfile.deltaAllyGoodCharmWeight;
-		info.val += deltaAllyBadCharms * curUnit.aiProfile.deltaAllyBadCharmWeight;
+		info.val += totalAllyDamage * curAIProfile.totalAllyDamageWeight;
+		info.val += totalAllyHeal * curAIProfile.totalAllyHealWeight;
+		info.val += numAlliesKilled * curAIProfile.numAlliesKilledWeight;
+		info.val += numAlliesAided * curAIProfile.numAlliesAidedWeight;
+		info.val += numAlliesCursed * curAIProfile.numAlliesCursedWeight;
+		info.val += deltaAllyGoodCharms * curAIProfile.deltaAllyGoodCharmWeight;
+		info.val += deltaAllyBadCharms * curAIProfile.deltaAllyBadCharmWeight;
 		Profiler.EndSample ();
 
 		if (printInfo) {
@@ -1495,7 +1507,7 @@ public class Board {
 			Debug.Log ("ally damaged " + totalAllyDamage);
 			Debug.Log ("num allies killed " + numAlliesKilled);
 			Debug.Log ("ally heal " + totalAllyHeal);
-			Debug.Log ("allies aided " + numAlliesAided+ "  weight " + curUnit.aiProfile.numAlliesAidedWeight);
+			Debug.Log ("allies aided " + numAlliesAided+ "  weight " + curAIProfile.numAlliesAidedWeight);
 			Debug.Log ("allies cursed " + numAlliesCursed);
 			Debug.Log ("ally good charm delta " + deltaAllyGoodCharms);
 			Debug.Log ("ally bad charm delta " + deltaAllyBadCharms);
@@ -1503,69 +1515,63 @@ public class Board {
 
 		//checking distance stuff
 		Profiler.BeginSample("distance stuff");
-		for (int i = 0; i < oldAllies.Count; i++) {
+		if (curAIProfile.ignoreDistanceChecks == false) {
+			for (int i = 0; i < oldAllies.Count; i++) {
 
-			float minDistFromClosest = curAllies [i].aiProfile.preferedDistToClosestEnemy - curAllies [i].aiProfile.acceptableDistanceRangeToClosestEnemy;
-			float maxDistFromClosest = curAllies [i].aiProfile.preferedDistToClosestEnemy + curAllies [i].aiProfile.acceptableDistanceRangeToClosestEnemy;
+				float minDistFromClosest = curAllies [i].aiProfile.preferedDistToClosestEnemy - curAllies [i].aiProfile.acceptableDistanceRangeToClosestEnemy;
+				float maxDistFromClosest = curAllies [i].aiProfile.preferedDistToClosestEnemy + curAllies [i].aiProfile.acceptableDistanceRangeToClosestEnemy;
 
-			float oldClosestDistToEnemy = 9999;
-			float newClosestDistToEnemy = 9999;
+				float oldClosestDistToEnemy = 9999;
+				float newClosestDistToEnemy = 9999;
 
-			foreach (Unit enemy in oldEnemies) {
-				float dist = dm.getDist (enemy.CurTile, oldAllies [i].CurTile);		// enemy.CurTile.Pos.getDist (oldAllies [i].CurTile.Pos);
-				if (dist < oldClosestDistToEnemy)		oldClosestDistToEnemy = dist;
+				foreach (Unit enemy in oldEnemies) {
+					float dist = dm.getDist (enemy.CurTile, oldAllies [i].CurTile);		// enemy.CurTile.Pos.getDist (oldAllies [i].CurTile.Pos);
+					if (dist < oldClosestDistToEnemy)
+						oldClosestDistToEnemy = dist;
+				}
+				foreach (Unit enemy in curEnemies) {
+					float dist = dm.getDist (enemy.CurTile, curAllies [i].CurTile);		// enemy.CurTile.Pos.getDist (curAllies [i].CurTile.Pos);
+					if (dist < newClosestDistToEnemy)
+						newClosestDistToEnemy = dist;
+				}
+
+				float oldVal = 0;
+				if (oldClosestDistToEnemy < minDistFromClosest) {
+					oldVal = oldClosestDistToEnemy - minDistFromClosest;
+				}
+				if (oldClosestDistToEnemy > maxDistFromClosest) {
+					oldVal = maxDistFromClosest - oldClosestDistToEnemy;
+				}
+
+				float newVal = 0;
+				if (newClosestDistToEnemy < minDistFromClosest) {
+					newVal = newClosestDistToEnemy - minDistFromClosest;
+				}
+				if (newClosestDistToEnemy > maxDistFromClosest) {
+					newVal = maxDistFromClosest - newClosestDistToEnemy;
+				}
+
+				float change = newVal - oldVal;
+				//THIS RELIES ON THE ALLIE'S AI PROFILE, not the current unit's
+				info.val += change * curAllies [i].aiProfile.distanceToEnemiesWeight;
+
+				if (printInfo) {
+					Debug.Log ("min dist: " + minDistFromClosest);
+					Debug.Log ("max dist: " + maxDistFromClosest);
+					Debug.Log ("old closest: " + oldClosestDistToEnemy);
+					Debug.Log ("new closest: " + newClosestDistToEnemy);
+					Debug.Log ("old val: " + oldVal);
+					Debug.Log ("new val: " + newVal);
+					Debug.Log (curAllies [i].unitName + " dist to enemy change: " + change);
+					Debug.Log ("actual value: " + (change * curAllies [i].aiProfile.distanceToEnemiesWeight));
+				}
 			}
-			foreach (Unit enemy in curEnemies) {
-				float dist = dm.getDist (enemy.CurTile, curAllies [i].CurTile);		// enemy.CurTile.Pos.getDist (curAllies [i].CurTile.Pos);
-				if (dist < newClosestDistToEnemy)		newClosestDistToEnemy = dist;
-			}
-
-			float oldVal = 0;
-			if (oldClosestDistToEnemy < minDistFromClosest) {
-				oldVal = oldClosestDistToEnemy - minDistFromClosest;
-			}
-			if (oldClosestDistToEnemy > maxDistFromClosest) {
-				oldVal = maxDistFromClosest - oldClosestDistToEnemy;
-			}
-
-			float newVal = 0;
-			if (newClosestDistToEnemy < minDistFromClosest) {
-				newVal = newClosestDistToEnemy - minDistFromClosest;
-			}
-			if (newClosestDistToEnemy > maxDistFromClosest) {
-				newVal = maxDistFromClosest - newClosestDistToEnemy;
-			}
-
-			float change = newVal - oldVal;
-			info.val += change * curAllies[i].aiProfile.distanceToEnemiesWeight;
-
-//			if (printInfo) {
-//				Debug.Log ("min dist: " + minDistFromClosest);
-//				Debug.Log ("max dist: " + maxDistFromClosest);
-//				Debug.Log ("old closest: " + oldClosestDistToEnemy);
-//				Debug.Log ("new closest: " + newClosestDistToEnemy);
-//				Debug.Log ("old val: " + oldVal);
-//				Debug.Log ("new val: " + newVal);
-//				Debug.Log (curAllies[i].unitName+" dist to enemy change: " + change);
-//			}
 		}
 		Profiler.EndSample ();
 
 		//how has ally cover changed?
 		Profiler.BeginSample("cover checks");
 		for (int i = 0; i < oldAllies.Count; i++) {
-//			Tile.Cover oldLowestCover = Tile.Cover.Full;
-//			foreach (Unit enemy in oldEnemies) {
-//				if (!enemy.isDead) {
-//					Tile.Cover thisCover = getCover (enemy.CurTile, oldAllies [i].CurTile);
-//					if ((int)thisCover < (int)oldLowestCover) {
-//						oldLowestCover = thisCover;
-//						if (thisCover == Tile.Cover.None) {
-//							break;
-//						}
-//					}	
-//				}
-//			}
 
 			Tile.Cover oldLowestCover = oldAllies [i].oldLowestCoverForAISim;
 
@@ -1590,11 +1596,11 @@ public class Board {
 				newLowestCover = curAllies [i].CurTile.getHighestAdjacentCover ();
 			}
 
-			float changeVal = curUnit.aiProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
+			float changeVal = curAIProfile.coverChange [(int)oldLowestCover, (int)newLowestCover];
 			info.val += changeVal;
 
 			if (printInfo) {
-				//Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
+				Debug.Log ("ally " + i + " " + curAllies [i] + " was " + oldLowestCover + " is " + newLowestCover + " for val "+changeVal);
 			}
 		}
 		Profiler.EndSample ();
@@ -1606,13 +1612,22 @@ public class Board {
 			if (!info.moves [i].passMove) {
 				string cardName = info.moves [i].cardIDName;
 				//Debug.Log ("  played " + info.moves [i].cardIDName);
-				if (curUnit.aiProfile.preferedCardWeights.ContainsKey(cardName)){
-					info.val += curUnit.aiProfile.preferedCardWeights [cardName];
-					//Debug.Log("played "+cardName+" worth "+curUnit.aiProfile.preferedCardWeights [cardName]);
+				if (curAIProfile.preferedCardWeights.ContainsKey(cardName)){
+					info.val += curAIProfile.preferedCardWeights [cardName];
+					//Debug.Log("played "+cardName+" worth "+curAIProfile.preferedCardWeights [cardName]);
 				}
 			}
 		}
 		Profiler.EndSample ();
+
+		//do any charms affect things?
+		foreach (Charm charm in curUnit.Charms) {
+			float charmVal = charm.getAIMoveValue (oldBoard, this, curUnit, ref info, printInfo);
+			info.val += charmVal;
+			if (charmVal != 0 && printInfo) {
+				Debug.Log ("charm " + charm.idName + " val: " + charmVal);
+			}
+		}
 
 
 		//what is the average cover for enemies?

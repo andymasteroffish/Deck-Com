@@ -40,6 +40,8 @@ public class CharmManager : MonoBehaviour {
 		string scriptName = node ["script"].InnerText;// node.Attributes ["script"].Value;
 		if (scriptName == "Charm") {
 			thisCharm = new Charm (node);
+		} else if (scriptName == "Charm_PatrolStatus") {
+			thisCharm = new Charm_PatrolStatus (node);
 		} else if (scriptName == "Weapon_Basic") {
 			thisCharm = new Weapon_Basic (node);
 		} else if (scriptName == "Charm_ExtraCard") {
@@ -65,6 +67,9 @@ public class CharmManager : MonoBehaviour {
 		if (parent.className == Charm.CharmClass.Charm) {
 			thisCharm = new Charm (parent);
 		}
+		else if (parent.className == Charm.CharmClass.PatrolStatus) {
+			thisCharm = new Charm_PatrolStatus (parent);
+		}
 		else if (parent.className == Charm.CharmClass.BasicWeapon) {
 			thisCharm = new Weapon_Basic (parent);
 		}
@@ -83,6 +88,7 @@ public class CharmManager : MonoBehaviour {
 		else if (parent.className == Charm.CharmClass.Web) {
 			thisCharm = new Charm_Web (parent);
 		}
+
 		else{
 			Debug.Log ("SOMETHING WENT WRONG MAKING: "+parent.className);
 		}

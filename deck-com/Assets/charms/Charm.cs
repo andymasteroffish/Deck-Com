@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Charm  {
 
-	public enum CharmClass{ Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon, Web };
+	public enum CharmClass{ PatrolStatus, Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon, Web };
 	public enum CharmType {Weapon, Equipment, StatusEffect};
 
 	public string name, description;
@@ -188,6 +188,11 @@ public class Charm  {
 	}
 	public virtual void resetRoundCustom(){}
 
+	public void startAITurn(){
+		startAITurnCustom ();
+	}
+	public virtual void startAITurnCustom(){}
+
 	public void storeCard(Card card){
 		storedCard = card;
 	}
@@ -232,6 +237,15 @@ public class Charm  {
 
 	}
 	public virtual void dealWeaponDamageCustom(Card card, Unit target, int damage){}
+
+	//AI
+	public virtual AIProfile checkReplaceAIProfile(){
+		return null;
+	}
+
+	public virtual float getAIMoveValue(Board oldBoard, Board newBoard, Unit curUnit, ref TurnInfo info, bool printInfo){
+		return 0;
+	}
 
 	//modifiers
 	public int getCardActionCostMod(Card card){

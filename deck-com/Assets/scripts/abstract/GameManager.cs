@@ -89,6 +89,7 @@ public class GameManager {
 					}
 				}
 			}
+			foes [0].isPodLeader = true;
 		}
 
 
@@ -193,6 +194,7 @@ public class GameManager {
 	public void advanceAITurn(){
 		Debug.Log ("do ai turn step " + activeAIUnit.curAITurnStep);
 		board.resolveMove (activeAIUnit.aiTurnInfo.moves [activeAIUnit.curAITurnStep]);
+		board.updateVisible ();
 		activeAIUnit.curAITurnStep++;
 		Debug.Log ("advance");
 	}

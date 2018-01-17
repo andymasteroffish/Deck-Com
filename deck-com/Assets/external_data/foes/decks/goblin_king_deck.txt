@@ -1,6 +1,7 @@
 attack
 attack
 move5
+move6
 attack_r2
 move4
 grenade

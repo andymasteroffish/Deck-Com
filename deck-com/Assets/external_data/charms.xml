@@ -1,4 +1,11 @@
 <charms>
+<charm idName="patrol_status">
+<name>Patrol Status</name>
+<type>StatusEffect</type>
+<level>-1</level>
+<script>Charm_PatrolStatus</script>
+<desc>unit is patrolling</desc>
+</charm>
 <charm idName="test_melee">
 <name>Short Test</name>
 <type>Weapon</type>

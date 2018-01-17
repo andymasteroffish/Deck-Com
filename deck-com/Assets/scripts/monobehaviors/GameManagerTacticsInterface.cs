@@ -20,6 +20,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public bool debugClearTileDists;
 	public bool debugWakeAllFoes;
 	public bool debugAllFoesHaveLoot;
+	public bool debugTreatAllFoesAsVisible;
 
 	public static GameManagerTacticsInterface instance;
 
@@ -84,6 +85,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			debugClearTileDists = false;
 			debugWakeAllFoes = false;
 			debugAllFoesHaveLoot = false;
+			debugTreatAllFoesAsVisible = false;
 		}
 
 		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
@@ -265,7 +267,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	}
 
 	public void endPlayerTurn(){
-		if (playerTurnTimer > minTimeOnPlayerTurn || GameManagerTacticsInterface.instance.debugDoNotShuffle) {
+		if (playerTurnTimer > minTimeOnPlayerTurn || !GameManagerTacticsInterface.instance.publicRelease) {	//remove the minimum time before ending turn if we're testing debug shit
 			gm.endPlayerTurn ();
 			autoPlayAITurn = false;
 		}

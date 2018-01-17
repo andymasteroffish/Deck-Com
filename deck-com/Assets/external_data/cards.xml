@@ -1,4 +1,22 @@
 <cards>
+<card idName="patrol_move_5">
+<name>Patrol Move 5</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<card_type>Movement</card_type>
+<self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
+<range>5</range>
+</card>
+<card idName="patrol_move_6">
+<name>Patrol Move 6</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<card_type>Movement</card_type>
+<self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
+<range>6</range>
+</card>
 <card idName="attack">
 <name>Attack</name>
 <level>1</level>

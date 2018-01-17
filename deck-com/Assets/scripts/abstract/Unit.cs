@@ -16,6 +16,7 @@ public class Unit {
 	public bool isPlayerControlled;
 	public bool isAwake;
 	public List<Unit> podmates;
+	public bool isPodLeader;
 
 	private Tile curTile;
 	private bool isActive;
@@ -148,12 +149,18 @@ public class Unit {
 		canPickUpLoot = false;
 
 		isAwake = isPlayerControlled;
+		isPodLeader = false;
 
 		//spawn deck
 		deck = new Deck();
 
 		for (int i = 0; i < charmIDs.Count; i++) {
 			addCharm (charmIDs [i]);
+		}
+
+		//if they are AI, give them the patrol status charm
+		if (!isAwake) {
+			addCharm ("patrol_status");
 		}
 
 		//the first item is the weapon
@@ -193,9 +200,13 @@ public class Unit {
 
 		isPlayerControlled = parent.isPlayerControlled;
 		isAwake = parent.isAwake;
-		//PODMATES ARE IGNORED FOR NOW
-		Profiler.BeginSample("making empty pod list");
+
+		Profiler.BeginSample("making pod list");
 		podmates = new List<Unit>();
+		foreach (Unit mate in parent.podmates) {
+			podmates.Add (mate);
+		}
+		isPodLeader = parent.isPodLeader;
 		Profiler.EndSample ();
 
 		sprite = null;
@@ -337,15 +348,23 @@ public class Unit {
 
 		//time to get the AI move?
 		if (!isPlayerControlled && isActive && !gm.IsPlayerTurn){
+			Debug.Log ("checking for " + unitName);
 			if (isAwake) {
-				gm.markAIStart ();
-				aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
-				//ObjectPooler.instance.printInfo ();
-				curAITurnStep = 0;	//flag to hlp the display interface
-				gm.markAIEnd();
+				Debug.Log ("is awake");
 			} else {
 				Debug.Log ("not awake");
 			}
+
+			for (int i=charms.Count-1; i>=0; i--){
+				charms[i].startAITurn();
+			}
+
+			Debug.Log ("getting AI turn for " + unitName);
+			gm.markAIStart ();
+			aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
+			//ObjectPooler.instance.printInfo ();
+			curAITurnStep = 0;	//flag to hlp the display interface
+			gm.markAIEnd();
 		}
 	}
 
@@ -358,14 +377,14 @@ public class Unit {
 		visibleTiles.Clear ();
 		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
 		if (isPlayerControlled && !isAISimUnit) {
-			Debug.Log ("set vis for " + unitName + " with sight " + sightRange+ " on frame "+Time.frameCount);
+			//Debug.Log ("set vis for " + unitName + " with sight " + sightRange+ " on frame "+Time.frameCount);
 			board.updateVisible ();
 		}
 		Profiler.EndSample ();
 	}
 
 	public void wakeUp(){
-		//Debug.Log ("wake up " + unitName);
+		Debug.Log ("wake up " + unitName);
 		isAwake = true;
 		foreach (Unit mate in podmates) {
 			if (!mate.isAwake) {
@@ -376,6 +395,9 @@ public class Unit {
 	}
 
 	public bool getIsVisibleToPlayer(){
+		if (GameManagerTacticsInterface.instance.debugTreatAllFoesAsVisible) {
+			return true;
+		}
 		return curTile.isVisibleToPlayer;
 	}
 
@@ -466,9 +488,9 @@ public class Unit {
 			isExausted = true;
 		}
 
-		if (!isAwake) {
-			isExausted = true;
-		}
+//		if (!isAwake) {
+//			isExausted = true;
+//		}
 	}
 
 	//input

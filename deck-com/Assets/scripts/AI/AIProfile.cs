@@ -13,6 +13,11 @@ public class AIProfile {
 
 	public float hateForPassing;
 
+	//patrol stuff
+	public bool ignoreDistanceChecks;
+	public float maxPatrolDistFromLeader;
+	public float maxPatrolDistFromLeaderWeight;
+
 	//each of these are the value that the given stat will be multiplied by
 	public float totalEnemyDamageWeight;
 	public float totalEnemyHealWeight;
@@ -40,6 +45,9 @@ public class AIProfile {
 
 	//need to factor in healing allies or enemies as their own stat
 
+	public AIProfile(Unit _owner){
+		owner = _owner;
+	}
 
 	public AIProfile(Unit _owner, string xmlName){
 		owner = _owner;
@@ -51,7 +59,6 @@ public class AIProfile {
 			xml.Load(Application.dataPath + "/external_data/foes/ai_profiles/"+xmlName+".xml");
 			setFromXML(xml.GetElementsByTagName ("ai")[0]);
 		}
-
 	}
 
 	private void setDefaultValues(){
@@ -74,6 +81,10 @@ public class AIProfile {
 		preferedDistToClosestEnemy = owner.Weapon.baseRange - 1;
 		acceptableDistanceRangeToClosestEnemy = 1.5f;
 
+		ignoreDistanceChecks = false;
+		maxPatrolDistFromLeader = 0;
+		maxPatrolDistFromLeaderWeight = 0;
+
 		hateForPassing = 10;
 
 		distanceToEnemiesWeight = 1;
@@ -94,6 +105,59 @@ public class AIProfile {
 
 		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.None] = -7;
 		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.Part] = -1;
+	}
+
+	public void setPatrolValues(){
+		Debug.Log ("setting patrol vals");
+
+		maxPatrolDistFromLeader = 5;
+		maxPatrolDistFromLeaderWeight = -100;
+
+		//keeping the cover stuff
+		coverChange = new float[3, 3];
+		for (int i=0; i<3; i++){
+			for (int k=0; k<3; k++){
+				coverChange[i,k] = 0;
+			}
+		}
+		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Part] = 5;
+		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Full] = 5;
+
+		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.None] = -5;
+		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.Full] = 5;
+
+		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.None] = -5;
+		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.Part] = 5;
+
+
+		//everything else is irrelevant
+		totalEnemyDamageWeight = 0;
+		totalEnemyHealWeight = 0;
+		numEnemiesKilledWeight = 0;
+		numEnemiesAidedWeight = 0;
+		numEnemiesCursedWeight = 0;
+		deltaEnemyGoodCharmWeight = 0;
+		deltaEnemyBadCharmWeight = 0;
+
+		totalAllyDamageWeight = 0;
+		totalAllyHealWeight = 0;
+		numAlliesKilledWeight = 0;
+		numAlliesAidedWeight = 0;
+		numAlliesCursedWeight = 0;
+		deltaAllyGoodCharmWeight = 0;
+		deltaAllyBadCharmWeight = 0;
+
+		ignoreDistanceChecks = true;
+		preferedDistToClosestEnemy = 0;
+		acceptableDistanceRangeToClosestEnemy = 10000;
+
+		hateForPassing = 0;
+
+		distanceToEnemiesWeight = 0;
+
+		newAlliesWeight = 0;
+
+
 	}
 
 	private void setFromXML(XmlNode node){
