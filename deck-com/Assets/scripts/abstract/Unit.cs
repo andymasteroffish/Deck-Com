@@ -7,6 +7,8 @@ using UnityEngine.Profiling;
 
 public class Unit {
 
+	public enum BehaviorMode {Patrolling, Awake};
+
 	//some basic info
 	public string unitName;
 
@@ -14,7 +16,7 @@ public class Unit {
 	public Board board;
 
 	public bool isPlayerControlled;
-	public bool isAwake;
+	public BehaviorMode curBehavior;
 	public List<Unit> podmates;
 	public bool isPodLeader;
 
@@ -148,7 +150,10 @@ public class Unit {
 
 		canPickUpLoot = false;
 
-		isAwake = isPlayerControlled;
+		curBehavior = BehaviorMode.Patrolling;
+		if (isPlayerControlled) {
+			curBehavior = BehaviorMode.Awake;
+		}
 		isPodLeader = false;
 
 		//spawn deck
@@ -159,7 +164,7 @@ public class Unit {
 		}
 
 		//if they are AI, give them the patrol status charm
-		if (!isAwake) {
+		if (curBehavior == BehaviorMode.Patrolling) {
 			addCharm ("patrol_status");
 		}
 
@@ -199,7 +204,7 @@ public class Unit {
 		isAISimUnit = true;
 
 		isPlayerControlled = parent.isPlayerControlled;
-		isAwake = parent.isAwake;
+		curBehavior = parent.curBehavior;
 
 		Profiler.BeginSample("making pod list");
 		podmates = new List<Unit>();
@@ -348,18 +353,12 @@ public class Unit {
 
 		//time to get the AI move?
 		if (!isPlayerControlled && isActive && !gm.IsPlayerTurn){
-			Debug.Log ("checking for " + unitName);
-			if (isAwake) {
-				Debug.Log ("is awake");
-			} else {
-				Debug.Log ("not awake");
-			}
-
+			//Debug.Log ("checking for " + unitName);
 			for (int i=charms.Count-1; i>=0; i--){
 				charms[i].startAITurn();
 			}
 
-			Debug.Log ("getting AI turn for " + unitName);
+			//Debug.Log ("getting AI turn for " + unitName);
 			gm.markAIStart ();
 			aiTurnInfo = gm.getAIMove (board.getUnitID (this), board, board, 0);
 			//ObjectPooler.instance.printInfo ();
@@ -385,9 +384,9 @@ public class Unit {
 
 	public void wakeUp(){
 		Debug.Log ("wake up " + unitName);
-		isAwake = true;
+		curBehavior = BehaviorMode.Awake;
 		foreach (Unit mate in podmates) {
-			if (!mate.isAwake) {
+			if (mate.curBehavior == BehaviorMode.Patrolling) {
 				mate.wakeUp ();
 			}
 		}

@@ -31,8 +31,8 @@ public class Charm_PatrolStatus : Charm {
 	}
 
 	public override void startAITurnCustom(){
-		//if the unit is awake, this is done
-		if (Owner.isAwake) {
+		//if the unit behavior has changed, remove this
+		if (Owner.curBehavior != Unit.BehaviorMode.Patrolling) {
 			Owner.removeCharm (this);
 		} 
 		//otherwise give them the move card
@@ -45,8 +45,7 @@ public class Charm_PatrolStatus : Charm {
 
 	//if a unit wakes up during their turn, this should be removed at the end of their turn
 	public override void turnEndPreDiscardCustom(){
-		Debug.Log ("CHECK ME");
-		if (Owner.isAwake) {
+		if (Owner.curBehavior != Unit.BehaviorMode.Patrolling) {
 			Owner.removeCharm (this);
 		} 
 	}

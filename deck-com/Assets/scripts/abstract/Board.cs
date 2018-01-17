@@ -381,9 +381,9 @@ public class Board {
 
 
 		foreach (Unit unit in units) {
-			//check if this would wake up any AI units
+			//check if this would wake up any AI units in patrol mode
 			if (!unit.isPlayerControlled) {
-				if (grid [unit.CurTile.Pos.x, unit.CurTile.Pos.y].isVisibleToPlayer && !unit.isAwake) {
+				if (grid [unit.CurTile.Pos.x, unit.CurTile.Pos.y].isVisibleToPlayer && unit.curBehavior == Unit.BehaviorMode.Patrolling) {
 					unit.wakeUp ();
 				}
 			}
@@ -1174,7 +1174,7 @@ public class Board {
 
 		//if the unit has at least one action, pass-turn is also a viable move
 		//not when patrolling!
-		if (actionsLeft >= 1 && units[unitID].isAwake) {
+		if (actionsLeft >= 1 && units[unitID].curBehavior != Unit.BehaviorMode.Patrolling) {
 			MoveInfo thisMove = new MoveInfo (unitID);
 			thisMove.passMove = true;
 			moves.Add (thisMove);
