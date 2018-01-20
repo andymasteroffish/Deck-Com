@@ -118,6 +118,8 @@ public class Deck {
 
 		addCardToHand (drawPile [0]);
 		drawPile.RemoveAt (0);
+
+		updateCardsDisabled ();	//in case the draw changes anything
 	}
 
 	public void addCardToHand(Card card){
@@ -254,6 +256,16 @@ public class Deck {
 			}
 		}
 		return loot;
+	}
+
+	public int getCardsInHandOfType(Card.CardType type){
+		int total = 0;
+		foreach (Card card in hand) {
+			if (card.type == type) {
+				total++;
+			}
+		}
+		return total;
 	}
 
 	//saving

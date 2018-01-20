@@ -202,7 +202,7 @@
 <level>-1</level>
 <script>Card_Loot</script>
 <card_type>Loot</card_type>
-<action_cost>100</action_cost>
+<action_cost>0</action_cost>
 </card>
 <card idName="move_and_attack">
 <name>Move And Attack</name>
@@ -359,10 +359,11 @@
 <level>2</level>
 <script>Card_DirectDamage</script>
 <card_type>Spell</card_type>
-<desc>Deal {damage} damage to target unit ignoring cover and any status effects or items (on you and the target)</desc>
+<desc>Deal {damage} damage to target unit ignoring cover and any status effects or items. Must have {mana_cost} other spell in hand</desc>
 <damage>2</damage>
 <ignore_target_charms>true</ignore_target_charms>
 <ignore_user_charms>true</ignore_user_charms>
+<mana_cost>1</mana_cost>
 </card>
 <card idName="bite_n_scurry">
 <name>Bite 'n Scurry</name>

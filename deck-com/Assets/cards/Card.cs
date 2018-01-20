@@ -31,6 +31,9 @@ public class Card : IComparable<Card> {
 	private Unit owner;
 	private Deck deck;
 
+	//shit for spells
+	public int manaCost;	//how many other spells need to be in hand to play this
+
 	//bonus things the card might give to the unit that plays it
 	public int bonusActions;
 	public int bonusCards;
@@ -90,6 +93,11 @@ public class Card : IComparable<Card> {
 		costToAddToDeck = 2 * cardLevel;
 		if (node ["add_to_deck_cost"] != null) {
 			costToAddToDeck = int.Parse(node ["add_to_deck_cost"].InnerText);
+		}
+
+		manaCost = 0;
+		if (node ["mana_cost"] != null) {
+			manaCost = int.Parse(node ["mana_cost"].InnerText);
 		}
 
 		//any bonuses?
@@ -246,6 +254,8 @@ public class Card : IComparable<Card> {
 		baseActionCost = blueprint.baseActionCost;
 		costToAddToDeck = blueprint.costToAddToDeck;
 
+		manaCost = blueprint.manaCost;
+
 		//any bonuses?
 		bonusActions = blueprint.bonusActions;
 
@@ -291,9 +301,31 @@ public class Card : IComparable<Card> {
 		isDisabled = !checkIfCanBePlayed();
 	}
 
-	//by default, cards just need an aciton to be played
-	public virtual bool checkIfCanBePlayed(){
-		return Owner.ActionsLeft >= getNumActionsNeededToPlay();
+	//by default, cards just need an action to be played
+	public  bool checkIfCanBePlayed(){
+		//custom checks
+		if (checkIfCanBePlayedCustom () == false) {
+			return false;
+		}
+
+		//action cost
+		if (Owner.ActionsLeft < getNumActionsNeededToPlay ()) {
+			return false;
+		}
+
+		//mana cost if aplicable
+		if (manaCost > 0) {
+			//Debug.Log("this fool has "+owner.deck.getCardsInHandOfType (CardType.Spell) +" in hand");
+			if (owner.deck.getCardsInHandOfType (CardType.Spell) - 1 < manaCost) {
+				return false;
+			}
+		}
+
+		//if everything else is legit, we're good!
+		return true;
+	}
+	public virtual bool checkIfCanBePlayedCustom(){
+		return true;
 	}
 
 	public int getNumActionsNeededToPlay(){
@@ -376,9 +408,10 @@ public class Card : IComparable<Card> {
 			owner.deck.addCardToHand (gift);
 		}
 
-		owner.markCardPlayed (this);
 
 		deck.removeCardFromHand (this);
+
+		owner.markCardPlayed (this);
 
 		if (!selfDestructWhenPlayed && !removeFromPlay) {
 			deck.discardCard (this);

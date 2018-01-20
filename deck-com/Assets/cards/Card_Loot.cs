@@ -11,11 +11,15 @@ public class Card_Loot : Card {
 	public Card_Loot(XmlNode _node){
 		node = _node;
 
-		baseActionCost = 1000;
+		baseActionCost = 0;
 	}
 
 	public void lootSetup(int _level){
 		level = _level;
+	}
+
+	public override bool checkIfCanBePlayedCustom(){
+		return false;
 	}
 
 
