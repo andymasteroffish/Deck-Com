@@ -28,6 +28,8 @@ public class UnitGO : MonoBehaviour {
 	public float minHitTime, maxHitTime;
 	public int hitTimeMaxDamage;
 
+	//showing when a unit is woken up
+	private bool wasPatrollingLastFrame;
 
 	public void activate(Unit unit){
 		owner = unit;
@@ -45,6 +47,8 @@ public class UnitGO : MonoBehaviour {
 		healthLastFrame = owner.health;
 
 		doingAnimation = false;
+
+		wasPatrollingLastFrame = unit.curBehavior == Unit.BehaviorMode.Patrolling;
 
 		spriteRend.sprite = unit.sprite;
 		outline.setup ();
@@ -115,6 +119,12 @@ public class UnitGO : MonoBehaviour {
 			StartCoroutine (doHitAnimation ( healthLastFrame-owner.health));
 			healthLastFrame = owner.health;
 		}
+
+		//focus if this is an AI unit that just revealed itself
+		if (owner.curBehavior == Unit.BehaviorMode.Awake && wasPatrollingLastFrame && owner.getIsVisibleToPlayer ()) {
+			GameManagerTacticsInterface.instance.Cam.setTarget (owner);
+		}
+		wasPatrollingLastFrame = owner.curBehavior == Unit.BehaviorMode.Patrolling;
 
 		boxCol.enabled = owner.mouseColliderIsActive;
 

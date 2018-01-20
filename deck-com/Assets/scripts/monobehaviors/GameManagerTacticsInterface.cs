@@ -370,7 +370,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		return false;
 	}
 
-
+	public CameraControl Cam {
+		get {
+			return this.cam;
+		}
+	}
 
 
 	//data stuff
