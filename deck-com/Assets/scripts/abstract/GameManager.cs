@@ -63,13 +63,16 @@ public class GameManager {
 		board.reset (curLevelNum, curAreaNum);
 
 		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
-			podPlacement.placeFoes (this, board, curLevelNum, curAreaNum);
 			List<Unit> activePlayerUnits = UnitManager.instance.getActivePlayerUnits ();
 			for (int i = 0; i < activePlayerUnits.Count; i++) {
 				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.Player);
 				activePlayerUnits [i].setup (this, board, spawnTile);
 				board.units.Add (activePlayerUnits [i]);
+				activePlayerUnits [i].setVisibleTiles ();
 			}
+			board.updateVisible ();	//make sure we know what the units can see
+
+			podPlacement.placeFoes (this, board, curLevelNum, curAreaNum);
 		} else {
 
 			for (int i = 0; i < debugSpawnList.Length; i++) {

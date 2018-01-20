@@ -1,0 +1,12 @@
+poison_dart
+poison_dart
+poison_dart
+attack
+attack
+move6
+move6
+move5
+move5
+move4
+heal_light
+heal

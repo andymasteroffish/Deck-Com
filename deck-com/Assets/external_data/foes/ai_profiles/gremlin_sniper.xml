@@ -1,0 +1,15 @@
+<ai>
+<preferedDistToClosestEnemy>9</preferedDistToClosestEnemy>
+<acceptableDistanceRangeToClosestEnemy>4</acceptableDistanceRangeToClosestEnemy>
+<deltaEnemyBadCharmWeight>5</deltaEnemyBadCharmWeight>
+<distanceToEnemiesWeight>3</distanceToEnemiesWeight>
+<totalAllyHealWeight>4</totalAllyHealWeight>
+
+<coverNoneToPart>10</coverNoneToPart>
+<coverNoneToFull>40</coverNoneToFull>
+<coverPartToNone>-10</coverPartToNone>
+<coverPartToFull>40</coverPartToFull>
+<coverFullToNone>-20</coverFullToNone>
+<coverFullToPart>-5</coverFullToPart>
+
+</ai>

@@ -52,9 +52,9 @@ public class PodPlacement {
 
 	//these are wack numbers for now
 	public void placeFoes(GameManager _gm, Board _board, int levelNum, int curArea){
-		int totalCR = levelNum * 6;
+		int totalCR = levelNum * 8;
 		Debug.Log ("total CL " + totalCR);
-		int numPods = 2 + levelNum/3;
+		int numPods = 3 + levelNum/3;
 		if (numPods > 5) {
 			numPods = 5;
 		}
@@ -134,6 +134,14 @@ public class PodPlacement {
 			originTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.Foe);
 			//and get tiles within walking distance
 			spawnTiles = board.getTilesInMoveRange (originTile, maxMoveDistAwayToSpawn, false, false);
+
+			//remove the ones the player can see
+			for (int i = spawnTiles.Count - 1; i >= 0; i--) {
+				if (spawnTiles [i].isVisibleToPlayer) {
+					spawnTiles.RemoveAt (i);
+				}
+			}
+
 			//make sure that there are enough tiles to nicely support the pod
 			if (spawnTiles.Count < foesToSpawn.Count * 3) {
 				goodSpot = false;

@@ -17,8 +17,8 @@ public class LevelGen {
 		TextAsset[] files = GameManagerTacticsInterface.instance.mapChunks;
 
 		//create a grid
-		int chunkCols = 3 + curAreaNum/2;
-		int chunkRows = 3 + curAreaNum;
+		int chunkCols = 4 + curAreaNum/2;
+		int chunkRows = 4 + curAreaNum;
 
 		//make sure it has at least enough height to feel good
 		chunkRows = (int)Mathf.Max(3, chunkRows);

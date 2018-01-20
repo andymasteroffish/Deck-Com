@@ -38,6 +38,9 @@ public class Charm  {
 	public int handSizeMod;
 	public int generalTakeDamageMod;
 
+	public int actionMod;
+	public int damageAtTurnStart;
+
 	public bool protectDuringAISim;	//KILL THIS
 
 	//if a charm came from a card (most likely equipment) that card should be stored in limbo until the charm is destroyed
@@ -106,6 +109,17 @@ public class Charm  {
 			expiresAfterAttack = bool.Parse (node ["expires_after_attack"].InnerXml);
 		}
 
+		actionMod = 0;
+		if (node["action_mod"] != null){
+			actionMod = int.Parse(node["action_mod"].InnerText);
+		}
+
+		damageAtTurnStart = 0;
+		if (node["damage_at_turn_start"] != null){
+			damageAtTurnStart = int.Parse(node["damage_at_turn_start"].InnerText);
+		}
+
+
 		aiGoodCharmPoints = 0;
 		aiBadCharmPoints = 0;
 
@@ -160,6 +174,9 @@ public class Charm  {
 
 		generalTakeDamageMod = parent.generalTakeDamageMod;
 
+		actionMod = parent.actionMod;
+		damageAtTurnStart = parent.damageAtTurnStart;
+
 
 		selfDestructsAfterTurns = parent.selfDestructsAfterTurns;
 		turnsLeftBeforeSelfDestruct = parent.turnsLeftBeforeSelfDestruct;
@@ -184,6 +201,14 @@ public class Charm  {
 	}
 
 	public void resetRound(){
+
+		if (damageAtTurnStart != 0) {
+			Owner.takeDamage (damageAtTurnStart, null, null);
+		}
+		if (actionMod != 0) {
+			Owner.gainActions (actionMod);
+		}
+
 		resetRoundCustom ();
 	}
 	public virtual void resetRoundCustom(){}
@@ -222,8 +247,10 @@ public class Charm  {
 	public virtual void cardPlayedCustom(Card card){}
 
 	public void takeDamage (Card card, Unit source){
-		if (card.ignoreTargetCharms) {
-			return;
+		if (card != null) {
+			if (card.ignoreTargetCharms) {
+				return;
+			}
 		}
 		takeDamageCustom (card, source);
 	}
@@ -281,6 +308,9 @@ public class Charm  {
 	public virtual int getWeaponRangeModCustom(Card card){return 0;}
 
 	public int getDamageTakenMod(Card card, Unit source){
+		if (card == null) {
+			return 0;
+		}
 		if (card.ignoreTargetCharms) {
 			return 0;
 		}

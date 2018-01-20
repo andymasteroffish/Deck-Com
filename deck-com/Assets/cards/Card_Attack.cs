@@ -8,6 +8,8 @@ public class Card_Attack : Card {
 	public int damageMod;
 	public int rangeMod;
 
+	public string charmToGiveTarget;
+
 
 	public Card_Attack (){}
 	public Card_Attack(XmlNode _node){
@@ -21,6 +23,11 @@ public class Card_Attack : Card {
 		damageMod = 0;
 		if (node ["damage_mod"] != null) {
 			damageMod = int.Parse (node ["damage_mod"].InnerText);
+		}
+
+		charmToGiveTarget = "";
+		if (node ["charm_to_give"] != null) {
+			charmToGiveTarget = node ["charm_to_give"].InnerText;
 		}
 
 	}
@@ -40,6 +47,7 @@ public class Card_Attack : Card {
 		Card_Attack blueprintCustom = (Card_Attack)blueprint;
 		damageMod = blueprintCustom.damageMod;
 		rangeMod = blueprintCustom.rangeMod;
+		charmToGiveTarget = blueprintCustom.charmToGiveTarget;
 	}
 
 
@@ -63,7 +71,11 @@ public class Card_Attack : Card {
 		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
 			Owner.Charms [i].dealWeaponDamageCustom (this, unit, damageVal);
 		}
-		//doWeaponDamageToUnit (unit, damageAdjust);
+
+		if (charmToGiveTarget != "" && damageVal > 0) {
+			unit.addCharm (charmToGiveTarget);
+		}
+
 		finish ();
 	}
 

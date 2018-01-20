@@ -389,6 +389,14 @@
 <desc>Attack. Free if at least {num_move_cards_played_to_make_free} move cards have been played by this unit this turn</desc>
 <num_move_cards_played_to_make_free>2</num_move_cards_played_to_make_free>
 </card>
+<card idName="poison_dart">
+<name>Poison Dart</name>
+<level>1</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<desc>Poisons the target if it delas damage</desc>
+<charm_to_give>dart_poison</charm_to_give>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

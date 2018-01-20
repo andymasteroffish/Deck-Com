@@ -25,46 +25,6 @@
       <charm>test_melee</charm>
     </charms>
   </unit>
-  <unit idName = "charger">
-    <name>Charger</name>
-    <sprite>charger</sprite>
-    <deck>charger</deck>
-    <ai_profile>aggro_melee</ai_profile>
-    <player_controlled>false</player_controlled>
-    <cr>3</cr>
-    <min_area>1</min_area>
-    <max_area>2</max_area>
-    <base_health>5</base_health>
-    <charms>
-      <charm>acid_knife</charm>
-    </charms>
-  </unit>
-  <unit idName = "spider">
-    <name>Big Spider</name>
-    <sprite>spider</sprite>
-    <deck>spider</deck>
-    <ai_profile>spider</ai_profile>
-    <player_controlled>false</player_controlled>
-    <cr>5</cr>
-    <min_area>2</min_area>
-    <base_health>8</base_health>
-    <charms>
-      <charm>fangs</charm>
-    </charms>
-  </unit>
-  <unit idName = "spider_egg">
-    <name>Spider Egg</name>
-    <sprite>spider_egg</sprite>
-    <deck>spider_egg</deck>
-    <ai_profile>spider</ai_profile>
-    <player_controlled>false</player_controlled>
-    <cr>-1</cr>
-    <base_health>2</base_health>
-    <hand_size>1</hand_size>
-    <charms>
-      <charm>nothing</charm>
-    </charms>
-  </unit>
   <unit idName = "spider_baby">
     <name>Baby Spider</name>
     <sprite>spider_baby</sprite>
@@ -92,6 +52,19 @@
       <charm>grunt_wep</charm>
     </charms>
   </unit>
+  <unit idName = "gremlin_sniper">
+    <name>Gremlin Sniper</name>
+    <sprite>gremlin_sniper</sprite>
+    <deck>gremlin_sniper_deck</deck>
+    <ai_profile>gremlin_sniper</ai_profile>
+    <player_controlled>false</player_controlled>
+    <cr>2</cr>
+    <max_area>2</max_area>
+    <base_health>4</base_health>
+    <charms>
+      <charm>blow_gun</charm>
+    </charms>
+  </unit>
   <unit idName = "goblin">
     <name>Goblin</name>
     <sprite>goblin</sprite>
@@ -102,6 +75,20 @@
     <base_health>4</base_health>
     <charms>
       <charm>goblin_wep</charm>
+    </charms>
+  </unit>
+  <unit idName = "charger">
+    <name>Charger</name>
+    <sprite>charger</sprite>
+    <deck>charger</deck>
+    <ai_profile>aggro_melee</ai_profile>
+    <player_controlled>false</player_controlled>
+    <cr>3</cr>
+    <min_area>1</min_area>
+    <max_area>2</max_area>
+    <base_health>5</base_health>
+    <charms>
+      <charm>acid_knife</charm>
     </charms>
   </unit>
   <unit idName = "goblin_king">
@@ -115,6 +102,32 @@
     <base_health>8</base_health>
     <charms>
       <charm>goblin_king_wep</charm>
+    </charms>
+  </unit>
+  <unit idName = "spider">
+    <name>Big Spider</name>
+    <sprite>spider</sprite>
+    <deck>spider</deck>
+    <ai_profile>spider</ai_profile>
+    <player_controlled>false</player_controlled>
+    <cr>5</cr>
+    <min_area>2</min_area>
+    <base_health>8</base_health>
+    <charms>
+      <charm>fangs</charm>
+    </charms>
+  </unit>
+  <unit idName = "spider_egg">
+    <name>Spider Egg</name>
+    <sprite>spider_egg</sprite>
+    <deck>spider_egg</deck>
+    <ai_profile>spider</ai_profile>
+    <player_controlled>false</player_controlled>
+    <cr>-1</cr>
+    <base_health>2</base_health>
+    <hand_size>1</hand_size>
+    <charms>
+      <charm>nothing</charm>
     </charms>
   </unit>
 </units>

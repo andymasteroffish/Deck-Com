@@ -48,6 +48,14 @@
 <range>8</range>
 <attack_card_cost_mod>1</attack_card_cost_mod>
 </charm>
+<charm idName="blow_gun">
+<name>Blow Gun</name>
+<type>Weapon</type>
+<level>-1</level>
+<script>Weapon_Basic</script>
+<damage>1</damage>
+<range>7</range>
+</charm>
 <charm idName="grunt_wep">
 <name>Grunt Weapon</name>
 <type>Weapon</type>
@@ -182,5 +190,16 @@
 <script>Weapon_Basic</script>
 <damage>0</damage>
 <range>0</range>
+</charm>
+<charm idName="dart_poison">
+<name>Dart Poison</name>
+<type>StatusEffect</type>
+<level>-1</level>
+<script>Charm</script>
+<desc>Unit takes one damage and loses one HP at the start round. Lasts one round.</desc>
+<action_mod>-1</action_mod>
+<damage_at_turn_start>1</damage_at_turn_start>
+<turns_to_self_destruct>1</turns_to_self_destruct>
+<ai_bad_points>1</ai_bad_points>
 </charm>
 </charms>
