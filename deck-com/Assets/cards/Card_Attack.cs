@@ -10,6 +10,9 @@ public class Card_Attack : Card {
 
 	public string charmToGiveTarget;
 
+	bool hitAllInRange;
+	bool canEnd;
+
 
 	public Card_Attack (){}
 	public Card_Attack(XmlNode _node){
@@ -30,6 +33,13 @@ public class Card_Attack : Card {
 			charmToGiveTarget = node ["charm_to_give"].InnerText;
 		}
 
+		hitAllInRange = false;
+		if (node ["hit_all_in_range"] != null) {
+			hitAllInRange = bool.Parse (node ["hit_all_in_range"].InnerXml);
+		}
+
+		canEnd = true;
+
 	}
 
 	public override void setupBlueprintCustom(){
@@ -48,20 +58,40 @@ public class Card_Attack : Card {
 		damageMod = blueprintCustom.damageMod;
 		rangeMod = blueprintCustom.rangeMod;
 		charmToGiveTarget = blueprintCustom.charmToGiveTarget;
+		hitAllInRange = blueprintCustom.hitAllInRange;
+		canEnd = blueprintCustom.canEnd;
 	}
 
 
 	public override void mouseEnterEffects(){
 		mouseEnterForWeapon (rangeMod);
+
+		if (hitAllInRange) {
+			Owner.CurTile.setHighlighted (false);
+		}
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
 		setPotentialTargetInfoTextForWeapon (unit, damageMod);
+
+
 	}
 
 	public override void selectCardCustom(){
-
 		selectCardForWeapon (rangeMod);
+
+		//if we're hitting everybody, just do it
+		if (hitAllInRange) {
+			Owner.setHighlighted (false);
+			canEnd = false;
+			List<Unit> targets = Owner.board.getAllHighlightedUnits ();
+			for (int i = 0; i < targets.Count; i++) {
+				if (i == targets.Count - 1) {
+					canEnd = true;
+				}
+				passInUnitCustom (targets [i]);
+			}
+		}
 	}
 
 	public override void passInUnitCustom(Unit unit){
@@ -76,12 +106,16 @@ public class Card_Attack : Card {
 			unit.addCharm (charmToGiveTarget);
 		}
 
-		finish ();
+		if (canEnd) {
+			finish ();
+		}
 	}
 
 	public override void resolveFromMove(MoveInfo move){
 		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
 		passInUnitCustom (targetUnit);
+
+		//DOES NOT YET WORK WITH THE HIT ALL IN RANGE OPTION
 	}
 
 //	public override int getAIAttackRange(){

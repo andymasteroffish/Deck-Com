@@ -397,6 +397,14 @@
 <desc>Poisons the target if it delas damage</desc>
 <charm_to_give>dart_poison</charm_to_give>
 </card>
+<card idName="berserker_rage">
+<name>Berserker Rage</name>
+<level>3</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<desc>Attack all units in range (including allies)</desc>
+<hit_all_in_range>true</hit_all_in_range>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

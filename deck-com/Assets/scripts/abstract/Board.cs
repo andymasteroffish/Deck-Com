@@ -826,6 +826,16 @@ public class Board {
 		return null;
 	}
 
+	public List<Unit> getAllHighlightedUnits(){
+		List<Unit> returnVal = new List<Unit> ();
+		foreach (Unit unit in units) {
+			if (unit.IsHighlighted) {
+				returnVal.Add (unit);
+			}
+		}
+		return returnVal;
+	}
+
 	public Tile GetUnoccupiedTileWithSpawnProperty(Tile.SpawnProperty property){
 		List<Tile> matches = new List<Tile> ();
 		for (int x = 0; x < cols; x++) {
