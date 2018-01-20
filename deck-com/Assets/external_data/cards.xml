@@ -406,6 +406,16 @@
 <desc>Attack all units in range (including allies)</desc>
 <hit_all_in_range>true</hit_all_in_range>
 </card>
+<card idName="mulligan">
+<name>Mulligan</name>
+<level>1</level>
+<script>Card_DiscardAndDraw</script>
+<card_type>Skill</card_type>
+<desc>Discard your hand and draw that many cards minus one. Gain an action</desc>
+<mulligan_effect>true</mulligan_effect>
+<any_unit>false</any_unit>
+<bonus_actions>1</bonus_actions>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

@@ -126,6 +126,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_RemoveCharm (node);
 		} else if (scriptName == "Card_SpawnUnit") {
 			thisCard = new Card_SpawnUnit (node);
+		} else if (scriptName == "Card_DiscardAndDraw") {
+			thisCard = new Card_DiscardAndDraw (node);
 		}
 		else{
 			Debug.Log ("SCRIPT NAME FOR CARD NOT FOUND: "+scriptName);
@@ -176,7 +178,10 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_RemoveCharm ();
 		} else if (scriptName == "Card_SpawnUnit") {
 			thisCard = new Card_SpawnUnit ();
-		}else{
+		} else if (scriptName == "Card_DiscardAndDraw") {
+			thisCard = new Card_DiscardAndDraw ();
+		}
+		else{
 			Debug.Log ("SCRIPT NAME FOR BLUEPRINT NOT FOUND: "+scriptName);
 		}
 			
