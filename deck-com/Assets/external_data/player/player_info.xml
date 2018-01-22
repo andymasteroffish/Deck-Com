@@ -1,7 +1,7 @@
 <player>
   <info>
     <money>2</money>
-    <cur_level>1</cur_level>
+    <cur_level>-1</cur_level>
   </info>
   <unit idName = "test_player">
     <name>Test Player</name>
@@ -33,7 +33,7 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>glass_cannon</charm>
+      <charm>long_bow</charm>
     </charms>
   </unit>
   <unit idName = "tank">

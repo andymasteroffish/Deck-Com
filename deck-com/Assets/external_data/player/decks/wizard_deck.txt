@@ -1,6 +1,4 @@
-
-arcane_balistics
-gain_an_action
+combat_vitality
 equipment_helpers_ring
 move3
 move4
@@ -9,4 +7,5 @@ move5
 attack
 attack
 heal
+gain_an_action
 draw_a_card

@@ -416,6 +416,17 @@
 <any_unit>false</any_unit>
 <bonus_actions>1</bonus_actions>
 </card>
+<card idName="combat_vitality">
+<name>Combat Vitality</name>
+<level>2</level>
+<script>Card_CardsPlayedBonus</script>
+<card_type>Skill</card_type>
+<desc>Target unit gains an action and draws a card for each attack card they already played this turn</desc>
+<actions_to_gain>1</actions_to_gain>
+<cards_to_draw>1</cards_to_draw>
+<any_unit>true</any_unit>
+<type_to_care_about>Attack</type_to_care_about>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

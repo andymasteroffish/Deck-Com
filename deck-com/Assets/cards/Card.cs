@@ -430,6 +430,18 @@ public class Card : IComparable<Card> {
 		return waitingForTile || waitingForUnit || waitingForChoice;
 	}
 
+	public CardType cardTypeFromString(string input){
+		// https://msdn.microsoft.com/en-us/library/essfb559(v=vs.110).aspx
+		try {
+			CardType val = (CardType) Enum.Parse(typeof(CardType), input);      
+			return val;
+		}
+		catch (ArgumentException) {
+			Debug.Log ("CONVERSION DID NOT WORK");
+			return CardType.Other;
+		}
+	}
+
 	//**********************************
 	//Dealing with AI
 	//**********************************

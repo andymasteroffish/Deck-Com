@@ -3,3 +3,4 @@ attack
 heal_light
 heal_light
 move6
+acid_knife

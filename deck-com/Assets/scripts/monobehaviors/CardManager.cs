@@ -102,6 +102,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_BasicAOEAttack (node);
 		} else if (scriptName == "Card_BasicTargetBonus") {
 			thisCard = new Card_BasicTargetBonus (node);
+		} else if (scriptName == "Card_CardsPlayedBonus") {
+			thisCard = new Card_CardsPlayedBonus (node);
 		} else if (scriptName == "Card_CoverAttack") {
 			thisCard = new Card_CoverAttack (node);
 		} else if (scriptName == "Card_GiveCharm") {
@@ -154,6 +156,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_BasicAOEAttack ();
 		} else if (scriptName == "Card_BasicTargetBonus") {
 			thisCard = new Card_BasicTargetBonus ();
+		} else if (scriptName == "Card_CardsPlayedBonus") {
+			thisCard = new Card_CardsPlayedBonus ();
 		} else if (scriptName == "Card_CoverAttack") {
 			thisCard = new Card_CoverAttack ();
 		} else if (scriptName == "Card_GiveCharm") {
