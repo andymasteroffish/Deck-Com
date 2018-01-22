@@ -25,7 +25,7 @@
 <charm idName="long_bow">
 <name>Long Bow</name>
 <type>Weapon</type>
-<level>-1</level>
+<level>1</level>
 <script>Weapon_Basic</script>
 <damage>2</damage>
 <range>6</range>
@@ -33,7 +33,7 @@
 <charm idName="wizard_staff">
 <name>Wizard Staff</name>
 <type>Weapon</type>
-<level>-1</level>
+<level>1</level>
 <script>Weapon_Basic</script>
 <damage>1</damage>
 <range>7</range>
@@ -41,7 +41,7 @@
 <charm idName="sniper_rifle">
 <name>Sniper Rifle</name>
 <type>Weapon</type>
-<level>-1</level>
+<level>1</level>
 <script>Weapon_Basic</script>
 <desc>4 Damage, 8 Range, attack cards cost an additional action</desc>
 <damage>4</damage>
@@ -83,7 +83,7 @@
 <charm idName="acid_knife">
 <name>Acid Knife</name>
 <type>Weapon</type>
-<level>-1</level>
+<level>3</level>
 <script>Weapon_Basic</script>
 <desc>Deal 1 damage at range 2 and causes units to take 1 additional damage from all other sources.</desc>
 <damage>1</damage>
@@ -201,5 +201,13 @@
 <damage_at_turn_start>1</damage_at_turn_start>
 <turns_to_self_destruct>1</turns_to_self_destruct>
 <ai_bad_points>1</ai_bad_points>
+</charm>
+<charm idName="glass_cannon">
+<name>Glass Cannon</name>
+<type>Weapon</type>
+<level>2</level>
+<script>Weapon_GlassCannon</script>
+<damage>4</damage>
+<range>6</range>
 </charm>
 </charms>
