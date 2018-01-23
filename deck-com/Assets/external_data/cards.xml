@@ -427,6 +427,15 @@
 <any_unit>true</any_unit>
 <type_to_care_about>Attack</type_to_care_about>
 </card>
+<card idName="borrow_strike">
+<name>Let me Borrow That</name>
+<level>2</level>
+<script>Card_AttackOtherWeapon</script>
+<card_type>Attack</card_type>
+<desc>Attack using the weapon of a unit within {other_unit_range} spaces</desc>
+<use_other_unit_weapon>true</use_other_unit_weapon>
+<other_unit_range>4</other_unit_range>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

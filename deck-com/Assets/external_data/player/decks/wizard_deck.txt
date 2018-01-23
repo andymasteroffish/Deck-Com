@@ -1,4 +1,4 @@
-combat_vitality
+borrow_strike
 equipment_helpers_ring
 move3
 move4

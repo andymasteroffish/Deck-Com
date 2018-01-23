@@ -1,4 +1,4 @@
-combat_vitality
+borrow_strike
 attack
 attack
 move4

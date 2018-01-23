@@ -680,6 +680,9 @@ public class Unit {
 		get{
 			return this.weapon;
 		}
+		set{
+			weapon = value;
+		}
 	}
 
 	public List<Charm> Charms{

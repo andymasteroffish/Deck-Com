@@ -526,6 +526,7 @@ public class Card : IComparable<Card> {
 	//**********************************
 
 	public int getRangeForWeapon(int rangeMod){
+		Debug.Log ("my wep " + Owner.Weapon.baseRange);
 		int range = Owner.Weapon.baseRange + rangeMod;
 
 		for (int i = owner.Charms.Count - 1; i >= 0; i--) {

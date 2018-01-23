@@ -64,6 +64,7 @@ public class Card_Attack : Card {
 
 
 	public override void mouseEnterEffects(){
+		Debug.Log ("range mod "+rangeMod);
 		mouseEnterForWeapon (rangeMod);
 
 		if (hitAllInRange) {
@@ -73,8 +74,6 @@ public class Card_Attack : Card {
 
 	public override void setPotentialTargetInfo(Unit unit){
 		setPotentialTargetInfoTextForWeapon (unit, damageMod);
-
-
 	}
 
 	public override void selectCardCustom(){
