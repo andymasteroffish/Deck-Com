@@ -1,10 +1,9 @@
-borrow_strike
-attack
-attack
 move4
 move4
 move5
 move5
+attack
+attack
 attack
 bandage
 blade_dash

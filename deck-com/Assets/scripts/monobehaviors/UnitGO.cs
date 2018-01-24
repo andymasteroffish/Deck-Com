@@ -122,7 +122,8 @@ public class UnitGO : MonoBehaviour {
 
 		//focus if this is an AI unit that just revealed itself
 		if (owner.curBehavior == Unit.BehaviorMode.Awake && wasPatrollingLastFrame && owner.getIsVisibleToPlayer ()) {
-			GameManagerTacticsInterface.instance.Cam.setTarget (owner);
+			GameManagerTacticsInterface.instance.Cam.revealAIUnit (owner);
+			//GameManagerTacticsInterface.instance.Cam.setTargetAfterTime (GameManagerTacticsInterface.instance.gm.activePlayerUnit , 4.0f);
 		}
 		wasPatrollingLastFrame = owner.curBehavior == Unit.BehaviorMode.Patrolling;
 

@@ -66,7 +66,7 @@ public class Card_AttackOtherWeapon : Card {
 		if (onAttackStep) {
 			setPotentialTargetInfoTextForWeapon (unit, damageMod);
 		} else {
-			Owner.GM.targetInfoText.turnOn ("borrow\n"+unit.Weapon.name, 0, unit);
+			Owner.GM.targetInfoText.turnOn ("borrow\n"+unit.Weapon.name, 0, unit, false);
 		}
 	}
 
@@ -90,6 +90,7 @@ public class Card_AttackOtherWeapon : Card {
 			Owner.addCharm (newWeapon.idName);
 
 			onAttackStep = true;
+			setPotentialTargetInfoTextForWeapon (unit, damageMod);
 		} else {
 			
 			WaitingForUnit = false;
@@ -112,7 +113,7 @@ public class Card_AttackOtherWeapon : Card {
 		if (onAttackStep) {
 			onAttackStep = false;
 			returnOriginalWep ();
-			finish ();
+			//finish ();
 		}
 	}
 

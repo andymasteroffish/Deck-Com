@@ -46,10 +46,15 @@ public class TargetInfoText : MonoBehaviour {
 		}
 	}
 
-	public void turnOn(string text, int damage, Unit _targetUnit){
+	public void turnOn(string text, int damage, Unit _targetUnit, bool showDamageText = true){
 		targetUnit = _targetUnit;
 		descriptionText.text = text;
 		damageText.text = "DAMAGE: " + damage.ToString ();
+
+		if (showDamageText == false){
+			damageText.text = "";
+		}
+
 		gameObject.SetActive (true);
 
 		doNoDamageBlink = damage <= 0;

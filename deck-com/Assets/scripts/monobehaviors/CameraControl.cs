@@ -20,25 +20,42 @@ public class CameraControl : MonoBehaviour {
 	private float startSize;
 	private float targetSize;
 
+
+	private bool doingAIReveal;
+
 	void Start(){
 		cam = GetComponent<Camera> ();
 		startSize = cam.orthographicSize;
 		targetSize = startSize;
+
+		doingAIReveal = false;
 	}
 
 
-	public void setTarget(Unit target){
+	public void setTarget(Unit target, bool isAIReveal = false){
+		if (doingAIReveal && !isAIReveal) {
+			return;
+		}
 		targetUnit = GameObjectManager.instance.findUnitGO(target);
 		usingTargetTile = false;
 		freeControl = false;
 	}
 
-	public void setTarget(TilePos target){
+	public void setTarget(TilePos target, bool isAIReveal = false){
+		if (doingAIReveal && !isAIReveal) {
+			return;
+		}
 		targetUnit = null;
 		usingTargetTile = true;
 		targetTile = new TilePos (target);
 		freeControl = false;
 	}
+
+	public void revealAIUnit(Unit newTarget){
+		StartCoroutine(doRevealAIUnit(newTarget));
+	}
+
+
 
 	void Update () {
 
@@ -67,6 +84,17 @@ public class CameraControl : MonoBehaviour {
 		targetSize += Input.mouseScrollDelta.y * zoomSpeed * Time.deltaTime;
 		targetSize = Mathf.Clamp (targetSize, minSize, maxSize);
 		cam.orthographicSize = Mathf.Lerp (cam.orthographicSize, targetSize, targetLerp);
+
 	
+	}
+
+
+	IEnumerator doRevealAIUnit(Unit newTarget){
+		doingAIReveal = true;
+		yield return new WaitForSeconds (0.5f);
+		setTarget (newTarget, true);
+		yield return new WaitForSeconds (2f);
+		setTarget (GameManagerTacticsInterface.instance.gm.activePlayerUnit, true);
+		doingAIReveal = false;
 	}
 }
