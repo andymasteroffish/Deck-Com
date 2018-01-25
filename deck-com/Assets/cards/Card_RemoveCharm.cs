@@ -5,23 +5,41 @@ using System.Xml;
 
 public class Card_RemoveCharm : Card {
 
-	public bool removesEquipment;
+	//public bool removesEquipment;
+
+	public List<Charm.CharmType> typesToRemove;
 
 	public Card_RemoveCharm(){}
 	public Card_RemoveCharm(XmlNode _node){
 		node = _node;
 
-		removesEquipment = bool.Parse (node ["hits_equipment"].InnerXml);
+		//removesEquipment = bool.Parse (node ["hits_equipment"].InnerXml);
+
+		typesToRemove = new List<Charm.CharmType> ();
+
+		for (int i = 0; i < node.ChildNodes.Count; i++) {
+			if (node.ChildNodes [i].Name == "remove_type") {
+				typesToRemove.Add( CharmTypeFromString(node.ChildNodes[i].InnerText));
+				Debug.Log (typesToRemove [(int)typesToRemove.Count - 1]);
+			}
+		}
+
+	
+
 	}
 
-	// Use this for initialization
 	public override void setupBlueprintCustom(){
 		
 	}
 
 	public override void setupCustom(){
 		Card_RemoveCharm blueprintCustom = (Card_RemoveCharm)blueprint;
-		removesEquipment = blueprintCustom.removesEquipment;
+
+		typesToRemove = new List<Charm.CharmType> ();
+		for (int i = 0; i < blueprintCustom.typesToRemove.Count; i++) {
+			typesToRemove.Add( blueprintCustom.typesToRemove[i]);
+		}
+		//removesEquipment = blueprintCustom.removesEquipment;
 	}
 
 	public override void mouseEnterEffects(){
@@ -37,9 +55,8 @@ public class Card_RemoveCharm : Card {
 		Debug.Log ("Kill some charms");
 
 		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
-			if (unit.Charms [i].type == Charm.CharmType.Equipment && removesEquipment) {
+			if (typesToRemove.Contains(unit.Charms [i].type)) {
 				unit.removeCharm (unit.Charms [i]);
-				//unit.aiSimHasBeenCursedCount++;
 			}
 		}
 

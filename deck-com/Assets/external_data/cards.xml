@@ -311,13 +311,14 @@
 <card_type>Spell</card_type>
 <desc>trade places with any unit you can see</desc>
 </card>
-<card idName="destroy_equipment">
-<name>Destory Equipment</name>
+<card idName="disenchant">
+<name>Disenchant</name>
 <level>1</level>
 <script>Card_RemoveCharm</script>
 <card_type>Spell</card_type>
-<desc>Destroy equipment</desc>
-<hits_equipment>true</hits_equipment>
+<desc>Destroy non-weapon equipment or status effect</desc>
+<remove_type>Equipment</remove_type>
+<remove_type>StatusEffect</remove_type>
 </card>
 <card idName="spit_web">
 <name>Spit Web</name>

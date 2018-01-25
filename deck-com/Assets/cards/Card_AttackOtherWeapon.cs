@@ -108,12 +108,9 @@ public class Card_AttackOtherWeapon : Card {
 	}
 
 	public override void cancelCustom(){
-		
-
 		if (onAttackStep) {
 			onAttackStep = false;
 			returnOriginalWep ();
-			//finish ();
 		}
 	}
 

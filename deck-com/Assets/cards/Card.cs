@@ -437,8 +437,19 @@ public class Card : IComparable<Card> {
 			return val;
 		}
 		catch (ArgumentException) {
-			Debug.Log ("CONVERSION DID NOT WORK");
+			Debug.Log ("CONVERSION DID NOT WORK:"+input);
 			return CardType.Other;
+		}
+	}
+
+	public Charm.CharmType CharmTypeFromString(string input){
+		try {
+			Charm.CharmType val = (Charm.CharmType) Enum.Parse(typeof(Charm.CharmType), input);      
+			return val;
+		}
+		catch (ArgumentException) {
+			Debug.Log ("CHARM CONVERSION DID NOT WORK:"+input);
+			return Charm.CharmType.StatusEffect;
 		}
 	}
 
