@@ -78,7 +78,7 @@ public class AIProfile {
 		deltaAllyGoodCharmWeight = 2;
 		deltaAllyBadCharmWeight = -6;
 
-		preferedDistToClosestEnemy = owner.Weapon.baseRange - 1;
+		preferedDistToClosestEnemy = owner.Weapon.baseRange - 3;//- 1;
 		acceptableDistanceRangeToClosestEnemy = 1.5f;
 
 		ignoreDistanceChecks = false;
@@ -97,13 +97,13 @@ public class AIProfile {
 				coverChange[i,k] = 0;
 			}
 		}
-		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Part] = 4;
-		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Full] = 20;
+		coverChange [(int)Tile.Cover.None, (int)Tile.Cover.Part] = 2;//4;
+		coverChange[(int)Tile.Cover.None, (int)Tile.Cover.Full] = 10;//20;
 
-		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.None] = -5;
+		coverChange [(int)Tile.Cover.Part, (int)Tile.Cover.None] = -2;//-5;
 		coverChange[(int)Tile.Cover.Part, (int)Tile.Cover.Full] = 1;
 
-		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.None] = -7;
+		coverChange [(int)Tile.Cover.Full, (int)Tile.Cover.None] = -3;//-7;
 		coverChange[(int)Tile.Cover.Full, (int)Tile.Cover.Part] = -1;
 	}
 

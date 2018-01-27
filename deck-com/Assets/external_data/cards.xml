@@ -178,7 +178,7 @@
 <level>1</level>
 <script>Card_Heal</script>
 <card_type>Skill</card_type>
-<heal>3</heal>
+<heal>2</heal>
 <range>2</range>
 </card>
 <card idName="heal">
@@ -188,6 +188,7 @@
 <card_type>Spell</card_type>
 <heal>2</heal>
 <range>5</range>
+<mana_cost>1</mana_cost>
 </card>
 <card idName="heal_light">
 <name>Heal Light</name>
@@ -316,7 +317,7 @@
 <level>1</level>
 <script>Card_RemoveCharm</script>
 <card_type>Spell</card_type>
-<desc>Destroy non-weapon equipment or status effect</desc>
+<desc>Destroy all non-weapon equipment or status effect on target</desc>
 <remove_type>Equipment</remove_type>
 <remove_type>StatusEffect</remove_type>
 </card>

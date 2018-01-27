@@ -179,9 +179,9 @@ public class Board {
 		}
 
 		int lootToDistribute = GameManagerTacticsInterface.instance.lootPerLevel + (int)Random.Range (0, (float)GameManagerTacticsInterface.instance.potentialBonusLootPerLevel+1);
-		//intro level only gets one
+		//intro level gets a set amount
 		if (curAreaNum == 0) {
-			lootToDistribute = 1;
+			lootToDistribute = 2;
 		}
 
 		if (GameManagerTacticsInterface.instance.debugAllFoesHaveLoot) {

@@ -31,10 +31,6 @@ public class EndGameManager {
 		LootReward reward = new LootReward();
 		int level = (int)Mathf.Max(lootCard.level, 1);
 		reward.baseMoney = level;
-		//sometimes throw in an extra dollar
-		if (Random.value < 0.75f) {
-			reward.baseMoney += 1;
-		}
 
 		int numCardsAtLevel = 2;
 		int numCardPairsAtLowerLevel = 2;
@@ -90,7 +86,7 @@ public class EndGameManager {
 	}
 
 	int getRewardMoney(int level){
-		float val = Mathf.Pow (level, 1.3f) * 3.0f;
+		float val = Mathf.Pow (level, 1.4f) * 3.0f;
 		//Debug.Log ("level " + level + "  val " + val);
 		float wiggle = val * 0.4f;
 		val += Random.Range (-wiggle, wiggle);

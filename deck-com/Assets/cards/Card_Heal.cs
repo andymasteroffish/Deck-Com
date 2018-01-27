@@ -19,6 +19,9 @@ public class Card_Heal : Card {
 	public override void setupBlueprintCustom(){
 		
 		description = "heals "+healAmount+" at range "+range;
+		if (manaCost > 0) {
+			description += "\nMust have "+manaCost.ToString()+" other spell in hand to cast.";
+		}
 	}
 
 	public override void setupCustom(){
