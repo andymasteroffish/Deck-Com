@@ -85,7 +85,7 @@ public class AIProfile {
 		maxPatrolDistFromLeader = 0;
 		maxPatrolDistFromLeaderWeight = 0;
 
-		hateForPassing = 10;
+		hateForPassing = 1;
 
 		distanceToEnemiesWeight = 1;
 

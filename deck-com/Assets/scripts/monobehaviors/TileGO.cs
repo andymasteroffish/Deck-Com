@@ -11,6 +11,10 @@ public class TileGO : MonoBehaviour {
 	public Sprite[] coverSprites;
 	public Sprite goalSprite;
 
+	public Color coverColorGood, coverColExposed;
+	public Sprite[] coverIconSprites;
+	public SpriteRenderer[] coverIconSpriteRend;
+
 	private Tile tile;
 
 	private bool isActive;
@@ -22,6 +26,8 @@ public class TileGO : MonoBehaviour {
 		isActive = true;
 		gameObject.SetActive (true);
 		transform.position = tile.Pos.getV3 ();
+
+		turnOffCoverIcons ();
 		//refresh ();
 	}
 
@@ -93,12 +99,64 @@ public class TileGO : MonoBehaviour {
 			}
 		}
 
+		if (tile.IsHighlighted) {
+			turnOnCoverIcons ();
+		}
+
 		//GameManagerTacticsInterface.instance.gm.board.updateUnitVisibilityIconsFromTile (tile, GameManagerTacticsInterface.instance.gm.activePlayerUnit);
 	}
 	void OnMouseExit(){
 		tile.MouseIsOver = false;
 		if (GameManagerTacticsInterface.instance.curMouseOverTile == tile) {
 			GameManagerTacticsInterface.instance.curMouseOverTile = null;
+		}
+		turnOffCoverIcons ();
+	}
+
+	void turnOnCoverIcons(){
+
+		//do nothing if this tile is cover
+		if ((int)tile.CoverVal > 0) {
+			return;
+		}
+
+		//go through and check adjacent tiles
+		for (int i = 0; i < coverIconSpriteRend.Length; i++) {
+			if (tile.Adjacent [i] != null) {
+				if ((int)tile.Adjacent [i].CoverVal > 0) {
+					coverIconSpriteRend [i].enabled = true;
+					coverIconSpriteRend [i].sprite = coverIconSprites [(int)tile.Adjacent [i].CoverVal];
+				}
+			}
+		}
+
+		//if the lowest cover (from AI units) to this spot is none, than we are exposed
+		List<Unit> enemies = GameManagerTacticsInterface.instance.gm.getAIUnits();
+		int lowestCover = (int)Tile.Cover.Full;
+		foreach (Unit enemy in enemies) {
+
+			if (enemy.getIsVisibleToPlayer ()) {
+
+				List<Tile> visible = GameManagerTacticsInterface.instance.gm.board.getTilesInVisibleRange (enemy.CurTile, enemy.sightRange + 1);
+				if (visible.Contains (tile)) {
+
+					Tile.Cover thisCover = GameManagerTacticsInterface.instance.gm.board.getCover (enemy.CurTile, tile);
+					if ((int)thisCover < lowestCover) {
+						lowestCover = (int)thisCover;
+					}
+				}
+			}
+		}
+
+		Color colToUse = lowestCover == (int)Tile.Cover.None ? coverColExposed : coverColorGood;
+		for (int i = 0; i < coverIconSpriteRend.Length; i++) {
+			coverIconSpriteRend [i].color = colToUse;
+		}
+	}
+
+	void turnOffCoverIcons(){
+		for (int i = 0; i < coverIconSpriteRend.Length; i++) {
+			coverIconSpriteRend [i].enabled = false;
 		}
 	}
 
