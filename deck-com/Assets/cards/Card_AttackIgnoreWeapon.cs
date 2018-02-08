@@ -63,7 +63,15 @@ public class Card_AttackIgnoreWeapon : Card {
 
 	public override void selectCardCustom(){
 		WaitingForUnit = true;
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, true, baseHighlightColor);
+
+		bool includeAI = true;
+		if (Owner.isPlayerControlled == false) {
+			if (Owner.aiProfile.willAttackAllies == false) {
+				includeAI = false;
+			}
+		}
+
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, includeAI, baseHighlightColor);
 	}
 
 	public override void passInUnitCustom(Unit unit){

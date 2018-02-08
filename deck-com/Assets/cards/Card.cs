@@ -562,7 +562,14 @@ public class Card : IComparable<Card> {
 		}
 
 		bool includePlayer = true;//!owner.isPlayerControlled;
-		bool includeAI = true;//owner.isPlayerControlled;
+		bool includeAI = true;
+
+		if (Owner.isPlayerControlled == false) {
+			if (owner.aiProfile.willAttackAllies == false) {
+				includeAI = false;
+			}
+		}
+
 		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, includePlayer, includeAI, highlightColors[CardType.Attack]);
 	}
 

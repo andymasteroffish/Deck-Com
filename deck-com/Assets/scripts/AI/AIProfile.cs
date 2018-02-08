@@ -13,6 +13,8 @@ public class AIProfile {
 
 	public float hateForPassing;
 
+	public bool willAttackAllies;	//cards will need to specificly deal with this
+
 	//patrol stuff
 	public bool ignoreDistanceChecks;
 	public float maxPatrolDistFromLeader;
@@ -70,7 +72,7 @@ public class AIProfile {
 		deltaEnemyGoodCharmWeight = -10;
 		deltaEnemyBadCharmWeight = 5;
 
-		totalAllyDamageWeight = -6;
+		totalAllyDamageWeight = 100;//-6;	//PUT THIS BACK
 		totalAllyHealWeight = 1;
 		numAlliesKilledWeight = -100;
 		numAlliesAidedWeight = 2;
@@ -86,6 +88,8 @@ public class AIProfile {
 		maxPatrolDistFromLeaderWeight = 0;
 
 		hateForPassing = 1;
+
+		willAttackAllies = false;
 
 		distanceToEnemiesWeight = 1;
 
@@ -152,6 +156,7 @@ public class AIProfile {
 		acceptableDistanceRangeToClosestEnemy = 10000;
 
 		hateForPassing = 0;
+		willAttackAllies = false;
 
 		distanceToEnemiesWeight = 0;
 
@@ -164,7 +169,10 @@ public class AIProfile {
 		
 		foreach (XmlNode child in node.ChildNodes) {
 			string nodeName = child.Name;
-			float value = float.Parse (child.InnerText);
+			float value = 0;
+			bool valueB = false;
+			float.TryParse (child.InnerText, out value);
+			bool.TryParse (child.InnerText, out valueB);
 		
 
 			if (nodeName == "preferedDistToClosestEnemy") {
@@ -173,7 +181,9 @@ public class AIProfile {
 				acceptableDistanceRangeToClosestEnemy = value;
 			} else if (nodeName == "hateForPassing") {
 				hateForPassing = value;
-			} else if (nodeName == "distanceToEnemiesWeight") {
+			} else if (nodeName == "willAttackAllies") {
+				willAttackAllies = valueB;
+			}  else if (nodeName == "distanceToEnemiesWeight") {
 				distanceToEnemiesWeight = value;
 			} else if (nodeName == "totalEnemyDamageWeight") {
 				totalEnemyDamageWeight = value;
