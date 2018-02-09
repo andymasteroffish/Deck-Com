@@ -45,7 +45,7 @@ public class Card_Movement : Card {
 
 
 	public override int checkMoveVal(MoveInfo move, Board board){
-		return GenericMovementCardCheckMoveVal (move, board);
+		return GenericMovementCardCheckMoveVal (move, board, range);
 	}
 
 }

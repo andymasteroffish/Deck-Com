@@ -632,7 +632,7 @@ public class Card : IComparable<Card> {
 
 	//checking move values
 
-	public int GenericMovementCardCheckMoveVal(MoveInfo move, Board board){
+	public int GenericMovementCardCheckMoveVal(MoveInfo move, Board board, float maxRange){
 		Unit unit = board.units [move.unitID];
 		int moveVal = 0;
 
@@ -671,6 +671,12 @@ public class Card : IComparable<Card> {
 			moveVal++;
 		}
 
+		//if the move would put us at just about the maximum distance, that's cool too. Again, no cowards
+		float moveDist = owner.board.dm.getDist(unit.CurTile.Pos, move.targetTilePos);
+		if ( moveDist > maxRange-1 && newCloseDist < curCloseDist) {
+			moveVal++;
+		}
+
 		//is there cover (or would the move put us very close to a foe since many units like that)
 		Tile.Cover lowestCover = targetTile.getHighestAdjacentCover();
 		bool nextToFoe = newCloseDist < 2.5f;
@@ -679,15 +685,15 @@ public class Card : IComparable<Card> {
 		}
 
 		//testing
-		//		if (moveVal == 2) {
-		//			targetTile.setHighlighted (true, Color.green);
-		//		}
-		//		if (moveVal == 1) {
-		//			targetTile.setHighlighted (true, Color.yellow);
-		//		}
-		//		if (moveVal == 0) {
-		//			targetTile.setHighlighted (true, Color.red);
-		//		}
+		if (moveVal == 2) {
+			targetTile.setHighlighted (true, Color.green);
+		}
+		if (moveVal == 1) {
+			targetTile.setHighlighted (true, Color.yellow);
+		}
+		if (moveVal == 0) {
+			targetTile.setHighlighted (true, Color.red);
+		}
 
 		return moveVal;
 	}
