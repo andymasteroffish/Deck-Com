@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DistanceManager : MonoBehaviour {
+public class DistanceManager {
 
 	private float[,] dists;
 
