@@ -685,15 +685,15 @@ public class Card : IComparable<Card> {
 		}
 
 		//testing
-		if (moveVal == 2) {
-			targetTile.setHighlighted (true, Color.green);
-		}
-		if (moveVal == 1) {
-			targetTile.setHighlighted (true, Color.yellow);
-		}
-		if (moveVal == 0) {
-			targetTile.setHighlighted (true, Color.red);
-		}
+//		if (moveVal == 2) {
+//			targetTile.setHighlighted (true, Color.green);
+//		}
+//		if (moveVal == 1) {
+//			targetTile.setHighlighted (true, Color.yellow);
+//		}
+//		if (moveVal == 0) {
+//			targetTile.setHighlighted (true, Color.red);
+//		}
 
 		return moveVal;
 	}

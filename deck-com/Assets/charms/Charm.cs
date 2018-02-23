@@ -218,6 +218,12 @@ public class Charm  {
 	}
 	public virtual void startAITurnCustom(){}
 
+	public void unitWakesUp(){
+		unitWakesUpCustom ();
+	}
+	public virtual void unitWakesUpCustom(){
+	}
+
 	public void storeCard(Card card){
 		storedCard = card;
 	}

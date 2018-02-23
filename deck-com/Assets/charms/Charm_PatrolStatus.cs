@@ -43,6 +43,11 @@ public class Charm_PatrolStatus : Charm {
 		}
 	}
 
+	public override void unitWakesUpCustom(){
+		Debug.Log ("kill me dog");
+		Owner.removeCharm (this);
+	}
+
 	//if a unit wakes up during their turn, this should be removed at the end of their turn
 	public override void turnEndPreDiscardCustom(){
 		if (Owner.curBehavior != Unit.BehaviorMode.Patrolling) {

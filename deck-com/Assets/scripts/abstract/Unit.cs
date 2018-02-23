@@ -385,6 +385,9 @@ public class Unit {
 	public void wakeUp(){
 		Debug.Log ("wake up " + unitName);
 		curBehavior = BehaviorMode.Awake;
+		for (int i=charms.Count-1; i>=0; i--){
+			charms[i].unitWakesUp ();
+		}
 		foreach (Unit mate in podmates) {
 			if (mate.curBehavior == BehaviorMode.Patrolling) {
 				mate.wakeUp ();
