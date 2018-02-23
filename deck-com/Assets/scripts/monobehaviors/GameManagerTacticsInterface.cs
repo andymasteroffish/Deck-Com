@@ -62,6 +62,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public Tile curMouseOverTile;	//for roll over effects
 	private Tile prevMouseOverTile;
 
+	public GameObject passTurnMarkerPrefab;
+
 	private int thisIsATest = -1;
 
 	void Awake () {
@@ -329,18 +331,22 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 //				return;
 
 			} else {
-				gm.endAITurn ();
-				return;
+				Instantiate (passTurnMarkerPrefab, gm.activeAIUnit.CurTile.Pos.getV3(), Quaternion.identity);
+
 			}
 		}
 
 		//play the card
 		if (aiTurnPhase == 2) {
-			gm.advanceAITurn ();
-			aiTurnPhase = 0;
-			autoPlayAITurn = !gm.activeAIUnit.getIsVisibleToPlayer ();
-			//remove targets
-			GameObjectManager.instance.turnOffAllTargets();
+			if (gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].passMove == false) {
+				gm.advanceAITurn ();
+				aiTurnPhase = 0;
+				autoPlayAITurn = !gm.activeAIUnit.getIsVisibleToPlayer ();
+				//remove targets
+				GameObjectManager.instance.turnOffAllTargets ();
+			} else {
+				gm.endAITurn ();
+			}
 		}
 	}
 

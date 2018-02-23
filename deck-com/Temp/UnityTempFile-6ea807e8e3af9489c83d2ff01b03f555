@@ -151,6 +151,7 @@
 'Assets/scripts/monobehaviors/GenericButton.cs'
 'Assets/scripts/monobehaviors/LootGO.cs'
 'Assets/scripts/monobehaviors/NameDisplayFrame.cs'
+'Assets/scripts/monobehaviors/PassTurnIcon.cs'
 'Assets/scripts/monobehaviors/Pulser.cs'
 'Assets/scripts/monobehaviors/SpriteOutline.cs'
 'Assets/scripts/monobehaviors/TargetGO.cs'
