@@ -10,6 +10,10 @@ public class UnitGO : MonoBehaviour {
 	public SpriteRenderer spriteRend;
 	public SpriteRenderer visibilityIconSprite;
 
+	public SpriteRenderer coverIcon;
+	public Sprite[] coverIconSprites;
+	private int coverIconValLastFrame = -1;
+
 	private bool doingAnimation;
 
 	private bool isActive;
@@ -41,6 +45,8 @@ public class UnitGO : MonoBehaviour {
 		transform.position = owner.CurTile.Pos.getV3 ();
 		transform.localScale = Vector3.one;
 		spriteRend.gameObject.transform.localScale = Vector3.one;
+
+		coverIcon.enabled = false;
 
 		gameObject.name = "unit " + owner.unitName;
 
@@ -121,13 +127,24 @@ public class UnitGO : MonoBehaviour {
 		}
 
 		//focus if this is an AI unit that just revealed itself
-		if (owner.curBehavior == Unit.BehaviorMode.Awake && wasPatrollingLastFrame && owner.getIsVisibleToPlayer ()) {
+		if (owner.curBehavior == Unit.BehaviorMode.Awake && wasPatrollingLastFrame && owner.getIsVisibleToPlayer () && GameManagerTacticsInterface.instance.publicRelease) {
 			GameManagerTacticsInterface.instance.Cam.revealAIUnit (owner);
 			//GameManagerTacticsInterface.instance.Cam.setTargetAfterTime (GameManagerTacticsInterface.instance.gm.activePlayerUnit , 4.0f);
 		}
 		wasPatrollingLastFrame = owner.curBehavior == Unit.BehaviorMode.Patrolling;
 
 		boxCol.enabled = owner.mouseColliderIsActive;
+
+		if (owner.showCoverLevelIcon >= 0) {
+			coverIcon.enabled = true;
+			coverIcon.sprite = coverIconSprites [owner.showCoverLevelIcon];
+		}
+		//turn it off if the unit just switched the value to off
+		//this is so that we can still have the mouse over effect
+		else if (coverIconValLastFrame != -1) {
+			coverIcon.enabled = false;
+		}
+		coverIconValLastFrame = owner.showCoverLevelIcon;
 
 	}
 
@@ -149,6 +166,14 @@ public class UnitGO : MonoBehaviour {
 				}
 			}
 		}
+
+		//show the cover to active player unit
+		if (!owner.isPlayerControlled) {
+			coverIcon.enabled = true;
+			int coverLevel = (int)owner.GM.board.getCover (owner.GM.activePlayerUnit, owner);
+			coverIcon.sprite = coverIconSprites [coverLevel];
+		}
+
 	}
 	void OnMouseExit(){
 		owner.mouseIsOver = false;
@@ -158,6 +183,8 @@ public class UnitGO : MonoBehaviour {
 			owner.setActive (false);
 			owner.GM.activeAIUnit = null;
 		}
+
+		coverIcon.enabled = false;
 	}
 
 

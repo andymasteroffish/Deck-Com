@@ -43,6 +43,7 @@ public class Unit {
 	public bool mouseColliderIsActive;
 
 	public bool showVisibilityIcon;
+	public int showCoverLevelIcon = -1;
 
 	//decks and cards
 	public Deck deck;

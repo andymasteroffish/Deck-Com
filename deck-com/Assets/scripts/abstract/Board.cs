@@ -258,6 +258,7 @@ public class Board {
 	public void clearVisibilityIcons(){
 		foreach (Unit unit in units) {
 			unit.showVisibilityIcon = false;
+			unit.showCoverLevelIcon = -1;
 		}
 	}
 
@@ -397,10 +398,12 @@ public class Board {
 		//go through all units and see if they are on any of those tiles
 		foreach (Unit unit in units) {
 			unit.showVisibilityIcon = false;
+			unit.showCoverLevelIcon = -1;
 			if (unit != sourceUnit && unit.getIsVisibleToPlayer()) {
 				foreach (Tile tile in tiles) {
 					if (unit.CurTile == tile) {
 						unit.showVisibilityIcon = true;
+						unit.showCoverLevelIcon = (int)getCover (sourceTile, unit.CurTile);
 						break;
 					}
 				}
