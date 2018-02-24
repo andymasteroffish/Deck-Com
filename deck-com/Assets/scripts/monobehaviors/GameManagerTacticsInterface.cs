@@ -90,7 +90,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			debugTreatAllFoesAsVisible = false;
 		}
 
-		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
+		cam = GameObject.Find ("World Cam").GetComponent<CameraControl> ();
 		gm.targetInfoText = targetInfoText;
 		gm.setup (debugSpawnList);
 		doingAnimation = false;

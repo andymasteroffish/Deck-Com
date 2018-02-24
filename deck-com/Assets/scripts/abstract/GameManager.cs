@@ -100,7 +100,7 @@ public class GameManager {
 		gameIsOver = false;
 		playerWins = false;
 			
-		cam = GameObject.Find ("Main Camera").GetComponent<CameraControl> ();
+		cam = GameObject.Find ("World Cam").GetComponent<CameraControl> ();
 
 
 		board.resetUnitsAndLoot (curAreaNum);
