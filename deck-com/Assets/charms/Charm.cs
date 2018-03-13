@@ -41,6 +41,8 @@ public class Charm  {
 	public int actionMod;
 	public int damageAtTurnStart;
 
+	public float sightRangeMod;
+
 	public bool protectDuringAISim;	//KILL THIS
 
 	//if a charm came from a card (most likely equipment) that card should be stored in limbo until the charm is destroyed
@@ -119,6 +121,15 @@ public class Charm  {
 			damageAtTurnStart = int.Parse(node["damage_at_turn_start"].InnerText);
 		}
 
+		sightRangeMod = 0;
+		if (node["sight_range_mod"] != null){
+			sightRangeMod = float.Parse(node["sight_range_mod"].InnerText);
+			//this may change what the unit can see at the moment they get this charm
+			if (owner != null) {
+				Debug.Log ("love to do it " + owner.getSightRange ());
+				owner.setVisibleTiles ();
+			}
+		}
 
 		aiGoodCharmPoints = 0;
 		aiBadCharmPoints = 0;
@@ -182,6 +193,8 @@ public class Charm  {
 		turnsLeftBeforeSelfDestruct = parent.turnsLeftBeforeSelfDestruct;
 
 		expiresAfterAttack = parent.expiresAfterAttack;
+
+		sightRangeMod = parent.sightRangeMod;
 
 		//do the charm's own setup
 		setFromParentCustom (parent);
@@ -336,6 +349,11 @@ public class Charm  {
 		return getHandSizeModCustom();
 	}
 	public virtual int getHandSizeModCustom(){return handSizeMod;}
+
+	public float getSightRangeMod(){
+		return getSightRangeModCustom ();
+	}
+	public virtual float getSightRangeModCustom(){return sightRangeMod;}
 
 	//writing modifiers in the info box
 	public string getWeaponDamageModifierText(Card card, Unit target){

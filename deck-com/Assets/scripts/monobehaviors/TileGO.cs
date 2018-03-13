@@ -137,7 +137,7 @@ public class TileGO : MonoBehaviour {
 
 			if (enemy.getIsVisibleToPlayer ()) {
 
-				List<Tile> visible = GameManagerTacticsInterface.instance.gm.board.getTilesInVisibleRange (enemy.CurTile, enemy.sightRange + 1);
+				List<Tile> visible = GameManagerTacticsInterface.instance.gm.board.getTilesInVisibleRange (enemy.CurTile, enemy.getSightRange() + 1);
 				if (visible.Contains (tile)) {
 
 					Tile.Cover thisCover = GameManagerTacticsInterface.instance.gm.board.getCover (enemy.CurTile, tile);

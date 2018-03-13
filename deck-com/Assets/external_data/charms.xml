@@ -210,4 +210,13 @@
 <damage>4</damage>
 <range>6</range>
 </charm>
+<charm idName="glasses">
+<name>Glasses</name>
+<type>Equipment</type>
+<level>2</level>
+<script>Charm_WeaponBonus</script>
+<desc>Sight range increased by 2 tiles and weapon range increases by 1</desc>
+<sight_range_mod>2</sight_range_mod>
+<range_mod>1</range_mod>
+</charm>
 </charms>

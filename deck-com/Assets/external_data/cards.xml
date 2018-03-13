@@ -459,4 +459,11 @@
 <desc>Weapon range increased by 2</desc>
 <equipment_id>adjusted_sights</equipment_id>
 </card>
+<card idName="equipment_glasses">
+<name>Glasses</name>
+<level>2</level>
+<script>Card_Equipment</script>
+<desc>Sight range increased by 2 tiles and weapon range increases by 1</desc>
+<equipment_id>glasses</equipment_id>
+</card>
 </cards>

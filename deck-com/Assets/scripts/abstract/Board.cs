@@ -393,7 +393,7 @@ public class Board {
 
 	//showing which units will be visible from a given tile
 	public void updateUnitVisibilityIconsFromTile(Tile sourceTile, Unit sourceUnit){
-		List<Tile> tiles = getTilesInVisibleRange (sourceTile, sourceUnit.sightRange);
+		List<Tile> tiles = getTilesInVisibleRange (sourceTile, sourceUnit.getSightRange());
 
 		//go through all units and see if they are on any of those tiles
 		foreach (Unit unit in units) {
@@ -559,7 +559,7 @@ public class Board {
 	public void highlightUnitsVisibleToUnit(Unit source, bool includeAllies, bool includeFoes, Color col){
 		clearHighlights ();
 		if (source.visibleTiles == null) {
-			Debug.Log ("set visible tiles for " + source.unitName + " with vision " + source.sightRange);
+			Debug.Log ("set visible tiles for " + source.unitName + " with vision " + source.getSightRange());
 			source.setVisibleTiles ();
 		}
 		foreach (Unit unit in units) {
@@ -578,7 +578,7 @@ public class Board {
 		clearHighlights ();
 		turnOffUnitMouseColliders ();
 		if (source.visibleTiles == null) {
-			Debug.Log ("no vis tiles, so set visible tiles for " + source.unitName + " with vision " + source.sightRange);
+			Debug.Log ("no vis tiles, so set visible tiles for " + source.unitName + " with vision " + source.getSightRange());
 			source.setVisibleTiles ();
 		}
 		foreach (Tile tile in source.visibleTiles) {

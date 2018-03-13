@@ -265,11 +265,13 @@ public class Unit {
 
 	public Charm addCharm(string idName){
 		Charm thisCharm = CharmManager.instance.getCharmFromIdName (idName);
+		charms.Add (thisCharm);
 		thisCharm.setup (this, useGO, idName);
 		if (isActive) {
 			thisCharm.setActive (true);
 		}
-		charms.Add (thisCharm);
+
+
 		return thisCharm;
 	}
 
@@ -291,6 +293,16 @@ public class Unit {
 			charms [i].offsetID = i;
 			charms [i].hasChangedPos = true;
 		}
+	}
+
+	public float getSightRange(){
+		float val = sightRange;
+
+		for (int i = 0; i < charms.Count; i++) {
+			val += charms [i].getSightRangeMod ();
+		}
+
+		return val;
 	}
 
 	public void reset(){
@@ -375,7 +387,7 @@ public class Unit {
 			visibleTiles = new List<Tile> ();
 		}
 		visibleTiles.Clear ();
-		visibleTiles = board.getTilesInVisibleRange (curTile, sightRange);
+		visibleTiles = board.getTilesInVisibleRange (curTile, getSightRange());
 		if (isPlayerControlled && !isAISimUnit) {
 			//Debug.Log ("set vis for " + unitName + " with sight " + sightRange+ " on frame "+Time.frameCount);
 			board.updateVisible ();
