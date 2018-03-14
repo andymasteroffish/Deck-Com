@@ -1,7 +1,3 @@
-equipment_glasses
-disenchant
-poison_dart
-attack
 move4
 move4
 move5

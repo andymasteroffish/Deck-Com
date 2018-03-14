@@ -1,7 +1,7 @@
 <player>
   <info>
     <money>2</money>
-    <cur_level>3</cur_level>
+    <cur_level>-1</cur_level>
   </info>
   <unit idName = "test_player">
     <name>Test Player</name>

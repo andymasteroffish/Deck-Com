@@ -438,6 +438,14 @@
 <use_other_unit_weapon>true</use_other_unit_weapon>
 <other_unit_range>4</other_unit_range>
 </card>
+<card idName="build_a_wall">
+<name>Build-A-Wall</name>
+<level>1</level>
+<script>Card_ChangeCover</script>
+<card_type>Skill</card_type>
+<desc>Build full cover in any unoccupied tile you cna see</desc>
+<new_cover_level>2</new_cover_level>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

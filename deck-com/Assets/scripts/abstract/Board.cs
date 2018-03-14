@@ -575,6 +575,20 @@ public class Board {
 	}
 
 	public void highlightTilesVisibleToUnit(Unit source, Color col){
+		highlightTilesVisibleToUnit (source, col, -1, true);
+//		clearHighlights ();
+//		turnOffUnitMouseColliders ();
+//		if (source.visibleTiles == null) {
+//			Debug.Log ("no vis tiles, so set visible tiles for " + source.unitName + " with vision " + source.getSightRange());
+//			source.setVisibleTiles ();
+//		}
+//		foreach (Tile tile in source.visibleTiles) {
+//			tile.setHighlighted (true, col);
+//		}
+	}
+
+	//ignoreCover level is an int to allow it to be -1, meaning allow all cover levels
+	public void highlightTilesVisibleToUnit(Unit source, Color col, int ignoreCoverLevel, bool canContainUnit){
 		clearHighlights ();
 		turnOffUnitMouseColliders ();
 		if (source.visibleTiles == null) {
@@ -582,7 +596,21 @@ public class Board {
 			source.setVisibleTiles ();
 		}
 		foreach (Tile tile in source.visibleTiles) {
-			tile.setHighlighted (true, col);
+			bool skip = false;
+
+			if ((int)tile.CoverVal== ignoreCoverLevel) {
+				skip = true;
+			}
+
+			//this one is a bit more expensive so no point in doing it if the tile has been ruled out already
+			if (!skip && !canContainUnit && getUnitOnTile (tile) != null) {
+				skip = true;
+			}
+
+			//if it passed all of the checks, add it
+			if (!skip) {
+				tile.setHighlighted (true, col);
+			}
 		}
 	}
 

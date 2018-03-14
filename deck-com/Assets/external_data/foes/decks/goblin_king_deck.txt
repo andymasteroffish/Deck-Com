@@ -1,10 +1,3 @@
-attack
-attack
-attack
-attack
-attack
-attack
-attack
 move5
 move6
 attack

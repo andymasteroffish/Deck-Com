@@ -1,7 +1,4 @@
 equipment_helpers_ring
-disenchant
-poison_dart
-attack
 move3
 move4
 move4
