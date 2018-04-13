@@ -11,6 +11,7 @@ public class Unit {
 
 	//some basic info
 	public string unitName;
+	public string idName;
 
 	private GameManager gm;
 	public Board board;
@@ -87,6 +88,7 @@ public class Unit {
 	}
 	public Unit(XmlNode node){
 		unitName = node ["name"].InnerXml;
+		idName = node.Attributes ["idName"].Value;
 		isPlayerControlled = bool.Parse(node["player_controlled"].InnerXml);
 
 		deckListPath = Application.dataPath + "/external_data/";
@@ -199,6 +201,7 @@ public class Unit {
 		useGO = false;
 
 		unitName = parent.unitName;
+		idName = parent.idName;
 
 		isActingAIUnit = parent.isActingAIUnit;
 		aiProfile = parent.aiProfile;

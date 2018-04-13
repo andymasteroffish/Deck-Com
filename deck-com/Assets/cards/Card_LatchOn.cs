@@ -7,6 +7,7 @@ public class Card_LatchOn : Card {
 
 	public int range;
 
+
 	public Card_LatchOn(){}
 	public Card_LatchOn(XmlNode _node){
 		node = _node;
@@ -23,7 +24,12 @@ public class Card_LatchOn : Card {
 	}
 
 	//DON'T LET THIS BE PLAYED IF THE OWNER IS ALREADY LATCHED ON
-	public virtual bool checkIfCanBePlayedCustom(){
+	public override bool checkIfCanBePlayedCustom(){
+		foreach (Charm charm in Owner.Charms) {
+			if (charm.idName == "latched_on") {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -46,8 +52,11 @@ public class Card_LatchOn : Card {
 			for (int d = 0; d < 4; d++) {
 				Tile adj = unit.CurTile.Adjacent [d];
 				if (adj != null) {
-					if (adj.CoverVal == Tile.Cover.None && Owner.board.getUnitOnTile (adj) == null) {
-						validTiles.Add (adj);
+					if (adj.CoverVal == Tile.Cover.None){
+						Unit thisUnit = Owner.board.getUnitOnTile (adj);
+						if (thisUnit == null || thisUnit == Owner) {
+							validTiles.Add (adj);
+						}
 					}
 				}
 			}
@@ -92,7 +101,7 @@ public class Card_LatchOn : Card {
 	}
 
 	public override void resolveFromMove(MoveInfo move){
-		Unit targetUnit = Owner.board.getUnitOnTile (move.targetTilePos);
-		passInUnitCustom (targetUnit);
+		Tile targetTile = Owner.board.Grid [move.targetTilePos.x, move.targetTilePos.y];
+		passInTileCustom (targetTile);
 	}
 }

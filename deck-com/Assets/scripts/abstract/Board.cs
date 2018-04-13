@@ -1214,13 +1214,17 @@ public class Board {
 	//AI stuff
 	//*************
 	public List<MoveInfo> getAllMovesForUnit(int unitID){
+		//Debug.Log ("getting moves for unit");
 		Profiler.BeginSample ("get all AI moves for unit");
+
+		units [unitID].deck.updateCardsDisabled ();
 		List<MoveInfo> moves = new List<MoveInfo> ();
 		int actionsLeft = units [unitID].ActionsLeft;
 		List<string> cardIDsUsed = new List<string> ();
 		for (int i = 0; i < units [unitID].deck.Hand.Count; i++) {
 			string idName = units [unitID].deck.Hand [i].idName;
-			if (actionsLeft >= units [unitID].deck.Hand [i].getNumActionsNeededToPlay ()) {
+			Card thisCard = units [unitID].deck.Hand [i];
+			if (actionsLeft >= thisCard.getNumActionsNeededToPlay ()) {
 				//make sure we have not gotten moves for the same card alread
 				if (cardIDsUsed.Contains (idName) == false) {
 					List<MoveInfo> movesForThisCard = getAllMovesForCard (unitID, i);
@@ -1246,6 +1250,9 @@ public class Board {
 		List<MoveInfo> moves = new List<MoveInfo> ();
 		clearHighlights ();
 		Card thisCard = units [unitID].deck.Hand [cardID];
+		if (thisCard.IsDisabled) {
+			return moves;
+		}
 		thisCard.selectCard (true);
 
 		//go through all highlighted tiles

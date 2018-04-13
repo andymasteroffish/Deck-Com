@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Charm_LatchOn : Charm {
 
-	private Unit targetUnit;
+	public Unit targetUnit;
 	private bool needsTarget;
 
 	private TilePos otherPosWhenLatched;
@@ -29,6 +29,14 @@ public class Charm_LatchOn : Charm {
 		targetUnit = null;
 		needsTarget = true;
 		otherPosWhenLatched = new TilePos (-1, -1);
+
+		className = CharmClass.LatchOn;
+
+		//The leech doesn't recieve AI bad points for this. The leech likes it!
+		if (Owner.idName == "leech") {
+			aiGoodCharmPoints = 4;
+			aiBadCharmPoints = 0;
+		}
 	}
 
 	public void setTarget(Unit _targetUnit){

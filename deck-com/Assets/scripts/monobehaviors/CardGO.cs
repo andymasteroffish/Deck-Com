@@ -113,7 +113,8 @@ public class CardGO : MonoBehaviour {
 		nameField.text = card.name;
 		descField.text = card.description;
 
-		actionCostField.text = card.getNumActionsNeededToPlay ().ToString ();
+		//PUT THIS BAKC
+		//actionCostField.text = card.getNumActionsNeededToPlay ().ToString ();
 
 		//set the position (if we're not sliding it)
 		if (!doingAnimation && !inAiRevealSpot) {

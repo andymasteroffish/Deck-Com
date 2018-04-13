@@ -1,0 +1,10 @@
+<ai>
+<preferedDistToClosestEnemy>1</preferedDistToClosestEnemy>
+<acceptableDistanceRangeToClosestEnemy>0.5</acceptableDistanceRangeToClosestEnemy>
+<coverNoneToPart>0</coverNoneToPart>
+<coverNoneToFull>0</coverNoneToFull>
+<coverPartToNone>0</coverPartToNone>
+<coverPartToFull>0</coverPartToFull>
+<coverFullToNone>0</coverFullToNone>
+<coverFullToPart>0</coverFullToPart>
+</ai>

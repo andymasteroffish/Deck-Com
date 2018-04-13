@@ -1,0 +1,9 @@
+latch_on
+latch_on
+move5
+leech_bite
+move5
+move6
+leech_bite
+latch_on
+attack

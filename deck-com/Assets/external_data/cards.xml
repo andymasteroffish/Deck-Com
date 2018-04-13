@@ -454,6 +454,16 @@
 <desc>Unit latches on to target and neither can move until one is dead or moved</desc>
 <range>3</range>
 </card>
+<card idName="leech_bite">
+<name>Leech Bite</name>
+<level>-1</level>
+<script>Card_LeechBite</script>
+<card_type>Attack</card_type>
+<desc>Deal {damage} to latched unit. Heal {heal}</desc>
+<range>1</range>
+<damage>2</damage>
+<heal>1</heal>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

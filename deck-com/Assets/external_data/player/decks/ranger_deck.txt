@@ -1,4 +1,6 @@
 latch_on
+latch_on
+leech_bite
 attack
 teleport
 move4
