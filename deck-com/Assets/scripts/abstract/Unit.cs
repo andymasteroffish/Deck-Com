@@ -487,8 +487,6 @@ public class Unit {
 		deck.updateCardsDisabled();
 		checkExausted ();
 
-
-
 		//if this unit is player controlled and exausted, it's time to to tab on
 		if (isExausted && gm.activePlayerUnit == this) {
 			GameManagerTacticsInterface.instance.triggerTabAfterAnimations ();

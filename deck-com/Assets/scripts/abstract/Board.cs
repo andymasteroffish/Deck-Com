@@ -224,6 +224,7 @@ public class Board {
 			//if a unit passes, they lose all actions
 			units [move.unitID].ActionsLeft = 0;
 		}
+
 		Profiler.EndSample ();
 	}
 
@@ -415,7 +416,6 @@ public class Board {
 	//Hihglighting tiles and units
 	//**********************
 
-
 	public void highlightAllUnits(bool includePlayer, bool includeAI, Color col){
 		clearHighlights ();
 		foreach (Unit unit in units) {
@@ -428,18 +428,36 @@ public class Board {
 	//**********************
 	//VISIBLE RANGE IS AS THE CROW FLIES, BUT NOT OBSCURED
 	//**********************
-	public void highlightUnitsInVisibleRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
+	public List<Unit> highlightUnitsInVisibleRange(Tile source, float range, bool sourceIsPlayer, bool includeMyTeam, bool includeOtherTeam, Color col){
+		bool includePlayer = false;
+		bool includeAI = false;
+		if (sourceIsPlayer) {
+			includePlayer = includeMyTeam;
+			includeAI = includeOtherTeam;
+		}
+		else {
+			includePlayer = includeOtherTeam;
+			includeAI = includeMyTeam;
+		}
+		return highlightUnitsInVisibleRange (source, range, includePlayer, includeAI, col);
+	}
+		
+	public List<Unit> highlightUnitsInVisibleRange(Tile source, float range, bool includePlayer, bool includeAI, Color col){
 		clearHighlights ();
 		List<Tile> selectable = getTilesInVisibleRange (source, range);
+		List<Unit> highlightedUnits = new List<Unit> ();
 		foreach (Tile tile in selectable) {
 			foreach (Unit unit in units) {
 				if (unit.CurTile == tile && !unit.isDead) {
 					if ((unit.isPlayerControlled && includePlayer) || (!unit.isPlayerControlled && includeAI)) {
 						unit.setHighlighted (true, col);
+						highlightedUnits.Add (unit);
 					}
 				}
 			}
 		}
+
+		return highlightedUnits;
 	}
 
 	public List<Tile> highlightTilesInVisibleRange(Tile source, float range, Color col){

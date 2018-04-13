@@ -1,8 +1,10 @@
-move4
-move4
-move5
-move5
+latch_on
 attack
+teleport
+move4
+move4
+move5
+move5
 attack
 attack
 bandage

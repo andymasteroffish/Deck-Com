@@ -134,6 +134,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_DiscardAndDraw (node);
 		} else if (scriptName == "Card_ChangeCover") {
 			thisCard = new Card_ChangeCover (node);
+		} else if (scriptName == "Card_LatchOn") {
+			thisCard = new Card_LatchOn (node);
 		}
 		else{
 			Debug.Log ("SCRIPT NAME FOR CARD NOT FOUND: "+scriptName);
@@ -190,6 +192,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_SpawnUnit ();
 		} else if (scriptName == "Card_DiscardAndDraw") {
 			thisCard = new Card_DiscardAndDraw ();
+		} else if (scriptName == "Card_LatchOn") {
+			thisCard = new Card_LatchOn ();
 		}
 		else if (scriptName == "Card_ChangeCover") {
 			thisCard = new Card_ChangeCover ();

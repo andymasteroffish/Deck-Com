@@ -56,6 +56,8 @@ public class CharmManager : MonoBehaviour {
 			thisCharm = new Charm_OneTimeShield (node);
 		} else if (scriptName == "Charm_Web") {
 			thisCharm = new Charm_Web (node);
+		} else if (scriptName == "Charm_LatchOn") {
+			thisCharm = new Charm_LatchOn (node);
 		}
 		else{
 			Debug.Log ("SCRIPT NAME FOR CHARM NOT FOUND: "+scriptName);
@@ -92,6 +94,9 @@ public class CharmManager : MonoBehaviour {
 		}
 		else if (parent.className == Charm.CharmClass.Web) {
 			thisCharm = new Charm_Web (parent);
+		}
+		else if (parent.className == Charm.CharmClass.LatchOn) {
+			thisCharm = new Charm_LatchOn (parent);
 		}
 
 		else{

@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Charm  {
 
-	public enum CharmClass{ PatrolStatus, Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon, GlassCannon, Web };
+	public enum CharmClass{ PatrolStatus, Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon, GlassCannon, Web, LatchOn };
 	public enum CharmType {Weapon, Equipment, StatusEffect};
 
 	public string name, description;
@@ -283,6 +283,12 @@ public class Charm  {
 
 	}
 	public virtual void dealWeaponDamageCustom(Card card, Unit target, int damage){}
+
+	//this will fire for all charms after any action of any type. Right now I'm using it for things that need to be checked veyr reguraly
+	public void anyActionTaken(){
+		anyActionTakenCustom ();
+	}
+	public virtual void anyActionTakenCustom(){}
 
 	//AI
 	public virtual AIProfile checkReplaceAIProfile(){

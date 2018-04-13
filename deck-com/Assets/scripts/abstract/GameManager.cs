@@ -333,6 +333,27 @@ public class GameManager {
 		}
 	}
 
+	public void doPostCardPlayActions(){
+		//make sure the info box is off
+		targetInfoText.turnOff ();
+
+		//Debug.Log ("resolve");
+		//see if charms need to do anythng
+		for (int u = board.units.Count-1; u >= 0; u--) {
+			for (int c = board.units [u].Charms.Count - 1; c >= 0; c--) {
+				board.units [u].Charms [c].anyActionTaken ();
+			}
+		}
+
+		//does that change anything for the active unit
+		if (activePlayerUnit != null) {
+			activePlayerUnit.deck.updateCardsDisabled ();
+		}
+		if (activeAIUnit != null) {
+			activeAIUnit.deck.updateCardsDisabled ();
+		}
+	}
+
 	public bool checkGameOver(){
 		List<Unit> unitsAI = getAIUnits ();
 		if (unitsAI.Count == 0) {

@@ -219,4 +219,12 @@
 <sight_range_mod>2</sight_range_mod>
 <range_mod>1</range_mod>
 </charm>
+<charm idName="latched_on">
+<name>Latched</name>
+<type>Status Effect</type>
+<level>-1</level>
+<script>Charm_LatchOn</script>
+<desc>This unit cannot move until the latched unit is killed or moved</desc>
+<ai_bad_points>2</ai_bad_points>
+</charm>
 </charms>

@@ -446,6 +446,14 @@
 <desc>Build full cover in any unoccupied tile you cna see</desc>
 <new_cover_level>2</new_cover_level>
 </card>
+<card idName="latch_on">
+<name>Latch On</name>
+<level>-1</level>
+<script>Card_LatchOn</script>
+<card_type>Skill</card_type>
+<desc>Unit latches on to target and neither can move until one is dead or moved</desc>
+<range>3</range>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

@@ -389,7 +389,7 @@ public class Card : IComparable<Card> {
 
 
 	public void finish(bool removeFromPlay = false){
-		owner.GM.targetInfoText.turnOff ();
+		
 		revealAICardFlag = false;
 
 		//check if this card grants any bonus
@@ -420,6 +420,8 @@ public class Card : IComparable<Card> {
 		} else if (removeFromPlay) {
 			owner.GM.clearActiveCard ();
 		}
+
+		owner.GM.doPostCardPlayActions ();
 	}
 	public void discard(){
 		deck.removeCardFromHand (this);
