@@ -66,6 +66,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	private int thisIsATest = -1;
 
+	public Color[] areaColors;
+
 	void Awake () {
 		if (instance == null) {
 			instance = this;

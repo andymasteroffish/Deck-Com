@@ -43,7 +43,7 @@ public class TileGO : MonoBehaviour {
 		if (tile.IsHighlighted) {
 			spriteRend.color = tile.highlightCol;
 		} else {
-			spriteRend.color = Color.white;
+			spriteRend.color = GameManagerTacticsInterface.instance.areaColors [GameManagerTacticsInterface.instance.gm.CurAreaNum];
 		}
 
 		if (tile.spawnProperty == Tile.SpawnProperty.Exit) {

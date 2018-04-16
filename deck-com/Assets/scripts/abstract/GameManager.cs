@@ -567,4 +567,13 @@ public class GameManager {
 			return this.playerWins;
 		}
 	}
+
+	public int CurAreaNum {
+		get {
+			if (this.curAreaNum < 0) {
+				return 0;
+			}
+			return this.curAreaNum;
+		}
+	}
 }

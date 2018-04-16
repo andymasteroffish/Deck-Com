@@ -20,7 +20,7 @@ public class Card_RemoveCharm : Card {
 		for (int i = 0; i < node.ChildNodes.Count; i++) {
 			if (node.ChildNodes [i].Name == "remove_type") {
 				typesToRemove.Add( CharmTypeFromString(node.ChildNodes[i].InnerText));
-				Debug.Log (typesToRemove [(int)typesToRemove.Count - 1]);
+				//Debug.Log (typesToRemove [(int)typesToRemove.Count - 1]);
 			}
 		}
 
