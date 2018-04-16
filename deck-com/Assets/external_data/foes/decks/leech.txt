@@ -1,9 +1,10 @@
 latch_on
 latch_on
-move5
+latch_on
 leech_bite
+leech_bite
+move5
+move5
 move5
 move6
-leech_bite
-latch_on
 attack

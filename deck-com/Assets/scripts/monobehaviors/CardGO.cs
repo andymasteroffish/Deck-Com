@@ -139,7 +139,8 @@ public class CardGO : MonoBehaviour {
 		//set the color
 		Color col = new Color (1, 1, 1, 1);
 		if (card.IsDisabled) {
-			col = new Color (1, 1, 1, 0.4f);
+			float whiteVal = 0.2f;
+			col = new Color (whiteVal, whiteVal, whiteVal, 0.2f);
 		}
 		spriteRend.color = col;
 
