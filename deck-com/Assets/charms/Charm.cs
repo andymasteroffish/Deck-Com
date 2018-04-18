@@ -69,7 +69,7 @@ public class Charm  {
 		idName = _idName;
 
 		if (owner != null) {
-			offsetID = owner.Charms.Count;
+			offsetID = owner.Charms.Count-1;
 		}
 
 		isDead = false;

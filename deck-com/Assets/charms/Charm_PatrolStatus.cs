@@ -44,7 +44,6 @@ public class Charm_PatrolStatus : Charm {
 	}
 
 	public override void unitWakesUpCustom(){
-		Debug.Log ("kill me dog");
 		Owner.removeCharm (this);
 	}
 

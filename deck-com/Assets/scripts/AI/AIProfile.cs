@@ -112,7 +112,7 @@ public class AIProfile {
 	}
 
 	public void setPatrolValues(){
-		Debug.Log ("setting patrol vals");
+		//Debug.Log ("setting patrol vals");
 
 		maxPatrolDistFromLeader = 5;
 		maxPatrolDistFromLeaderWeight = -100;
