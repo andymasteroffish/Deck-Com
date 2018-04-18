@@ -290,6 +290,10 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		aiTurnPhase = 0;
 	}
 	private void advanceAITurn(){
+		if (gm.GameIsOver) {
+			return;
+		}
+
 		aiTurnPhase++;
 
 		//are we done?
@@ -364,7 +368,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		Debug.Log ("load pls");
 		doingAnimation = false;
-		UnityEngine.SceneManagement.SceneManager.LoadScene ("endGameReport");
+		if (gm.PlayerWins) {
+			UnityEngine.SceneManagement.SceneManager.LoadScene ("endGameReport");
+		} else {
+			UnityEngine.SceneManagement.SceneManager.LoadScene ("game_over");
+		}
 	}
 
 	public bool areAnimationsHappening(){

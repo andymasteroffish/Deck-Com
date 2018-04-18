@@ -1,12 +1,8 @@
-latch_on
-latch_on
-leech_bite
+move4
+move4
+move5
+move5
 attack
-teleport
-move4
-move4
-move5
-move5
 attack
 attack
 bandage

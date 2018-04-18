@@ -289,6 +289,7 @@ public class Board {
 		if (!deadUnit.isAISimUnit) {
 			updateVisible ();
 		}
+
 	}
 
 	//some loot specific functions

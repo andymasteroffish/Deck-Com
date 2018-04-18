@@ -1,0 +1,7 @@
+Deck-Com Areas
+
+0 - intro		F9F9F9FF
+1 - Woods		F1F9E5FF
+2 - Swamp		E8DDEEFF
+3 - Crags		FFE9E9FF
+4 - Stronghold		EDEDE9FF

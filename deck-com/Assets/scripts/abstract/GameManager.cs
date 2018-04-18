@@ -35,6 +35,7 @@ public class GameManager {
 	//pooling objects
 	ObjectPooler objectPool;
 
+
 	public GameManager(){
 		podPlacement = new PodPlacement ( UnitManager.instance.foeNodes );
 		objectPool = new ObjectPooler ();
@@ -112,6 +113,11 @@ public class GameManager {
 	//starting and ending turns
 
 	void startPlayerTurn(){
+		if (checkGameOver()) {
+			endGame ();
+			return;
+		}
+
 		roundNum++;
 
 		isPlayerTurn = true;
@@ -359,16 +365,23 @@ public class GameManager {
 		if (unitsAI.Count == 0) {
 			return true;
 		}
+
+		List<Unit> unitsPlayer = getPlayerUnits ();
+		if (unitsPlayer.Count == 0) {
+			return true;
+		}
+
 		return false;
 	}
 
 	public void endGame(){
+		Debug.Log ("END GAME");
 		gameIsOver = true;
 
 		List<Unit> unitsAI = getAIUnits ();
 		playerWins = unitsAI.Count == 0;
 
-		Debug.Log ("pls save everything thanks");
+
 		List <Unit> playerUnits = getPlayerUnits ();
 
 		List<Card_Loot> loot = new List<Card_Loot> ();
@@ -385,12 +398,16 @@ public class GameManager {
 			playerUnits [i].saveDeckFile ();
 		}
 
-		//increase the level and save
-		curLevelNum++;
-		Debug.Log ("graduate to level " + curLevelNum);
-		XmlNode infoNode = playerDoc.GetElementsByTagName("info")[0];
-		int curMoney = int.Parse(infoNode["cur_level"].InnerXml);
-		infoNode ["cur_level"].InnerXml = curLevelNum.ToString ();
+		//increase the level
+		if (playerWins) {
+			curLevelNum++;
+			Debug.Log ("graduate to level " + curLevelNum);
+			XmlNode infoNode = playerDoc.GetElementsByTagName ("info") [0];
+			int curMoney = int.Parse (infoNode ["cur_level"].InnerXml);
+			infoNode ["cur_level"].InnerXml = curLevelNum.ToString ();
+		}
+
+		//save
 		playerDoc.Save(playerDocPath);
 
 		//save whatever info needs to be passed to the next scene
@@ -510,7 +527,7 @@ public class GameManager {
 	public List<Unit> getAIUnits(){
 		List<Unit> aiUnits = new List<Unit> ();
 		foreach (Unit unit in board.units){
-			if (!unit.isPlayerControlled) {
+			if (!unit.isPlayerControlled && !unit.isDead) {
 				aiUnits.Add (unit);
 			}
 		}
@@ -519,7 +536,7 @@ public class GameManager {
 	public List<Unit> getPlayerUnits(){
 		List<Unit> aiUnits = new List<Unit> ();
 		foreach (Unit unit in board.units){
-			if (unit.isPlayerControlled) {
+			if (unit.isPlayerControlled && !unit.isDead) {
 				aiUnits.Add (unit);
 			}
 		}
@@ -562,18 +579,18 @@ public class GameManager {
 		}
 	}
 
-	public bool PlayerWinds{
-		get{
-			return this.playerWins;
-		}
-	}
-
 	public int CurAreaNum {
 		get {
 			if (this.curAreaNum < 0) {
 				return 0;
 			}
 			return this.curAreaNum;
+		}
+	}
+
+	public bool PlayerWins {
+		get {
+			return this.playerWins;
 		}
 	}
 }

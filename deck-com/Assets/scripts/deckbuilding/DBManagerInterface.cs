@@ -28,10 +28,12 @@ public class DBManagerInterface : MonoBehaviour {
 
 	public GameObject unusedCardSelectionBG;
 
-	public TextMesh moneyText, levelText;
+	public TextMesh moneyText;
 
 	public int maxUnusedCardsShownAtOnce;
 	public Text unusedCardWindowPageText;
+
+	public LevelProgressionMap levelMap;
 
 	void Awake(){
 		if (instance == null) {
@@ -45,7 +47,7 @@ public class DBManagerInterface : MonoBehaviour {
 	void Start () {
 		manager = new DBManager ();
 
-		levelText.text = "Next Level: " + manager.curLevel;
+		levelMap.setup (manager.curLevel);
 	}
 	
 	// Update is called once per frame
@@ -88,7 +90,7 @@ public class DBManagerInterface : MonoBehaviour {
 		//update the text
 		moneyText.text = "$"+manager.money;
 
-		levelText.gameObject.SetActive (manager.activeDeck == null);
+		levelMap.gameObject.SetActive (manager.activeDeck == null);
 
 		//some keyboard stuff
 		if (Input.GetKeyDown (KeyCode.Escape)) {
