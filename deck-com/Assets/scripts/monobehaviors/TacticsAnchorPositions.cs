@@ -11,6 +11,8 @@ public class TacticsAnchorPositions : MonoBehaviour {
 	public Vector2 charmOffset;
 	public Vector2 aiCardRevealOffset;
 
+	public Vector2 actionMarkerOffset, actionMarkerAIOffset;
+
 	public Vector2 playerButtonsOffset;
 
 	public Transform card_player_startPos;
@@ -66,6 +68,9 @@ public class TacticsAnchorPositions : MonoBehaviour {
 
 		charm_ai_startPos.position = new Vector3 (camRight + 4.0f, camTop - charmOffset.y);	//off screen
 		charm_ai_endPos.position = new Vector3 (camRight + charmOffset.x, camTop - charmOffset.y);
+
+		actionMarker_player_startPos.position = new Vector3 (camLeft + actionMarkerOffset.x, camBottom + actionMarkerOffset.y, 0);
+		actionMarker_ai_startPos.position = new Vector3 (camLeft + actionMarkerAIOffset.x, camTop + actionMarkerAIOffset.y, 0);
 
 
 		playerButtons.position = new Vector3 (camLeft + playerButtonsOffset.x, camTop + playerButtonsOffset.y);
