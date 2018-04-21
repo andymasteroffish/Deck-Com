@@ -30,7 +30,6 @@ public class CardGO : MonoBehaviour {
 
 	//sliding in and out
 	//private Transform enterTrans, restTrans, endTrans = null;
-	bool needsAnimationPositions = true;
 	private Vector3 startPos, restPos, endPos;	//rest pos is the position of the far left card when it is not being raised up
 	private Vector3 startPosPlayer, restPosPlayer, endPosPlayer;
 	private Vector3 startPosAI, restPosAI, endPosAI;
@@ -52,6 +51,7 @@ public class CardGO : MonoBehaviour {
 		}
 
 		gameObject.SetActive (true);
+		transform.localScale = new Vector3 (1, 1, 1);
 
 		playerControlled = card.Owner.isPlayerControlled;
 
@@ -59,17 +59,16 @@ public class CardGO : MonoBehaviour {
 
 		inAiRevealSpot = false;
 
-		if (needsAnimationPositions) {
-			startPosPlayer = GameObject.Find ("card_player_startPos").transform.position;
-			restPosPlayer = GameObject.Find ("card_player_restPos").transform.position;
-			endPosPlayer = GameObject.Find ("card_player_endPos").transform.position;
+		startPosPlayer = GameObject.Find ("card_player_startPos").transform.position;
+		restPosPlayer = GameObject.Find ("card_player_restPos").transform.position;
+		endPosPlayer = GameObject.Find ("card_player_endPos").transform.position;
 
-			startPosAI = GameObject.Find ("card_ai_startPos").transform.position;
-			restPosAI = GameObject.Find ("card_ai_restPos").transform.position;
-			endPosAI = GameObject.Find ("card_ai_endPos").transform.position;
+		startPosAI = GameObject.Find ("card_ai_startPos").transform.position;
+		restPosAI = GameObject.Find ("card_ai_restPos").transform.position;
+		endPosAI = GameObject.Find ("card_ai_endPos").transform.position;
 
-			aiRevealPos = GameObject.Find ("card_ai_revealPos").transform.position;
-		}
+		aiRevealPos = GameObject.Find ("card_ai_revealPos").transform.position;
+
 
 		startPos = playerControlled ? startPosPlayer : startPosAI;
 		restPos = playerControlled ? restPosPlayer : restPosAI;
@@ -97,7 +96,7 @@ public class CardGO : MonoBehaviour {
 			cardBack.SetActive (true);
 		}
 
-		StartCoroutine (doMoveAnimation (getPos(), moveTime, false, false));
+		StartCoroutine (doMoveAnimation (getPos(), moveTime, 1, false, false));
 	}
 
 	public void deactivate(){
@@ -154,23 +153,23 @@ public class CardGO : MonoBehaviour {
 		//putting a card in the discard
 		if (!doingAnimation && !card.Owner.deck.Hand.Contains (card)) {
 			StopAllCoroutines();
-			StartCoroutine(doMoveAnimation(endPos, moveTime, false, true));
+			StartCoroutine(doMoveAnimation(endPos, moveTime, 0.4f, false, true));
 		}
 
 		//moving to a different player
 		if (!doingAnimation && !card.Owner.IsActive){
-			StartCoroutine(doMoveAnimation(startPos, moveTime, false, true));
+			StartCoroutine(doMoveAnimation(startPos, moveTime, 1,  false, true));
 		}
 
 		//player death
 		if (!doingAnimation && card.Owner.isDead){
-			StartCoroutine(doMoveAnimation(startPos, moveTime, false, true));
+			StartCoroutine(doMoveAnimation(startPos, moveTime, 1,  false, true));
 		}
 
 		//showing an AI card
 		if (!doingAnimation && card.revealAICardFlag && !inAiRevealSpot) {
 			inAiRevealSpot = true;
-			StartCoroutine (doMoveAnimation (aiRevealPos, moveTime, true, false));
+			StartCoroutine (doMoveAnimation (aiRevealPos, moveTime, 1, true, false));
 		}
 
 		if (!card.Owner.getIsVisibleToPlayer ()) {
@@ -205,10 +204,11 @@ public class CardGO : MonoBehaviour {
 		yield return null;
 	}
 
-	IEnumerator doMoveAnimation(Vector3 target, float time, bool flipCard, bool deactivateWhenDone){
+	IEnumerator doMoveAnimation(Vector3 target, float time, float targetScale, bool flipCard, bool deactivateWhenDone){
 		doingAnimation = true;
 
 		Vector3 startPos = transform.position;
+		float startScale = transform.localScale.x;
 
 		time *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
 
@@ -233,7 +233,9 @@ public class CardGO : MonoBehaviour {
 					cardBack.SetActive (false);
 				}
 			}
-
+		
+			float newScale = Mathf.Lerp (startScale, targetScale, prc);
+			transform.localScale = new Vector3 (newScale, newScale, newScale);
 
 			yield return null;
 		}

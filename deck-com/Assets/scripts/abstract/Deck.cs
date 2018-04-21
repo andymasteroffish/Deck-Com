@@ -310,4 +310,16 @@ public class Deck {
 			return this.hand;
 		}
 	}
+
+	public int getNumCardsInDrawPile(){
+		return this.drawPile.Count;
+	}
+
+	public Card getTopCardOfDiscard(){
+		if (discardPile.Count == 0) {
+			return null;
+		}
+
+		return discardPile [discardPile.Count - 1];
+	}
 }

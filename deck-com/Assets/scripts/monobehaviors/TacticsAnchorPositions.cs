@@ -7,6 +7,7 @@ public class TacticsAnchorPositions : MonoBehaviour {
 	public Camera hudCam;
 
 	public Vector2 cardOffsetPlayer, cardOffsetAI;
+	public Vector2 cardEndOffsetPlayer;
 
 	public Vector2 charmOffset;
 	public Vector2 aiCardRevealOffset;
@@ -51,12 +52,13 @@ public class TacticsAnchorPositions : MonoBehaviour {
 		float camBottom = -camHeight;
 		float camTop = camHeight;
 
-		Debug.Log ("cam left " + camLeft);
-		Debug.Log ("cam top " + camTop);
+		//Debug.Log ("cam left " + camLeft);
+		//Debug.Log ("cam top " + camTop);
 
 
 		card_player_restPos.position = new Vector3 (camLeft+cardOffsetPlayer.x, camBottom+cardOffsetPlayer.y, 0);
 		card_player_startPos.position = new Vector3 (camLeft - 2.0f,	camBottom - cardOffsetPlayer.y, 0);	//off screen
+		card_player_endPos.position = new Vector3(camLeft+cardEndOffsetPlayer.x, camBottom+cardEndOffsetPlayer.y, 0);
 
 		card_ai_restPos.position = new Vector3 (camLeft + cardOffsetAI.x, camTop - cardOffsetAI.y, 0);
 		card_ai_startPos.position = new Vector3 (camLeft -2.0f, camTop - cardOffsetAI.y, 0);				//off screen

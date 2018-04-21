@@ -7,7 +7,6 @@ public class NameDisplayFrame : MonoBehaviour {
 
 	public bool isForPlayer;
 
-	private bool doingAnimation;
 	public Transform startPos, endPos;
 
 	public float xeno;
