@@ -1,11 +1,10 @@
 equipment_helpers_ring
-move5
-attack
-attack
-blade_dash
-draw_a_card
-gain_an_action
-heal
 move3
 move4
 move4
+move5
+attack
+attack
+heal
+gain_an_action
+draw_a_card

@@ -118,7 +118,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		thisIsATest--;
 		if (thisIsATest == 0 && Profiler.enabled) {
+			#if UNITY_EDITOR
 			UnityEditor.EditorApplication.isPaused = true;
+			#endif
 		}
 
 		//tabbing

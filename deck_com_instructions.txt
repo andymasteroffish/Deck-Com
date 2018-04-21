@@ -2,12 +2,20 @@ Deck-Com Intro script
 
 **Goal**
 
-Defeat all enemies on each floor.
+Defeat all enemies in each level.
+
+
+**Controls**
+
+WASD to move camera
+Scroll to zoom
+
+The game mostly uses the mouse.
 
 
 **Cards**
 
-Each unit has their own deck of cards. At the start of each turn, they discard their existing hand and draw 4 new cards. When their deck runs out, their discard pile is shuffled and becomes a new deck.
+Each unit has their own deck of cards. At the end of each turn, they discard their existing hand and draw 4 new cards. When their deck runs out, their discard pile is shuffled and becomes a new deck.
 
 By default, all cards cost 1 action to play and units have 2 actions per turn. Action cost is shown in the bottom left corner of the card (This number includes any effects that would modify cost).
 
@@ -30,9 +38,15 @@ Other equipment cards can be played. These cards stay on the unit and do not go 
 
 Loot can be collected (as a free action) and will turn into a booster pack at the end of the level.
 
-In between levels, new cards can be added to the unit decks for $2 per card.
+In between levels, new cards can be added to the unit decks for $2 per card level.
 
 
+**Notes on this build**
 
-WASD to move camera
-Scroll to zoom
+You can quit the game on the deck building scene and it will save your progress
+
+Right now all of your units need to be killed to reach a game over. If any survive, the dead units will come back at the end of the round.
+
+There is no store yet, but that will be a secondary use for money.
+
+
