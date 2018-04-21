@@ -147,7 +147,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			}
 
 			//pressing escape to cancel a move
-			if (Input.GetKeyDown (KeyCode.Escape)) {
+			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetKeyDown(KeyCode.Q)) {
 				cancel ();
 			}
 

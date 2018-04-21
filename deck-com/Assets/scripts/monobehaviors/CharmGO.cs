@@ -24,7 +24,7 @@ public class CharmGO : MonoBehaviour {
 	private Vector3 startAnchor, endAnchor;
 	private Vector3 startPosPlayer, endPosPlayer;
 	private Vector3 startPosAI, endPosAI;
-	private bool needsPositions = true;
+	//private bool needsPositions = true;
 	private bool doingAnimation;
 
 	public void activate(Charm _charm){
@@ -42,13 +42,13 @@ public class CharmGO : MonoBehaviour {
 
 		gameObject.SetActive (true);
 
-		if (needsPositions == true) {
-			needsPositions = false;
+		//if (needsPositions == true) {
+			//needsPositions = false;
 			startPosPlayer = GameObject.Find ("charm_player_startPos").transform.position;
 			endPosPlayer = GameObject.Find ("charm_player_endPos").transform.position;
 			startPosAI = GameObject.Find ("charm_ai_startPos").transform.position;
 			endPosAI = GameObject.Find ("charm_ai_endPos").transform.position;
-		}
+		//}
 
 		startAnchor = charm.Owner.isPlayerControlled ? startPosPlayer : startPosAI;
 		endAnchor = charm.Owner.isPlayerControlled ? endPosPlayer : endPosAI;

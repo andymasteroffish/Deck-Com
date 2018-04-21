@@ -1,46 +1,32 @@
 <player>
   <info>
-    <money>2</money>
-    <cur_level>-1</cur_level>
+    <money>7</money>
+    <cur_level>3</cur_level>
   </info>
-  <unit idName = "test_player">
-    <name>Test Player</name>
-    <sprite>unit_test</sprite>
-    <deck>test_deck</deck>
-    <hand_size>5</hand_size>
-    <player_controlled>true</player_controlled>
-    <currently_active>false</currently_active>
-    <charms>
-      <charm>long_bow</charm>
-    </charms>
-  </unit>
-  <unit idName = "wizard">
+  <unit idName="wizard">
     <name>Gorb The Charmer</name>
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
-    <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
       <charm>wizard_staff</charm>
     </charms>
   </unit>
-  <unit idName = "ranger">
+  <unit idName="ranger">
     <name>Quick Alexi</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
-    <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
       <charm>long_bow</charm>
     </charms>
   </unit>
-  <unit idName = "tank">
+  <unit idName="tank">
     <name>Big Bobo</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
-    <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>

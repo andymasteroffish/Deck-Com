@@ -53,7 +53,7 @@ public class PodPlacement {
 	//these are wack numbers for now
 	public void placeFoes(GameManager _gm, Board _board, int levelNum, int curArea){
 		int totalCR = levelNum * 8;
-		Debug.Log ("total CL " + totalCR);
+		//Debug.Log ("total CL " + totalCR);
 		int numPods = 3 + levelNum/3;
 		if (numPods > 5) {
 			numPods = 5;
@@ -63,7 +63,7 @@ public class PodPlacement {
 	}
 
 	public void placePods(GameManager _gm, Board _board, int numPods, int podCR, int curArea){
-		Debug.Log ("Placing " + numPods + " with a CL of " + podCR);
+		//Debug.Log ("Placing " + numPods + " with a CL of " + podCR);
 		gm = _gm;
 		board = _board;
 
@@ -84,7 +84,7 @@ public class PodPlacement {
 			targetCL = 2;
 		}
 		//Debug.Log (rangeMod);
-		Debug.Log ("making a pod with CL " + targetCL);
+		//Debug.Log ("making a pod with CL " + targetCL);
 
 		List<FoeInfo> potentialFoes = new List<FoeInfo> ();
 		foreach (FoeInfo info in foeInfo) {
