@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Loot {
-
-	//public enum Type{money, booster};
-
+	
 	private bool createGO = true;
 
 	//public Type type;
@@ -14,7 +12,6 @@ public class Loot {
 	//loot lives on a unit until that unit dies
 	private Unit curUnit;
 	private Tile curTile;
-	//private List<Tile> adjacentTiles = new List<Tile>();
 
 	public bool isDone;
 
@@ -33,8 +30,6 @@ public class Loot {
 
 	void drop(){
 		curTile = curUnit.CurTile;
-		//adjacentTiles = curUnit.GM.board.getAdjacentTiles (curTile, true, Tile.Cover.Full);
-		//adjacentTiles.Add (curTile);
 
 		if (createGO) {
 			GameObjectManager.instance.getLootGO ().activate (this);

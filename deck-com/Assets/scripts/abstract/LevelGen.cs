@@ -191,6 +191,7 @@ public class LevelGen {
 				if (thisChar == 'P')	spawnProperty = Tile.SpawnProperty.Player;
 				if (thisChar == 'F')	spawnProperty = Tile.SpawnProperty.Foe;
 				if (thisChar == 'G')	spawnProperty = Tile.SpawnProperty.Exit;
+				if (thisChar == '$')	spawnProperty = Tile.SpawnProperty.StoreKey;
 
 				//make the tile
 				grid [x, y] = new Tile(cover, spawnProperty, GameManagerTacticsInterface.instance.gm);

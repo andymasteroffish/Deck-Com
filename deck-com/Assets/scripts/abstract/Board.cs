@@ -20,6 +20,7 @@ public class Board {
 
 	public List<Unit> units;
 	public List<Loot> loot;
+	public List<PassiveObject> passiveObjects;
 
 	public int partialCoverDamageReduction = 1;
 	public float fullCoverDamagePrc = 0.5f;
@@ -43,6 +44,7 @@ public class Board {
 		levelGen = new LevelGen ();
 		units = new List<Unit> ();
 		loot = new List<Loot> ();
+		passiveObjects = new List<PassiveObject> ();
 	}
 
 	public void reset(int curLevelNum, int curAreaNum){
@@ -54,6 +56,7 @@ public class Board {
 		}
 
 		loot.Clear ();
+		passiveObjects.Clear ();
 
 		cols = grid.GetLength (0);
 		rows = grid.GetLength (1);
@@ -99,6 +102,15 @@ public class Board {
 
 		//loot is not represented and can stay empty
 		loot = new List<Loot>();
+
+		//passive objects might matter
+		passiveObjects = new List<PassiveObject>();
+		for (int i = 0; i < parent.passiveObjects.Count; i++) {
+			if (parent.passiveObjects [i].type == PassiveObject.PassiveObjectType.StoreKey) {
+				StoreKey newObj = new StoreKey ((StoreKey)parent.passiveObjects [i]);
+				passiveObjects.Add (newObj);
+			}
+		}
 
 		Profiler.EndSample ();
 	}
@@ -225,6 +237,8 @@ public class Board {
 			units [move.unitID].ActionsLeft = 0;
 		}
 
+
+
 		Profiler.EndSample ();
 	}
 
@@ -242,6 +256,29 @@ public class Board {
 		return newBoard;
 	}
 
+	//checks after any card has been played
+	public void doPostCardPlayActions(){
+		//Debug.Log ("resolve");
+		//see if charms need to do anythng
+		for (int u = units.Count-1; u >= 0; u--) {
+			for (int c = units [u].Charms.Count - 1; c >= 0; c--) {
+				units [u].Charms [c].anyActionTaken ();
+			}
+		}
+
+		//does this affect passive objects?
+		for (int i = passiveObjects.Count-1; i>=0; i--) {
+			passiveObjects [i].checkBoard (this);
+			if (passiveObjects [i].isDone) {
+				passiveObjects.RemoveAt (i);
+			}
+		}
+
+		if (!isAISim) {
+			GameManagerTacticsInterface.instance.gm.doUserSidePostCardPlayActions ();
+		}
+	}
+
 	//setting things to be selectables
 	public void clearHighlights(){
 		for (int x = 0; x < cols; x++) {
@@ -255,6 +292,7 @@ public class Board {
 		}
 		clearVisibilityIcons ();
 	}
+
 
 	public void clearVisibilityIcons(){
 		foreach (Unit unit in units) {

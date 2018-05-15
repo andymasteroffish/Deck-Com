@@ -6,7 +6,7 @@ public class Tile {
 
 	public enum Direction{Up, Right, Down, Left, None};
 	public enum Cover{None, Part, Full};
-	public enum SpawnProperty{None, Player, Foe, Exit};
+	public enum SpawnProperty{None, Player, Foe, Exit, StoreKey};
 
 
 	private GameManager gm;

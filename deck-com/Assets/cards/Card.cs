@@ -421,7 +421,7 @@ public class Card : IComparable<Card> {
 			owner.GM.clearActiveCard ();
 		}
 
-		owner.GM.doPostCardPlayActions ();
+		owner.board.doPostCardPlayActions ();
 	}
 	public void discard(){
 		deck.removeCardFromHand (this);

@@ -63,6 +63,10 @@ public class GameManager {
 		board.mainBoardSetup ();
 		board.reset (curLevelNum, curAreaNum);
 
+		//throw in the store key
+		Tile storeKeyTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.StoreKey);
+		board.passiveObjects.Add(new StoreKey(storeKeyTile.Pos));
+
 		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
 			List<Unit> activePlayerUnits = UnitManager.instance.getActivePlayerUnits ();
 			for (int i = 0; i < activePlayerUnits.Count; i++) {
@@ -134,6 +138,11 @@ public class GameManager {
 		}
 
 		clearActiveCard ();
+
+		//any passive object effects?
+		for (int i = board.passiveObjects.Count-1; i>=0; i--) {
+			board.passiveObjects [i].playerTurnStart();
+		}
 	}
 
 	void startAITurn(){
@@ -157,6 +166,11 @@ public class GameManager {
 		}
 
 		clearActiveCard ();
+
+		//any passive object effects?
+		for (int i = board.passiveObjects.Count-1; i>=0; i--) {
+			board.passiveObjects [i].AITurnStart();
+		}
 	}
 
 	public void markAIStart(){
@@ -339,17 +353,9 @@ public class GameManager {
 		}
 	}
 
-	public void doPostCardPlayActions(){
+	public void doUserSidePostCardPlayActions(){
 		//make sure the info box is off
 		targetInfoText.turnOff ();
-
-		//Debug.Log ("resolve");
-		//see if charms need to do anythng
-		for (int u = board.units.Count-1; u >= 0; u--) {
-			for (int c = board.units [u].Charms.Count - 1; c >= 0; c--) {
-				board.units [u].Charms [c].anyActionTaken ();
-			}
-		}
 
 		//does that change anything for the active unit
 		if (activePlayerUnit != null) {

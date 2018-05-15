@@ -12,6 +12,7 @@ public class GameObjectManager : MonoBehaviour {
 	public GameObject actionMarkerPrefab;
 	public GameObject unitPrefab;
 	public GameObject lootPrefab;
+	public GameObject passiveObjectPrefab;
 	public GameObject targetPrefab;
 
 	private List<TileGO> tiles = new List<TileGO>();
@@ -20,6 +21,7 @@ public class GameObjectManager : MonoBehaviour {
 	private List<ActionMarkerGO> actionMarkers = new List<ActionMarkerGO>();
 	private List<UnitGO> units = new List<UnitGO> ();
 	private List<LootGO> loot = new List<LootGO> ();
+	private List<PassiveObjectGO> passiveObjects = new List<PassiveObjectGO> ();
 	private List<TargetGO> targets = new List<TargetGO>();
 
 	public GameObject tileHolder;
@@ -206,6 +208,21 @@ public class GameObjectManager : MonoBehaviour {
 		GameObject obj = Instantiate(lootPrefab) as GameObject;
 		LootGO GO = obj.GetComponent<LootGO> ();
 		loot.Add (GO);
+		return GO;
+	}
+
+	public PassiveObjectGO getPassiveObjectGO(){
+		//check if we have any inactive in the list
+		for (int i = 0; i < passiveObjects.Count; i++) {
+			if (passiveObjects [i].IsActive == false) {
+				return passiveObjects [i];
+			}
+		}
+
+		//otherwise make one
+		GameObject obj = Instantiate(passiveObjectPrefab) as GameObject;
+		PassiveObjectGO GO = obj.GetComponent<PassiveObjectGO> ();
+		passiveObjects.Add (GO);
 		return GO;
 	}
 
