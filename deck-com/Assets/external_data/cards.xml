@@ -317,7 +317,7 @@
 <level>1</level>
 <script>Card_RemoveCharm</script>
 <card_type>Spell</card_type>
-<desc>Destroy all non-weapon equipment or status effect on target</desc>
+<desc>Destroy all non-weapon equipment and status effects on target</desc>
 <remove_type>Equipment</remove_type>
 <remove_type>StatusEffect</remove_type>
 </card>

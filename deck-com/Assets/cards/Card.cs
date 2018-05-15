@@ -576,7 +576,7 @@ public class Card : IComparable<Card> {
 
 	public void setPotentialTargetInfoTextForWeapon(Unit unit, int damageMod){
 		//start with the weapon
-		string text = "Weapon +"+Owner.Weapon.baseDamage+"\n";
+		string text = "Weapon +"+Owner.Weapon.getBaseDamage()+"\n";
 
 		//then the damage mod for this card
 		string cardSymbol = damageMod >= 0 ? "+" : "";
@@ -612,7 +612,7 @@ public class Card : IComparable<Card> {
 	}
 
 	public int getWeaponDamageToUnit(Unit unit, int damageMod){
-		int damageVal = Owner.Weapon.baseDamage + damageMod;
+		int damageVal = Owner.Weapon.getBaseDamage () + damageMod;
 
 		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
 			damageVal += owner.Charms [i].getWeaponDamageMod (this, unit);

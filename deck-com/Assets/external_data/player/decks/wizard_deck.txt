@@ -1,3 +1,7 @@
+heal
+heal
+heal
+attack
 equipment_helpers_ring
 move3
 move4

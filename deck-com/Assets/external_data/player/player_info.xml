@@ -22,7 +22,7 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>wizard_staff</charm>
+      <charm>convoking_staff</charm>
     </charms>
   </unit>
   <unit idName = "ranger">

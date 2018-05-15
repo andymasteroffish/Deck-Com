@@ -5,7 +5,7 @@ using System.Xml;
 
 public class Charm  {
 
-	public enum CharmClass{ PatrolStatus, Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon, GlassCannon, Web, LatchOn };
+	public enum CharmClass{ PatrolStatus, Charm, ExtraCard, HealRing, OneTimeShield, WeaponBonus, BasicWeapon, GlassCannon, SpellCountWeapon, Web, LatchOn };
 	public enum CharmType {Weapon, Equipment, StatusEffect};
 
 	public string name, description;
@@ -307,6 +307,10 @@ public class Charm  {
 		return getCardActionCostModCustom (card);
 	}
 	public virtual int getCardActionCostModCustom(Card card){return 0;}
+
+	public virtual int getBaseDamage(){
+		return baseDamage;
+	}
 
 	public int getGeneralDamageMod(Card card, Unit target){
 		if (card.ignoreCasterCharms) {
