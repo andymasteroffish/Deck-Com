@@ -236,4 +236,15 @@
 <range>6</range>
 <damage_per_spell>2</damage_per_spell>
 </charm>
+<charm idName="chain_gun">
+<name>Chain Gun</name>
+<type>Weapon</type>
+<level>1</level>
+<script>Weapon_Basic</script>
+<desc>1 Damage, 6 Range. Draw a card and gain an action when this deals damage</desc>
+<damage>1</damage>
+<range>6</range>
+<card_draw_on_damage>1</card_draw_on_damage>
+<action_gain_on_damage>1</action_gain_on_damage>
+</charm>
 </charms>

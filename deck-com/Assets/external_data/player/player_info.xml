@@ -33,7 +33,7 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>long_bow</charm>
+      <charm>chain_gun</charm>
     </charms>
   </unit>
   <unit idName = "tank">
