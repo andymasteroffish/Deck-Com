@@ -2,6 +2,8 @@
   <info>
     <money>2</money>
     <cur_level>-1</cur_level>
+    <generate_new_seed>true</generate_new_seed>
+    <seed>42</seed>
   </info>
   <unit idName = "test_player">
     <name>Test Player</name>

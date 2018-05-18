@@ -51,6 +51,16 @@ public class GameManager {
 		XmlNode infoNode = playerDoc.GetElementsByTagName("info")[0];
 		curLevelNum = int.Parse(infoNode["cur_level"].InnerXml);
 
+		if ( bool.Parse(infoNode["generate_new_seed"].InnerXml) ){
+			Debug.Log("my seed: "+Random.seed);
+			infoNode ["seed"].InnerXml = ((int)Random.Range(0,9999999)).ToString ();
+			infoNode ["generate_new_seed"].InnerXml = "false";
+		}
+
+		Random.seed = int.Parse (infoNode ["seed"].InnerXml) + (curLevelNum * 100);
+
+
+
 		curAreaNum = (curLevelNum / GameManagerTacticsInterface.instance.levelsPerArea) + 1;
 		if (curLevelNum < 0) {
 			curAreaNum = 0;

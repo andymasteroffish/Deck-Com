@@ -83,6 +83,11 @@ public class LevelGen {
 			grid [gridW-1, 0].spawnProperty = Tile.SpawnProperty.None;
 		}
 
+		//add a store key
+		TilePos storePos = new TilePos((int)Random.Range(1, gridW-1), (int)Random.Range(1,gridH-1));
+		grid [storePos.x, storePos.y].spawnProperty = Tile.SpawnProperty.StoreKey;
+		grid [storePos.x, storePos.y].setCover(Tile.Cover.None);
+
 		//setup all tiles
 		for (int x = 0; x < gridW; x++) {
 			for (int y = 0; y < gridH; y++) {

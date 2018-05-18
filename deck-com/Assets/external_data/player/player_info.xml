@@ -1,9 +1,11 @@
 <player>
   <info>
     <money>2</money>
-    <cur_level>-1</cur_level>
+    <cur_level>0</cur_level>
+    <generate_new_seed>false</generate_new_seed>
+    <seed>9847060</seed>
   </info>
-  <unit idName = "test_player">
+  <unit idName="test_player">
     <name>Test Player</name>
     <sprite>unit_test</sprite>
     <deck>test_deck</deck>
@@ -14,7 +16,7 @@
       <charm>long_bow</charm>
     </charms>
   </unit>
-  <unit idName = "wizard">
+  <unit idName="wizard">
     <name>Gorb The Charmer</name>
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
@@ -22,10 +24,10 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>convoking_staff</charm>
+      <charm>wizard_staff</charm>
     </charms>
   </unit>
-  <unit idName = "ranger">
+  <unit idName="ranger">
     <name>Quick Alexi</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
@@ -33,10 +35,10 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>chain_gun</charm>
+      <charm>long_bow</charm>
     </charms>
   </unit>
-  <unit idName = "tank">
+  <unit idName="tank">
     <name>Big Bobo</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
