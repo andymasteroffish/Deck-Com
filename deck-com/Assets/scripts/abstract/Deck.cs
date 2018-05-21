@@ -207,6 +207,15 @@ public class Deck {
 		}
 	}
 
+	public void tryToSelectCard(int idNum){
+		if (idNum < hand.Count) {
+			if (!hand [idNum].IsDisabled) {
+				cancel ();	//clear whatever was going on
+				hand [idNum].selectCard ();
+			}
+		}
+	}
+
 	public void cancel(){
 		for (int i=hand.Count-1; i>=0; i--){
 			if (hand[i].IsActive) {

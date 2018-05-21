@@ -134,6 +134,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//input for player turn
 		if (gm.IsPlayerTurn) {
+			
 			playerTurnTimer += Time.deltaTime;
 			//clicks
 			if (Input.GetMouseButtonDown (0) && !areAnimationsHappening()) {
@@ -153,6 +154,13 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				cancel ();
 			}
 
+			//check numbers ot select cards
+			for (int i = 1; i <= 9; i++) {
+				KeyCode numKey = (KeyCode)((int)KeyCode.Alpha0 + i);
+				if (Input.GetKeyDown (numKey)) {
+					gm.activePlayerUnit.deck.tryToSelectCard (i - 1);
+				}
+			}
 
 		}
 		//input for AI turn
