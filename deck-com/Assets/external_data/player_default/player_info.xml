@@ -5,6 +5,15 @@
     <generate_new_seed>true</generate_new_seed>
     <seed>42</seed>
   </info>
+  <store>
+    <unlocked>true</unlocked>
+    <purchased_card0>false</purchased_card0>
+    <purchased_card1>false</purchased_card1>
+    <purchased_card2>false</purchased_card2>
+    <purchased_card3>false</purchased_card3>
+    <purchased_card4>false</purchased_card4>
+    <purchased_card5>false</purchased_card5>
+  </store>
   <unit idName = "test_player">
     <name>Test Player</name>
     <sprite>unit_test</sprite>

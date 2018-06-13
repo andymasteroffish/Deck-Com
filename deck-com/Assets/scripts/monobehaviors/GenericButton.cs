@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GenericButton : MonoBehaviour {
 
@@ -12,10 +13,15 @@ public class GenericButton : MonoBehaviour {
 	public SpriteRenderer frameRend;
 	public Color normalColor = Color.white;
 	public Color mouseOverColor = new Color (0.75f, 0.75f, 0.75f);
+	public Color disabledColor = new Color (0.75f, 0.75f, 0.75f, 0.4f);
 
 	//some dumb placeholder effects to make UI more obvious 
 	public bool pulseWhenPlayerExausted;
 	public bool pulseAllTheTime;
+
+	//turning the button off
+	public bool isDisabled;
+	public Text text; 
 
 
 	// Use this for initialization
@@ -26,6 +32,9 @@ public class GenericButton : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		frameRend.color = mouseIsOver ? mouseOverColor : normalColor;
+		if (text != null) {
+			text.color = Color.black;
+		}
 
 		bool isPulsing = pulseAllTheTime;
 		if (pulseWhenPlayerExausted) {
@@ -36,16 +45,25 @@ public class GenericButton : MonoBehaviour {
 			transform.localScale = new Vector3(newScale, newScale, 1);
 		}
 
+		if (isDisabled) {
+			text.color = disabledColor;
+			frameRend.color = disabledColor;
+		}
+
 		mouseIsOver = false;	//this will be overwritten by onMouseOver if they are on the button
 	}
 
 	void OnMouseOver(){
-		mouseIsOver = true;
+		if (!isDisabled) {
+			mouseIsOver = true;
+		}
 	}
 
 	void OnMouseDown(){
-		target.SendMessage (message);
-		mouseIsOver = false;
+		if (!isDisabled) {
+			target.SendMessage (message);
+			mouseIsOver = false;
+		}
 	}
 
 

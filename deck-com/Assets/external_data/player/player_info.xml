@@ -1,10 +1,19 @@
 <player>
   <info>
-    <money>2</money>
+    <money>0</money>
     <cur_level>0</cur_level>
     <generate_new_seed>false</generate_new_seed>
     <seed>9847060</seed>
   </info>
+  <store>
+    <unlocked>true</unlocked>
+    <purchased_card0>True</purchased_card0>
+    <purchased_card1>True</purchased_card1>
+    <purchased_card2>False</purchased_card2>
+    <purchased_card3>False</purchased_card3>
+    <purchased_card4>True</purchased_card4>
+    <purchased_card5>False</purchased_card5>
+  </store>
   <unit idName="test_player">
     <name>Test Player</name>
     <sprite>unit_test</sprite>

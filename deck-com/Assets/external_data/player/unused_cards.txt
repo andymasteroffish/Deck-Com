@@ -1,0 +1,6 @@
+attack_d1
+bandage
+bandage
+village
+move_and_attack
+attack_d1

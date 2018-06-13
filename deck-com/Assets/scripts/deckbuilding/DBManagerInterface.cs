@@ -23,7 +23,7 @@ public class DBManagerInterface : MonoBehaviour {
 	private List<DBCardGO> cardButtons = new List<DBCardGO> ();
 
 	public GameObject[] deckViewButtons;
-	public GameObject startButton;
+	public GameObject startButton, storeButton;
 	public GameObject[] unusedCardsScrollButtons;
 
 	public GameObject unusedCardSelectionBG;
@@ -72,6 +72,7 @@ public class DBManagerInterface : MonoBehaviour {
 		}
 
 		startButton.SetActive (manager.activeDeck == null);
+		storeButton.SetActive (startButton.activeSelf);
 
 		//unused card window UI
 //		unusedCardsScrollButtons[0].SetActive(manager.unusedCardsOpen && manager.curUnusedCardWindowPage > 0);	//prev
@@ -124,8 +125,11 @@ public class DBManagerInterface : MonoBehaviour {
 //	}
 
 	public void startGame(){
-		Debug.Log ("did we get here?");
 		UnityEngine.SceneManagement.SceneManager.LoadScene ("tactics_game");
+	}
+
+	public void goToStore(){
+		UnityEngine.SceneManagement.SceneManager.LoadScene ("store");
 	}
 
 	//supplying the shell objects
