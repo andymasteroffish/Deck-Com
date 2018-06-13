@@ -22,7 +22,10 @@ public class DBManager {
 	public int money;
 	public int curLevel;
 
+	public bool storeIsAvailable;
+
 	private string xmlPath;
+	private XmlDocument xmlDoc;
 	private string unusedWeaponsListPath;
 
 	//private Charm.CharmType charmReplaceType;
@@ -37,7 +40,7 @@ public class DBManager {
 
 		//grabbing the info for the player
 		xmlPath = Application.dataPath + "/external_data/player/player_info.xml";
-		XmlDocument xmlDoc = new XmlDocument();
+		xmlDoc = new XmlDocument();
 		xmlDoc.Load(xmlPath);
 
 		//get the info node
@@ -45,6 +48,10 @@ public class DBManager {
 		money = int.Parse(infoNode["money"].InnerXml);
 
 		curLevel = int.Parse (infoNode ["cur_level"].InnerXml);
+
+		//get the store node
+		XmlNode storeNode = xmlDoc.GetElementsByTagName("store")[0];
+		storeIsAvailable = bool.Parse (storeNode ["unlocked"].InnerXml);
 
 		//go through each unit and make a deck if it is player controlled
 		XmlNodeList unitNodes = xmlDoc.GetElementsByTagName ("unit");
@@ -176,12 +183,53 @@ public class DBManager {
 		activeDeck.setAsInactive ();
 		activeDeck = null;
 
+		//set the money
+		XmlNode infoNode = xmlDoc.GetElementsByTagName("info")[0];
+		infoNode ["money"].InnerXml = money.ToString ();
+
+		//remove the unit nodes
+		XmlNodeList unitNodes = xmlDoc.GetElementsByTagName ("unit");
+		foreach (XmlNode node in unitNodes) {
+			//xmlDoc.RemoveChild(node);
+			node.ParentNode.RemoveChild(node);
+		}
+
+		//replace the unit nodes with the current info
+		//shoving it at the end
+		XmlNode mainNode = xmlDoc.GetElementsByTagName("player")[0];
+		//Debug.Log (mainNode.InnerXml);
+
+		string xmlText = "";
+		for (int i = 0; i < decks.Count; i++) {
+			if (decks [i] != unusedCardsDeck) {
+				xmlText += decks [i].getXML ();
+			}
+		}
+
+		mainNode.InnerXml += xmlText;
+
+		xmlDoc.Save(xmlPath);
+
+		//and have each deck update their text file
+		for (int i = 0; i < decks.Count; i++) {
+			decks [i].saveDeckFile ();
+		}
+
+		//and update the unsued charm file
+		string[] charmLines = new string[unusedCharms.Count];
+		for (int i = 0; i < unusedCharms.Count; i++) {
+			charmLines [i] = unusedCharms [i].idName;
+		}
+				/*
+
 		//go ahead and create the xml for all of the player's info
 		string xmlText = "";
 		xmlText += "<player>\n";
 
 		xmlText += "<info>\n";
 		xmlText += "<money>" + money + "</money>\n";
+		xmlText += "<cur_level>" + curLevel + "</cur_level>\n";
+		xmlText += "<cur_level>" + curLevel + "</cur_level>\n";
 		xmlText += "<cur_level>" + curLevel + "</cur_level>\n";
 		xmlText += "</info>\n";
 
@@ -209,6 +257,7 @@ public class DBManager {
 		}
 
 		File.WriteAllLines(unusedWeaponsListPath, charmLines);
+				*/
 
 	}
 }

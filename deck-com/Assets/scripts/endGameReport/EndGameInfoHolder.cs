@@ -10,6 +10,7 @@ public class EndGameInfoHolder : MonoBehaviour {
 	public bool bCreateDummyLoot;
 
 	public List<Card_Loot> lootList;
+	public bool hasStoreKey;
 
 	void Awake() {
 		//if this already exists, destory it

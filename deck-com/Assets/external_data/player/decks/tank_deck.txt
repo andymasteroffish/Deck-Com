@@ -1,7 +1,9 @@
 grenade
+move2_cantrip
 move5
 move5
 aim
+village
 attack
 attack
 attack

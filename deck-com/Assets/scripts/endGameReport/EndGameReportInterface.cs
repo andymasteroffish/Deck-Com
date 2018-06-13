@@ -31,6 +31,7 @@ public class EndGameReportInterface : MonoBehaviour {
 		List<Card_Loot> loot = EndGameInfoHolder.instance.getLoot ();
 
 		manager = new EndGameManager (loot);
+		manager.hasStoreKey = EndGameInfoHolder.instance.hasStoreKey;
 
 		nextRewardToShow = 0;
 

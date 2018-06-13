@@ -59,6 +59,11 @@ public class PodPlacement {
 			numPods = 5;
 		}
 		int podCL = (int)Mathf.Ceil((float)totalCR / (float)numPods);
+
+		if (GameManagerTacticsInterface.instance.debugOnePodPerLevel) {
+			numPods = 1;
+		}
+
 		placePods(_gm, _board, numPods, podCL, curArea);
 	}
 

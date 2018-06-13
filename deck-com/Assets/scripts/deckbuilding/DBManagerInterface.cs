@@ -23,7 +23,9 @@ public class DBManagerInterface : MonoBehaviour {
 	private List<DBCardGO> cardButtons = new List<DBCardGO> ();
 
 	public GameObject[] deckViewButtons;
-	public GameObject startButton, storeButton;
+	public GameObject startButton;
+	public GenericButton storeButton;
+	public GameObject lockedStoreInfo;
 	public GameObject[] unusedCardsScrollButtons;
 
 	public GameObject unusedCardSelectionBG;
@@ -72,7 +74,14 @@ public class DBManagerInterface : MonoBehaviour {
 		}
 
 		startButton.SetActive (manager.activeDeck == null);
-		storeButton.SetActive (startButton.activeSelf);
+		storeButton.gameObject.SetActive (startButton.activeSelf);
+
+		if (storeButton.gameObject.activeSelf) {
+			lockedStoreInfo.SetActive (!manager.storeIsAvailable);
+			storeButton.isDisabled = !manager.storeIsAvailable;
+		} else {
+			lockedStoreInfo.SetActive (false);
+		}
 
 		//unused card window UI
 //		unusedCardsScrollButtons[0].SetActive(manager.unusedCardsOpen && manager.curUnusedCardWindowPage > 0);	//prev

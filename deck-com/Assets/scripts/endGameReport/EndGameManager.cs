@@ -10,6 +10,8 @@ public class EndGameManager {
 	private List<Card> newCards;
 	private int totalMoneyEarned;
 
+	public bool hasStoreKey;	//set in EndGameReportInterface
+
 	public EndGameManager(List<Card_Loot> lootCards){
 		rewards = new List<LootReward> ();
 		newCards = new List<Card> ();
@@ -30,7 +32,7 @@ public class EndGameManager {
 
 		LootReward reward = new LootReward();
 		int level = (int)Mathf.Max(lootCard.level, 1);
-		reward.baseMoney = level;
+		reward.baseMoney = level+1;
 
 		int numCardsAtLevel = 2;
 		int numCardPairsAtLowerLevel = 2;
@@ -134,6 +136,13 @@ public class EndGameManager {
 		int curMoney = int.Parse(infoNode["money"].InnerXml);
 		int newMoney = curMoney + totalMoneyEarned;
 		infoNode ["money"].InnerXml = newMoney.ToString ();
+
+		//set if the store has been unlocked and set all cards in the store to not be purchased
+		XmlNode storeNode = xmlDoc.GetElementsByTagName("store")[0];
+		storeNode ["unlocked"].InnerXml = hasStoreKey.ToString ();
+		for (int i = 0; i < 6; i++) {	//magic number! Bad!
+			storeNode ["purchased_card" + i.ToString ()].InnerXml = false.ToString();
+		}
 
 		//save it
 		xmlDoc.Save(xmlPath);

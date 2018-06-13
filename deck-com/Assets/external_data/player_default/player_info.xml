@@ -6,7 +6,7 @@
     <seed>42</seed>
   </info>
   <store>
-    <unlocked>true</unlocked>
+    <unlocked>false</unlocked>
     <purchased_card0>false</purchased_card0>
     <purchased_card1>false</purchased_card1>
     <purchased_card2>false</purchased_card2>

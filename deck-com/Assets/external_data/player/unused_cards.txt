@@ -1,6 +1,7 @@
-attack_d1
-bandage
-bandage
-village
-move_and_attack
-attack_d1
+move5
+disenchant
+poison_dart
+gain_an_action
+swap_spots
+cover_attack
+move2_cantrip

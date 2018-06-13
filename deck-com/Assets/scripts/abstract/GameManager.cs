@@ -27,6 +27,8 @@ public class GameManager {
 	private bool gameIsOver;
 	private bool playerWins;
 
+	public bool hasStoreKey;
+
 	//getting and setting info about player progress
 	string playerDocPath;
 	XmlDocument playerDoc;
@@ -115,6 +117,8 @@ public class GameManager {
 		gameIsOver = false;
 		playerWins = false;
 			
+		hasStoreKey = false;
+
 		cam = GameObject.Find ("World Cam").GetComponent<CameraControl> ();
 
 
@@ -421,6 +425,7 @@ public class GameManager {
 			XmlNode infoNode = playerDoc.GetElementsByTagName ("info") [0];
 			int curMoney = int.Parse (infoNode ["cur_level"].InnerXml);
 			infoNode ["cur_level"].InnerXml = curLevelNum.ToString ();
+			Debug.Log ("seed: " + infoNode ["seed"].InnerXml);
 		}
 
 		//save
@@ -428,6 +433,7 @@ public class GameManager {
 
 		//save whatever info needs to be passed to the next scene
 		EndGameInfoHolder.instance.lootList = loot;
+		EndGameInfoHolder.instance.hasStoreKey = hasStoreKey;
 	}
 
 	//AI shit

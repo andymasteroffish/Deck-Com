@@ -41,10 +41,6 @@ public class StoreManager {
 		//get the store node
 		XmlNode storeNode = xmlDoc.GetElementsByTagName("store")[0];
 
-		//seed the store
-		int seed = int.Parse(infoNode["seed"].InnerXml);
-		UnityEngine.Random.seed = seed;
-
 		//get the area
 		curLevel = int.Parse (infoNode ["cur_level"].InnerXml);
 		curAreaNum = (curLevel / 3) + 1;		//this needs to match what tactics interface syas and should not be a magic number
@@ -53,6 +49,11 @@ public class StoreManager {
 		}
 
 		Debug.Log ("cur level: " + curAreaNum);
+
+		//seed the store
+		int seed = int.Parse(infoNode["seed"].InnerXml);
+		UnityEngine.Random.seed = seed + (curLevel * 101);
+
 
 		//grab some cards
 		List<string> cardsPrevLevel = CardManager.instance.getIDListAtLevel ( Mathf.Max(1, curAreaNum-1));

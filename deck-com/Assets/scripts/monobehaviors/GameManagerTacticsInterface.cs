@@ -16,6 +16,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	public bool debugRevealFOW;
 	public bool debugRemoveFOW;
 	public bool debugIgnoreStandardSpawns;
+	public bool debugOnePodPerLevel;
 	public bool debugShowTileDist;
 	public bool debugClearTileDists;
 	public bool debugWakeAllFoes;
@@ -85,6 +86,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			debugRevealFOW = false;
 			debugRemoveFOW = false;
 			debugIgnoreStandardSpawns = false;
+			debugOnePodPerLevel = false;
 			debugShowTileDist = false;
 			debugClearTileDists = false;
 			debugWakeAllFoes = false;

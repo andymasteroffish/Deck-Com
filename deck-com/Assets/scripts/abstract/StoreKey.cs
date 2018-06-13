@@ -17,6 +17,7 @@ public class StoreKey : PassiveObject {
 		if (unitOnMe != null) {
 			if (unitOnMe.isPlayerControlled) {
 				Debug.Log ("gimme dat shit");
+				GameManagerTacticsInterface.instance.gm.hasStoreKey = true;
 				isDone = true;
 			}
 		}

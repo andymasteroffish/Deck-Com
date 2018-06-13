@@ -57,6 +57,7 @@ public class DBSaveButton : MonoBehaviour {
 		boxCol.enabled = shouldShow;
 
 		if (shouldShow && Input.GetMouseButtonDown (0) && mouseIsOver && gotThatCash) {
+			Debug.Log ("save me daddy");
 			manager.saveChanges ();
 			mouseIsOver = false;
 		}
