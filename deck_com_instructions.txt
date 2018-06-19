@@ -41,6 +41,11 @@ Loot can be collected (as a free action) and will turn into a booster pack at th
 In between levels, new cards can be added to the unit decks for $2 per card level.
 
 
+**Store**
+
+You can access the store in between levels by collecting the key. Collect the key by moving one of your units on top of it.
+
+
 **Notes on this build**
 
 You can quit the game on the deck building scene and it will save your progress

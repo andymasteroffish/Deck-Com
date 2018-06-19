@@ -7,6 +7,7 @@ public class TileGO : MonoBehaviour {
 	public BoxCollider2D collider;
 	public SpriteRenderer spriteRend;
 	public SpriteRenderer fogSprite;
+	public SpriteRenderer fadeSprite;
 
 	public Sprite[] coverSprites;
 	public Sprite goalSprite;
@@ -56,10 +57,8 @@ public class TileGO : MonoBehaviour {
 		if (GameManagerTacticsInterface.instance.debugRevealFOW) {
 			fogSprite.color = new Color (1, 1, 1, 0.2f);
 		}
-//		if (!tile.isVisibleToPlayer) {
-//			spriteRend.sprite = coverSprites [0];
-//			spriteRend.color = new Color (1, 1, 1, 0.5f);
-//		}
+
+		fadeSprite.enabled = !GameManagerTacticsInterface.instance.gm.activePlayerUnit.visibleTiles.Contains (tile);
 
 		if (tile.debugText != debugtext.text) {
 			debugtext.text = tile.debugText;
@@ -67,22 +66,6 @@ public class TileGO : MonoBehaviour {
 			
 	}
 
-//	public void refresh(){
-//		transform.position = tile.Pos.getV3 ();
-//
-//		spriteRend.sprite = coverSprites [(int)tile.CoverVal];
-//
-//		if (tile.spawnProperty == Tile.SpawnProperty.Exit) {
-//			spriteRend.sprite = goalSprite;
-//		}
-//
-//		if (tile.IsHighlighted) {
-//			spriteRend.color = tile.highlightCol;
-//		} else {
-//			//Debug.Log ("time " + Time.time);
-//			spriteRend.color = new Color (1, 1, 1);
-//		}
-//	}
 
 	void OnMouseEnter(){
 		tile.MouseIsOver = true;
@@ -93,8 +76,6 @@ public class TileGO : MonoBehaviour {
 			for (int x = 0; x < GameManagerTacticsInterface.instance.gm.board.cols; x++) {
 				for (int y = 0; y < GameManagerTacticsInterface.instance.gm.board.rows; y++) {
 					GameManagerTacticsInterface.instance.gm.board.Grid [x, y].debugText = tile.visibleRangeDists [x, y].ToString ("N1");
-					//Tile otherTile = GameManagerTacticsInterface.instance.gm.board.Grid [x, y];
-					//otherTile.debugText = GameManagerTacticsInterface.instance.gm.board.dm.getDist(tile, otherTile) .ToString ("N1");
 				}
 			}
 		}

@@ -1,7 +1,0 @@
-move5
-disenchant
-poison_dart
-gain_an_action
-swap_spots
-cover_attack
-move2_cantrip
