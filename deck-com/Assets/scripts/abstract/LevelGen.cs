@@ -31,6 +31,11 @@ public class LevelGen {
 		//determine where the players will be
 		int playerCol = (int)Random.Range(0, chunkCols);
 
+		//tetsing into the breach style. Eventually this should be able to change, but for now lets just do far left
+		if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			playerCol = 0;
+		}
+
 
 		//go through and make cunks
 		for (int chunkX = 0; chunkX < chunkCols; chunkX++) {
@@ -54,6 +59,30 @@ public class LevelGen {
 				}
 				if (Random.value < 0.5f) {
 					chunk = flipVert(chunk, chunkSize, chunkSize);
+				}
+
+				//testing an S type shape for Into The Breach mode. This would eventually be more random
+				if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+					bool doNotFillIn = false;
+					int crossY = (int)Mathf.Floor (chunkRows / 2);
+					if (chunkX == 0 && chunkY == 0)
+						doNotFillIn = true;
+					if (chunkY == crossY)
+						doNotFillIn = true;
+					if (chunkX == chunkCols - 1 && chunkY == chunkRows - 1)
+						doNotFillIn = true;
+					if (chunkX == 0 && chunkY < crossY)
+						doNotFillIn = true;
+					if (chunkX == chunkCols - 1 && chunkY > crossY)
+						doNotFillIn = true;
+					if (chunkX == 1 && chunkY == crossY - 1)
+						doNotFillIn = true;
+					if (chunkX == chunkCols - 2 && chunkY == crossY + 1)
+						doNotFillIn = true;
+
+					if (!doNotFillIn) {
+						fillIn (chunk, chunkSize, chunkSize);
+					}
 				}
 
 				//add it
@@ -101,15 +130,17 @@ public class LevelGen {
 	public void greeble(Tile[,] grid, int gridW, int gridH){
 		for (int x = 0; x < gridW; x++) {
 			for (int y = 0; y < gridH; y++) {
-//				if (Random.value < 0.05f) {
-//					grid [x, y].setCover (Tile.Cover.Full);
-//				}
-//				if (Random.value < 0.03f) {
-//					grid [x, y].setCover (Tile.Cover.Part);
-//				}
 				if (Random.value < 0.05f) {
 					grid [x, y].setCover (Tile.Cover.None);
 				}
+			}
+		}
+	}
+
+	public void fillIn(Tile[,] grid, int gridW, int gridH){
+		for (int x = 0; x < gridW; x++) {
+			for (int y = 0; y < gridH; y++) {
+				grid [x, y].setCover (Tile.Cover.Full);
 			}
 		}
 	}

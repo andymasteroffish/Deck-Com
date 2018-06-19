@@ -1,7 +1,7 @@
 <player>
   <info>
     <money>2</money>
-    <cur_level>-1</cur_level>
+    <cur_level>2</cur_level>
     <generate_new_seed>false</generate_new_seed>
     <seed>7517265</seed>
   </info>

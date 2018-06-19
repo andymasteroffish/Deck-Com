@@ -53,9 +53,13 @@ public class TileGO : MonoBehaviour {
 			spriteRend.sprite = coverSprites [(int)tile.CoverVal];
 		}
 
-		fogSprite.enabled = !tile.isVisibleToPlayer;
-		if (GameManagerTacticsInterface.instance.debugRevealFOW) {
-			fogSprite.color = new Color (1, 1, 1, 0.2f);
+		if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			fogSprite.enabled = false;
+		} else {
+			fogSprite.enabled = !tile.isVisibleToPlayer;
+			if (GameManagerTacticsInterface.instance.debugRevealFOW) {
+				fogSprite.color = new Color (1, 1, 1, 0.2f);
+			}
 		}
 
 		fadeSprite.enabled = !GameManagerTacticsInterface.instance.gm.activePlayerUnit.visibleTiles.Contains (tile);

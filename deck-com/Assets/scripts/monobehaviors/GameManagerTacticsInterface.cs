@@ -10,6 +10,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	private CameraControl cam;
 
+	public bool intoTheBreachMode;	//testing a new way of doing things
+
 	public float debugAnimationTimeMod;
 	public bool debugDoNotShuffle;
 	public bool debugPrintAIInfo;
