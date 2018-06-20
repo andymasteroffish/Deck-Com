@@ -26,8 +26,8 @@ public class PodPlacement {
 	private int podCLPadding = 2; //how much it can be over by and still be OK
 	private int maxMoveDistAwayToSpawn = 2;
 
-	private Board board;
-	private GameManager gm;
+	//private Board board;
+	//private GameManager gm;
 
 	public PodPlacement(XmlNodeList foeNodes){
 
@@ -67,17 +67,26 @@ public class PodPlacement {
 		placePods(_gm, _board, numPods, podCL, curArea);
 	}
 
-	public void placePods(GameManager _gm, Board _board, int numPods, int podCR, int curArea){
+	public void placeFoesIntoTheBreach(GameManager gm, Board board, int levelNum, int curArea){
+		int podCL = levelNum * 2;// (int)Mathf.Ceil((float)totalCR / (float)numPods);
+
+		makePod (gm, board, podCL, curArea);
+		makePod (gm, board, podCL, curArea);
+	}
+
+
+
+	public void placePods(GameManager gm, Board board, int numPods, int podCR, int curArea){
 		//Debug.Log ("Placing " + numPods + " with a CL of " + podCR);
-		gm = _gm;
-		board = _board;
+//		gm = _gm;
+//		board = _board;
 
 		for (int i = 0; i < numPods; i++) {
-			makePod (podCR, curArea);
+			makePod (gm, board, podCR, curArea);
 		}
 	}
 
-	public void makePod(int podCR, int curArea){
+	public void makePod(GameManager gm, Board board, int podCR, int curArea){
 		
 		int curCL = 0;
 		int rangeMod = (int) Mathf.Ceil( (float)podCR * podClRangePrc);

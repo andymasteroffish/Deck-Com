@@ -89,7 +89,11 @@ public class GameManager {
 			}
 			board.updateVisible ();	//make sure we know what the units can see
 
-			podPlacement.placeFoes (this, board, curLevelNum, curAreaNum);
+			if (!GameManagerTacticsInterface.instance.intoTheBreachMode) {
+				podPlacement.placeFoes (this, board, curLevelNum, curAreaNum);
+			}else{
+				podPlacement.placeFoesIntoTheBreach (this, board, curLevelNum, curAreaNum);
+			}
 		} else {
 
 			for (int i = 0; i < debugSpawnList.Length; i++) {
@@ -363,6 +367,9 @@ public class GameManager {
 		if (count <= unitsAI.Count) {
 			setActiveAIUnit (unitsAI [idNum], true);
 		} else {
+			if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+				podPlacement.makePod (this, board, curLevelNum * 2, curAreaNum);
+			}
 			startPlayerTurn ();
 		}
 	}
