@@ -141,9 +141,11 @@ public class PodPlacement {
 			spawnTiles = board.getTilesInMoveRange (originTile, maxMoveDistAwayToSpawn, false, false);
 
 			//remove the ones the player can see
-			for (int i = spawnTiles.Count - 1; i >= 0; i--) {
-				if (spawnTiles [i].isVisibleToPlayer) {
-					spawnTiles.RemoveAt (i);
+			if (!GameManagerTacticsInterface.instance.intoTheBreachMode) {
+				for (int i = spawnTiles.Count - 1; i >= 0; i--) {
+					if (spawnTiles [i].isVisibleToPlayer) {
+						spawnTiles.RemoveAt (i);
+					}
 				}
 			}
 
@@ -163,6 +165,9 @@ public class PodPlacement {
 		for (int i = 0; i < foesToSpawn.Count; i++) {
 			Unit unit = UnitManager.instance.getUnitFromIdName (foesToSpawn [i].idName);
 			int spawnTileID = (int)Random.Range (0, spawnTiles.Count);
+			if (spawnTiles.Count == 0) {
+				Debug.Log ("NO MORE SPAWN TILES");
+			}
 			Tile spawnTile = spawnTiles[spawnTileID];
 			spawnTiles.RemoveAt (spawnTileID);
 			unit.setup (gm, board, spawnTile);

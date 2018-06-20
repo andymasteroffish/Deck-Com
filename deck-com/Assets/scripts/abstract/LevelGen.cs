@@ -96,6 +96,14 @@ public class LevelGen {
 							chunk[x,y].spawnProperty = Tile.SpawnProperty.Foe;
 						}
 
+						if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+							if (chunkX == chunkCols - 1 && chunkY == chunkRows - 1) {
+								if (y == chunkSize - 1) {
+									chunk [x, y].spawnProperty = Tile.SpawnProperty.Exit;
+								}
+							}
+						}
+
 						grid [chunkX * chunkSize + x, chunkY * chunkSize + y] = chunk [x, y];
 					}
 				}
@@ -103,17 +111,24 @@ public class LevelGen {
 		}
 
 		//clean up the whole perimeter
-		for (int x = 0; x < gridW; x++) {
-			grid [x, 0].spawnProperty = Tile.SpawnProperty.None;
-			grid [x, gridH-1].spawnProperty = Tile.SpawnProperty.None;
-		}
-		for (int y = 0; y < gridH; y++) {
-			grid [0, y].spawnProperty = Tile.SpawnProperty.None;
-			grid [gridW-1, 0].spawnProperty = Tile.SpawnProperty.None;
-		}
+//		for (int x = 0; x < gridW; x++) {
+//			grid [x, 0].spawnProperty = Tile.SpawnProperty.None;
+//			grid [x, gridH-1].spawnProperty = Tile.SpawnProperty.None;
+//		}
+//		for (int y = 0; y < gridH; y++) {
+//			grid [0, y].spawnProperty = Tile.SpawnProperty.None;
+//			grid [gridW-1, 0].spawnProperty = Tile.SpawnProperty.None;
+//		}
 
 		//add a store key
-		TilePos storePos = new TilePos((int)Random.Range(1, gridW-1), (int)Random.Range(1,gridH-1));
+		TilePos storePos = new TilePos(0,0);
+		bool goodStoreKeyPos = false;
+		while (!goodStoreKeyPos) {
+			storePos = new TilePos ((int)Random.Range (2, gridW - 2), (int)Random.Range (2, gridH - 2));
+			if (grid [storePos.x, storePos.y].CoverVal == Tile.Cover.None) {
+				goodStoreKeyPos = true;
+			}
+		}
 		grid [storePos.x, storePos.y].spawnProperty = Tile.SpawnProperty.StoreKey;
 		grid [storePos.x, storePos.y].setCover(Tile.Cover.None);
 
