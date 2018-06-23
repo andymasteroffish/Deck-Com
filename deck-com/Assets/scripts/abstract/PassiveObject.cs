@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PassiveObject {
 
-	public enum PassiveObjectType { StoreKey, None };
+	public enum PassiveObjectType { StoreKey, ReinforcementMarker, None };
 
 	private TilePos curTilePos;
 

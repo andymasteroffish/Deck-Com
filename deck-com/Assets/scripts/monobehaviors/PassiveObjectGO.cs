@@ -19,6 +19,8 @@ public class PassiveObjectGO : MonoBehaviour {
 		isActive = true;
 		gameObject.SetActive (true);
 
+		Debug.Log ("dog I am " + obj.type);
+
 		spriteRend.sprite = sprites [(int)obj.type];
 
 		gameObject.name = obj.type.ToString();

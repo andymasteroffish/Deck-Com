@@ -166,6 +166,16 @@ public class GameManager {
 	void startAITurn(){
 		isPlayerTurn = false;
 
+		//any reinforcements?
+		if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			foreach (PassiveObject passive in board.passiveObjects) {
+				if (passive.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
+					passive.isDone = true;
+					podPlacement.makePod (this, board, board.getTileFromPos(passive.CurTilePos), curLevelNum * 2, curAreaNum);
+				}
+			}
+		}
+
 		if (checkGameOver()) {
 			endGame ();
 		} else {
@@ -367,8 +377,10 @@ public class GameManager {
 		if (count <= unitsAI.Count) {
 			setActiveAIUnit (unitsAI [idNum], true);
 		} else {
+			//eventually there should be a formula for figuring out where to drop reinforcements
 			if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
-				podPlacement.makePod (this, board, curLevelNum * 2, curAreaNum);
+				Tile reinforcementTile = board.GetRandomTileWithCoverLevel (Tile.Cover.None);
+				board.passiveObjects.Add(new ReinforcementMarker(reinforcementTile.Pos));
 			}
 			startPlayerTurn ();
 		}

@@ -5,7 +5,9 @@ using UnityEngine;
 public class StoreKey : PassiveObject {
 
 	public StoreKey(TilePos pos){
+		type = PassiveObjectType.StoreKey;
 		setupGeneral (pos);
+
 	}
 
 	public StoreKey(StoreKey parent){

@@ -106,10 +106,11 @@ public class Board {
 		//passive objects might matter
 		passiveObjects = new List<PassiveObject>();
 		for (int i = 0; i < parent.passiveObjects.Count; i++) {
-			if (parent.passiveObjects [i].type == PassiveObject.PassiveObjectType.StoreKey) {
-				StoreKey newObj = new StoreKey ((StoreKey)parent.passiveObjects [i]);
-				passiveObjects.Add (newObj);
-			}
+			//I don't think store keys actually need to be created for AI boards
+//			if (parent.passiveObjects [i].type == PassiveObject.PassiveObjectType.StoreKey) {
+//				StoreKey newObj = new StoreKey ((StoreKey)parent.passiveObjects [i]);
+//				passiveObjects.Add (newObj);
+//			}
 		}
 
 		Profiler.EndSample ();
@@ -849,45 +850,6 @@ public class Board {
 	//getting tiles and units from a tile
 	//********************
 
-//	public void highlightAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover, Color col){
-//		turnOffUnitMouseColliders ();
-//		List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, maxCover);
-//		Debug.Log("tile count "+tiles.Count);
-//		for (int i = 0; i < tiles.Count; i++) {
-//			tiles [i].setHighlighted (true, col);
-//		}
-//	}
-
-//	public List<Tile> getAdjacentTiles(Tile start, bool includeDiagonal, Tile.Cover maxCover){
-//		Profiler.BeginSample ("get adjacent tiles");
-//
-//		Profiler.BeginSample ("make list for adjcent");
-//		List<Tile> tiles = new List<Tile> ();
-//		Profiler.EndSample ();
-//
-//		Profiler.BeginSample ("go through tiles");
-//		for (int xOffset = - 1; xOffset <= 1; xOffset++) {
-//			for (int yOffset = - 1; yOffset <= 1; yOffset++) {
-//				int x = start.Pos.x + xOffset;
-//				int y = start.Pos.y + yOffset;
-//				if (x >= 0 && x < cols && y >= 0 && y < rows && (xOffset != 0 || yOffset !=0)) {
-//					if (includeDiagonal || (xOffset != yOffset)) {
-//						if ((int)grid [x, y].CoverVal <= (int)maxCover) {
-//							Profiler.BeginSample ("add to lsit");
-//							tiles.Add (grid [x, y]);
-//							Profiler.EndSample ();
-//						}
-//					}
-//				}
-//			}
-//		}
-//		Profiler.EndSample ();
-//
-//		Profiler.EndSample ();
-//
-//		return tiles;
-//	}
-
 	public List<Unit> getAdjacentUnits(Tile start, bool includeDiagonal){
 		Tile[] tiles = includeDiagonal ? start.AdjacentIncludingDiag : start.Adjacent;
 		//List<Tile> tiles = getAdjacentTiles (start, includeDiagonal, Tile.Cover.Full);
@@ -947,6 +909,24 @@ public class Board {
 		return matches [(int)Random.Range (0, matches.Count)];
 	}
 
+	public Tile GetRandomTileWithCoverLevel(Tile.Cover cover){
+		List<Tile> matches = new List<Tile> ();
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				if (grid [x, y].CoverVal == cover) {
+					matches.Add (grid [x, y]);
+				}
+			}
+		}
+
+		if (matches.Count == 0) {
+			Debug.Log ("NO TILES WITH COVER " + cover);
+			return null;
+		}
+
+		return matches [(int)Random.Range (0, matches.Count)];
+	}
+
 	public Tile getFirstTileWithCover(Tile start, Tile end){
 		Tile returnVal = null;
 
@@ -959,40 +939,6 @@ public class Board {
 		//just get the line from the source to the target
 		return getCover (sourceUnit.CurTile, targetUnit.CurTile);
 	}
-
-	/*
-	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
-		//get the direction
-		float dist = dm.getDist(sourceTile, targetTile); // sourceTile.Pos.getDist(targetTile.Pos);
-		Vector3 dir3 = targetTile.Pos.getV3() - sourceTile.Pos.getV3();	
-		Vector2 dir = new Vector2(dir3.x, dir3.y);
-
-		//debug line
-		//Debug.DrawLine(sourceTile.Pos.getV3(), sourceTile.Pos.getV3()+new Vector3(dir.x, dir.y, 0), Color.green);
-
-		//check for full cover
-		if (raytraceFloat (sourceTile, targetTile, Tile.Cover.Full) != null) {
-			return Tile.Cover.Full;
-		}
-
-		//and for partial cover
-		//only tiles directly adjacent to a unit should provide partial cover
-		List<Tile> tilesThatCanCoverTarget = new List<Tile>();
-		for (int i = 0; i < 4; i++) {
-			if (targetTile.Adjacent [i] != null) {
-				if (targetTile.Adjacent [i].CoverVal == Tile.Cover.Part) {
-					tilesThatCanCoverTarget.Add (targetTile.Adjacent [i]);
-				}
-			}
-		}
-		if (raytrace (sourceTile, targetTile, Tile.Cover.Part, tilesThatCanCoverTarget, false) != null) {
-			return Tile.Cover.Part;
-		}
-
-		//if nothing hit, then there is no cover
-		return Tile.Cover.None;
-	}
-	*/
 
 	//right now only adjacent tiles can provide cover. Maybe that's bad?
 	public Tile.Cover getCover(Tile sourceTile, Tile targetTile){
