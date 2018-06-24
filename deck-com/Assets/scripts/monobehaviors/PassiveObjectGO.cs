@@ -12,9 +12,12 @@ public class PassiveObjectGO : MonoBehaviour {
 
 	private bool isActive;
 
+	private bool doingAnimation;
+
 	private int numTurnsActive;
 
 	public bool hasBeenTriggered;	//some objects need to be turned on by TacticsInterface as part of an animaiton. Not all care about this
+
 
 	public void activate(PassiveObject _obj){
 		obj = _obj;
@@ -22,15 +25,24 @@ public class PassiveObjectGO : MonoBehaviour {
 		isActive = true;
 		gameObject.SetActive (true);
 
+		transform.localScale = new Vector3 (1, 1, 1);
+
 		Debug.Log ("dog I am " + obj.type);
 
 		spriteRend.sprite = sprites [(int)obj.type];
 
 		gameObject.name = obj.type.ToString();
 
+		doingAnimation = false;
+
 		numTurnsActive = 0;
 
 		hasBeenTriggered = false;
+
+		//reinforcement marker starts invisible
+		if (obj.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
+			transform.localScale = new Vector3 (0, 0, 0);
+		}
 	}
 
 	public void deactivate(){
@@ -49,11 +61,38 @@ public class PassiveObjectGO : MonoBehaviour {
 	}
 
 
+	public void triggerScaleAnimation(float targetScale, float time){
+		StartCoroutine (doScaleAnimation (targetScale, time));
+	}
+	IEnumerator doScaleAnimation(float targetScale, float time){
+		doingAnimation = true;
 
+		time *= GameManagerTacticsInterface.instance.debugAnimationTimeMod;
+
+		float startScale = transform.localScale.x;
+		float timer = 0;
+
+		while (timer < time) {
+			timer += Time.deltaTime;
+			float prc = Mathf.Clamp (timer / time, 0, 1);
+			float newScale = prc * targetScale + (1.0f - prc) * startScale;
+			transform.localScale = new Vector3 (newScale, newScale, newScale);
+			yield return null;
+		}
+
+		doingAnimation = false;
+		transform.localScale = new Vector3 (targetScale, targetScale, targetScale);
+	}
 
 	public bool IsActive{
 		get{
 			return this.isActive;
+		}
+	}
+
+	public bool DoingAnimation {
+		get {
+			return this.doingAnimation;
 		}
 	}
 

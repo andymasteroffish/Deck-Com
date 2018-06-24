@@ -181,6 +181,7 @@ public class UnitGO : MonoBehaviour {
 
 		if (owner.GM.CurPhase == GameManager.TurnPhase.Player && !owner.isPlayerControlled && owner.GM.activeAIUnit == owner) {
 			owner.setActive (false);
+			Debug.Log ("mouse out");
 			owner.GM.activeAIUnit = null;
 		}
 

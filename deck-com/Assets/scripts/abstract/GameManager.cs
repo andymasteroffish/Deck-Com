@@ -137,6 +137,7 @@ public class GameManager {
 
 	//starting and ending turns
 	public void startPlayerTurn(){
+		Debug.Log ("start player turn");
 		if (checkGameOver()) {
 			endGame ();
 			return;
@@ -157,6 +158,7 @@ public class GameManager {
 
 		if (activeAIUnit != null) {
 			activeAIUnit.setActive (false);
+			Debug.Log ("null yur dad");
 			activeAIUnit = null;
 		}
 
@@ -203,8 +205,10 @@ public class GameManager {
 		curPhase = TurnPhase.CleanUp;
 
 		//eventually there should be a formula for figuring out where to drop reinforcements
-		Tile reinforcementTile = board.GetRandomTileWithCoverLevel (Tile.Cover.None);
-		board.passiveObjects.Add(new ReinforcementMarker(reinforcementTile.Pos));
+		for (int i = 0; i < 3; i++) {
+			Tile reinforcementTile = board.GetRandomTileWithCoverLevel (Tile.Cover.None);
+			board.passiveObjects.Add (new ReinforcementMarker (reinforcementTile.Pos));
+		}
 	}
 
 	public void markAIStart(){

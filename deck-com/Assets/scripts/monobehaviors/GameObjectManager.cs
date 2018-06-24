@@ -70,6 +70,12 @@ public class GameObjectManager : MonoBehaviour {
 			}
 		}
 
+		for (int i = 0; i < passiveObjects.Count; i++) {
+			if (passiveObjects [i].IsActive == true && passiveObjects[i].DoingAnimation) {
+				return true;
+			}
+		}
+
 		//FILL THIS IN FOR OTHER GAME OBJECTS
 		return false;
 

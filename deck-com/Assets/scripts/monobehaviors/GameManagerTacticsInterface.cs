@@ -321,10 +321,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		aiTurnPhase++;
 		Debug.Log ("ai phase: " + aiTurnPhase);
 
-		//check for reinforcements
+		//check for reinforcements (this will happen for every AI unit even though there could only be reinforcements before the first one, but it will just be skipped if there are none)
 		if (aiTurnPhase == -1) {
 			ReinforcementMarker marker = gm.getNextReinforcementMarker ();
 			if (marker == null) {
+				Debug.Log ("no reinforcements, skip ahead");
 				aiTurnPhase = 1;	//skip ahead
 			} else {
 				//otherwise focus the cam
@@ -339,6 +340,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			} 
 			//otherwise hang out here and focus the camera
 			else {
+				Debug.Log ("we got more reinforcememnts");
 				aiTurnPhase = -2;
 				cam.setTarget (reinforcementTile.Pos);
 			}
@@ -346,9 +348,20 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 
 		//are we done with this AI unit's turn?
-		if (aiTurnPhase == 1 && gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {
-			gm.endAITurn ();
-			return;
+		Debug.Log("active ai: "+gm.activeAIUnit.idName);
+		Debug.Log("   at: "+gm.activeAIUnit.CurTile.Pos.x+" , "+gm.activeAIUnit.CurTile.Pos.y);
+		Debug.Log("active info: "+gm.activeAIUnit.aiTurnInfo);
+		//Debug.Log("active moves: "+gm.activeAIUnit.aiTurnInfo.moves);
+		//if the unit is out of moves or has none, end their turn
+		if (aiTurnPhase == 1){
+			if (gm.activeAIUnit.aiTurnInfo == null) {
+				gm.endAITurn ();
+				return;
+			}
+			if (gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {
+				gm.endAITurn ();
+				return;
+			}
 		}
 
 		//otherwise reveal the card and mark the target
@@ -360,7 +373,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				TilePos targetPos = gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].targetTilePos;
 
 				//if the unit or the target is visible, demo it
-				if (gm.board.Grid [targetPos.x, targetPos.y].isVisibleToPlayer || gm.activeAIUnit.getIsVisibleToPlayer ()) {
+				if (gm.board.Grid [targetPos.x, targetPos.y].isVisibleToPlayer || gm.activeAIUnit.getIsVisibleToPlayer () || intoTheBreachMode) {
 					autoPlayAITurn = false;
 
 					thisCard.revealAICardFlag = true; 
@@ -416,6 +429,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 					if (passive.hasBeenTriggered == false) {
 						cleanupPhase = -1;	//do this again
 						passive.hasBeenTriggered = true;
+						passive.triggerScaleAnimation (1.0f, 0.75f);
 						cam.setTarget (passive.Obj.CurTilePos);
 						return;
 					}
