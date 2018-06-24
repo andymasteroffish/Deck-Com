@@ -75,6 +75,12 @@ public class GameObjectManager : MonoBehaviour {
 
 	}
 
+	public void newPlayerTurn(){
+		foreach (PassiveObjectGO go in passiveObjects) {
+			go.NumTurnsActive++;
+		}
+	}
+
 
 
 	public TileGO getTileGO(){
@@ -246,6 +252,16 @@ public class GameObjectManager : MonoBehaviour {
 			if (targets [i].IsActive) {
 				targets [i].deactivate ();
 			}
+		}
+	}
+
+
+
+
+
+	public List<PassiveObjectGO> PassiveObjects{
+		get{
+			return this.passiveObjects;
 		}
 	}
 }

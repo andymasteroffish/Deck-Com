@@ -83,7 +83,7 @@ public class CharmGO : MonoBehaviour {
 
 		//set the sprite color
 		Color col = new Color (1, 1, 1, 1);
-		if (charm.Owner.isPlayerControlled && !charm.Owner.GM.IsPlayerTurn) {
+		if (charm.Owner.isPlayerControlled && charm.Owner.GM.CurPhase != GameManager.TurnPhase.Player) {
 			col = new Color (1, 1, 1, 0.4f);
 		}
 		spriteRend.color = col;

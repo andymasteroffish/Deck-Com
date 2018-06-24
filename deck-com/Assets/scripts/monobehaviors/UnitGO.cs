@@ -81,7 +81,7 @@ public class UnitGO : MonoBehaviour {
 			//greying when turn is done
 			if (!owner.IsHighlighted) {
 				Color colThisFrame = new Color (1, 1, 1, 1);
-				if (owner.ActionsLeft == 0 && owner.GM.IsPlayerTurn == owner.isPlayerControlled){
+				if (owner.ActionsLeft == 0 && owner.GM.CurPhase == GameManager.TurnPhase.Player == owner.isPlayerControlled){
 				//if (owner.TurnIsDone && owner.GM.IsPlayerTurn == owner.isPlayerControlled) {
 					colThisFrame = new Color (0.3f, 0.3f, 0.3f, 0.5f);
 				}
@@ -155,7 +155,7 @@ public class UnitGO : MonoBehaviour {
 			owner.GM.activeCard.potentialTargetMouseOver (owner);
 		}
 
-		if (owner.GM.IsPlayerTurn && !owner.isPlayerControlled) {
+		if (owner.GM.CurPhase == GameManager.TurnPhase.Player && !owner.isPlayerControlled) {
 			owner.GM.setActiveAIUnit (owner, false);
 		}
 
@@ -179,7 +179,7 @@ public class UnitGO : MonoBehaviour {
 		owner.mouseIsOver = false;
 		owner.GM.targetInfoText.unitRollOff(owner);
 
-		if (owner.GM.IsPlayerTurn && !owner.isPlayerControlled && owner.GM.activeAIUnit == owner) {
+		if (owner.GM.CurPhase == GameManager.TurnPhase.Player && !owner.isPlayerControlled && owner.GM.activeAIUnit == owner) {
 			owner.setActive (false);
 			owner.GM.activeAIUnit = null;
 		}

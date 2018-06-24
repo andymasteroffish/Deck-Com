@@ -40,5 +40,7 @@ public class PassiveObject {
 		get{
 			return this.curTilePos;
 		}
+			
+
 	}
 }

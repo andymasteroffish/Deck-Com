@@ -368,7 +368,7 @@ public class Unit {
 		}
 
 		//time to get the AI move?
-		if (!isPlayerControlled && isActive && !gm.IsPlayerTurn){
+		if (!isPlayerControlled && isActive && gm.CurPhase == GameManager.TurnPhase.AI){
 			//Debug.Log ("checking for " + unitName);
 			for (int i=charms.Count-1; i>=0; i--){
 				charms[i].startAITurn();

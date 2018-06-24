@@ -5,6 +5,8 @@ using System.Xml;
 using UnityEngine.Profiling;
 
 public class GameManager {
+
+	public enum TurnPhase{Player, AI, CleanUp};
 	
 	private CameraControl cam;	//THIS SHOULD NOT BE HERE. MOVE THIS TO AN INTERFACE CLASS
 
@@ -20,7 +22,8 @@ public class GameManager {
 	public TargetInfoText targetInfoText;
 
 	//tracking rounds
-	private bool isPlayerTurn;
+	//private bool isPlayerTurn;
+	private TurnPhase curPhase;
 	private int roundNum;
 
 	//finishing
@@ -133,8 +136,7 @@ public class GameManager {
 	}
 
 	//starting and ending turns
-
-	void startPlayerTurn(){
+	public void startPlayerTurn(){
 		if (checkGameOver()) {
 			endGame ();
 			return;
@@ -142,7 +144,10 @@ public class GameManager {
 
 		roundNum++;
 
-		isPlayerTurn = true;
+		//isPlayerTurn = true;
+		curPhase = TurnPhase.Player;
+
+		GameObjectManager.instance.newPlayerTurn ();
 
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		foreach(Unit unit in unitsPlayer){
@@ -164,17 +169,8 @@ public class GameManager {
 	}
 
 	void startAITurn(){
-		isPlayerTurn = false;
-
-		//any reinforcements?
-		if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
-			foreach (PassiveObject passive in board.passiveObjects) {
-				if (passive.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
-					passive.isDone = true;
-					podPlacement.makePod (this, board, board.getTileFromPos(passive.CurTilePos), curLevelNum * 2, curAreaNum);
-				}
-			}
-		}
+		curPhase = TurnPhase.AI;
+		//isPlayerTurn = false;
 
 		if (checkGameOver()) {
 			endGame ();
@@ -201,6 +197,16 @@ public class GameManager {
 		}
 	}
 
+
+	public void startCleanupPhase(){
+		Debug.Log ("go clean up");
+		curPhase = TurnPhase.CleanUp;
+
+		//eventually there should be a formula for figuring out where to drop reinforcements
+		Tile reinforcementTile = board.GetRandomTileWithCoverLevel (Tile.Cover.None);
+		board.passiveObjects.Add(new ReinforcementMarker(reinforcementTile.Pos));
+	}
+
 	public void markAIStart(){
 		//Debug.Log ("reset all AI flags");
 		board.refreshAllyAndEnemyListsForBoardCompare(true);
@@ -212,6 +218,35 @@ public class GameManager {
 		foreach (Unit unit in board.units) {
 			unit.markAIEnd ();
 		}
+	}
+
+	public Tile spawnReinforcementAtNextMarker(){
+		if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			for (int i=0; i<board.passiveObjects.Count; i++){
+				PassiveObject passive = board.passiveObjects [i];
+				if (passive.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
+					passive.isDone = true;
+					Tile originTile = board.getTileFromPos (passive.CurTilePos);
+					podPlacement.makePod (this, board, originTile, curLevelNum * 2, curAreaNum);
+					//manually remove the marker
+					board.passiveObjects.RemoveAt(i);
+					return originTile;	//just one at a time
+				}
+			}
+		}
+
+		return null;
+	}
+	public ReinforcementMarker getNextReinforcementMarker(){
+		if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			foreach (PassiveObject passive in board.passiveObjects) {
+				if (passive.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
+					return (ReinforcementMarker)passive;	
+				}
+			}
+		}
+
+		return null;
 	}
 
 	//checking input
@@ -309,7 +344,7 @@ public class GameManager {
 		foreach (Unit unit in aiUnits){
 			unit.setActive ( unit==activeAIUnit);
 		}
-		if (newActive.getIsVisibleToPlayer () && !isPlayerTurn) {
+		if (newActive.getIsVisibleToPlayer () && curPhase == TurnPhase.Player) {
 			cam.setTarget (newActive);
 		}
 		if (startTurn) {
@@ -377,14 +412,16 @@ public class GameManager {
 		if (count <= unitsAI.Count) {
 			setActiveAIUnit (unitsAI [idNum], true);
 		} else {
-			//eventually there should be a formula for figuring out where to drop reinforcements
+			
 			if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
-				Tile reinforcementTile = board.GetRandomTileWithCoverLevel (Tile.Cover.None);
-				board.passiveObjects.Add(new ReinforcementMarker(reinforcementTile.Pos));
+				startCleanupPhase ();
+			} else {
+				startPlayerTurn ();
 			}
-			startPlayerTurn ();
 		}
 	}
+
+
 
 	public void doUserSidePostCardPlayActions(){
 		//make sure the info box is off
@@ -608,9 +645,14 @@ public class GameManager {
 
 	//setters and getters
 
-	public bool IsPlayerTurn {
+//	public bool IsPlayerTurn {
+//		get {
+//			return this.isPlayerTurn;
+//		}
+//	}
+	public TurnPhase CurPhase{
 		get {
-			return this.isPlayerTurn;
+			return this.curPhase;
 		}
 	}
 

@@ -28,7 +28,7 @@ public class TargetInfoText : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//match the mouse position on the player turn
-		if (GameManagerTacticsInterface.instance.gm.IsPlayerTurn) {
+		if (GameManagerTacticsInterface.instance.gm.CurPhase == GameManager.TurnPhase.Player) {
 			Vector3 v3 = Input.mousePosition;
 			v3.z = 1f;
 			v3 = Camera.main.ScreenToWorldPoint (v3);
@@ -65,7 +65,7 @@ public class TargetInfoText : MonoBehaviour {
 	}
 
 	public void unitRollOff(Unit unit){
-		if (unit == targetUnit && GameManagerTacticsInterface.instance.gm.IsPlayerTurn){
+		if (unit == targetUnit && GameManagerTacticsInterface.instance.gm.CurPhase == GameManager.TurnPhase.Player){
 			turnOff ();
 		}
 	}

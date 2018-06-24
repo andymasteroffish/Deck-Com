@@ -12,6 +12,9 @@ public class PassiveObjectGO : MonoBehaviour {
 
 	private bool isActive;
 
+	private int numTurnsActive;
+
+	public bool hasBeenTriggered;	//some objects need to be turned on by TacticsInterface as part of an animaiton. Not all care about this
 
 	public void activate(PassiveObject _obj){
 		obj = _obj;
@@ -24,6 +27,10 @@ public class PassiveObjectGO : MonoBehaviour {
 		spriteRend.sprite = sprites [(int)obj.type];
 
 		gameObject.name = obj.type.ToString();
+
+		numTurnsActive = 0;
+
+		hasBeenTriggered = false;
 	}
 
 	public void deactivate(){
@@ -47,6 +54,21 @@ public class PassiveObjectGO : MonoBehaviour {
 	public bool IsActive{
 		get{
 			return this.isActive;
+		}
+	}
+
+	public int NumTurnsActive{
+		get{
+			return this.numTurnsActive;
+		}
+		set{
+			numTurnsActive = value;
+		}
+	}
+
+	public PassiveObject Obj{
+		get{
+			return this.obj;
 		}
 	}
 }

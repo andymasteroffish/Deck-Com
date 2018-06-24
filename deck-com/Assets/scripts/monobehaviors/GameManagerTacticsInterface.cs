@@ -57,6 +57,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 	private int aiTurnPhase;
 	private bool autoPlayAITurn;	//for when ai units are not visible
 
+	private int cleanupPhase;
+
 	public float pauseTimeBeforeTabbingExaustedUnit;
 	private float tabTimer;
 	private bool tabPlayerAfterAnimations;
@@ -137,11 +139,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 
 		//input for player turn
-		if (gm.IsPlayerTurn) {
+		if (gm.CurPhase == GameManager.TurnPhase.Player) {
 			
 			playerTurnTimer += Time.deltaTime;
 			//clicks
-			if (Input.GetMouseButtonDown (0) && !areAnimationsHappening()) {
+			if (Input.GetMouseButtonDown (0) && !areAnimationsHappening ()) {
 				gm.checkClick ();
 			}
 
@@ -154,7 +156,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			}
 
 			//pressing escape to cancel a move
-			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetKeyDown(KeyCode.Q)) {
+			if (Input.GetKeyDown (KeyCode.Escape) || Input.GetKeyDown (KeyCode.Q)) {
 				cancel ();
 			}
 
@@ -168,10 +170,17 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		}
 		//input for AI turn
-		else {
+		else if (gm.CurPhase == GameManager.TurnPhase.AI) {
 			playerTurnTimer = 0; 
-			if (Input.GetKeyDown(KeyCode.Space) || autoPlayAITurn) {
+			if (Input.GetKeyDown (KeyCode.Space) || autoPlayAITurn) {
 				advanceAITurn ();
+			}
+		}
+		//input for cleanup
+		else if (gm.CurPhase == GameManager.TurnPhase.CleanUp) {
+			playerTurnTimer = 0; 
+			if (Input.GetKeyDown (KeyCode.Space) || autoPlayAITurn) {
+				advanceCleanupPhase ();
 			}
 		}
 
@@ -208,11 +217,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 
 		//showing AI turn text
-		aiTurnText.SetActive(!gm.IsPlayerTurn);
+		aiTurnText.SetActive(gm.CurPhase != GameManager.TurnPhase.Player);
 
 		//buttons
-		pickupLootButton.SetActive (gm.IsPlayerTurn && gm.activePlayerUnit.CanPickupLoot);
-		playerButtonsGroup.SetActive (gm.IsPlayerTurn);
+		pickupLootButton.SetActive (gm.CurPhase == GameManager.TurnPhase.Player && gm.activePlayerUnit.CanPickupLoot);
+		playerButtonsGroup.SetActive (gm.CurPhase == GameManager.TurnPhase.Player);
 		cancelButton.SetActive (gm.activeCard != null);
 
 		//did I just toggle the debug switch to show tile distances?
@@ -301,7 +310,8 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	//deailng with AI
 	public void startNewAIUnitTurn(){
-		aiTurnPhase = 0;
+		aiTurnPhase = -2;
+		cleanupPhase = -1;
 	}
 	private void advanceAITurn(){
 		if (gm.GameIsOver) {
@@ -309,8 +319,33 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 
 		aiTurnPhase++;
+		Debug.Log ("ai phase: " + aiTurnPhase);
 
-		//are we done?
+		//check for reinforcements
+		if (aiTurnPhase == -1) {
+			ReinforcementMarker marker = gm.getNextReinforcementMarker ();
+			if (marker == null) {
+				aiTurnPhase = 1;	//skip ahead
+			} else {
+				//otherwise focus the cam
+				cam.setTarget (marker.CurTilePos);
+			}
+		}
+		if (aiTurnPhase == 0) {
+			Tile reinforcementTile = gm.spawnReinforcementAtNextMarker ();
+			//if there was nothing, move on
+			if (reinforcementTile == null) {
+				aiTurnPhase++;
+			} 
+			//otherwise hang out here and focus the camera
+			else {
+				aiTurnPhase = -2;
+				cam.setTarget (reinforcementTile.Pos);
+			}
+		}
+
+
+		//are we done with this AI unit's turn?
 		if (aiTurnPhase == 1 && gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {
 			gm.endAITurn ();
 			return;
@@ -346,10 +381,6 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 					autoPlayAITurn = true;
 				}
 
-				//testing
-//				advanceAITurn();
-//				return;
-
 			} else {
 				Instantiate (passTurnMarkerPrefab, gm.activeAIUnit.CurTile.Pos.getV3(), Quaternion.identity);
 
@@ -369,6 +400,35 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			}
 		}
 	}
+
+	//showing cleanup
+	private void advanceCleanupPhase(){
+		if (gm.GameIsOver) {
+			return;
+		}
+
+		cleanupPhase++;
+
+		if (cleanupPhase == 0) {
+			//get a list of reinforcement markers that are new
+			foreach (PassiveObjectGO passive in GameObjectManager.instance.PassiveObjects) {
+				if (passive.Obj.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
+					if (passive.hasBeenTriggered == false) {
+						cleanupPhase = -1;	//do this again
+						passive.hasBeenTriggered = true;
+						cam.setTarget (passive.Obj.CurTilePos);
+						return;
+					}
+				}
+			}
+		}
+
+
+		//if we're all done, start the player turn
+		gm.startPlayerTurn();
+
+	}
+
 
 	IEnumerator doEndGame(){
 		float timer = 0;
