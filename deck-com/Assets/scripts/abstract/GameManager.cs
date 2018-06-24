@@ -201,14 +201,11 @@ public class GameManager {
 
 
 	public void startCleanupPhase(){
-		Debug.Log ("go clean up");
+		Debug.Log ("go clean up on turn "+roundNum);
 		curPhase = TurnPhase.CleanUp;
 
-		//eventually there should be a formula for figuring out where to drop reinforcements
-		for (int i = 0; i < 3; i++) {
-			Tile reinforcementTile = board.GetRandomTileWithCoverLevel (Tile.Cover.None);
-			board.passiveObjects.Add (new ReinforcementMarker (reinforcementTile.Pos));
-		}
+		//check if we should flash in some reinforcements next turn
+		podPlacement.checkIfWeNeedReinforcements(curLevelNum, curAreaNum, roundNum, board, getPlayerUnits());
 	}
 
 	public void markAIStart(){

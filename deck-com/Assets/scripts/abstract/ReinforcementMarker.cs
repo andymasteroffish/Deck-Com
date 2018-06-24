@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class ReinforcementMarker : PassiveObject {
 
-	public ReinforcementMarker(TilePos pos){
+	public int challengeRating;
+
+	public ReinforcementMarker(TilePos pos, int cr){
 		type = PassiveObjectType.ReinforcementMarker;
+		challengeRating = cr;
 		setupGeneral (pos);
 
 		Debug.Log ("mother fuck reinformcement");

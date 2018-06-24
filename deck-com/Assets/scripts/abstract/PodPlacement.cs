@@ -196,6 +196,84 @@ public class PodPlacement {
 		board.units.AddRange (newFoes);
 	}
 
+
+	//Into The Breach Mode
+	public void checkIfWeNeedReinforcements(int curLevelNum, int curArea, int turnNum, Board board, List<Unit> playerUnits){
+		//get the average player position
+		Vector2 avgPlayerPos = new Vector3(0,0,0);
+		foreach (Unit unit in playerUnits) {
+			avgPlayerPos += new Vector2 (unit.CurTile.Pos.x, unit.CurTile.Pos.y);
+		}
+		avgPlayerPos /= (float)playerUnits.Count;
+
+		//get the average end position
+		List<Tile> endTiles = board.GetAllTilesWithSpawnProperty(Tile.SpawnProperty.Exit);
+		Vector2 avgEndPos = new Vector3(0,0,0);
+		foreach (Tile endTile in endTiles) {
+			avgEndPos += new Vector2 (endTile.Pos.x, endTile.Pos.y);
+		}
+		avgEndPos /= (float)endTiles.Count;
+
+		//set the challenge rating
+		int CR = curLevelNum * 2;
+		//trying out having the CR go up after a few turns. This formula is probably terrible.
+		if (turnNum > 5) {
+			CR += turnNum - 5;
+		}
+
+		//need some type of chart to determine how many reinforcements
+		int numReinforcements = 0;
+		if (turnNum % 2 == 1) {
+			numReinforcements++;
+		}
+		if (turnNum % 6 == 5) {
+			numReinforcements++;
+		}
+
+		for (int i = 0; i < numReinforcements; i++) {
+			bool goodPos = false;
+			TilePos spawnPos = new TilePos (0,0);
+			int numTries = 0;
+			while (!goodPos) {
+				numTries++;
+
+
+				//select a point between the player units and the exit
+				float closenessToPlayer = Random.Range (0.5f, 0.5f);
+				Vector2 startingSpawnPoint = closenessToPlayer * avgPlayerPos + (1.0f - closenessToPlayer) * avgEndPos;
+
+				//move around a bit
+				float bonusDist = 5;
+				startingSpawnPoint.x += Random.Range (-bonusDist, bonusDist);
+				startingSpawnPoint.y += Random.Range (-bonusDist, bonusDist);
+
+				Debug.Log ("starting point: " + startingSpawnPoint);
+
+				//convert it to a tile
+				spawnPos.set( (int)Mathf.Round(startingSpawnPoint.x), (int)Mathf.Round(startingSpawnPoint.y));
+
+				Debug.Log ("tile " + spawnPos.x + " , " + spawnPos.y);
+
+				//make sure it is in range
+				if (spawnPos.x >= 0 && spawnPos.x < board.cols && spawnPos.y >= 0 && spawnPos.y < board.rows) {
+					//make sure it is empty
+					if (board.getTileFromPos (spawnPos).CoverVal == Tile.Cover.None) {
+						goodPos = true;
+					}
+				}
+
+
+				if (numTries > 100) {
+					Debug.Log ("oh fuck!");
+					goodPos = true;
+				}
+			}
+
+			board.passiveObjects.Add (new ReinforcementMarker (spawnPos, CR));
+		}
+
+	}
+
 	//THIS VERISON IS USED FOR REINFORCEMENTS
 	//IF YOU USE INTO THE BREACH MODE, REMOVE THE VERISON ABOVE
 	public void makePod(GameManager gm, Board board, Tile originTile, int podCR, int curArea){

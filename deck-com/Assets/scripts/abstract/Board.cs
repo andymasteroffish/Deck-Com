@@ -909,6 +909,18 @@ public class Board {
 		return matches [(int)Random.Range (0, matches.Count)];
 	}
 
+	public List<Tile> GetAllTilesWithSpawnProperty(Tile.SpawnProperty property){
+		List<Tile> matches = new List<Tile> ();
+		for (int x = 0; x < cols; x++) {
+			for (int y = 0; y < rows; y++) {
+				if (grid [x, y].spawnProperty == property) {
+					matches.Add (grid [x, y]);
+				}
+			}
+		}
+		return matches ;
+	}
+
 	public Tile GetRandomTileWithCoverLevel(Tile.Cover cover){
 		List<Tile> matches = new List<Tile> ();
 		for (int x = 0; x < cols; x++) {
