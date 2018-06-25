@@ -27,10 +27,10 @@ public class StoreKey : PassiveObject {
 	}
 
 	public override void playerTurnStart(){
-		Debug.Log ("player testo");
+		//Debug.Log ("player testo");
 	}
 
 	public override void AITurnStart(){
-		Debug.Log ("Ai testo");
+		//Debug.Log ("Ai testo");
 	}
 }

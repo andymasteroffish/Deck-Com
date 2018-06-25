@@ -196,9 +196,7 @@ public class PodPlacement {
 		board.units.AddRange (newFoes);
 	}
 
-
-	//Into The Breach Mode
-	public void checkIfWeNeedReinforcements(int curLevelNum, int curArea, int turnNum, Board board, List<Unit> playerUnits){
+	public TilePos getEmptyMidpointTileBetweenPlayerAndEnd(Board board, List<Unit> playerUnits, float prcTowardsPlayer, float wiggle){
 		//get the average player position
 		Vector2 avgPlayerPos = new Vector3(0,0,0);
 		foreach (Unit unit in playerUnits) {
@@ -213,6 +211,58 @@ public class PodPlacement {
 			avgEndPos += new Vector2 (endTile.Pos.x, endTile.Pos.y);
 		}
 		avgEndPos /= (float)endTiles.Count;
+
+		bool goodPos = false;
+		TilePos spawnPos = new TilePos (-1,-1);
+		int numTries = 0;
+		while (!goodPos) {
+			numTries++;
+
+			//select a point between the player units and the exit
+			Vector2 startingSpawnPoint = prcTowardsPlayer * avgPlayerPos + (1.0f - prcTowardsPlayer) * avgEndPos;
+
+			//move around a bit
+			startingSpawnPoint.x += Random.Range (-wiggle, wiggle);
+			startingSpawnPoint.y += Random.Range (-wiggle, wiggle);
+
+			//convert it to a tile
+			spawnPos.set( (int)Mathf.Round(startingSpawnPoint.x), (int)Mathf.Round(startingSpawnPoint.y));
+
+			//Debug.Log ("tile " + spawnPos.x + " , " + spawnPos.y);
+
+			//make sure it is in range
+			if (spawnPos.x >= 0 && spawnPos.x < board.cols && spawnPos.y >= 0 && spawnPos.y < board.rows) {
+				//make sure it is empty
+				if (board.getTileFromPos (spawnPos).CoverVal == Tile.Cover.None) {
+					goodPos = true;
+				}
+			}
+
+			if (numTries > 100) {
+				Debug.Log ("oh fuck!");
+				goodPos = true;
+			}
+		}
+
+		return spawnPos;
+	}
+
+	//Into The Breach Mode
+	public void checkIfWeNeedReinforcements(int curLevelNum, int curArea, int turnNum, Board board, List<Unit> playerUnits){
+//		//get the average player position
+//		Vector2 avgPlayerPos = new Vector3(0,0,0);
+//		foreach (Unit unit in playerUnits) {
+//			avgPlayerPos += new Vector2 (unit.CurTile.Pos.x, unit.CurTile.Pos.y);
+//		}
+//		avgPlayerPos /= (float)playerUnits.Count;
+//
+//		//get the average end position
+//		List<Tile> endTiles = board.GetAllTilesWithSpawnProperty(Tile.SpawnProperty.Exit);
+//		Vector2 avgEndPos = new Vector3(0,0,0);
+//		foreach (Tile endTile in endTiles) {
+//			avgEndPos += new Vector2 (endTile.Pos.x, endTile.Pos.y);
+//		}
+//		avgEndPos /= (float)endTiles.Count;
 
 		//set the challenge rating
 		int CR = curLevelNum * 2;
@@ -231,47 +281,49 @@ public class PodPlacement {
 		}
 
 		for (int i = 0; i < numReinforcements; i++) {
-			bool goodPos = false;
-			TilePos spawnPos = new TilePos (0,0);
-			int numTries = 0;
-			while (!goodPos) {
-				numTries++;
+//			bool goodPos = false;
+//			TilePos spawnPos = new TilePos (-1,-1);
+//			int numTries = 0;
+//			while (!goodPos) {
+//				numTries++;
+//
+//
+//				//select a point between the player units and the exit
+//				float closenessToPlayer = Random.Range (0.4f, 0.75f);
+//				Vector2 startingSpawnPoint = closenessToPlayer * avgPlayerPos + (1.0f - closenessToPlayer) * avgEndPos;
+//
+//				//move around a bit
+//				float bonusDist = 5;
+//				startingSpawnPoint.x += Random.Range (-bonusDist, bonusDist);
+//				startingSpawnPoint.y += Random.Range (-bonusDist, bonusDist);
+//
+//				Debug.Log ("starting point: " + startingSpawnPoint);
+//
+//				//convert it to a tile
+//				spawnPos.set( (int)Mathf.Round(startingSpawnPoint.x), (int)Mathf.Round(startingSpawnPoint.y));
+//
+//				Debug.Log ("tile " + spawnPos.x + " , " + spawnPos.y);
+//
+//				//make sure it is in range
+//				if (spawnPos.x >= 0 && spawnPos.x < board.cols && spawnPos.y >= 0 && spawnPos.y < board.rows) {
+//					//make sure it is empty
+//					if (board.getTileFromPos (spawnPos).CoverVal == Tile.Cover.None) {
+//						goodPos = true;
+//					}
+//				}
+//
+//
+//				if (numTries > 100) {
+//					Debug.Log ("oh fuck!");
+//					goodPos = true;
+//				}
+//			}
 
-
-				//select a point between the player units and the exit
-				float closenessToPlayer = Random.Range (0.5f, 0.5f);
-				Vector2 startingSpawnPoint = closenessToPlayer * avgPlayerPos + (1.0f - closenessToPlayer) * avgEndPos;
-
-				//move around a bit
-				float bonusDist = 5;
-				startingSpawnPoint.x += Random.Range (-bonusDist, bonusDist);
-				startingSpawnPoint.y += Random.Range (-bonusDist, bonusDist);
-
-				Debug.Log ("starting point: " + startingSpawnPoint);
-
-				//convert it to a tile
-				spawnPos.set( (int)Mathf.Round(startingSpawnPoint.x), (int)Mathf.Round(startingSpawnPoint.y));
-
-				Debug.Log ("tile " + spawnPos.x + " , " + spawnPos.y);
-
-				//make sure it is in range
-				if (spawnPos.x >= 0 && spawnPos.x < board.cols && spawnPos.y >= 0 && spawnPos.y < board.rows) {
-					//make sure it is empty
-					if (board.getTileFromPos (spawnPos).CoverVal == Tile.Cover.None) {
-						goodPos = true;
-					}
-				}
-
-
-				if (numTries > 100) {
-					Debug.Log ("oh fuck!");
-					goodPos = true;
-				}
-			}
-
+			float closenessToPlayer = Random.Range (0.4f, 0.75f);
+			float wiggleDist = 5;
+			TilePos spawnPos = getEmptyMidpointTileBetweenPlayerAndEnd (board, playerUnits, closenessToPlayer, wiggleDist);
 			board.passiveObjects.Add (new ReinforcementMarker (spawnPos, CR));
 		}
-
 	}
 
 	//THIS VERISON IS USED FOR REINFORCEMENTS
@@ -330,8 +382,8 @@ public class PodPlacement {
 		List<Tile> spawnTiles = board.getTilesInMoveRange (originTile, maxMoveDistAwayToSpawn, false, false);
 
 		//make sure that there are enough tiles to nicely support the pod
-		if (spawnTiles.Count < foesToSpawn.Count * 3) {
-			Debug.Log ("THAT SPAWN POS WAS BAD, DOG.");
+		if (spawnTiles.Count < foesToSpawn.Count) {
+			Debug.Log ("THAT SPAWN POS WAS BAD, DOG. Only "+spawnTiles.Count+" free tiles");
 		}
 
 		//add the foes
@@ -359,7 +411,8 @@ public class PodPlacement {
 		//and define a leader
 		newFoes[0].isPodLeader = true;
 
-		board.units.AddRange (newFoes);
+		board.addFoes (newFoes, curArea);
+		//board.units.AddRange (newFoes);
 	}
 
 }

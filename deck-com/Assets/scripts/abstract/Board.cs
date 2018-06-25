@@ -219,6 +219,17 @@ public class Board {
 		}
 	}
 
+	public void addFoes(List<Unit> newFoes, int curAreaNum){
+		//reset 'em
+		foreach (Unit foe in newFoes) {
+			foe.reset ();
+		}
+		//give one of them loot
+		Loot thisLoot = new Loot (newFoes[(int)Random.Range(0,newFoes.Count)], curAreaNum);
+		loot.Add (thisLoot);
+		units.AddRange (newFoes);
+	}
+
 	//**************************
 	//game functions
 	//**************************

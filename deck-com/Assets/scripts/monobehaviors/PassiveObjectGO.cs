@@ -27,8 +27,6 @@ public class PassiveObjectGO : MonoBehaviour {
 
 		transform.localScale = new Vector3 (1, 1, 1);
 
-		Debug.Log ("dog I am " + obj.type);
-
 		spriteRend.sprite = sprites [(int)obj.type];
 
 		gameObject.name = obj.type.ToString();

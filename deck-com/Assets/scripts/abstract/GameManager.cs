@@ -88,6 +88,7 @@ public class GameManager {
 				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty (Tile.SpawnProperty.Player);
 				activePlayerUnits [i].setup (this, board, spawnTile);
 				board.units.Add (activePlayerUnits [i]);
+				activePlayerUnits [i].reset ();
 				activePlayerUnits [i].setVisibleTiles ();
 			}
 			board.updateVisible ();	//make sure we know what the units can see
@@ -95,7 +96,10 @@ public class GameManager {
 			if (!GameManagerTacticsInterface.instance.intoTheBreachMode) {
 				podPlacement.placeFoes (this, board, curLevelNum, curAreaNum);
 			}else{
-				podPlacement.placeFoesIntoTheBreach (this, board, curLevelNum, curAreaNum);
+				TilePos originPos = podPlacement.getEmptyMidpointTileBetweenPlayerAndEnd (board, getPlayerUnits (), 0.8f, 5);
+				podPlacement.makePod (this, board, board.getTileFromPos(originPos), curLevelNum * 2, curAreaNum);
+
+				//podPlacement.placeFoesIntoTheBreach (this, board, curLevelNum, curAreaNum);
 			}
 		} else {
 
@@ -104,6 +108,7 @@ public class GameManager {
 				Tile spawnTile = board.GetUnoccupiedTileWithSpawnProperty (unit.isPlayerControlled ? Tile.SpawnProperty.Player : Tile.SpawnProperty.Foe);
 				if (spawnTile != null) {
 					unit.setup (this, board, spawnTile);
+					unit.reset ();
 					board.units.Add (unit);
 				}
 			}
@@ -128,8 +133,9 @@ public class GameManager {
 
 		cam = GameObject.Find ("World Cam").GetComponent<CameraControl> ();
 
-
-		board.resetUnitsAndLoot (curAreaNum);
+		if (!GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			board.resetUnitsAndLoot (curAreaNum);
+		}
 
 		startPlayerTurn ();
 
@@ -176,6 +182,7 @@ public class GameManager {
 
 		if (checkGameOver()) {
 			endGame ();
+			return;
 		} else {
 			//start the AI
 			List<Unit> unitsAI = getAIUnits ();
@@ -186,8 +193,11 @@ public class GameManager {
 			if (GameManagerTacticsInterface.instance.debugDoNotShuffle) {
 				startID = 0;//unitsAI.Count-1;
 			}
-			activeAIUnit = unitsAI [startID];
-			//setActiveAIUnit (unitsAI [startID]);
+			if (unitsAI.Count > 0) {
+				activeAIUnit = unitsAI [startID];
+			} else {
+				activeAIUnit = null;
+			}
 			tabActiveAIUnit (0);
 		}
 
@@ -226,9 +236,10 @@ public class GameManager {
 			for (int i=0; i<board.passiveObjects.Count; i++){
 				PassiveObject passive = board.passiveObjects [i];
 				if (passive.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
-					passive.isDone = true;
-					Tile originTile = board.getTileFromPos (passive.CurTilePos);
-					podPlacement.makePod (this, board, originTile, curLevelNum * 2, curAreaNum);
+					ReinforcementMarker thisMarker = (ReinforcementMarker)passive;
+					thisMarker.isDone = true;
+					Tile originTile = board.getTileFromPos (thisMarker.CurTilePos);
+					podPlacement.makePod (this, board, originTile, thisMarker.challengeRating, curAreaNum);
 					//manually remove the marker
 					board.passiveObjects.RemoveAt(i);
 					return originTile;	//just one at a time
@@ -345,7 +356,7 @@ public class GameManager {
 		foreach (Unit unit in aiUnits){
 			unit.setActive ( unit==activeAIUnit);
 		}
-		if (newActive.getIsVisibleToPlayer () && curPhase == TurnPhase.Player) {
+		if (newActive.getIsVisibleToPlayer () && curPhase == TurnPhase.AI) {
 			cam.setTarget (newActive);
 		}
 		if (startTurn) {
@@ -403,22 +414,23 @@ public class GameManager {
 
 		//find the next unit who's turn is not over
 		int count = 0;
-		idNum = (idNum  + dir + unitsAI.Count) % unitsAI.Count;
-		while (unitsAI [idNum].isExausted && count < unitsAI.Count + 1) {
-			idNum = (idNum + 1) % unitsAI.Count;
-			count++;
+		if (unitsAI.Count > 0) {
+			idNum = (idNum + dir + unitsAI.Count) % unitsAI.Count;
+			while (unitsAI [idNum].isExausted && count < unitsAI.Count + 1) {
+				idNum = (idNum + 1) % unitsAI.Count;
+				count++;
+			}
+		} else {
+			count = 99999;
 		}
 
 		//if we found one, great, otherwise, go to the next turn
 		if (count <= unitsAI.Count) {
 			setActiveAIUnit (unitsAI [idNum], true);
 		} else {
-			
-			if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
-				startCleanupPhase ();
-			} else {
-				startPlayerTurn ();
-			}
+			Debug.Log ("im so done");
+			activeAIUnit = null;
+
 		}
 	}
 
@@ -438,13 +450,28 @@ public class GameManager {
 	}
 
 	public bool checkGameOver(){
-		List<Unit> unitsAI = getAIUnits ();
-		if (unitsAI.Count == 0) {
-			return true;
+		if (!GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			List<Unit> unitsAI = getAIUnits ();
+			if (unitsAI.Count == 0) {
+				playerWins = true;
+				return true;
+			}
 		}
 
 		List<Unit> unitsPlayer = getPlayerUnits ();
 		if (unitsPlayer.Count == 0) {
+			playerWins = false;
+			return true;
+		}
+
+		bool allOnEnd = true;
+		foreach (Unit unit in getPlayerUnits()) {
+			if (unit.CurTile.spawnProperty != Tile.SpawnProperty.Exit) {
+				allOnEnd = false;
+			}
+		}
+		if (allOnEnd) {
+			playerWins = true;
 			return true;
 		}
 
@@ -454,9 +481,6 @@ public class GameManager {
 	public void endGame(){
 		Debug.Log ("END GAME");
 		gameIsOver = true;
-
-		List<Unit> unitsAI = getAIUnits ();
-		playerWins = unitsAI.Count == 0;
 
 
 		List <Unit> playerUnits = getPlayerUnits ();

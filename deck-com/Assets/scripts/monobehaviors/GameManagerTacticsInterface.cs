@@ -110,6 +110,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 
 		playerTurnTimer = 0;
+
+		cleanupPhase = -1;
+		aiTurnPhase = -2;
 	}
 
 	void Update () {
@@ -198,7 +201,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			}
 			//gain action
 			if (Input.GetKeyDown (KeyCode.A)) {
-				gm.activePlayerUnit.gainActions (1);
+				gm.activePlayerUnit.gainActions (5);
 			}
 			//draw card
 			if (Input.GetKeyDown (KeyCode.D)) {
@@ -207,6 +210,12 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			//heal
 			if (Input.GetKeyDown (KeyCode.H)) {
 				gm.activePlayerUnit.heal (2);
+			}
+			//damage (kill)
+			if (Input.GetKeyDown (KeyCode.K)) {
+				if (gm.activeAIUnit != null) {
+					gm.activeAIUnit.takeDamage (gm.activeAIUnit.health+1, null, gm.activePlayerUnit);
+				}
 			}
 				
 		}
@@ -310,8 +319,7 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 	//deailng with AI
 	public void startNewAIUnitTurn(){
-		aiTurnPhase = -2;
-		cleanupPhase = -1;
+		
 	}
 	private void advanceAITurn(){
 		if (gm.GameIsOver) {
@@ -329,10 +337,14 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				aiTurnPhase = 1;	//skip ahead
 			} else {
 				//otherwise focus the cam
+				Debug.Log("get ready to reinforce");
 				cam.setTarget (marker.CurTilePos);
+
+				return;
 			}
 		}
 		if (aiTurnPhase == 0) {
+			Debug.Log ("time now to reinforce");
 			Tile reinforcementTile = gm.spawnReinforcementAtNextMarker ();
 			//if there was nothing, move on
 			if (reinforcementTile == null) {
@@ -343,7 +355,21 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 				Debug.Log ("we got more reinforcememnts");
 				aiTurnPhase = -2;
 				cam.setTarget (reinforcementTile.Pos);
+				return;
 			}
+
+		}
+
+		//if there is no active AI unit, move on
+		if (gm.activeAIUnit == null) {
+			if (intoTheBreachMode) {
+				aiTurnPhase = -2;
+				gm.startCleanupPhase ();
+			} else {
+				aiTurnPhase = -2;
+				gm.startPlayerTurn ();
+			}
+			return;
 		}
 
 
@@ -356,10 +382,12 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		if (aiTurnPhase == 1){
 			if (gm.activeAIUnit.aiTurnInfo == null) {
 				gm.endAITurn ();
+				aiTurnPhase = -2;	//reset for next time
 				return;
 			}
 			if (gm.activeAIUnit.curAITurnStep >= gm.activeAIUnit.aiTurnInfo.moves.Count) {
 				gm.endAITurn ();
+				aiTurnPhase = -2;
 				return;
 			}
 		}
@@ -405,10 +433,11 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 			if (gm.activeAIUnit.aiTurnInfo.moves [gm.activeAIUnit.curAITurnStep].passMove == false) {
 				gm.advanceAITurn ();
 				aiTurnPhase = 0;
-				autoPlayAITurn = !gm.activeAIUnit.getIsVisibleToPlayer ();
+				autoPlayAITurn = !gm.activeAIUnit.getIsVisibleToPlayer () && !intoTheBreachMode;
 				//remove targets
 				GameObjectManager.instance.turnOffAllTargets ();
 			} else {
+				aiTurnPhase = -2;	//reset for next time
 				gm.endAITurn ();
 			}
 		}
@@ -421,12 +450,14 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 		}
 
 		cleanupPhase++;
+		Debug.Log ("cleanup phase " + cleanupPhase);
 
 		if (cleanupPhase == 0) {
 			//get a list of reinforcement markers that are new
 			foreach (PassiveObjectGO passive in GameObjectManager.instance.PassiveObjects) {
-				if (passive.Obj.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
+				if (passive.IsActive && passive.Obj.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
 					if (passive.hasBeenTriggered == false) {
+						Debug.Log ("slam it");
 						cleanupPhase = -1;	//do this again
 						passive.hasBeenTriggered = true;
 						passive.triggerScaleAnimation (1.0f, 0.75f);
@@ -440,6 +471,9 @@ public class GameManagerTacticsInterface : MonoBehaviour {
 
 		//if we're all done, start the player turn
 		gm.startPlayerTurn();
+		//reset for next time
+		cleanupPhase = -1;
+		Debug.Log ("now clean up pahse " + cleanupPhase);
 
 	}
 
