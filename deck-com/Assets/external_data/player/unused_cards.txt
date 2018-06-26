@@ -1,0 +1,7 @@
+village
+move2_cantrip
+move2_cantrip
+move2_cantrip
+move5
+blade_dash
+team_dash

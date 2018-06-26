@@ -88,7 +88,7 @@ public class EndGameManager {
 	}
 
 	int getRewardMoney(int level){
-		float val = Mathf.Pow (level, 1.4f) * 3.0f;
+		float val = Mathf.Pow (level, 1.4f) * 3.0f + 1;
 		//Debug.Log ("level " + level + "  val " + val);
 		float wiggle = val * 0.4f;
 		val += Random.Range (-wiggle, wiggle);
