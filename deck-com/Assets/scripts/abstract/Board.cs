@@ -222,7 +222,12 @@ public class Board {
 	public void addFoes(List<Unit> newFoes, int curAreaNum, int numLoot){
 		//reset 'em
 		foreach (Unit foe in newFoes) {
-			foe.resetWithCard ("patrol_move_6");
+			//foes that just landed should only be able to move
+			if (GameManagerTacticsInterface.instance.gm.TurnNum > 0) {
+				foe.resetWithCard ("patrol_move_4");
+			} else {
+				foe.reset ();
+			}
 			foe.resetRound ();
 		}
 		//give one of them loot if we should

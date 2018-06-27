@@ -1,4 +1,13 @@
 <cards>
+<card idName="patrol_move_4">
+<name>Scramble</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<card_type>Movement</card_type>
+<self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
+<range>4</range>
+</card>
 <card idName="patrol_move_5">
 <name>Patrol Move 5</name>
 <level>-1</level>
@@ -215,7 +224,7 @@
 </card>
 <card idName="blade_dash">
 <name>Blade Dash</name>
-<level>1</level>
+<level>2</level>
 <script>Card_MoveAttackAOE</script>
 <card_type>Attack</card_type>
 <damage>2</damage>
@@ -397,7 +406,7 @@
 <level>1</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<desc>Poisons the target if it delas damage</desc>
+<desc>Poisons the target if it deals damage</desc>
 <charm_to_give>dart_poison</charm_to_give>
 </card>
 <card idName="berserker_rage">
@@ -451,7 +460,7 @@
 <level>-1</level>
 <script>Card_LatchOn</script>
 <card_type>Skill</card_type>
-<desc>Unit latches on to target and neither can move until one is dead or moved</desc>
+<desc>Unit latches on to target. Neither unit can move until one of them is killed or moved</desc>
 <range>3</range>
 </card>
 <card idName="leech_bite">

@@ -97,7 +97,7 @@ public class GameManager {
 				podPlacement.placeFoes (this, board, curLevelNum, curAreaNum);
 			}else{
 				TilePos originPos = podPlacement.getEmptyMidpointTileBetweenPlayerAndEnd (board, getPlayerUnits (), 0.8f, 5);
-				podPlacement.makePod (this, board, board.getTileFromPos(originPos), curLevelNum * 2, curAreaNum);
+				podPlacement.makePod (this, board, board.getTileFromPos(originPos), curLevelNum * 4, curAreaNum);
 				//and give us a reinforcement too
 				podPlacement.checkIfWeNeedReinforcements(curLevelNum, curAreaNum, turnNum, board, getPlayerUnits());
 

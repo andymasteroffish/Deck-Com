@@ -344,7 +344,8 @@ public class PodPlacement {
 			}
 			Tile spawnTile = spawnTiles[spawnTileID];
 			spawnTiles.RemoveAt (spawnTileID);
-			unit.setup (gm, board, spawnTile);
+			unit.setup (gm, board, originTile);
+			unit.moveTo (spawnTile);
 			newFoes.Add (unit);
 			//Debug.Log ("Added unit " + unit.unitName + " on tile " + spawnTile.Pos.x + "," + spawnTile.Pos.y);
 		}
