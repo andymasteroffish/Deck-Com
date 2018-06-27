@@ -24,7 +24,7 @@ public class GameManager {
 	//tracking rounds
 	//private bool isPlayerTurn;
 	private TurnPhase curPhase;
-	private int roundNum;
+	private int turnNum;
 
 	//finishing
 	private bool gameIsOver;
@@ -98,8 +98,9 @@ public class GameManager {
 			}else{
 				TilePos originPos = podPlacement.getEmptyMidpointTileBetweenPlayerAndEnd (board, getPlayerUnits (), 0.8f, 5);
 				podPlacement.makePod (this, board, board.getTileFromPos(originPos), curLevelNum * 2, curAreaNum);
+				//and give us a reinforcement too
+				podPlacement.checkIfWeNeedReinforcements(curLevelNum, curAreaNum, turnNum, board, getPlayerUnits());
 
-				//podPlacement.placeFoesIntoTheBreach (this, board, curLevelNum, curAreaNum);
 			}
 		} else {
 
@@ -125,7 +126,7 @@ public class GameManager {
 		}
 
 
-		roundNum = 0;
+		turnNum = 0;
 		gameIsOver = false;
 		playerWins = false;
 			
@@ -149,7 +150,7 @@ public class GameManager {
 			return;
 		}
 
-		roundNum++;
+		turnNum++;
 
 		//isPlayerTurn = true;
 		curPhase = TurnPhase.Player;
@@ -211,11 +212,11 @@ public class GameManager {
 
 
 	public void startCleanupPhase(){
-		Debug.Log ("go clean up on turn "+roundNum);
+		Debug.Log ("go clean up on turn "+turnNum);
 		curPhase = TurnPhase.CleanUp;
 
 		//check if we should flash in some reinforcements next turn
-		podPlacement.checkIfWeNeedReinforcements(curLevelNum, curAreaNum, roundNum, board, getPlayerUnits());
+		podPlacement.checkIfWeNeedReinforcements(curLevelNum, curAreaNum, turnNum, board, getPlayerUnits());
 	}
 
 	public void markAIStart(){
@@ -543,7 +544,7 @@ public class GameManager {
 
 			//find all of the moves the AI could make from there
 			TurnInfo followingMoves = null;
-			if (!newBoard.units [unitID].isDead) {
+			if (!newBoard.units [unitID].isDead && !move.passMove) {
 				followingMoves = getAIMove (unitID, newBoard, originalBoard, curDepth + 1);
 			} else {
 				//Debug.Log ("I'm dead lol");
@@ -699,6 +700,12 @@ public class GameManager {
 	public bool PlayerWins {
 		get {
 			return this.playerWins;
+		}
+	}
+
+	public int TurnNum{
+		get{
+			return this.turnNum;
 		}
 	}
 }

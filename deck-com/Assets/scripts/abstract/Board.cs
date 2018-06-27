@@ -222,7 +222,8 @@ public class Board {
 	public void addFoes(List<Unit> newFoes, int curAreaNum, int numLoot){
 		//reset 'em
 		foreach (Unit foe in newFoes) {
-			foe.reset ();
+			foe.resetWithCard ("patrol_move_6");
+			foe.resetRound ();
 		}
 		//give one of them loot if we should
 		int lootHolderID = (int)Random.Range (0, newFoes.Count);

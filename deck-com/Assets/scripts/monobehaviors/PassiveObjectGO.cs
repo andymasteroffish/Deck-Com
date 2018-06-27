@@ -38,7 +38,7 @@ public class PassiveObjectGO : MonoBehaviour {
 		hasBeenTriggered = false;
 
 		//reinforcement marker starts invisible
-		if (obj.type == PassiveObject.PassiveObjectType.ReinforcementMarker) {
+		if (obj.type == PassiveObject.PassiveObjectType.ReinforcementMarker && GameManagerTacticsInterface.instance.gm.TurnNum > 0) {
 			transform.localScale = new Vector3 (0, 0, 0);
 		}
 	}

@@ -153,10 +153,12 @@ public class Unit {
 
 		canPickUpLoot = false;
 
-		curBehavior = BehaviorMode.Patrolling;
-		if (isPlayerControlled) {
-			curBehavior = BehaviorMode.Awake;
+		curBehavior = BehaviorMode.Awake;
+		if (!isPlayerControlled && !GameManagerTacticsInterface.instance.intoTheBreachMode) {
+			curBehavior = BehaviorMode.Patrolling;
+			addCharm ("patrol_status");
 		}
+
 		isPodLeader = false;
 
 		//spawn deck
@@ -164,11 +166,6 @@ public class Unit {
 
 		for (int i = 0; i < charmIDs.Count; i++) {
 			addCharm (charmIDs [i]);
-		}
-
-		//if they are AI, give them the patrol status charm
-		if (curBehavior == BehaviorMode.Patrolling) {
-			addCharm ("patrol_status");
 		}
 
 		//the first item is the weapon
@@ -308,14 +305,16 @@ public class Unit {
 		return val;
 	}
 
-	public void reset(){
+	public void reset(bool drawFirstHand = true){
 		//draw first hand
-		int drawSize = baseHandSize;
-		for (int i = 0; i < charms.Count; i++) {
-			drawSize += charms [i].getHandSizeMod ();
-		}
-		for (int i = 0; i < baseHandSize; i++) {
-			deck.drawCard ();
+		if (drawFirstHand) {
+			int drawSize = baseHandSize;
+			for (int i = 0; i < charms.Count; i++) {
+				drawSize += charms [i].getHandSizeMod ();
+			}
+			for (int i = 0; i < baseHandSize; i++) {
+				deck.drawCard ();
+			}
 		}
 		actionsLeft = 0;
 		setVisibleTiles ();
@@ -325,6 +324,13 @@ public class Unit {
 			cardsPlayedThisTurn = new List<Card> ();
 		}
 		cardsPlayedThisTurn.Clear ();
+	}
+
+	public  void resetWithCard(string cardID){
+		reset (false);
+		Card card = CardManager.instance.getCardFromIdName (cardID);
+		card.setup (this, deck);
+		deck.addCardToHand (card);
 	}
 
 	public void resetRound(){
