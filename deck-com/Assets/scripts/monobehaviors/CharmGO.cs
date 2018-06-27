@@ -88,8 +88,8 @@ public class CharmGO : MonoBehaviour {
 		}
 		spriteRend.color = col;
 
-		canvas.enabled = charm.Owner.getIsVisibleToPlayer ();
-		spriteRend.enabled = charm.Owner.getIsVisibleToPlayer ();
+		canvas.enabled = charm.Owner.getIsVisibleToPlayer () || GameManagerTacticsInterface.instance.intoTheBreachMode;
+		spriteRend.enabled = charm.Owner.getIsVisibleToPlayer () || GameManagerTacticsInterface.instance.intoTheBreachMode;
 	}
 
 	private void setAnimationPositions(){

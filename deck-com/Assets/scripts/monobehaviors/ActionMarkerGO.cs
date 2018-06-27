@@ -112,8 +112,8 @@ public class ActionMarkerGO : MonoBehaviour {
 			}
 		}
 
-		spriteRend.enabled = owner.getIsVisibleToPlayer ();
-		labelSprite.enabled = owner.getIsVisibleToPlayer () && idNum == 1;
+		spriteRend.enabled = owner.getIsVisibleToPlayer () || GameManagerTacticsInterface.instance.intoTheBreachMode;
+		labelSprite.enabled = (owner.getIsVisibleToPlayer () || GameManagerTacticsInterface.instance.intoTheBreachMode) && idNum == 1;
 	}
 
 	IEnumerator doScaleAnim(float targetScale, float time, bool deactivateWhenDone){

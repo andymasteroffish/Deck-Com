@@ -26,6 +26,9 @@ public class PodPlacement {
 	private int podCLPadding = 2; //how much it can be over by and still be OK
 	private int maxMoveDistAwayToSpawn = 2;
 
+	private int lootGiven;
+	private int maxLootPerLevel = 6;
+
 	//private Board board;
 	//private GameManager gm;
 
@@ -48,6 +51,7 @@ public class PodPlacement {
 			}
 		}
 
+		lootGiven = 0;
 	}
 
 	//these are wack numbers for now
@@ -254,10 +258,10 @@ public class PodPlacement {
 
 		//need some type of chart to determine how many reinforcements
 		int numReinforcements = 1;
-		if (turnNum % 3 == 0 && curLevelNum >= 1) {
+		if (turnNum % 6 == 0 && curLevelNum >= 1) {
 			numReinforcements++;
 		}
-		if (turnNum > 8) {
+		if (turnNum > 15) {
 			numReinforcements++;
 		}
 
@@ -355,8 +359,19 @@ public class PodPlacement {
 		//and define a leader
 		newFoes[0].isPodLeader = true;
 
-		board.addFoes (newFoes, curArea);
-		//board.units.AddRange (newFoes);
+		//should they have loot?
+		int numLoot = 0;
+		if (lootGiven < maxLootPerLevel) {
+			numLoot++;
+			lootGiven++;
+			//sometimes do it again!
+			if (Random.value < 0.2f) {
+				numLoot++;
+				lootGiven++;
+			}
+		}
+
+		board.addFoes (newFoes, curArea, numLoot);
 	}
 
 }

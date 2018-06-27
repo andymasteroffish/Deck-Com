@@ -356,7 +356,7 @@ public class GameManager {
 		foreach (Unit unit in aiUnits){
 			unit.setActive ( unit==activeAIUnit);
 		}
-		if (newActive.getIsVisibleToPlayer () && curPhase == TurnPhase.AI) {
+		if ( (newActive.getIsVisibleToPlayer () || GameManagerTacticsInterface.instance.intoTheBreachMode) && curPhase == TurnPhase.AI) {
 			cam.setTarget (newActive);
 		}
 		if (startTurn) {

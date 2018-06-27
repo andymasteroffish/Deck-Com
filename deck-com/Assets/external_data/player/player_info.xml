@@ -1,20 +1,20 @@
 <player>
   <info>
-    <money>30</money>
-    <cur_level>1</cur_level>
-    <generate_new_seed>false</generate_new_seed>
-    <seed>3564292</seed>
+    <money>2</money>
+    <cur_level>-1</cur_level>
+    <generate_new_seed>true</generate_new_seed>
+    <seed>42</seed>
   </info>
   <store>
-    <unlocked>True</unlocked>
-    <purchased_card0>False</purchased_card0>
-    <purchased_card1>False</purchased_card1>
-    <purchased_card2>False</purchased_card2>
-    <purchased_card3>False</purchased_card3>
-    <purchased_card4>False</purchased_card4>
-    <purchased_card5>True</purchased_card5>
+    <unlocked>false</unlocked>
+    <purchased_card0>false</purchased_card0>
+    <purchased_card1>false</purchased_card1>
+    <purchased_card2>false</purchased_card2>
+    <purchased_card3>false</purchased_card3>
+    <purchased_card4>false</purchased_card4>
+    <purchased_card5>false</purchased_card5>
   </store>
-  <unit idName="test_player">
+  <unit idName = "test_player">
     <name>Test Player</name>
     <sprite>unit_test</sprite>
     <deck>test_deck</deck>
@@ -25,7 +25,7 @@
       <charm>long_bow</charm>
     </charms>
   </unit>
-  <unit idName="wizard">
+  <unit idName = "wizard">
     <name>Gorb The Charmer</name>
     <sprite>unit_wizard</sprite>
     <deck>wizard_deck</deck>
@@ -36,7 +36,7 @@
       <charm>wizard_staff</charm>
     </charms>
   </unit>
-  <unit idName="ranger">
+  <unit idName = "ranger">
     <name>Quick Alexi</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
@@ -47,7 +47,7 @@
       <charm>long_bow</charm>
     </charms>
   </unit>
-  <unit idName="tank">
+  <unit idName = "tank">
     <name>Big Bobo</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>

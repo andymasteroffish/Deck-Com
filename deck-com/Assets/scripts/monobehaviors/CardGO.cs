@@ -172,7 +172,7 @@ public class CardGO : MonoBehaviour {
 			StartCoroutine (doMoveAnimation (aiRevealPos, moveTime, 1, true, false));
 		}
 
-		if (!card.Owner.getIsVisibleToPlayer ()) {
+		if (!card.Owner.getIsVisibleToPlayer () && !GameManagerTacticsInterface.instance.intoTheBreachMode) {
 			cardFront.SetActive (false);
 			cardBack.SetActive (false);
 		}

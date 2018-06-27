@@ -185,7 +185,7 @@ public class Board {
 		Profiler.EndSample ();
 	}
 
-
+	//NOT USED FOR INTO THE BREAHC MODE
 	public void resetUnitsAndLoot(int curAreaNum){
 		foreach(Unit unit in units){
 			unit.reset ();
@@ -219,15 +219,24 @@ public class Board {
 		}
 	}
 
-	public void addFoes(List<Unit> newFoes, int curAreaNum){
+	public void addFoes(List<Unit> newFoes, int curAreaNum, int numLoot){
 		//reset 'em
 		foreach (Unit foe in newFoes) {
 			foe.reset ();
 		}
-		//give one of them loot
-		Loot thisLoot = new Loot (newFoes[(int)Random.Range(0,newFoes.Count)], curAreaNum);
-		loot.Add (thisLoot);
-		units.AddRange (newFoes);
+		//give one of them loot if we should
+		int lootHolderID = (int)Random.Range (0, newFoes.Count);
+		for (int i=0; i<numLoot; i++){
+			Loot thisLoot = new Loot (newFoes [lootHolderID], curAreaNum);
+			loot.Add (thisLoot);
+			lootHolderID++;
+			if (lootHolderID >= newFoes.Count) {
+				lootHolderID = 0;
+			}
+		}
+
+		//add 'em
+		units.AddRange(newFoes);
 	}
 
 	//**************************

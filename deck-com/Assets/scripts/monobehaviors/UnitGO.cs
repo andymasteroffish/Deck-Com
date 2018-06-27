@@ -90,7 +90,7 @@ public class UnitGO : MonoBehaviour {
 		}
 
 		//show health
-		if (owner.getIsVisibleToPlayer ()) {
+		if (owner.getIsVisibleToPlayer () || GameManagerTacticsInterface.instance.intoTheBreachMode) {
 			healthText.text = "HP: " + owner.health + "/" + owner.baseHealth;
 		} else {
 			healthText.text = "";
@@ -129,7 +129,6 @@ public class UnitGO : MonoBehaviour {
 		//focus if this is an AI unit that just revealed itself
 		if (owner.curBehavior == Unit.BehaviorMode.Awake && wasPatrollingLastFrame && owner.getIsVisibleToPlayer () && GameManagerTacticsInterface.instance.publicRelease) {
 			GameManagerTacticsInterface.instance.Cam.revealAIUnit (owner);
-			//GameManagerTacticsInterface.instance.Cam.setTargetAfterTime (GameManagerTacticsInterface.instance.gm.activePlayerUnit , 4.0f);
 		}
 		wasPatrollingLastFrame = owner.curBehavior == Unit.BehaviorMode.Patrolling;
 
