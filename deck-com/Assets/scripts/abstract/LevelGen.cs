@@ -6,6 +6,7 @@ public class LevelGen {
 
 	private const int chunkSize = 5;
 
+	//these values get altered in a few functions. Better to use pass-by-reference, but I got lazy
 	private int playerStartChunkX = -1;
 	private int playerEndChunkX = -1;
 
@@ -35,7 +36,6 @@ public class LevelGen {
 		Tile[,] grid = new Tile[gridW, gridH];
 
 		//determine where the players will be
-		int playerCol = playerStartChunkX;
 		Debug.Log ("end chunk: " + playerEndChunkX);
 
 		//go through and make cunks
@@ -73,11 +73,11 @@ public class LevelGen {
 				//add it to the grid
 				for (int x = 0; x < chunkSize; x++) {
 					for (int y = 0; y < chunkSize; y++) {
-						if (chunkX == playerCol && chunkY == 0 && chunk [x, y].CoverVal == Tile.Cover.None) {
+						if (chunkX == playerStartChunkX && chunkY == 0 && chunk [x, y].CoverVal == Tile.Cover.None) {
 							chunk [x, y].spawnProperty = Tile.SpawnProperty.Player;
 						}
 
-						if ((chunkY > 0 || chunkX != playerCol) && chunk [x, y].CoverVal == Tile.Cover.None) {
+						if ((chunkY > 0 || chunkX != playerStartChunkX) && chunk [x, y].CoverVal == Tile.Cover.None) {
 							chunk [x, y].spawnProperty = Tile.SpawnProperty.Foe;
 						}
 
