@@ -6,6 +6,9 @@ public class LevelGen {
 
 	private const int chunkSize = 5;
 
+	private int playerStartChunkX = -1;
+	private int playerEndChunkX = -1;
+
 	public LevelGen(){
 	}
 
@@ -16,12 +19,15 @@ public class LevelGen {
 	public Tile[,] getLevel(int curLevelNum, int curAreaNum){
 		TextAsset[] files = GameManagerTacticsInterface.instance.mapChunks;
 
-		//create a grid
-		int chunkCols = 4 + curAreaNum/2;
-		int chunkRows = 4 + curAreaNum;
+		bool [,] chunkPath = generateChunkPath (curAreaNum);
+		//if it returns an empty array, that means we hit a dead end and should try again
+		while (chunkPath.GetLength (0) < 2) {
+			chunkPath = generateChunkPath (curAreaNum);
+		}
 
-		//make sure it has at least enough height to feel good
-		chunkRows = (int)Mathf.Max(3, chunkRows);
+		//create a grid
+		int chunkCols = chunkPath.GetLength(0);
+		int chunkRows = chunkPath.GetLength(1);
 
 		Debug.Log ("level is " + chunkCols + " x " + chunkRows + " chunks");
 		int gridW = chunkCols * chunkSize;
@@ -29,80 +35,56 @@ public class LevelGen {
 		Tile[,] grid = new Tile[gridW, gridH];
 
 		//determine where the players will be
-		int playerCol = (int)Random.Range(0, chunkCols);
-
-		//tetsing into the breach style. Eventually this should be able to change, but for now lets just do far left
-		if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
-			playerCol = 0;
-		}
-
+		int playerCol = playerStartChunkX;
+		Debug.Log ("end chunk: " + playerEndChunkX);
 
 		//go through and make cunks
 		for (int chunkX = 0; chunkX < chunkCols; chunkX++) {
 			for (int chunkY = 0; chunkY < chunkRows; chunkY++) {
-				//grab a file
-				TextAsset thisFile = files[(int)Random.Range(0,files.Length)];
-				Tile[,] chunk = loadChunkFromText (thisFile, chunkX, chunkY);
+				Tile[,] chunk;
+				//if it is on the path, make a room
+				if (chunkPath [chunkX, chunkY]) {
+					TextAsset thisFile = files [(int)Random.Range (0, files.Length)];
+					chunk = loadChunkFromText (thisFile, chunkX, chunkY);
 
-				//add or remove one or two cover objects randomly
-				greeble(chunk, chunkSize, chunkSize);
+					//add or remove one or two cover objects randomly
+					greeble (chunk, chunkSize, chunkSize);
 
-				//possibly rotate it
-				int numRots = (int)Random.Range(0,4);
-				for (int i = 0; i < numRots; i++) {
-					chunk = rotateCCW (chunk, chunkSize, chunkSize);
-				}
+					//possibly rotate it
+					int numRots = (int)Random.Range (0, 4);
+					for (int i = 0; i < numRots; i++) {
+						chunk = rotateCCW (chunk, chunkSize, chunkSize);
+					}
 
-				//possibly flip it
-				if (Random.value < 0.5f) {
-					chunk = flipHorz(chunk, chunkSize, chunkSize);
-				}
-				if (Random.value < 0.5f) {
-					chunk = flipVert(chunk, chunkSize, chunkSize);
-				}
-
-				//testing an S type shape for Into The Breach mode. This would eventually be more random
-				if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
-					bool doNotFillIn = false;
-					int crossY = (int)Mathf.Floor (chunkRows / 2);
-					if (chunkX == 0 && chunkY == 0)
-						doNotFillIn = true;
-					if (chunkY == crossY)
-						doNotFillIn = true;
-					if (chunkX == chunkCols - 1 && chunkY == chunkRows - 1)
-						doNotFillIn = true;
-					if (chunkX == 0 && chunkY < crossY)
-						doNotFillIn = true;
-					if (chunkX == chunkCols - 1 && chunkY > crossY)
-						doNotFillIn = true;
-					if (chunkX == 1 && chunkY == crossY - 1)
-						doNotFillIn = true;
-					if (chunkX == chunkCols - 2 && chunkY == crossY + 1)
-						doNotFillIn = true;
-
-					if (!doNotFillIn) {
-						fillIn (chunk, chunkSize, chunkSize);
+					//possibly flip it
+					if (Random.value < 0.5f) {
+						chunk = flipHorz (chunk, chunkSize, chunkSize);
+					}
+					if (Random.value < 0.5f) {
+						chunk = flipVert (chunk, chunkSize, chunkSize);
 					}
 				}
 
-				//add it
+				//otherwise just fill it in
+				else{
+					chunk = getFilledInChunk ();
+				}
+
+				//add it to the grid
 				for (int x = 0; x < chunkSize; x++) {
 					for (int y = 0; y < chunkSize; y++) {
 						if (chunkX == playerCol && chunkY == 0 && chunk [x, y].CoverVal == Tile.Cover.None) {
-							chunk[x,y].spawnProperty = Tile.SpawnProperty.Player;
+							chunk [x, y].spawnProperty = Tile.SpawnProperty.Player;
 						}
 
-						if (chunkY >  0 && chunk [x, y].CoverVal == Tile.Cover.None) {
-							chunk[x,y].spawnProperty = Tile.SpawnProperty.Foe;
+						if ((chunkY > 0 || chunkX != playerCol) && chunk [x, y].CoverVal == Tile.Cover.None) {
+							chunk [x, y].spawnProperty = Tile.SpawnProperty.Foe;
 						}
 
-						if (GameManagerTacticsInterface.instance.intoTheBreachMode) {
-							if (chunkX == chunkCols - 1 && chunkY == chunkRows - 1) {
-								if (y == chunkSize - 1) {
-									chunk [x, y].spawnProperty = Tile.SpawnProperty.Exit;
-								}
-							}
+						if (chunkX == playerEndChunkX && chunkY == chunkRows - 1 && y >= chunkSize-2) {
+							chunk [x, y].spawnProperty = Tile.SpawnProperty.Exit;
 						}
+
 
 						grid [chunkX * chunkSize + x, chunkY * chunkSize + y] = chunk [x, y];
 					}
@@ -110,15 +92,6 @@ public class LevelGen {
 			}
 		}
 
-		//clean up the whole perimeter
-//		for (int x = 0; x < gridW; x++) {
-//			grid [x, 0].spawnProperty = Tile.SpawnProperty.None;
-//			grid [x, gridH-1].spawnProperty = Tile.SpawnProperty.None;
-//		}
-//		for (int y = 0; y < gridH; y++) {
-//			grid [0, y].spawnProperty = Tile.SpawnProperty.None;
-//			grid [gridW-1, 0].spawnProperty = Tile.SpawnProperty.None;
-//		}
 
 		//add a store key
 		TilePos storePos = new TilePos(0,0);
@@ -142,6 +115,176 @@ public class LevelGen {
 		return grid;
 	}
 
+	private bool[,] generateChunkPath(int curAreaNum){
+		int maxSize = 16;
+		bool[,] grid = new bool[maxSize, maxSize];
+
+		//determine how long the path should be
+		int targetPathLength = 8 + curAreaNum*3;
+
+		Debug.Log ("target path lenght: " + targetPathLength);
+
+		//set them all to be off
+		for (int x = 0; x < maxSize; x++) {
+			for (int y = 0; y < maxSize; y++) {
+				grid [x, y] = false;
+			}
+		}
+
+		//move through it
+		TilePos curPos = new TilePos(maxSize/2,0);
+		playerStartChunkX = curPos.x;
+		for (int i=0; i<targetPathLength; i++){
+			grid [curPos.x, curPos.y] = true;
+			playerEndChunkX = curPos.x;
+
+			bool goodDir = false;
+			int numTries = 0;
+			while (goodDir == false) {
+				numTries++;
+				goodDir = true;	//asume this one will work
+				int nextDir = (int)Random.Range (0, 3);
+				TilePos nextPos = new TilePos (curPos);
+				//left
+				if (nextDir == 0 && curPos.x > 0) {
+					nextPos.x--;
+				}
+				//right
+				if (nextDir == 1 && curPos.x < maxSize-1) {
+					nextPos.x++;
+				}
+				//up
+				if (nextDir == 2 && curPos.y < maxSize-1) {
+					nextPos.y++;
+				}
+
+				//this spot must not currently be part of the path
+				if (grid [nextPos.x, nextPos.y]) {
+					goodDir = false;
+				}
+
+				//this spot should only have 1 neighbor in the path (the one leading to it)
+				int numNeighbors = 0;
+				if (nextPos.x > 0 && grid [nextPos.x - 1, nextPos.y])			numNeighbors++;
+				if (nextPos.x < maxSize-1 && grid [nextPos.x + 1, nextPos.y])	numNeighbors++;
+				if (nextPos.y > 0 && grid [nextPos.x, nextPos.y - 1])			numNeighbors++;
+				if (nextPos.y < maxSize-1 && grid [nextPos.x, nextPos.y + 1])	numNeighbors++;
+
+				if (numNeighbors > 1) {
+					goodDir = false;
+				}
+
+				//if it passes the checks, add it
+				if (goodDir) {
+					curPos = new TilePos (nextPos);
+				}
+				//otherwise chekc if we failed
+				else if (numTries > 50) {
+					Debug.Log ("PATH DONE GOT GOOFED, TRYING AGAIN");
+					return new bool[0, 0];
+				}
+			}
+		}
+
+		//print it
+//		string levelString = "";
+//		for (int y = maxSize - 1; y >= 0; y--) {
+//			for (int x = 0; x < maxSize; x++) {
+//				levelString += grid [x, y] ? "-" : "X";
+//			}
+//			levelString += '\n';
+//		}
+//		Debug.Log (levelString);
+
+		//make some rooms bigger by finding corner spaces and expanding them
+		List<TilePos> roomsToAdd = new List<TilePos>();
+		float chanceOfAddingRoom = 0.75f;
+		for (int x = 0; x < maxSize; x++) {
+			for (int y = 0; y < maxSize; y++) {
+				//get num neighbors for this spot
+				int numNeighbors = 0;
+				if (x > 0 && grid [x - 1, y])			numNeighbors++;
+				if (x < maxSize-1 && grid [x + 1, y])	numNeighbors++;
+				if (y > 0 && grid [x, y - 1])			numNeighbors++;
+				if (y < maxSize-1 && grid [x, y + 1])	numNeighbors++;
+
+				if (numNeighbors == 2 && Random.value < chanceOfAddingRoom) {
+					roomsToAdd.Add (new TilePos (x, y));
+				}	
+			}
+		}
+
+		//add 'em
+		for (int i = 0; i < roomsToAdd.Count; i++) {
+			grid [roomsToAdd [i].x, roomsToAdd [i].y] = true;
+		}
+
+		//print it again
+//		levelString = "";
+//		for (int y = maxSize - 1; y >= 0; y--) {
+//			for (int x = 0; x < maxSize; x++) {
+//				levelString += grid [x, y] ? "-" : "X";
+//			}
+//			levelString += '\n';
+//		}
+//		Debug.Log (levelString);
+
+
+		bool[,] trimGrid = trimBoolGrid (grid, maxSize);
+
+		//print it again
+//		levelString = "";
+//		for (int y = trimGrid.GetLength(1) - 1; y >= 0; y--) {
+//			for (int x = 0; x < trimGrid.GetLength(0); x++) {
+//				levelString += trimGrid [x, y] ? "-" : "X";
+//			}
+//			levelString += '\n';
+//		}
+//		Debug.Log (levelString);
+
+		return trimGrid;
+	}
+
+	public bool[,] trimBoolGrid(bool[,] source, int maxSize){
+		//figure out the offsets
+		int firstX = maxSize;
+		int lastX = 0;
+		int gridH = 0;
+		for (int x = 0; x < maxSize; x++) {
+			for (int y = 0; y < maxSize; y++) {
+				if (source [x, y] == true) {
+					if (x < firstX) {
+						firstX = x;
+					}
+					if (x > lastX) {
+						lastX = x;
+					}
+					if (y + 1 > gridH) {
+						gridH = y + 1;
+					}
+				}
+			}
+		}
+		int gridW = lastX + 1 - firstX;
+//		Debug.Log ("firstX " + firstX + "  lastX " + lastX);
+//		Debug.Log ("width: "+gridW + "  height " + gridH);
+
+		//make a new grid
+		bool[,] trimGrid = new bool[gridW,gridH];
+		for (int x = 0; x < gridW; x++) {
+			for (int y = 0; y < gridH; y++) {
+				int sourceX = x + firstX;
+				trimGrid [x, y] = source [sourceX, y];
+			}
+		}
+
+		//adjust starting pos
+		playerStartChunkX -= firstX;
+		playerEndChunkX -= firstX;
+
+		return trimGrid;
+	}
+
 	public void greeble(Tile[,] grid, int gridW, int gridH){
 		for (int x = 0; x < gridW; x++) {
 			for (int y = 0; y < gridH; y++) {
@@ -152,13 +295,13 @@ public class LevelGen {
 		}
 	}
 
-	public void fillIn(Tile[,] grid, int gridW, int gridH){
-		for (int x = 0; x < gridW; x++) {
-			for (int y = 0; y < gridH; y++) {
-				grid [x, y].setCover (Tile.Cover.Full);
-			}
-		}
-	}
+//	public void fillIn(Tile[,] grid, int gridW, int gridH){
+//		for (int x = 0; x < gridW; x++) {
+//			for (int y = 0; y < gridH; y++) {
+//				grid [x, y].setCover (Tile.Cover.Full);
+//			}
+//		}
+//	}
 
 	public Tile[,] rotateCCW(Tile[,] orig, int gridW, int gridH){
 		Tile[,] grid = new Tile[gridW, gridH];
@@ -217,6 +360,16 @@ public class LevelGen {
 			}
 		}
 
+		return chunk;
+	}
+
+	public Tile[,] getFilledInChunk(){
+		Tile[,] chunk = new Tile[chunkSize, chunkSize];
+		for (int y = 0; y < chunkSize; y++) {
+			for (int x = 0; x < chunkSize; x++) {
+				chunk [x, y] = new Tile(Tile.Cover.Full, Tile.SpawnProperty.None, GameManagerTacticsInterface.instance.gm);
+			}
+		}
 		return chunk;
 	}
 
