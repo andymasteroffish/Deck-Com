@@ -31,8 +31,8 @@
 <level>1</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<damage_mod>0</damage_mod>
-<range_mod>0</range_mod>
+<damage>2</damage>
+<range>5</range>
 </card>
 <card idName="attack_r1_d-1">
 <name>Attack</name>

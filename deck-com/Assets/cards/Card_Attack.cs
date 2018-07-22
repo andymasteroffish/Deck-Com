@@ -5,8 +5,10 @@ using System.Xml;
 
 public class Card_Attack : Card {
 
-	public int damageMod;
-	public int rangeMod;
+//	public int damageMod;
+//	public int rangeMod;
+	public int damage;
+	public float range;
 
 	public string charmToGiveTarget;
 
@@ -18,14 +20,20 @@ public class Card_Attack : Card {
 	public Card_Attack(XmlNode _node){
 		node = _node;
 
-		rangeMod = 0;
-		if (node ["range_mod"] != null) {
-			rangeMod = int.Parse (node ["range_mod"].InnerText);
+
+
+		range = 0;
+		if (node ["range"] != null) {
+			range = int.Parse (node ["range"].InnerText);
+		}else{
+			Debug.Log ("ATTACK CARD HAS NO RANGE: " + idName);
 		}
 
-		damageMod = 0;
-		if (node ["damage_mod"] != null) {
-			damageMod = int.Parse (node ["damage_mod"].InnerText);
+		damage = 0;
+		if (node ["damage"] != null) {
+			damage = int.Parse (node ["damage"].InnerText);
+		}else{
+			Debug.Log ("ATTACK CARD HAS NO DAMAGE: " + idName);
 		}
 
 		charmToGiveTarget = "";
@@ -43,20 +51,17 @@ public class Card_Attack : Card {
 	}
 
 	public override void setupBlueprintCustom(){
-		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
-		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
+		string damageText = "Damage: " + damage;
+		string rangeText = "Range: " + Mathf.Floor(range);
 
 		description = damageText + "\n" + rangeText;
 
-		if (damageMod == 0 && rangeMod == 0) {
-			description = "Attack using your equiped weapon";
-		}
 	}
 
 	public override void setupCustom(){
 		Card_Attack blueprintCustom = (Card_Attack)blueprint;
-		damageMod = blueprintCustom.damageMod;
-		rangeMod = blueprintCustom.rangeMod;
+		damage = blueprintCustom.damage;
+		range = blueprintCustom.range;
 		charmToGiveTarget = blueprintCustom.charmToGiveTarget;
 		hitAllInRange = blueprintCustom.hitAllInRange;
 		canEnd = blueprintCustom.canEnd;
@@ -64,7 +69,7 @@ public class Card_Attack : Card {
 
 
 	public override void mouseEnterEffects(){
-		mouseEnterForWeapon (rangeMod);
+		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
 
 		if (hitAllInRange) {
 			Owner.CurTile.setHighlighted (false);
@@ -72,11 +77,45 @@ public class Card_Attack : Card {
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
-		setPotentialTargetInfoTextForWeapon (unit, damageMod);
+		//start with the weapon
+		string text = "Card +"+damage+"\n";
+
+		//check my charms
+		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+			text += Owner.Charms [i].getGeneralDamageModifierText (this, unit);
+		}
+
+		//check if the unit has any charms that would alter damage values
+		int totalPrevention = 0;
+		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
+			text += unit.Charms [i].getDamagePreventionText (this, Owner);
+			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
+		}
+
+		//calculate cover
+		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
+		text += getInfoStringForCover (coverVal);
+
+		//print the total
+		//text += "\nDAMAGE: "+(getDamageToUnit(unit)+totalPrevention);
+		int totalDamage = getDamageToUnit(unit)+totalPrevention;
+
+		//set the target info text
+		Owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
 	}
 
 	public override void selectCardCustom(){
-		selectCardForWeapon (rangeMod);
+		WaitingForUnit = true;
+
+		bool includeAI = true;
+		if (Owner.isPlayerControlled == false) {
+			if (Owner.aiProfile.willAttackAllies == false) {
+				includeAI = false;
+			}
+		}
+
+		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, includeAI, baseHighlightColor);
+
 
 		//if we're hitting everybody, just do it
 		if (hitAllInRange) {
@@ -93,12 +132,8 @@ public class Card_Attack : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-		int damageVal = getWeaponDamageToUnit (unit, damageMod);
+		int damageVal = getDamageToUnit (unit);
 		doDamageToUnit( unit, damageVal );
-
-		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			Owner.Charms [i].dealWeaponDamageCustom (this, unit, damageVal);
-		}
 
 		if (charmToGiveTarget != "" && damageVal > 0) {
 			unit.addCharm (charmToGiveTarget);
@@ -116,7 +151,22 @@ public class Card_Attack : Card {
 		//DOES NOT YET WORK WITH THE HIT ALL IN RANGE OPTION
 	}
 
-//	public override int getAIAttackRange(){
-//		return getRangeForWeapon(rangeMod);
-//	}
+	public int getDamageToUnit(Unit unit){
+		int damageVal = damage;
+
+		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+			damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
+		}
+
+		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
+		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
+
+		if (damageVal < 0) {
+			damageVal = 0;
+		}
+
+		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
+
+		return damageVal;
+	}
 }
