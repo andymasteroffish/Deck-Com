@@ -52,9 +52,8 @@ public class Unit {
 
 	public string deckListPath;
 
-	//weapons and charms
+	//charms
 	private List<string> charmIDs;
-	private Charm weapon;
 	private List<Charm> charms = new List<Charm>();
 
 	//line of sight
@@ -168,15 +167,12 @@ public class Unit {
 			addCharm (charmIDs [i]);
 		}
 
-		//the first item is the weapon
-		weapon = charms[0];
-
 		//set them up
 		deck.setup (this, deckListPath);
 
 		setHighlighted (false);
 
-		//aiProfile might reference the weapon, so we should make it after setting the charms
+		//aiProfile might reference the charms, so we should make it after setting the charms
 		aiProfile = new AIProfile (this, aiProfileName);	//this should load from XML
 
 		//create the game object shell
@@ -251,7 +247,6 @@ public class Unit {
 			charms.Add(CharmManager.instance.getCharmFromParent (parent.charms[i]));
 			//Debug.Log ("test add: " + charms [i].idName + " to " + unitName);
 		}
-		weapon = charms[0];
 		Profiler.EndSample ();
 
 		isHighlighted = parent.isHighlighted;
@@ -648,9 +643,7 @@ public class Unit {
 
 	public void clearAllEquipment(){
 		for (int i = charms.Count - 1; i >= 0; i--) {
-			if (charms [i] != weapon) {
-				removeCharm (charms [i]);
-			}
+			removeCharm (charms [i]);
 		}
 	}
 
@@ -699,14 +692,6 @@ public class Unit {
 		}
 	}
 
-	public Charm Weapon{
-		get{
-			return this.weapon;
-		}
-		set{
-			weapon = value;
-		}
-	}
 
 	public List<Charm> Charms{
 		get{

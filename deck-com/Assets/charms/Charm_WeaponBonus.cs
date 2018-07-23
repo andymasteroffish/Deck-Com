@@ -27,10 +27,10 @@ public class Charm_WeaponBonus : Charm {
 
 		description = "";
 		if (rangeMod != 0) {
-			description += "Weapon range increase: " + rangeMod;
+			description += "Attack Card range increase: " + rangeMod;
 		}
 		if (damageMod != 0) {
-			description += "Damage increase: " + damageMod;
+			description += "Attack Card damage increase: " + damageMod;
 		}
 	}
 	public Charm_WeaponBonus(Charm parent){
@@ -49,10 +49,17 @@ public class Charm_WeaponBonus : Charm {
 		rangeMod = ((Charm_WeaponBonus)parent).rangeMod;
 	}
 
-	public override int getWeaponDamageModCustom(Card card, Unit target){
-		return damageMod;
+	public override int getDamageModCustom(Card card, Unit target){
+		if (card.type == Card.CardType.Attack || card.type == Card.CardType.AttackSpecial) {
+			return damageMod;
+		}
+		return 0;
 	}
-	public override int getWeaponRangeModCustom(Card card){
-		return rangeMod;
+	public override int getRangeModCustom(Card card){
+		if (card.type == Card.CardType.Attack || card.type == Card.CardType.AttackSpecial) {
+			return rangeMod;
+		}
+		return 0;
+
 	}
 }

@@ -25,6 +25,7 @@ public class CharmManager : MonoBehaviour {
 
 
 	public Charm getCharmFromIdName(string charmIdName){
+		Debug.Log ("look for " + charmIdName);
 		foreach (XmlNode node in nodes) {
 			if (node.Attributes ["idName"].Value == charmIdName) {
 				return	getCharmFromXMLNode (node);

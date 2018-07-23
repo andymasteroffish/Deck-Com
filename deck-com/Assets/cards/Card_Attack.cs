@@ -69,7 +69,8 @@ public class Card_Attack : Card {
 
 
 	public override void mouseEnterEffects(){
-		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
+		mouseEnterForAttack ( range);
+		//Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
 
 		if (hitAllInRange) {
 			Owner.CurTile.setHighlighted (false);
@@ -77,45 +78,35 @@ public class Card_Attack : Card {
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
-		//start with the weapon
-		string text = "Card +"+damage+"\n";
-
-		//check my charms
-		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			text += Owner.Charms [i].getGeneralDamageModifierText (this, unit);
-		}
-
-		//check if the unit has any charms that would alter damage values
-		int totalPrevention = 0;
-		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
-			text += unit.Charms [i].getDamagePreventionText (this, Owner);
-			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
-		}
-
-		//calculate cover
-		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		text += getInfoStringForCover (coverVal);
-
-		//print the total
-		//text += "\nDAMAGE: "+(getDamageToUnit(unit)+totalPrevention);
-		int totalDamage = getDamageToUnit(unit)+totalPrevention;
-
-		//set the target info text
-		Owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
+		setPotentialTargetInfoTextForAttack (unit, damage);
+//		string text = "Card +"+damage+"\n";
+//
+//		//check my charms
+//		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+//			text += Owner.Charms [i].getGeneralDamageModifierText (this, unit);
+//		}
+//
+//		//check if the unit has any charms that would alter damage values
+//		int totalPrevention = 0;
+//		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
+//			text += unit.Charms [i].getDamagePreventionText (this, Owner);
+//			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
+//		}
+//
+//		//calculate cover
+//		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
+//		text += getInfoStringForCover (coverVal);
+//
+//		//print the total
+//		//text += "\nDAMAGE: "+(getDamageToUnit(unit)+totalPrevention);
+//		int totalDamage = getDamageToUnit(unit)+totalPrevention;
+//
+//		//set the target info text
+//		Owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
 	}
 
 	public override void selectCardCustom(){
-		WaitingForUnit = true;
-
-		bool includeAI = true;
-		if (Owner.isPlayerControlled == false) {
-			if (Owner.aiProfile.willAttackAllies == false) {
-				includeAI = false;
-			}
-		}
-
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, true, includeAI, baseHighlightColor);
-
+		selectCardForAttack (range);
 
 		//if we're hitting everybody, just do it
 		if (hitAllInRange) {
@@ -132,7 +123,7 @@ public class Card_Attack : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-		int damageVal = getDamageToUnit (unit);
+		int damageVal = calculateAttackDamageToUnit (unit, damage);
 		doDamageToUnit( unit, damageVal );
 
 		if (charmToGiveTarget != "" && damageVal > 0) {
@@ -151,22 +142,22 @@ public class Card_Attack : Card {
 		//DOES NOT YET WORK WITH THE HIT ALL IN RANGE OPTION
 	}
 
-	public int getDamageToUnit(Unit unit){
-		int damageVal = damage;
-
-		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
-		}
-
-		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
-
-		if (damageVal < 0) {
-			damageVal = 0;
-		}
-
-		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
-
-		return damageVal;
-	}
+//	public int getDamageToUnit(Unit unit){
+//		int damageVal = damage;
+//
+//		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+//			damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
+//		}
+//
+//		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
+//		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
+//
+//		if (damageVal < 0) {
+//			damageVal = 0;
+//		}
+//
+//		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
+//
+//		return damageVal;
+//	}
 }

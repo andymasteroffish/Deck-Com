@@ -59,7 +59,7 @@ public class Card_DirectDamage : Card {
 
 		//check my charms
 		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			text += Owner.Charms [i].getGeneralDamageModifierText (this, unit);
+			text += Owner.Charms [i].getDamageModifierText (this, unit);
 		}
 
 
@@ -97,7 +97,7 @@ public class Card_DirectDamage : Card {
 
 		if (!ignoreCasterCharms) {
 			for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-				damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
+				damageVal += Owner.Charms [i].getDamageMod (this, unit);
 			}
 		}
 

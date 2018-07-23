@@ -39,7 +39,7 @@ public class Card_AttackIgnoreWeapon : Card {
 
 		//check my charms
 		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			text += Owner.Charms [i].getGeneralDamageModifierText (this, unit);
+			text += Owner.Charms [i].getDamageModifierText (this, unit);
 		}
 
 		//check if the unit has any charms that would alter damage values
@@ -83,7 +83,7 @@ public class Card_AttackIgnoreWeapon : Card {
 		int damageVal = damage;
 
 		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
+			damageVal += Owner.Charms [i].getDamageMod (this, unit);
 		}
 
 		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);

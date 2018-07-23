@@ -216,7 +216,9 @@ public class GameManager {
 		curPhase = TurnPhase.CleanUp;
 
 		//check if we should flash in some reinforcements next turn
-		podPlacement.checkIfWeNeedReinforcements(curLevelNum, curAreaNum, turnNum, board, getPlayerUnits());
+		if (!GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
+			podPlacement.checkIfWeNeedReinforcements (curLevelNum, curAreaNum, turnNum, board, getPlayerUnits ());
+		}
 	}
 
 	public void markAIStart(){

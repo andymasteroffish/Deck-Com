@@ -6,7 +6,9 @@ using System.Xml;
 public class Card_MoveAndAttack : Card {
 
 	public int moveRange;
-	public int damageMod;
+
+	public int damage;
+	public float attackRange;
 
 	private bool onAttackStep = false;
 
@@ -14,19 +16,21 @@ public class Card_MoveAndAttack : Card {
 	public Card_MoveAndAttack(XmlNode _node){
 		node = _node;
 
-		moveRange = int.Parse (node ["range"].InnerXml);
-		damageMod = int.Parse (node ["damage_mod"].InnerXml);
+		moveRange = int.Parse (node ["move_range"].InnerXml);
+		damage = int.Parse (node ["damage"].InnerXml);
+		attackRange = int.Parse (node ["attack_range"].InnerXml);
 	}
 
 	public override void setupBlueprintCustom(){
 		showVisibilityIconsWhenHighlighting = true;
-		description = "move up to " + moveRange + " spaces and attack at "+damageMod+" damage";
+		description = "move up to " + moveRange + " spaces and attack for "+damage+" damage at "+attackRange+" range";
 	}
 
 	public override void setupCustom(){
 		Card_MoveAndAttack blueprintCustom = (Card_MoveAndAttack)blueprint;
 		moveRange = blueprintCustom.moveRange;
-		damageMod = blueprintCustom.damageMod;
+		damage = blueprintCustom.damage;
+		attackRange = blueprintCustom.attackRange;
 	}
 
 	public override void mouseEnterEffects(){
@@ -49,18 +53,18 @@ public class Card_MoveAndAttack : Card {
 			WaitingForUnit = true;
 
 			//highlight for the attack
-			selectCardForWeapon(0);
+			selectCardForAttack(attackRange);
 		}
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
-		setPotentialTargetInfoTextForWeapon (unit, damageMod);
+		setPotentialTargetInfoTextForAttack (unit, damage);
 	}
 
 	public override void passInUnitCustom(Unit unit){
 		if (onAttackStep) {
 			onAttackStep = false;
-			int damageVal = getWeaponDamageToUnit (unit, damageMod);
+			int damageVal = calculateAttackDamageToUnit (unit, damage);// getWeaponDamageToUnit (unit, damageMod);
 			doDamageToUnit( unit, damageVal );
 			for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
 				Owner.Charms [i].dealWeaponDamage (this, unit, damageVal);

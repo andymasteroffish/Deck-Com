@@ -22,7 +22,6 @@
     <player_controlled>true</player_controlled>
     <currently_active>false</currently_active>
     <charms>
-      <charm>long_bow</charm>
     </charms>
   </unit>
   <unit idName = "wizard">

@@ -80,7 +80,7 @@ public class AIProfile {
 		deltaAllyGoodCharmWeight = 2;
 		deltaAllyBadCharmWeight = -6;
 
-		preferedDistToClosestEnemy = owner.Weapon.baseRange - 3;//- 1;
+		preferedDistToClosestEnemy = 7;//owner.Weapon.baseRange - 3;//- 1;
 		acceptableDistanceRangeToClosestEnemy = 1.5f;
 
 		ignoreDistanceChecks = false;

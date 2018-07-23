@@ -31,35 +31,36 @@ public class Card_CoverAttack : Card {
 		rangeMod = blueprintCustom.rangeMod;
 	}
 
+	//I COMMENTED OUT A LOT OF SHIT THAT NEEDS TO BE FIXED
 	public override void mouseEnterEffects(){
-		mouseEnterForWeapon (rangeMod);
+		//mouseEnterForWeapon (rangeMod);
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
-		setPotentialTargetInfoTextForWeapon (unit, damageMod);
+		//setPotentialTargetInfoTextForWeapon (unit, damageMod);
 	}
 
 	public override void selectCardCustom(){
 
-		selectCardForWeapon (rangeMod);
+		//selectCardForWeapon (rangeMod);
 
 	}
 
 	public override void passInUnitCustom(Unit unit){
 
-		//kill cover
-		while (Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile) != null) {
-			Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile).setCover (Tile.Cover.None); 
-		}
-
-		//do the damage
-		int damageVal =  getWeaponDamageToUnit(unit, damageMod); 
-		doDamageToUnit( unit, damageVal );
-
-		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			Owner.Charms [i].dealWeaponDamage (this, unit, damageVal);
-		}
-		//doWeaponDamageToUnit (unit, damageAdjust);
+//		//kill cover
+//		while (Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile) != null) {
+//			Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile).setCover (Tile.Cover.None); 
+//		}
+//
+//		//do the damage
+//		int damageVal =  getWeaponDamageToUnit(unit, damageMod); 
+//		doDamageToUnit( unit, damageVal );
+//
+//		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+//			Owner.Charms [i].dealWeaponDamage (this, unit, damageVal);
+//		}
+//
 		finish ();
 	}
 

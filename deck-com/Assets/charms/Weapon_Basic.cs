@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 
+//KILL THIS CLASS ENTIRELY
+
 public class Weapon_Basic : Charm {
 
 	public string charmToGive;
@@ -14,28 +16,28 @@ public class Weapon_Basic : Charm {
 
 	public Weapon_Basic(XmlNode _node){
 		
-		node = _node;
-		baseDamage = int.Parse(node ["damage"].InnerText);
-		baseRange = int.Parse(node ["range"].InnerText);
-
-		charmToGive = "none";
-		if (node ["charm_to_give"] != null) {
-			charmToGive = node ["charm_to_give"].InnerText;
-		}
-
-		attackCardActionCostMod = 0;
-		if (node ["attack_card_cost_mod"] != null) {
-			attackCardActionCostMod = int.Parse(node ["attack_card_cost_mod"].InnerText);
-		}
-
-		cardDrawOnDamage = 0;
-		if (node ["card_draw_on_damage"] != null) {
-			cardDrawOnDamage = int.Parse(node ["card_draw_on_damage"].InnerText);
-		}
-		actionGainOnDamage = 0;
-		if (node ["action_gain_on_damage"] != null) {
-			actionGainOnDamage = int.Parse(node ["action_gain_on_damage"].InnerText);
-		}
+//		node = _node;
+//		baseDamage = int.Parse(node ["damage"].InnerText);
+//		baseRange = int.Parse(node ["range"].InnerText);
+//
+//		charmToGive = "none";
+//		if (node ["charm_to_give"] != null) {
+//			charmToGive = node ["charm_to_give"].InnerText;
+//		}
+//
+//		attackCardActionCostMod = 0;
+//		if (node ["attack_card_cost_mod"] != null) {
+//			attackCardActionCostMod = int.Parse(node ["attack_card_cost_mod"].InnerText);
+//		}
+//
+//		cardDrawOnDamage = 0;
+//		if (node ["card_draw_on_damage"] != null) {
+//			cardDrawOnDamage = int.Parse(node ["card_draw_on_damage"].InnerText);
+//		}
+//		actionGainOnDamage = 0;
+//		if (node ["action_gain_on_damage"] != null) {
+//			actionGainOnDamage = int.Parse(node ["action_gain_on_damage"].InnerText);
+//		}
 	}
 	public Weapon_Basic(Charm parent){
 		setFromParent (parent);
@@ -44,7 +46,7 @@ public class Weapon_Basic : Charm {
 	public override void setupCustom(){
 		type = CharmType.Weapon;
 		className = CharmClass.BasicWeapon;
-		description = baseDamage + " damage, " + baseRange + " range.";
+		//description = baseDamage + " damage, " + baseRange + " range.";
 	}
 
 	public override void setFromParentCustom(Charm parent){

@@ -14,8 +14,6 @@ public class Charm  {
 
 	public int costToAddToDeck;
 
-	public int baseDamage, baseRange;	//only used for weapons. All other charms will ignore these values
-
 	private Unit owner;
 	public int offsetID;
 
@@ -52,7 +50,7 @@ public class Charm  {
 	public float aiGoodCharmPoints, aiBadCharmPoints;
 
 
-	//this should never be
+	//this should never be used
 	public Charm(){}
 
 	//this should be used
@@ -81,6 +79,8 @@ public class Charm  {
 
 		costToAddToDeck = 3;
 
+		Debug.Log (idName);
+		Debug.Log (node);
 		name = node ["name"].InnerText;
 
 		className = CharmClass.Charm;
@@ -177,9 +177,6 @@ public class Charm  {
 
 		className = parent.className;
 		type = parent.type;
-
-		baseDamage = parent.baseDamage;
-		baseRange = parent.baseRange;
 
 		handSizeMod = parent.handSizeMod;
 
@@ -308,33 +305,21 @@ public class Charm  {
 	}
 	public virtual int getCardActionCostModCustom(Card card){return 0;}
 
-	public virtual int getBaseDamage(){
-		return baseDamage;
-	}
-
-	public int getGeneralDamageMod(Card card, Unit target){
+	public int getDamageMod(Card card, Unit target){
 		if (card.ignoreCasterCharms) {
 			return 0;
 		}
-		return getGeneralDamageModCustom (card, target);
+		return getDamageModCustom (card, target);
 	}
-	public virtual int getGeneralDamageModCustom(Card card, Unit target){return 0;}
+	public virtual int getDamageModCustom(Card card, Unit target){return 0;}
 
-	public int getWeaponDamageMod(Card card, Unit target){
+	public int getRangeMod(Card card){
 		if (card.ignoreCasterCharms) {
 			return 0;
 		}
-		return getWeaponDamageModCustom (card, target);
+		return getRangeModCustom (card);
 	}
-	public virtual int getWeaponDamageModCustom(Card card, Unit target){return 0;}
-
-	public int getWeaponRangeMod(Card card){
-		if (card.ignoreCasterCharms) {
-			return 0;
-		}
-		return getWeaponRangeModCustom (card);
-	}
-	public virtual int getWeaponRangeModCustom(Card card){return 0;}
+	public virtual int getRangeModCustom(Card card){return 0;}
 
 	public int getDamageTakenMod(Card card, Unit source){
 		if (card == null) {
@@ -366,20 +351,10 @@ public class Charm  {
 	public virtual float getSightRangeModCustom(){return sightRangeMod;}
 
 	//writing modifiers in the info box
-	public string getWeaponDamageModifierText(Card card, Unit target){
-		string returnVal = "";
-		int damageMod = getWeaponDamageMod (card, target) + getGeneralDamageMod(card, target);
-		if (damageMod != 0) {
-			string symbol = damageMod >= 0 ? " +" : " ";
-			returnVal += name +symbol + damageMod + "\n";
-		}
 
-		return returnVal;
-	}
-
-	public string getGeneralDamageModifierText(Card card, Unit target){
+	public string getDamageModifierText(Card card, Unit target){
 		string returnVal = "";
-		int damageMod = getGeneralDamageMod (card, target);
+		int damageMod = getDamageMod (card, target);
 		if (damageMod != 0) {
 			string symbol = damageMod >= 0 ? " +" : " ";
 			returnVal += name +symbol + damageMod + "\n";

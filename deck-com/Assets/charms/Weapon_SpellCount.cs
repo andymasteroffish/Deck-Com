@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Xml;
 
+// THIS WHOLE CLASS NEEDS TO GO
+
 public class Weapon_SpellCount : Charm {
 
 	private int damage_per_spell = 2;
@@ -11,8 +13,8 @@ public class Weapon_SpellCount : Charm {
 		
 		node = _node;
 
-		baseDamage = 0;
-		baseRange = int.Parse(node ["range"].InnerText);
+//		baseDamage = 0;
+//		baseRange = int.Parse(node ["range"].InnerText);
 
 
 	}
@@ -30,8 +32,8 @@ public class Weapon_SpellCount : Charm {
 		
 	}
 
-	public override int getBaseDamage(){
-		return Owner.deck.getCardsInHandOfType (Card.CardType.Spell) * damage_per_spell;
-	}
+//	public override int getBaseDamage(){
+//		return Owner.deck.getCardsInHandOfType (Card.CardType.Spell) * damage_per_spell;
+//	}
 
 }

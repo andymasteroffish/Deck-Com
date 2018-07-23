@@ -219,8 +219,9 @@
 <level>1</level>
 <script>Card_MoveAndAttack</script>
 <card_type>Attack</card_type>
-<range>3</range>
-<damage_mod>-1</damage_mod>
+<move_range>3</move_range>
+<damage>1</damage>
+<attack_range>4</attack_range>
 </card>
 <card idName="blade_dash">
 <name>Blade Dash</name>
@@ -437,15 +438,6 @@
 <cards_to_draw>1</cards_to_draw>
 <any_unit>true</any_unit>
 <type_to_care_about>Attack</type_to_care_about>
-</card>
-<card idName="borrow_strike">
-<name>Let me Borrow That</name>
-<level>2</level>
-<script>Card_AttackOtherWeapon</script>
-<card_type>Attack</card_type>
-<desc>Attack using the weapon of a unit within {other_unit_range} spaces</desc>
-<use_other_unit_weapon>true</use_other_unit_weapon>
-<other_unit_range>4</other_unit_range>
 </card>
 <card idName="build_a_wall">
 <name>Build-A-Wall</name>
