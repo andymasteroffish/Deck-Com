@@ -64,12 +64,7 @@ public class Card_MoveAndAttack : Card {
 	public override void passInUnitCustom(Unit unit){
 		if (onAttackStep) {
 			onAttackStep = false;
-			int damageVal = calculateAttackDamageToUnit (unit, damage);// getWeaponDamageToUnit (unit, damageMod);
-			doDamageToUnit( unit, damageVal );
-			for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-				Owner.Charms [i].dealWeaponDamage (this, unit, damageVal);
-			}
-			//doWeaponDamageToUnit (unit, damageMod);
+			passInUnitForAttack (unit, damage);
 			finish ();
 		}
 	}

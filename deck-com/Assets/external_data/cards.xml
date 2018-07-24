@@ -465,6 +465,16 @@
 <damage>2</damage>
 <heal>1</heal>
 </card>
+<card idName="convoking_staff">
+<name>Convoking Staff</name>
+<level>1</level>
+<script>Card_AttackTypeCount</script>
+<card_type>Attack</card_type>
+<desc>Deal {damage_per_card} damage for each {type_to_care_about} card in hand. Range 6</desc>
+<range>6</range>
+<damage_per_card>2</damage_per_card>
+<type_to_care_about>Spell</type_to_care_about>
+</card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>
 <level>3</level>

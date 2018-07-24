@@ -530,8 +530,13 @@ public class Card : IComparable<Card> {
 	//**********************************
 	//Dealing damage
 	//**********************************
-	public void doDamageToUnit(Unit unit, int damage){
-		unit.takeDamage (damage, this, Owner);
+	public void doDamageToUnit(Unit target, int damage){
+		target.takeDamage (damage, this, Owner);
+
+		//do any charms trigger when we do damage?
+		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
+			Owner.Charms [i].dealDamage (this, target, damage);
+		}
 	}
 
 	//**********************************
@@ -610,6 +615,13 @@ public class Card : IComparable<Card> {
 		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
 
 		return damageVal;
+	}
+
+	public void passInUnitForAttack(Unit target, int base_damage){
+		int damageVal = calculateAttackDamageToUnit (target, base_damage);
+		doDamageToUnit( target, damageVal );
+
+
 	}
 
 	/*

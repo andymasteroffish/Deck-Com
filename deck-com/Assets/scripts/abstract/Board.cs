@@ -50,6 +50,7 @@ public class Board {
 	public void reset(int curLevelNum, int curAreaNum){
 		//clear ();
 		if (GameManagerTacticsInterface.instance.debugIgnoreStandardSpawns) {
+			Debug.Log ("tets em daddy");
 			grid = levelGen.getTestLevel (GameManagerTacticsInterface.instance.debugMapName);
 		} else {
 			grid = levelGen.getLevel (curLevelNum, curAreaNum);

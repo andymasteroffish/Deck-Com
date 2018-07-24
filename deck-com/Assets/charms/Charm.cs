@@ -272,14 +272,14 @@ public class Charm  {
 	}
 	public virtual void takeDamageCustom (Card card, Unit source){}
 
-	public void dealWeaponDamage(Card card, Unit target, int damage){
+	public void dealDamage(Card card, Unit target, int damage){
 		if (card.ignoreCasterCharms) {
 			return;
 		}
-		dealWeaponDamageCustom (card, target, damage);
+		dealDamageCustom (card, target, damage);
 
 	}
-	public virtual void dealWeaponDamageCustom(Card card, Unit target, int damage){}
+	public virtual void dealDamageCustom(Card card, Unit target, int damage){}
 
 	//this will fire for all charms after any action of any type. Right now I'm using it for things that need to be checked veyr reguraly
 	public void anyActionTaken(){

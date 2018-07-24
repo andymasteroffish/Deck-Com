@@ -55,19 +55,19 @@ public class Weapon_Basic : Charm {
 		actionGainOnDamage = ((Weapon_Basic)parent).actionGainOnDamage;
 	}
 
-	public override void dealWeaponDamageCustom(Card card, Unit target, int damage){
-		if (charmToGive != "none") {
-			//target.aiSimHasBeenCursedCount++;
-			target.addCharm (charmToGive);
-		}
-
-		if (cardDrawOnDamage > 0 && damage > 0) {
-			Owner.deck.drawCards(cardDrawOnDamage);
-		}
-		if (actionGainOnDamage > 0 && damage > 0) {
-			Owner.gainActions (actionGainOnDamage);
-		}
-	}
+//	public override void dealWeaponDamageCustom(Card card, Unit target, int damage){
+//		if (charmToGive != "none") {
+//			//target.aiSimHasBeenCursedCount++;
+//			target.addCharm (charmToGive);
+//		}
+//
+//		if (cardDrawOnDamage > 0 && damage > 0) {
+//			Owner.deck.drawCards(cardDrawOnDamage);
+//		}
+//		if (actionGainOnDamage > 0 && damage > 0) {
+//			Owner.gainActions (actionGainOnDamage);
+//		}
+//	}
 
 	public override int getCardActionCostModCustom(Card card){
 		if (card.type == Card.CardType.Attack) {

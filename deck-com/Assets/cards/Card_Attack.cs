@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Xml;
 
 public class Card_Attack : Card {
-
-//	public int damageMod;
-//	public int rangeMod;
+	
 	public int damage;
 	public float range;
 
@@ -24,7 +22,7 @@ public class Card_Attack : Card {
 
 		range = 0;
 		if (node ["range"] != null) {
-			range = int.Parse (node ["range"].InnerText);
+			range = float.Parse (node ["range"].InnerText);
 		}else{
 			Debug.Log ("ATTACK CARD HAS NO RANGE: " + idName);
 		}
@@ -70,7 +68,6 @@ public class Card_Attack : Card {
 
 	public override void mouseEnterEffects(){
 		mouseEnterForAttack ( range);
-		//Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, baseHighlightColor);
 
 		if (hitAllInRange) {
 			Owner.CurTile.setHighlighted (false);
@@ -79,30 +76,6 @@ public class Card_Attack : Card {
 
 	public override void setPotentialTargetInfo(Unit unit){
 		setPotentialTargetInfoTextForAttack (unit, damage);
-//		string text = "Card +"+damage+"\n";
-//
-//		//check my charms
-//		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-//			text += Owner.Charms [i].getGeneralDamageModifierText (this, unit);
-//		}
-//
-//		//check if the unit has any charms that would alter damage values
-//		int totalPrevention = 0;
-//		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
-//			text += unit.Charms [i].getDamagePreventionText (this, Owner);
-//			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
-//		}
-//
-//		//calculate cover
-//		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-//		text += getInfoStringForCover (coverVal);
-//
-//		//print the total
-//		//text += "\nDAMAGE: "+(getDamageToUnit(unit)+totalPrevention);
-//		int totalDamage = getDamageToUnit(unit)+totalPrevention;
-//
-//		//set the target info text
-//		Owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
 	}
 
 	public override void selectCardCustom(){
@@ -123,13 +96,14 @@ public class Card_Attack : Card {
 	}
 
 	public override void passInUnitCustom(Unit unit){
-		int damageVal = calculateAttackDamageToUnit (unit, damage);
-		doDamageToUnit( unit, damageVal );
+		passInUnitForAttack (unit, damage);
 
-		if (charmToGiveTarget != "" && damageVal > 0) {
+		//if there is a charm to give and the attack does damage, add it
+		if (charmToGiveTarget != "" && calculateAttackDamageToUnit(unit, damage) > 0) {
 			unit.addCharm (charmToGiveTarget);
 		}
 
+		//for hitAllInRange, we keep going until we hit the last one
 		if (canEnd) {
 			finish ();
 		}
@@ -142,22 +116,4 @@ public class Card_Attack : Card {
 		//DOES NOT YET WORK WITH THE HIT ALL IN RANGE OPTION
 	}
 
-//	public int getDamageToUnit(Unit unit){
-//		int damageVal = damage;
-//
-//		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-//			damageVal += Owner.Charms [i].getGeneralDamageMod (this, unit);
-//		}
-//
-//		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-//		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
-//
-//		if (damageVal < 0) {
-//			damageVal = 0;
-//		}
-//
-//		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
-//
-//		return damageVal;
-//	}
 }

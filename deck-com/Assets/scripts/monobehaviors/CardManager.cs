@@ -98,6 +98,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_Attack (node);
 		} else if (scriptName == "Card_AttackIgnoreWeapon") {
 			thisCard = new  Card_AttackIgnoreWeapon (node);
+		} else if (scriptName == "Card_AttackTypeCount") {
+			thisCard = new  Card_AttackTypeCount (node);
 		} else if (scriptName == "Card_BasicAOEAttack") {
 			thisCard = new Card_BasicAOEAttack (node);
 		} else if (scriptName == "Card_BasicTargetBonus") {
@@ -158,6 +160,8 @@ public class CardManager : MonoBehaviour {
 			thisCard = new Card_Attack ();
 		} else if (scriptName == "Card_AttackIgnoreWeapon") {
 			thisCard = new  Card_AttackIgnoreWeapon ();
+		} else if (scriptName == "Card_AttackTypeCount") {
+			thisCard = new  Card_AttackTypeCount ();
 		} else if (scriptName == "Card_BasicAOEAttack") {
 			thisCard = new Card_BasicAOEAttack ();
 		} else if (scriptName == "Card_BasicTargetBonus") {
