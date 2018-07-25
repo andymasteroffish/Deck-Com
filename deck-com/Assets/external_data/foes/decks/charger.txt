@@ -4,7 +4,6 @@ vampire_stab
 acid_knife
 acid_knife
 acid_knife
-bite
 move5
 move4
 move3

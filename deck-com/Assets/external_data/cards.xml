@@ -1,31 +1,4 @@
 <cards>
-<card idName="patrol_move_4">
-<name>Scramble</name>
-<level>-1</level>
-<script>Card_Movement</script>
-<card_type>Movement</card_type>
-<self_destruct>true</self_destruct>
-<action_cost>0</action_cost>
-<range>4</range>
-</card>
-<card idName="patrol_move_5">
-<name>Patrol Move 5</name>
-<level>-1</level>
-<script>Card_Movement</script>
-<card_type>Movement</card_type>
-<self_destruct>true</self_destruct>
-<action_cost>0</action_cost>
-<range>5</range>
-</card>
-<card idName="patrol_move_6">
-<name>Patrol Move 6</name>
-<level>-1</level>
-<script>Card_Movement</script>
-<card_type>Movement</card_type>
-<self_destruct>true</self_destruct>
-<action_cost>0</action_cost>
-<range>6</range>
-</card>
 <card idName="attack">
 <name>Test Attack</name>
 <level>1</level>
@@ -101,23 +74,65 @@
 <range>2</range>
 <charm_to_give>acid_burn</charm_to_give>
 </card>
-<card idName="bite">
-<name>Bite</name>
-<level>-1</level>
-<script>Card_AttackIgnoreWeapon</script>
-<card_type>AttackSpecial</card_type>
-<damage>2</damage>
-<range>1.5</range>
+<card idName="bite_n_scurry">
+<name>Bite 'n Scurry</name>
+<level>3</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<desc>Deal {damage} damage and range {range} and get a bonus move</desc>
+<damage>3</damage>
+<range>1</range>
+<bonus_card_id>scurry</bonus_card_id>
+</card>
+<card idName="nimble_strike">
+<name>Nimble Strike</name>
+<level>2</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<desc>Deal {damage} damage at range {range}. Free if at least {num_move_cards_played_to_make_free} move cards have been played by this unit this turn</desc>
+<damage>3</damage>
+<range>3</range>
+<num_move_cards_played_to_make_free>2</num_move_cards_played_to_make_free>
+</card>
+<card idName="poison_dart">
+<name>Poison Dart</name>
+<level>1</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<desc>Poisons the target if it deals damage</desc>
+<damage>1</damage>
+<range>7</range>
+<charm_to_give>dart_poison</charm_to_give>
+</card>
+<card idName="berserker_rage">
+<name>Berserker Rage</name>
+<level>3</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<desc>Attack all units in range {range} for {damage} damage (including allies)</desc>
+<damage>3</damage>
+<range>8</range>
+<hit_all_in_range>true</hit_all_in_range>
 </card>
 <card idName="vampire_stab">
 <name>Vampire Stab</name>
 <level>2</level>
-<script>Card_AttackIgnoreWeapon</script>
-<card_type>AttackSpecial</card_type>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
 <desc>Deal {damage} damage at range 1 and heal {bonus_heal}</desc>
 <range>1.5</range>
 <damage>3</damage>
 <bonus_heal>2</bonus_heal>
+</card>
+<card idName="convoking_staff">
+<name>Convoking Staff</name>
+<level>1</level>
+<script>Card_AttackTypeCount</script>
+<card_type>Attack</card_type>
+<desc>Deal {damage_per_card} damage for each {type_to_care_about} card in hand. Range 6</desc>
+<range>6</range>
+<damage_per_card>2</damage_per_card>
+<type_to_care_about>Spell</type_to_care_about>
 </card>
 <card idName="grenade">
 <name>Grenade</name>
@@ -157,6 +172,25 @@
 <cards_to_draw>1</cards_to_draw>
 <actions_to_gain>2</actions_to_gain>
 </card>
+<card idName="combat_vitality">
+<name>Combat Vitality</name>
+<level>2</level>
+<script>Card_CardsPlayedBonus</script>
+<card_type>Skill</card_type>
+<desc>Target unit gains an action and draws a card for each attack card they already played this turn</desc>
+<actions_to_gain>1</actions_to_gain>
+<cards_to_draw>1</cards_to_draw>
+<any_unit>true</any_unit>
+<type_to_care_about>Attack</type_to_care_about>
+</card>
+<card idName="build_a_wall">
+<name>Build-A-Wall</name>
+<level>1</level>
+<script>Card_ChangeCover</script>
+<card_type>Skill</card_type>
+<desc>Build full cover in any unoccupied tile you cna see</desc>
+<new_cover_level>2</new_cover_level>
+</card>
 <card idName="cover_attack">
 <name>Cover Attack</name>
 <level>1</level>
@@ -172,6 +206,27 @@
 <card_type>Spell</card_type>
 <desc>Do {damage} damage, ignoring cover</desc>
 <damage>1</damage>
+</card>
+<card idName="arcane_balistics">
+<name>Arcane Balistics</name>
+<level>2</level>
+<script>Card_DirectDamage</script>
+<card_type>Spell</card_type>
+<desc>Deal {damage} damage to target unit ignoring cover and any status effects or items. Must have {mana_cost} other spell in hand</desc>
+<damage>2</damage>
+<ignore_target_charms>true</ignore_target_charms>
+<ignore_user_charms>true</ignore_user_charms>
+<mana_cost>1</mana_cost>
+</card>
+<card idName="mulligan">
+<name>Mulligan</name>
+<level>1</level>
+<script>Card_DiscardAndDraw</script>
+<card_type>Skill</card_type>
+<desc>Discard your hand and draw that many cards minus one. Gain an action</desc>
+<mulligan_effect>true</mulligan_effect>
+<any_unit>false</any_unit>
+<bonus_actions>1</bonus_actions>
 </card>
 <card idName="dumbfound">
 <name>Dumbfound</name>
@@ -209,6 +264,23 @@
 <any_unit>true</any_unit>
 <gift_id>one_time_shield</gift_id>
 </card>
+<card idName="spit_web">
+<name>Spit Web</name>
+<level>-1</level>
+<script>Card_GiveCharm</script>
+<card_type>Skill</card_type>
+<desc>Target is trapped in a web</desc>
+<gift_id>web_binding</gift_id>
+</card>
+<card idName="web_shield">
+<name>Web Shield</name>
+<level>-1</level>
+<script>Card_GiveCharm</script>
+<card_type>Skill</card_type>
+<desc>Prevent the next 2 damage unit would recieve</desc>
+<gift_id>one_time_shield</gift_id>
+<any_unit>false</any_unit>
+</card>
 <card idName="bandage">
 <name>Bandage</name>
 <level>1</level>
@@ -234,6 +306,24 @@
 <heal>1</heal>
 <range>6</range>
 </card>
+<card idName="latch_on">
+<name>Latch On</name>
+<level>-1</level>
+<script>Card_LatchOn</script>
+<card_type>Skill</card_type>
+<desc>Unit latches on to target. Neither unit can move until one of them is killed or moved</desc>
+<range>3</range>
+</card>
+<card idName="leech_bite">
+<name>Leech Bite</name>
+<level>-1</level>
+<script>Card_LeechBite</script>
+<card_type>Attack</card_type>
+<desc>Deal {damage} to latched unit. Heal {heal}</desc>
+<range>1</range>
+<damage>2</damage>
+<heal>1</heal>
+</card>
 <card idName="loot">
 <name>Loot</name>
 <level>-1</level>
@@ -257,6 +347,33 @@
 <card_type>Attack</card_type>
 <damage>2</damage>
 <range>4</range>
+</card>
+<card idName="patrol_move_4">
+<name>Scramble</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<card_type>Movement</card_type>
+<self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
+<range>4</range>
+</card>
+<card idName="patrol_move_5">
+<name>Patrol Move 5</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<card_type>Movement</card_type>
+<self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
+<range>5</range>
+</card>
+<card idName="patrol_move_6">
+<name>Patrol Move 6</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<card_type>Movement</card_type>
+<self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
+<range>6</range>
 </card>
 <card idName="move3">
 <name>Move3</name>
@@ -326,6 +443,42 @@
 <self_destruct>true</self_destruct>
 <action_cost>0</action_cost>
 </card>
+<card idName="scurry">
+<name>Scurry</name>
+<level>-1</level>
+<script>Card_Movement</script>
+<card_type>Movement</card_type>
+<range>3</range>
+<self_destruct>true</self_destruct>
+<action_cost>0</action_cost>
+</card>
+<card idName="disenchant">
+<name>Disenchant</name>
+<level>1</level>
+<script>Card_RemoveCharm</script>
+<card_type>Spell</card_type>
+<desc>Destroy all non-weapon equipment and status effects on target</desc>
+<remove_type>Equipment</remove_type>
+<remove_type>StatusEffect</remove_type>
+</card>
+<card idName="spider_egg">
+<name>Lay Spider Egg</name>
+<level>-1</level>
+<script>Card_SpawnUnit</script>
+<card_type>Skill</card_type>
+<desc>Lays an egg that will hatch into a baby spider after one turn</desc>
+<range>1</range>
+<spawn_id>spider_egg</spawn_id>
+</card>
+<card idName="spider_hatch">
+<name>Hatch</name>
+<level>-1</level>
+<script>Card_SpawnUnit</script>
+<card_type>Skill</card_type>
+<desc>It's a baby!</desc>
+<replace_parent>true</replace_parent>
+<spawn_id>spider_baby</spawn_id>
+</card>
 <card idName="team_dash">
 <name>Team Dash</name>
 <level>2</level>
@@ -348,167 +501,6 @@
 <script>Card_Trade_Places</script>
 <card_type>Spell</card_type>
 <desc>trade places with any unit you can see</desc>
-</card>
-<card idName="disenchant">
-<name>Disenchant</name>
-<level>1</level>
-<script>Card_RemoveCharm</script>
-<card_type>Spell</card_type>
-<desc>Destroy all non-weapon equipment and status effects on target</desc>
-<remove_type>Equipment</remove_type>
-<remove_type>StatusEffect</remove_type>
-</card>
-<card idName="spit_web">
-<name>Spit Web</name>
-<level>-1</level>
-<script>Card_GiveCharm</script>
-<card_type>Skill</card_type>
-<desc>Target is trapped in a web</desc>
-<gift_id>web_binding</gift_id>
-</card>
-<card idName="web_shield">
-<name>Web Shield</name>
-<level>-1</level>
-<script>Card_GiveCharm</script>
-<card_type>Skill</card_type>
-<desc>Prevent the next 2 damage unit would recieve</desc>
-<gift_id>one_time_shield</gift_id>
-<any_unit>false</any_unit>
-</card>
-<card idName="spider_egg">
-<name>Lay Spider Egg</name>
-<level>-1</level>
-<script>Card_SpawnUnit</script>
-<card_type>Skill</card_type>
-<desc>Lays an egg that will hatch into a baby spider after one turn</desc>
-<range>1</range>
-<spawn_id>spider_egg</spawn_id>
-</card>
-<card idName="spider_hatch">
-<name>Hatch</name>
-<level>-1</level>
-<script>Card_SpawnUnit</script>
-<card_type>Skill</card_type>
-<desc>It's a baby!</desc>
-<replace_parent>true</replace_parent>
-<spawn_id>spider_baby</spawn_id>
-</card>
-<card idName="arcane_balistics">
-<name>Arcane Balistics</name>
-<level>2</level>
-<script>Card_DirectDamage</script>
-<card_type>Spell</card_type>
-<desc>Deal {damage} damage to target unit ignoring cover and any status effects or items. Must have {mana_cost} other spell in hand</desc>
-<damage>2</damage>
-<ignore_target_charms>true</ignore_target_charms>
-<ignore_user_charms>true</ignore_user_charms>
-<mana_cost>1</mana_cost>
-</card>
-<card idName="bite_n_scurry">
-<name>Bite 'n Scurry</name>
-<level>3</level>
-<script>Card_Attack</script>
-<card_type>Attack</card_type>
-<desc>Deal {damage} damage and range {range} and get a bonus move</desc>
-<damage>3</damage>
-<range>1</range>
-<bonus_card_id>scurry</bonus_card_id>
-</card>
-<card idName="scurry">
-<name>Scurry</name>
-<level>-1</level>
-<script>Card_Movement</script>
-<card_type>Movement</card_type>
-<range>3</range>
-<self_destruct>true</self_destruct>
-<action_cost>0</action_cost>
-</card>
-<card idName="nimble_strike">
-<name>Nimble Strike</name>
-<level>2</level>
-<script>Card_Attack</script>
-<card_type>Attack</card_type>
-<desc>Deal {damage} damage at range {range}. Free if at least {num_move_cards_played_to_make_free} move cards have been played by this unit this turn</desc>
-<damage>3</damage>
-<range>3</range>
-<num_move_cards_played_to_make_free>2</num_move_cards_played_to_make_free>
-</card>
-<card idName="poison_dart">
-<name>Poison Dart</name>
-<level>1</level>
-<script>Card_Attack</script>
-<card_type>Attack</card_type>
-<desc>Poisons the target if it deals damage</desc>
-<damage>1</damage>
-<range>7</range>
-<charm_to_give>dart_poison</charm_to_give>
-</card>
-<card idName="berserker_rage">
-<name>Berserker Rage</name>
-<level>3</level>
-<script>Card_Attack</script>
-<card_type>Attack</card_type>
-<desc>Attack all units in range {range} for {damage} damage (including allies)</desc>
-<damage>3</damage>
-<range>8</range>
-<hit_all_in_range>true</hit_all_in_range>
-</card>
-<card idName="mulligan">
-<name>Mulligan</name>
-<level>1</level>
-<script>Card_DiscardAndDraw</script>
-<card_type>Skill</card_type>
-<desc>Discard your hand and draw that many cards minus one. Gain an action</desc>
-<mulligan_effect>true</mulligan_effect>
-<any_unit>false</any_unit>
-<bonus_actions>1</bonus_actions>
-</card>
-<card idName="combat_vitality">
-<name>Combat Vitality</name>
-<level>2</level>
-<script>Card_CardsPlayedBonus</script>
-<card_type>Skill</card_type>
-<desc>Target unit gains an action and draws a card for each attack card they already played this turn</desc>
-<actions_to_gain>1</actions_to_gain>
-<cards_to_draw>1</cards_to_draw>
-<any_unit>true</any_unit>
-<type_to_care_about>Attack</type_to_care_about>
-</card>
-<card idName="build_a_wall">
-<name>Build-A-Wall</name>
-<level>1</level>
-<script>Card_ChangeCover</script>
-<card_type>Skill</card_type>
-<desc>Build full cover in any unoccupied tile you cna see</desc>
-<new_cover_level>2</new_cover_level>
-</card>
-<card idName="latch_on">
-<name>Latch On</name>
-<level>-1</level>
-<script>Card_LatchOn</script>
-<card_type>Skill</card_type>
-<desc>Unit latches on to target. Neither unit can move until one of them is killed or moved</desc>
-<range>3</range>
-</card>
-<card idName="leech_bite">
-<name>Leech Bite</name>
-<level>-1</level>
-<script>Card_LeechBite</script>
-<card_type>Attack</card_type>
-<desc>Deal {damage} to latched unit. Heal {heal}</desc>
-<range>1</range>
-<damage>2</damage>
-<heal>1</heal>
-</card>
-<card idName="convoking_staff">
-<name>Convoking Staff</name>
-<level>1</level>
-<script>Card_AttackTypeCount</script>
-<card_type>Attack</card_type>
-<desc>Deal {damage_per_card} damage for each {type_to_care_about} card in hand. Range 6</desc>
-<range>6</range>
-<damage_per_card>2</damage_per_card>
-<type_to_care_about>Spell</type_to_care_about>
 </card>
 <card idName="equipment_extra_card">
 <name>Extra Card Pendant</name>

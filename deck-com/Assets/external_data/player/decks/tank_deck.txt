@@ -1,4 +1,3 @@
-berserker_rage
 move5
 move5
 attack_sniper_rifle
