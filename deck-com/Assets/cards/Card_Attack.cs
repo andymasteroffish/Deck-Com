@@ -67,7 +67,7 @@ public class Card_Attack : Card {
 
 
 	public override void mouseEnterEffects(){
-		mouseEnterForAttack ( range);
+		mouseEnterForAttack (range);
 
 		if (hitAllInRange) {
 			Owner.CurTile.setHighlighted (false);

@@ -55,32 +55,7 @@ public class Card_LeechBite : Card {
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
-		//start with the weapon
-		string text = "Card +"+damage+"\n";
-
-		//check my charms
-		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-			text += Owner.Charms [i].getDamageModifierText (this, unit);
-		}
-
-
-		//check if the unit has any charms that would alter damage values
-		int totalPrevention = 0;
-		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
-			text += unit.Charms [i].getDamagePreventionText (this, Owner);
-			totalPrevention += unit.Charms [i].getDamageTakenMod (this, Owner);
-		}
-
-		if (totalPrevention < -damage) {
-			totalPrevention = -damage;
-		}
-
-		//print the total
-		//text += "\nDAMAGE: "+(damage+totalPrevention);
-		int totalDamage = damage+totalPrevention;
-
-		//set the target info text
-		Owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
+		setPotentialTargetInfoTextForAttack (unit, damage);
 	}
 
 	public override void selectCardCustom(){

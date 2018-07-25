@@ -135,8 +135,8 @@
 <level>1</level>
 <script>Card_CoverAttack</script>
 <card_type>Attack</card_type>
-<damage_mod>-1</damage_mod>
-<range_mod>0</range_mod>
+<damage>2</damage>
+<range>8</range>
 </card>
 <card idName="psychic_poke">
 <name>Psychic poke</name>

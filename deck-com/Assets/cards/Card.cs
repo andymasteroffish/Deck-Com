@@ -620,103 +620,8 @@ public class Card : IComparable<Card> {
 	public void passInUnitForAttack(Unit target, int base_damage){
 		int damageVal = calculateAttackDamageToUnit (target, base_damage);
 		doDamageToUnit( target, damageVal );
-
-
 	}
 
-	/*
-	public int getRangeForWeapon(int rangeMod){
-		int range = Owner.Weapon.baseRange + rangeMod;
-
-		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
-			range += owner.Charms [i].getWeaponRangeMod (this);
-		}
-
-		return range;
-	}
-
-	public void mouseEnterForWeapon(int rangeMod){
-		int range = getRangeForWeapon (rangeMod);
-
-		Owner.board.highlightTilesInVisibleRange (Owner.CurTile, range, highlightColors[CardType.Attack]);
-	}
-
-	public void selectCardForWeapon(int rangeMod){
-		WaitingForUnit = true;
-		int range = Owner.Weapon.baseRange + rangeMod;
-
-		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
-			range += owner.Charms [i].getWeaponRangeMod (this);
-		}
-
-		bool includePlayer = true;//!owner.isPlayerControlled;
-		bool includeAI = true;
-
-		if (Owner.isPlayerControlled == false) {
-			if (owner.aiProfile.willAttackAllies == false) {
-				includeAI = false;
-			}
-		}
-
-		Owner.board.highlightUnitsInVisibleRange (Owner.CurTile, range, includePlayer, includeAI, highlightColors[CardType.Attack]);
-	}
-
-	public void setPotentialTargetInfoTextForWeapon(Unit unit, int damageMod){
-		//start with the weapon
-		string text = "Weapon +"+Owner.Weapon.getBaseDamage()+"\n";
-
-		//then the damage mod for this card
-		string cardSymbol = damageMod >= 0 ? "+" : "";
-		text += "Card "+cardSymbol+damageMod+"\n";
-
-		//check my charms
-		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
-			text += owner.Charms [i].getWeaponDamageModifierText (this, unit);
-		}
-
-		int damage = getWeaponDamageToUnit (unit, damageMod);
-
-		//check if the unit has any charms that would alter damage values
-		int totalPrevention = 0;
-		for (int i = unit.Charms.Count - 1; i >= 0; i--) {
-			text += unit.Charms [i].getDamagePreventionText (this, Owner);
-			totalPrevention += unit.Charms [i].getDamageTakenMod (this, owner);
-		}
-		if (totalPrevention < -damage) {
-			totalPrevention = -damage;
-		}
-
-		//calculate cover
-		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		text += getInfoStringForCover (coverVal);
-
-		//print the total
-		//text += "\nDAMAGE: "+(damage+totalPrevention);
-		int totalDamage = damage+totalPrevention;
-
-		//set the target info text
-		owner.GM.targetInfoText.turnOn(text, totalDamage, unit);
-	}
-
-	public int getWeaponDamageToUnit(Unit unit, int damageMod){
-		int damageVal = Owner.Weapon.getBaseDamage () + damageMod;
-
-		for (int i = owner.Charms.Count - 1; i >= 0; i--) {
-			damageVal += owner.Charms [i].getWeaponDamageMod (this, unit);
-		}
-
-		Tile.Cover coverVal = Owner.board.getCover (Owner, unit);
-		damageVal = Owner.board.getNewDamageValFromCover (damageVal, coverVal);
-
-		if (damageVal < 0) {
-			damageVal = 0;
-		}
-
-		//Debug.Log ("cover: " + coverVal + "  damage: " + damageVal);
-
-		return damageVal;
-	}
-	*/
 
 
 	//checking move values
@@ -844,12 +749,5 @@ public class Card : IComparable<Card> {
 			return this.costToAddToDeck;
 		}
 	}
-
-//	public bool DoingAnimation{
-//		get{
-//			return this.doingAnimation;
-//		}
-//	}
-
 
 }

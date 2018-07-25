@@ -5,62 +5,58 @@ using System.Xml;
 
 public class Card_CoverAttack : Card {
 
-	public int damageMod;
-	public int rangeMod;
+	public int damage;
+	public int range;
 
 	public Card_CoverAttack(){}
 	public Card_CoverAttack(XmlNode _node){
 		node = _node;
 
-		damageMod = int.Parse (node ["damage_mod"].InnerXml);
-		rangeMod = int.Parse (node ["range_mod"].InnerXml);
+		damage = int.Parse (node ["damage"].InnerXml);
+		range = int.Parse (node ["range"].InnerXml);
 
 	}
 
 	public override void setupBlueprintCustom(){
 		
-		string damageText = "Damage: " + (damageMod >= 0 ? "+" : "") + damageMod;
-		string rangeText = "Range: " + (rangeMod >= 0 ? "+" : "") + rangeMod;
+		string damageText = "Damage: " + damage;
+		string rangeText = "Range: " + range;
 
 		description = damageText + "\n" + rangeText+"\nCan go through cover, destroying it";
 	}
 
 	public override void setupCustom(){
 		Card_CoverAttack blueprintCustom = (Card_CoverAttack)blueprint;
-		damageMod = blueprintCustom.damageMod;
-		rangeMod = blueprintCustom.rangeMod;
+		damage = blueprintCustom.damage;
+		range = blueprintCustom.range;
 	}
 
-	//I COMMENTED OUT A LOT OF SHIT THAT NEEDS TO BE FIXED
 	public override void mouseEnterEffects(){
-		//mouseEnterForWeapon (rangeMod);
+		mouseEnterForAttack (range);
 	}
 
 	public override void setPotentialTargetInfo(Unit unit){
+		setPotentialTargetInfoTextForAttack (unit, damage);
 		//setPotentialTargetInfoTextForWeapon (unit, damageMod);
 	}
 
 	public override void selectCardCustom(){
-
+		selectCardForAttack (range);
 		//selectCardForWeapon (rangeMod);
 
 	}
 
 	public override void passInUnitCustom(Unit unit){
+		//do the damage
+		passInUnitForAttack (unit, damage);
 
-//		//kill cover
-//		while (Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile) != null) {
-//			Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile).setCover (Tile.Cover.None); 
-//		}
-//
-//		//do the damage
-//		int damageVal =  getWeaponDamageToUnit(unit, damageMod); 
-//		doDamageToUnit( unit, damageVal );
-//
-//		for (int i = Owner.Charms.Count - 1; i >= 0; i--) {
-//			Owner.Charms [i].dealWeaponDamage (this, unit, damageVal);
-//		}
-//
+		//kill cover
+		while (Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile) != null) {
+			Owner.board.getFirstTileWithCover (Owner.CurTile, unit.CurTile).setCover (Tile.Cover.None); 
+		}
+
+
+
 		finish ();
 	}
 

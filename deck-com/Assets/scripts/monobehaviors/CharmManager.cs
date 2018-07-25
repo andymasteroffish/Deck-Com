@@ -47,8 +47,6 @@ public class CharmManager : MonoBehaviour {
 			thisCharm = new Weapon_Basic (node);
 		} else if (scriptName == "Weapon_GlassCannon") {
 			thisCharm = new Weapon_GlassCannon (node);
-		} else if (scriptName == "Weapon_SpellCount") {
-			thisCharm = new Weapon_SpellCount (node);
 		} else if (scriptName == "Charm_ExtraCard") {
 			thisCharm = new Charm_ExtraCard (node);
 		} else if (scriptName == "Charm_HealRing") {
@@ -82,9 +80,6 @@ public class CharmManager : MonoBehaviour {
 		} 
 		else if (parent.className == Charm.CharmClass.GlassCannon) {
 			thisCharm = new Weapon_GlassCannon (parent);
-		}
-		else if (parent.className == Charm.CharmClass.SpellCountWeapon) {
-			thisCharm = new Weapon_SpellCount (parent);
 		}
 		else if (parent.className == Charm.CharmClass.ExtraCard) {
 			thisCharm = new Charm_ExtraCard (parent);

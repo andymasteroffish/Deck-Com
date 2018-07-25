@@ -1,11 +1,7 @@
+latch_on
+cover_attack
+leech_bite
 attack
-shield
-convoking_staff
-move_and_attack
-teleport
-teleport
-teleport
-teleport
 focus
 move4
 move4
