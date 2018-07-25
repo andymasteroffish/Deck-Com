@@ -1,9 +1,9 @@
 move5
 swap_spots
 vampire_stab
-attack
-attack
-attack
+acid_knife
+acid_knife
+acid_knife
 bite
 move5
 move4

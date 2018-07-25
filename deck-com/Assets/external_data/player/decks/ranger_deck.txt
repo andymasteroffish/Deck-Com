@@ -2,9 +2,9 @@ move4
 move4
 move5
 move5
-attack
-attack
-attack
+attack_long_bow
+attack_long_bow
+attack_long_bow
 bandage
 blade_dash
 village

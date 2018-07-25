@@ -24,14 +24,14 @@ public class Card_Attack : Card {
 		if (node ["range"] != null) {
 			range = float.Parse (node ["range"].InnerText);
 		}else{
-			Debug.Log ("ATTACK CARD HAS NO RANGE: " + idName);
+			Debug.Log ("ATTACK CARD HAS NO RANGE: " + node.Attributes ["idName"].Value);
 		}
 
 		damage = 0;
 		if (node ["damage"] != null) {
 			damage = int.Parse (node ["damage"].InnerText);
 		}else{
-			Debug.Log ("ATTACK CARD HAS NO DAMAGE: " + idName);
+			Debug.Log ("ATTACK CARD HAS NO DAMAGE: " + node.Attributes ["idName"].Value);
 		}
 
 		charmToGiveTarget = "";
@@ -53,6 +53,10 @@ public class Card_Attack : Card {
 		string rangeText = "Range: " + Mathf.Floor(range);
 
 		description = damageText + "\n" + rangeText;
+
+		if (baseActionCost > 1) {
+			description += "\nCosts " + baseActionCost + " actions";
+		}
 
 	}
 

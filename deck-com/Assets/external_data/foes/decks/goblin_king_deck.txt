@@ -1,10 +1,10 @@
 move5
 move6
-attack
-attack
-attack_r2
+attack_staff
+attack_staff
+attack_staff
+attack_long_bow
 move4
 grenade
 move4
-attack
 focus

@@ -32,7 +32,6 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>wizard_staff</charm>
     </charms>
   </unit>
   <unit idName = "ranger">
@@ -43,7 +42,6 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>long_bow</charm>
     </charms>
   </unit>
   <unit idName = "tank">
@@ -54,7 +52,6 @@
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>
     <charms>
-      <charm>sniper_rifle</charm>
     </charms>
   </unit>
 </player>

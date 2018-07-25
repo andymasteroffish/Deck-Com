@@ -6,90 +6,6 @@
 <script>Charm_PatrolStatus</script>
 <desc>unit is patrolling</desc>
 </charm>
-<charm idName="test_melee">
-<name>Short Test</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>1</damage>
-<range>2</range>
-</charm>
-<charm idName="test_wep">
-<name>Test Weapon</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>1</damage>
-<range>5</range>
-</charm>
-<charm idName="long_bow">
-<name>Long Bow</name>
-<type>Weapon</type>
-<level>1</level>
-<script>Weapon_Basic</script>
-<damage>2</damage>
-<range>6</range>
-</charm>
-<charm idName="wizard_staff">
-<name>Wizard Staff</name>
-<type>Weapon</type>
-<level>1</level>
-<script>Weapon_Basic</script>
-<damage>1</damage>
-<range>7</range>
-</charm>
-<charm idName="sniper_rifle">
-<name>Sniper Rifle</name>
-<type>Weapon</type>
-<level>1</level>
-<script>Weapon_Basic</script>
-<desc>4 Damage, 8 Range, attack cards cost an additional action</desc>
-<damage>4</damage>
-<range>8</range>
-<attack_card_cost_mod>1</attack_card_cost_mod>
-</charm>
-<charm idName="blow_gun">
-<name>Blow Gun</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>1</damage>
-<range>7</range>
-</charm>
-<charm idName="grunt_wep">
-<name>Grunt Weapon</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>1</damage>
-<range>6</range>
-</charm>
-<charm idName="goblin_wep">
-<name>Goblin Weapon</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>2</damage>
-<range>6</range>
-</charm>
-<charm idName="goblin_king_wep">
-<name>King's Staff</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>2</damage>
-<range>3</range>
-</charm>
-<charm idName="acid_knife">
-<name>Acid Knife</name>
-<type>Weapon</type>
-<level>3</level>
-<script>Weapon_Basic</script>
-<desc>Deal 1 damage at range 2 and causes units to take 1 additional damage from all other sources.</desc>
-<damage>1</damage>
-<range>2</range>
-<charm_to_give>acid_burn</charm_to_give>
-</charm>
 <charm idName="extra_card">
 <name>Extra Card Pendant</name>
 <type>Equipment</type>
@@ -167,30 +83,6 @@
 <desc>Unit cannot play cards. The next time unit would take damage, prevent it and remove this</desc>
 <ai_bad_points>1</ai_bad_points>
 </charm>
-<charm idName="fangs_small">
-<name>Little Fangs</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>1</damage>
-<range>2</range>
-</charm>
-<charm idName="fangs">
-<name>Fangs</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>4</damage>
-<range>2</range>
-</charm>
-<charm idName="nothing">
-<name>Nothing</name>
-<type>Weapon</type>
-<level>-1</level>
-<script>Weapon_Basic</script>
-<damage>0</damage>
-<range>0</range>
-</charm>
 <charm idName="dart_poison">
 <name>Dart Poison</name>
 <type>StatusEffect</type>
@@ -226,16 +118,5 @@
 <script>Charm_LatchOn</script>
 <desc>This unit cannot move until the latched unit is killed or moved</desc>
 <ai_bad_points>2</ai_bad_points>
-</charm>
-<charm idName="chain_gun">
-<name>Chain Gun</name>
-<type>Weapon</type>
-<level>1</level>
-<script>Weapon_Basic</script>
-<desc>1 Damage, 6 Range. Draw a card and gain an action when this deals damage</desc>
-<damage>1</damage>
-<range>6</range>
-<card_draw_on_damage>1</card_draw_on_damage>
-<action_gain_on_damage>1</action_gain_on_damage>
 </charm>
 </charms>

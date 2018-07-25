@@ -1,8 +1,8 @@
 poison_dart
 poison_dart
 poison_dart
-attack
-attack
+attack_sling
+attack_sling
 move6
 move6
 move5

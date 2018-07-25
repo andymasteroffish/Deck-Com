@@ -1,9 +1,9 @@
-attack
+attack_little_fangs
 move3
 move4
-attack
+attack_little_fangs
 web_shield
-attack
+attack_little_fangs
 move3
 move4
-attack
+attack_little_fangs

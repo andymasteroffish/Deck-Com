@@ -1,10 +1,10 @@
-attack
-attack_r1_d-1
+attack_long_bow
+attack_arced_arrow
 aim
 move3
 move2
 move2
 move3
-attack
-attack
-attack_r1_d-1
+attack_long_bow
+attack_long_bow
+attack_arced_arrow

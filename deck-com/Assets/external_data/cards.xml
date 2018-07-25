@@ -27,52 +27,79 @@
 <range>6</range>
 </card>
 <card idName="attack">
-<name>Attack</name>
+<name>Test Attack</name>
 <level>1</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
 <damage>2</damage>
 <range>5</range>
 </card>
-<card idName="attack_r1_d-1">
-<name>Attack</name>
+<card idName="attack_staff">
+<name>Staff</name>
+<level>1</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<damage>2</damage>
+<range>4</range>
+</card>
+<card idName="attack_sniper_rifle">
+<name>Sniper Rifle</name>
+<level>1</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<damage>4</damage>
+<range>8</range>
+<action_cost>2</action_cost>
+</card>
+<card idName="attack_little_fangs">
+<name>Little Fangs</name>
 <level>-1</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<damage_mod>-1</damage_mod>
-<range_mod>1</range_mod>
+<damage>1</damage>
+<range>2</range>
 </card>
-<card idName="attack_r-1_d2">
-<name>Attack</name>
-<level>1</level>
-<script>Card_Attack</script>
-<card_type>Attack</card_type>
-<damage_mod>2</damage_mod>
-<range_mod>-1</range_mod>
-</card>
-<card idName="attack_d1">
-<name>Attack</name>
-<level>1</level>
-<script>Card_Attack</script>
-<card_type>Attack</card_type>
-<damage_mod>1</damage_mod>
-<range_mod>0</range_mod>
-</card>
-<card idName="attack_r1">
-<name>Attack</name>
+<card idName="attack_fangs">
+<name>Fangs</name>
 <level>-1</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<damage_mod>0</damage_mod>
-<range_mod>1</range_mod>
+<damage>4</damage>
+<range>2</range>
 </card>
-<card idName="attack_r2">
-<name>Attack</name>
+<card idName="attack_long_bow">
+<name>Long Bow</name>
 <level>1</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<damage_mod>0</damage_mod>
-<range_mod>2</range_mod>
+<damage>2</damage>
+<range>6</range>
+</card>
+<card idName="attack_arced_arrow">
+<name>Arced Arrow</name>
+<level>1</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<damage>1</damage>
+<range>8</range>
+</card>
+<card idName="attack_sling">
+<name>Sling</name>
+<level>-1</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<damage>1</damage>
+<range>6</range>
+</card>
+<card idName="acid_knife">
+<name>Acid Knife</name>
+<level>2</level>
+<script>Card_Attack</script>
+<card_type>Attack</card_type>
+<desc>Deal {damage} damage at range {range} and cause target to take 1 additional damage from all other sources.</desc>
+<damage>1</damage>
+<range>2</range>
+<charm_to_give>acid_burn</charm_to_give>
 </card>
 <card idName="bite">
 <name>Bite</name>
@@ -382,7 +409,9 @@
 <level>3</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<desc>Attack and get a bonus move</desc>
+<desc>Deal {damage} damage and range {range} and get a bonus move</desc>
+<damage>3</damage>
+<range>1</range>
 <bonus_card_id>scurry</bonus_card_id>
 </card>
 <card idName="scurry">
@@ -399,7 +428,9 @@
 <level>2</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<desc>Attack. Free if at least {num_move_cards_played_to_make_free} move cards have been played by this unit this turn</desc>
+<desc>Deal {damage} damage at range {range}. Free if at least {num_move_cards_played_to_make_free} move cards have been played by this unit this turn</desc>
+<damage>3</damage>
+<range>3</range>
 <num_move_cards_played_to_make_free>2</num_move_cards_played_to_make_free>
 </card>
 <card idName="poison_dart">
@@ -408,6 +439,8 @@
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
 <desc>Poisons the target if it deals damage</desc>
+<damage>1</damage>
+<range>7</range>
 <charm_to_give>dart_poison</charm_to_give>
 </card>
 <card idName="berserker_rage">
@@ -415,7 +448,9 @@
 <level>3</level>
 <script>Card_Attack</script>
 <card_type>Attack</card_type>
-<desc>Attack all units in range (including allies)</desc>
+<desc>Attack all units in range {range} for {damage} damage (including allies)</desc>
+<damage>3</damage>
+<range>8</range>
 <hit_all_in_range>true</hit_all_in_range>
 </card>
 <card idName="mulligan">

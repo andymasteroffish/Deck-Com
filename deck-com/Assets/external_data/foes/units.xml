@@ -21,7 +21,6 @@
     <base_health>2</base_health>
     <hand_size>2</hand_size>
     <charms>
-      <charm>test_melee</charm>
     </charms>
   </unit>
   <unit idName = "leech">
@@ -36,7 +35,6 @@
     <base_health>6</base_health>
     <hand_size>3</hand_size>
     <charms>
-      <charm>fangs_small</charm>
     </charms>
   </unit>
   <unit idName = "spider_baby">
@@ -50,7 +48,6 @@
     <base_health>3</base_health>
     <hand_size>4</hand_size>
     <charms>
-      <charm>fangs_small</charm>
     </charms>
   </unit>
   <unit idName = "grunt">
@@ -63,7 +60,6 @@
     <base_health>2</base_health>
     <hand_size>4</hand_size>
     <charms>
-      <charm>grunt_wep</charm>
     </charms>
   </unit>
   <unit idName = "gremlin_sniper">
@@ -76,7 +72,6 @@
     <max_area>2</max_area>
     <base_health>4</base_health>
     <charms>
-      <charm>blow_gun</charm>
     </charms>
   </unit>
   <unit idName = "goblin">
@@ -88,7 +83,6 @@
     <max_area>2</max_area>
     <base_health>4</base_health>
     <charms>
-      <charm>goblin_wep</charm>
     </charms>
   </unit>
   <unit idName = "charger">
@@ -102,7 +96,6 @@
     <max_area>3</max_area>
     <base_health>5</base_health>
     <charms>
-      <charm>acid_knife</charm>
     </charms>
   </unit>
   <unit idName = "goblin_king">
@@ -115,7 +108,6 @@
     <min_area>1</min_area>
     <base_health>8</base_health>
     <charms>
-      <charm>goblin_king_wep</charm>
     </charms>
   </unit>
   <unit idName = "spider">
@@ -128,7 +120,6 @@
     <min_area>2</min_area>
     <base_health>8</base_health>
     <charms>
-      <charm>fangs</charm>
     </charms>
   </unit>
   <unit idName = "spider_egg">
@@ -141,7 +132,6 @@
     <base_health>2</base_health>
     <hand_size>1</hand_size>
     <charms>
-      <charm>nothing</charm>
     </charms>
   </unit>
 </units>

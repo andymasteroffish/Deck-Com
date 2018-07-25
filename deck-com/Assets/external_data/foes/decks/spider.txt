@@ -1,9 +1,13 @@
+bite_n_scurry
+bite_n_scurry
+move1
+move1
+attack_fangs
+attack_fangs
+attack_fangs
+attack_fangs
 spider_egg
 move6
-bite_n_scurry
-attack
-move1
-move1
 move1
 move1
 spider_egg
@@ -14,6 +18,3 @@ web_shield
 web_shield
 move5
 move5
-attack
-attack
-attack
