@@ -73,16 +73,6 @@ public class DBCharmGO : MonoBehaviour {
 		isNew = false;
 		string nameString = "Open";
 		string descString = "no desc";
-		if (type == Charm.CharmType.Weapon) {
-			if (deck.weaponToAdd != null) {
-				nameString = deck.weaponToAdd.name;
-				descString = deck.weaponToAdd.description;
-				isNew = true;
-			} else {
-				nameString = deck.curWeapon.name;
-				descString = deck.curWeapon.description;
-			}
-		} 
 		if (type == Charm.CharmType.Equipment){
 			if (deck.charmToAdd != null) {
 				nameString = deck.charmToAdd.name;
@@ -118,10 +108,11 @@ public class DBCharmGO : MonoBehaviour {
 		}
 
 		//were we clicked?
-		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
-			manager.openUnusedWeapons();
-			mouseIsOver = false;
-		}
+		//WE SHOULD BE ABLE TO REMOVE THIS IF WE ARE NOT USING WEAPONS
+//		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
+//			manager.openUnusedWeapons();
+//			mouseIsOver = false;
+//		}
 	}
 
 

@@ -1,10 +1,10 @@
-attack_sniper_rifle
-attack_sniper_rifle
-attack_sniper_rifle
+move5
 move5
 move5
 move4
 move4
-grenade
+attack_sniper_rifle
+attack_sniper_rifle
+attack_sniper_rifle
 cover_attack
 aim

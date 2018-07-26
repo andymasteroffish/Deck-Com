@@ -5,6 +5,6 @@ move5
 attack_long_bow
 attack_long_bow
 attack_long_bow
-bandage
 blade_dash
-village
+blade_dash
+bandage

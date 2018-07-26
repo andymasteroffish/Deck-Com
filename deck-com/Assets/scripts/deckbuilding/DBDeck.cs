@@ -13,7 +13,7 @@ public class DBDeck {
 	public List<Card> cards;
 	public List<Card> cardsToAdd = new List<Card>();
 
-	public Charm curWeapon, curCharm = null;
+	public Charm curCharm = null;
 	public Charm weaponToAdd, charmToAdd = null;
 
 	//public List<Charm> charms = new List<Charm>();
@@ -51,11 +51,7 @@ public class DBDeck {
 				if (charmID.Length > 1) {
 					Charm thisCharm = CharmManager.instance.getCharmFromIdName (charmID);
 					thisCharm.setup (null, false, charmID);
-					if (thisCharm.type == Charm.CharmType.Weapon) {
-						curWeapon = thisCharm;
-					} else {
-						curCharm = thisCharm;
-					}
+					curCharm = thisCharm;
 				}
 			}
 		}
@@ -142,9 +138,6 @@ public class DBDeck {
 
 	public void saveChanges(){
 		//check if charms have been changed
-		if (weaponToAdd != null) {
-			curWeapon = weaponToAdd;
-		}
 		if (charmToAdd != null) {
 			curCharm = charmToAdd;
 		}
@@ -178,11 +171,12 @@ public class DBDeck {
 		xmlText += "<name>" + displayName + "</name>\n";
 		xmlText += "<sprite>" + spriteName + "</sprite>\n";
 		xmlText += "<deck>" + deckListShortName + "</deck>\n";
+		xmlText += "<hand_size>5</hand_size>\n";
 		xmlText += "<player_controlled>true</player_controlled>\n";
 		xmlText += "<currently_active>true</currently_active>\n";
 
 		xmlText += "<charms>\n";
-		xmlText += "<charm>" + curWeapon.idName + "</charm>\n";
+		//xmlText += "<charm>" + curWeapon.idName + "</charm>\n";
 		if (curCharm != null) {
 			xmlText += "<charm>" + curCharm.idName + "</charm>\n";
 		}

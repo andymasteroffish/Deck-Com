@@ -1,40 +1,20 @@
 <player>
   <info>
-    <money>2</money>
-    <cur_level>-1</cur_level>
-    <generate_new_seed>true</generate_new_seed>
-    <seed>42</seed>
+    <money>3</money>
+    <cur_level>0</cur_level>
+    <generate_new_seed>false</generate_new_seed>
+    <seed>2175352</seed>
   </info>
   <store>
-    <unlocked>false</unlocked>
-    <purchased_card0>false</purchased_card0>
-    <purchased_card1>false</purchased_card1>
-    <purchased_card2>false</purchased_card2>
-    <purchased_card3>false</purchased_card3>
-    <purchased_card4>false</purchased_card4>
-    <purchased_card5>false</purchased_card5>
+    <unlocked>True</unlocked>
+    <purchased_card0>False</purchased_card0>
+    <purchased_card1>False</purchased_card1>
+    <purchased_card2>False</purchased_card2>
+    <purchased_card3>False</purchased_card3>
+    <purchased_card4>False</purchased_card4>
+    <purchased_card5>False</purchased_card5>
   </store>
-  <unit idName = "test_player">
-    <name>Test Player</name>
-    <sprite>unit_test</sprite>
-    <deck>test_deck</deck>
-    <hand_size>5</hand_size>
-    <player_controlled>true</player_controlled>
-    <currently_active>false</currently_active>
-    <charms>
-    </charms>
-  </unit>
-  <unit idName = "wizard">
-    <name>Gorb The Charmer</name>
-    <sprite>unit_wizard</sprite>
-    <deck>wizard_deck</deck>
-    <hand_size>5</hand_size>
-    <player_controlled>true</player_controlled>
-    <currently_active>true</currently_active>
-    <charms>
-    </charms>
-  </unit>
-  <unit idName = "ranger">
+  <unit idName="ranger">
     <name>Quick Alexi</name>
     <sprite>unit_ranger</sprite>
     <deck>ranger_deck</deck>
@@ -44,10 +24,20 @@
     <charms>
     </charms>
   </unit>
-  <unit idName = "tank">
+  <unit idName="tank">
     <name>Big Bobo</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
+    <hand_size>5</hand_size>
+    <player_controlled>true</player_controlled>
+    <currently_active>true</currently_active>
+    <charms>
+    </charms>
+  </unit>
+  <unit idName="wizard">
+    <name>Gorb The Charmer</name>
+    <sprite>unit_wizard</sprite>
+    <deck>wizard_deck</deck>
     <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>

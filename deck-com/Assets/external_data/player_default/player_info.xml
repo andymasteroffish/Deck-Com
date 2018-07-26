@@ -24,16 +24,6 @@
     <charms>
     </charms>
   </unit>
-  <unit idName = "wizard">
-    <name>Gorb The Charmer</name>
-    <sprite>unit_wizard</sprite>
-    <deck>wizard_deck</deck>
-    <hand_size>5</hand_size>
-    <player_controlled>true</player_controlled>
-    <currently_active>true</currently_active>
-    <charms>
-    </charms>
-  </unit>
   <unit idName = "ranger">
     <name>Quick Alexi</name>
     <sprite>unit_ranger</sprite>
@@ -48,6 +38,16 @@
     <name>Big Bobo</name>
     <sprite>unit_tank</sprite>
     <deck>tank_deck</deck>
+    <hand_size>5</hand_size>
+    <player_controlled>true</player_controlled>
+    <currently_active>true</currently_active>
+    <charms>
+    </charms>
+  </unit>
+  <unit idName = "wizard">
+    <name>Gorb The Charmer</name>
+    <sprite>unit_wizard</sprite>
+    <deck>wizard_deck</deck>
     <hand_size>5</hand_size>
     <player_controlled>true</player_controlled>
     <currently_active>true</currently_active>

@@ -71,10 +71,11 @@ public class DBUnusedCharmGO : MonoBehaviour {
 
 		spriteRend.color = mouseIsOver ? mouseOverColor : normalColor;
 
-		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
-			manager.replaceCharm(charm);
-			mouseIsOver = false;
-		}
+		//IF WE ARE NOT USING WEPAONS, RMEOVE THIS
+//		if (Input.GetMouseButtonDown (0) && mouseIsOver) {
+//			manager.replaceCharm(charm);
+//			mouseIsOver = false;
+//		}
 		
 	}
 

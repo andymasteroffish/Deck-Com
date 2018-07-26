@@ -258,6 +258,13 @@ public class PodPlacement {
 
 		//need some type of chart to determine how many reinforcements
 		int numReinforcements = 1;
+		if (curArea == 0 && turnNum % 2 == 0) {
+			numReinforcements = 0;
+		}
+		if (curArea == 1 && turnNum % 3 == 1) {
+			numReinforcements = 0;
+		}
+
 		if (turnNum % 6 == 0 && curLevelNum >= 1) {
 			numReinforcements++;
 		}

@@ -123,32 +123,32 @@ public class DBManager {
 	}
 
 	//opens the list of unused charms
-	public void openUnusedWeapons(){
-		//charmReplaceType = replaceType;
-		unusedWeaponsOpen = true;
-		unusedCardsOpen = false;
-
-		Debug.Log ("open " + unusedCharms.Count + " charms");
-
-		int order = 0;
-		for (int i = 0; i < unusedCharms.Count; i++) {
-			if (unusedCharms [i].type == Charm.CharmType.Weapon) {
-				DBUnusedCharmGO thisGO = DBManagerInterface.instance.getUnusedCharmGO ();
-				Debug.Log (thisGO);
-				thisGO.activate (unusedCharms [i], order);
-				order++;
-			}
-		}
-	}
-
-	public void replaceCharm(Charm newCharm){
-		if (newCharm.type == Charm.CharmType.Weapon) {
-			activeDeck.weaponToAdd = newCharm;
-		} else {
-			activeDeck.charmToAdd = newCharm;
-		}
-		unusedWeaponsOpen = false;
-	}
+//	public void openUnusedWeapons(){
+//		//charmReplaceType = replaceType;
+//		unusedWeaponsOpen = true;
+//		unusedCardsOpen = false;
+//
+//		Debug.Log ("open " + unusedCharms.Count + " charms");
+//
+//		int order = 0;
+//		for (int i = 0; i < unusedCharms.Count; i++) {
+//			if (unusedCharms [i].type == Charm.CharmType.Weapon) {
+//				DBUnusedCharmGO thisGO = DBManagerInterface.instance.getUnusedCharmGO ();
+//				Debug.Log (thisGO);
+//				thisGO.activate (unusedCharms [i], order);
+//				order++;
+//			}
+//		}
+//	}
+//
+//	public void replaceCharm(Charm newCharm){
+//		if (newCharm.type == Charm.CharmType.Weapon) {
+//			activeDeck.weaponToAdd = newCharm;
+//		} else {
+//			activeDeck.charmToAdd = newCharm;
+//		}
+//		unusedWeaponsOpen = false;
+//	}
 
 	//steps back one
 	public void cancel(){
