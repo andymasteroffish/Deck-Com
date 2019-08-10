@@ -8,5 +8,3 @@ heal
 move4
 move4
 move4
-disenchant
-convoking_staff
